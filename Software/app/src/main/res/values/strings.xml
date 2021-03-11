@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShellPest_Android</string>
+    <string name="app_name">Sistema ShellPest San Tadeo</string>
     <string name="title_activity_login__usuario">Login_Usuario</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

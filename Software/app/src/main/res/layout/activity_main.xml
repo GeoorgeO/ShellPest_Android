@@ -6,13 +6,157 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/space_blak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".333"
+                android:background="#00000000"
+                android:enabled="false"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/btn_Sincronizar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".333"
+                android:onClick="Existe_Sinc"
+                android:text="Sincronizar" />
+
+            <EditText
+                android:id="@+id/space_blak2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".333"
+                android:background="#00000000"
+                android:enabled="false"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/space_blak3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".3"
+                android:background="#00000000"
+                android:enabled="false"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/date_Sinc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:inputType="date"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/space_blak4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".3"
+                android:background="#00000000"
+                android:enabled="false"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+
+            >
+
+            <EditText
+                android:id="@+id/Columna1"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".65"
+                android:background="@color/teal_700"
+                android:enabled="false"
+                android:text="Tabla"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/Columna2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:background="@color/teal_700"
+                android:enabled="false"
+                android:text="N Sinc."
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_Cambios"
+            android:layout_width="411dp"
+            android:layout_height="300dp"
+
+            android:layout_weight="6"
+            tools:listitem="@layout/registro_grid">
+
+        </ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/space_blak5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:background="#00000000"
+                android:enabled="false"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/btn_continuar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".3"
+                android:text="Continuar"
+                app:layout_constraintTop_toBottomOf="@+id/lv_Cambios" />
+
+            <EditText
+                android:id="@+id/space_blak6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:background="#00000000"
+                android:enabled="false"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
