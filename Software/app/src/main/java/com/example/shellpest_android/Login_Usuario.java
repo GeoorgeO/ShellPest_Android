@@ -34,6 +34,7 @@ public class Login_Usuario extends AppCompatActivity {
 
     private EditText et_Usuario,et_Password;
     public String MyIp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class Login_Usuario extends AppCompatActivity {
         Existe_Usuario();
     }
 
-    public void Agrega_Usuario(){
+    public void Agrega_Usuario(String perfil,String huerta){
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
 
@@ -63,13 +64,16 @@ public class Login_Usuario extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
 
-        Cursor Renglon =BD.rawQuery("select Id_Usuario,Contrasena from UsuarioLogin",null);
+        Cursor Renglon =BD.rawQuery("select Id_Usuario,Id_Perfil,Id_Huerta from UsuarioLogin",null);
 
         if(Renglon.moveToFirst()){
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.getString(0).length()>0){
                 Intent intento=new Intent(this,MainActivity.class);
+                intento.putExtra("usuario", Renglon.getString(0));
+                intento.putExtra("perfil", Renglon.getString(1));
+                intento.putExtra("huerta", Renglon.getString(2));
                 startActivity(intento);
             }
 
@@ -188,8 +192,12 @@ public class Login_Usuario extends AppCompatActivity {
                 JSONObject jsonobject=jsonarr.getJSONObject(i);
 
                 if(jsonobject.optString("Id_Usuario").length()>0){
-                    Agrega_Usuario();
+
+                    Agrega_Usuario(jsonobject.optString("Id_Perfil"),jsonobject.optString("Id_Huerta"));
                     Intent intento=new Intent(this,MainActivity.class);
+                    intento.putExtra("usuario", jsonobject.optString("Id_Usuario"));
+                    intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
+                    intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
                     startActivity(intento);
                 }else{
                     Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();

@@ -15,91 +15,211 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/ll_Fecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_weight="0.08"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editTextDate"
+                android:id="@+id/et_espacio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:background="#00000000"
+                android:enabled="false" />
 
-                android:ems="10"
-                android:inputType="date" />
+            <EditText
+                android:id="@+id/et_fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:autoText="false"
+                android:editable="false"
+                android:enabled="false"
+                android:inputType="date"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/et_espacio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:background="#00000000"
+                android:enabled="false" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_EP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_weight="0.08"
             android:orientation="horizontal">
 
-            <RadioGroup
+            <EditText
+                android:id="@+id/et_espacio3"
                 android:layout_width="wrap_content"
-                android:layout_height="51dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:background="#00000000"
+                android:enabled="false" />
 
+            <RadioGroup
+                android:id="@+id/rg_PE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton2"
+                    android:id="@+id/rb_Plaga"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_weight="5"
                     android:text="Plaga" />
 
                 <RadioButton
-                    android:id="@+id/radioButton"
+                    android:id="@+id/rb_Enfermedad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:text="Enfermedad" />
 
             </RadioGroup>
+
+            <EditText
+                android:id="@+id/et_espacio4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:background="#00000000"
+                android:enabled="false" />
         </LinearLayout>
 
         <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="61dp"
-            android:layout_weight="0.1" />
-
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_weight="0.1" />
-
-        <Spinner
-            android:id="@+id/spinner3"
-            android:layout_width="match_parent"
-            android:layout_height="51dp"
-            android:layout_weight="0.1" />
-
-        <Spinner
-            android:id="@+id/spinner4"
-            android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:layout_weight="0.1" />
-
-        <LinearLayout
+            android:id="@+id/sp_PE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+
+            android:layout_weight="0.08" />
+
+        <Spinner
+            android:id="@+id/sp_Hue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08" />
+
+        <Spinner
+            android:id="@+id/sp_Pto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08" />
+
+        <Spinner
+            android:id="@+id/sp_Org"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08"
+            android:text="Huerta" />
+        <Spinner
+            android:id="@+id/sp_Ind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08" />
+
+        <LinearLayout
+            android:id="@+id/ll_Agrega"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08"
             android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_espacio5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:background="#00000000"
+                android:enabled="false" />
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:text="Button" />
+                android:layout_weight="3.3"
+                android:text="Agregar" />
+
+            <EditText
+                android:id="@+id/et_espacio6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.3"
+                android:background="#00000000"
+                android:enabled="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_titlecolumns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_PuntoControl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:background="@color/teal_700"
+
+                android:editable="false"
+                android:enabled="false"
+                android:text="Punto"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/et_EP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:background="@color/teal_700"
+                android:editable="false"
+                android:enabled="false"
+                android:text="EP"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/et_Organo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:background="@color/teal_700"
+                android:editable="false"
+                android:enabled="false"
+                android:text="Organo"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/et_Individuo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:background="@color/teal_700"
+                android:editable="false"
+                android:enabled="false"
+                android:text="N Individuo"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.28" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase BD) {
-        BD.execSQL("create table UsuarioLogin(Id_Usuario text primary key,Contrasena text)");
+        BD.execSQL("create table UsuarioLogin(Id_Usuario text primary key,Contrasena text, Id_Perfil text,Id_Huerta text)");
         BD.execSQL("create table FechaSincroniza(id_Sincroniza text primary key,Fecha_Sincroniza text)");
         BD.execSQL("create table t_Calidad(Id_Calidad text primary key,Nombre_Calidad text )");
         BD.execSQL("create table t_Cultivo(Id_Cultivo text primary key,Nombre_Cultivo text)");
@@ -26,10 +26,10 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Pais(Id_Pais text primary key,Nombre_Pais text)");
         BD.execSQL("create table t_Estado(Id_Estado text primary key,Nombre_Estado text,Id_Pais text)");
         BD.execSQL("create table t_Ciudades(Id_Ciudad text primary key,Nombre_Ciudad text,Id_Estado text)");
-        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Duenio text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta INTEGER)");
+        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Duenio text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta INTEGER,Id_zona text)");
         BD.execSQL("create table t_Bloque(Id_Bloque text primary key,Id_Huerta text,Nombre_Bloque text)");
         BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text primary key,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text)");
-
+        BD.execSQL("create table t_Zona(Id_zona text primary key,Nombre_zona text)");
         //BD.execSQL("create table t_Monitoreo_PE(Id_PuntoControl text primary key,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text)");
 
     }
@@ -52,6 +52,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Huerta");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Bloque");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Puntocontrol");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Zona");
         onCreate(sqLiteDatabase);
     }
 }

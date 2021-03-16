@@ -51,11 +51,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Tablas_Sincronizadas Tabla;
 
 
+
     ListView Grid_Cambios;
     ArrayList<Tablas_Sincronizadas> arrayArticulos;
     Adaptador_Tabla Adapter;
     EditText date_Sinc;
     private int dia,mes, anio;
+    public String Usuario,Perfil,Huerta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         date_Sinc.setOnClickListener(this);
 
         Grid_Cambios=(ListView) findViewById(R.id.lv_Cambios);
-
 
         Grid_Cambios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,8 +89,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         date_Sinc.setText(objSDF.format(date1));
         date_Sinc.setInputType(InputType.TYPE_NULL);
         date_Sinc.requestFocus();
+
+        Usuario= getIntent().getStringExtra("usuario");
+        Perfil= getIntent().getStringExtra("perfil");
+        Huerta= getIntent().getStringExtra("huerta");
     }
 
+    public void PasaDatosUser(String usuario,String perfil){
+        Usuario=usuario;
+        Perfil=perfil;
+    }
 
 
     public void Existe_Sinc(View view){
@@ -142,6 +151,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void continuar(View view){
+        Intent intento=new Intent(this,activity_Monitoreo.class);
+        intento.putExtra("usuario", Usuario);
+        intento.putExtra("perfil", Perfil);
+        intento.putExtra("huerta", Huerta);
+        startActivity(intento);
+    }
+
     public void Sincroniza_Datos (String esaFecha,View view){
         List <String> Ligas_Web =new ArrayList<>();
 
@@ -174,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha="+objSDF.format(date1));
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha="+objSDF.format(date1));
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha="+objSDF.format(date1));
-
+        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha="+objSDF.format(date1));
         int regla3=0;
 
       Grid_Cambios.setAdapter(null);
@@ -345,7 +362,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // Declaraciones
                         Actualiza_Puntocontrol(datos);
                         break; // break es opcional
-
+                    case "Id_zona" :
+                        // Declaraciones
+                        Actualiza_Zona(datos);
+                        break; // break es opcional
                 }
 
             }
@@ -1137,6 +1157,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (Exception e){
                     Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
+
+        }
+    }
+
+    private void Actualiza_Zona(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Zona",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(Id_zona) from t_Zona where Id_zona='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Nombre_zona",Datos[x][1]);
+
+
+                        int cantidad=BD.update("t_Zona",registro,"Id_zona='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            Toast.makeText(this,"Se actualizo t_Puntocontrol correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Zona ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("Id_zona",Datos[x][0]);
+                        registro.put("Nombre_zona",Datos[x][1]);
+
+
+
+                        BD.insert("t_Zona",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
 
         }
     }
