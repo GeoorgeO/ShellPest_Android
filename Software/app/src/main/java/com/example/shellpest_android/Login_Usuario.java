@@ -55,6 +55,8 @@ public class Login_Usuario extends AppCompatActivity {
         ContentValues registro= new ContentValues();
         registro.put("Id_Usuario",Id_Usuario);
         registro.put("Contrasena",Contrasena);
+        registro.put("Id_Perfil",perfil);
+        registro.put("Id_Huerta",huerta);
 
         BD.insert("UsuarioLogin",null,registro);
         BD.close();
@@ -74,6 +76,8 @@ public class Login_Usuario extends AppCompatActivity {
                 intento.putExtra("usuario", Renglon.getString(0));
                 intento.putExtra("perfil", Renglon.getString(1));
                 intento.putExtra("huerta", Renglon.getString(2));
+
+                //Toast.makeText(this,Renglon.getString(0)+","+Renglon.getString(1)+","+Renglon.getString(2),Toast.LENGTH_SHORT).show();
                 startActivity(intento);
             }
 
@@ -137,91 +141,93 @@ public class Login_Usuario extends AppCompatActivity {
 
     public void validarLogin(View view){
         Obtener_Ip();
-        Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
-        String sql;
-        //if("192.168.3".indexOf(MyIp)>=0 || "10.0.2.16".indexOf(MyIp)>=0){
-        sql="http://192.168.3.254:8090//Usuarios/LoginUsuario?User="+et_Usuario.getText().toString()+"&Pass="+et_Password.getText().toString();
-        //}else{
-        //  sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User="+et_Usuario.getText().toString()+"&Pass="+et_Password.getText().toString();
-        //}
+        if (MyIp.length()>0 && !MyIp.equals("0.0.0.0")) {
+            //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
+            String sql;
+            //if("192.168.3".indexOf(MyIp)>=0 || "10.0.2.16".indexOf(MyIp)>=0){
+            sql = "http://192.168.3.254:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
+            //}else{
+            //  sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User="+et_Usuario.getText().toString()+"&Pass="+et_Password.getText().toString();
+            //}
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-        URL url= null;
-        try {
-            url = new URL(sql);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        HttpURLConnection conn= null;
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-
-
-            conn.setRequestMethod("GET");
-            conn.connect();
-
-            BufferedReader in =new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String inputLine;
-
-            StringBuffer response =new StringBuffer();
-
-            String json="";
-
-            while ((inputLine=in.readLine())!=null){
-                response.append(inputLine);
+            URL url = null;
+            try {
+                url = new URL(sql);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
 
-            json=response.toString();
+            HttpURLConnection conn = null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            JSONArray jsonarr=null;
+            try {
 
 
-            jsonarr=new JSONArray(json);
+                conn.setRequestMethod("GET");
+                conn.connect();
 
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-            for (int i=0;i<jsonarr.length();i++){
-                JSONObject jsonobject=jsonarr.getJSONObject(i);
+                String inputLine;
 
-                if(jsonobject.optString("Id_Usuario").length()>0){
+                StringBuffer response = new StringBuffer();
 
-                    Agrega_Usuario(jsonobject.optString("Id_Perfil"),jsonobject.optString("Id_Huerta"));
-                    Intent intento=new Intent(this,MainActivity.class);
-                    intento.putExtra("usuario", jsonobject.optString("Id_Usuario"));
-                    intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
-                    intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
-                    startActivity(intento);
-                }else{
-                    Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();
+                String json = "";
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
 
+                json = response.toString();
 
+                JSONArray jsonarr = null;
+
+
+                jsonarr = new JSONArray(json);
+
+
+                for (int i = 0; i < jsonarr.length(); i++) {
+                    JSONObject jsonobject = jsonarr.getJSONObject(i);
+
+                    if (jsonobject.optString("Id_Usuario").length() > 0) {
+
+                        Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"));
+                        Intent intento = new Intent(this, MainActivity.class);
+                        intento.putExtra("usuario", jsonobject.optString("Id_Usuario"));
+                        intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
+                        intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
+
+                        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+                        startActivity(intento);
+                    } else {
+                        Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+                conn.disconnect();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 1", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 2", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 3", Toast.LENGTH_SHORT).show();
             }
-            conn.disconnect();
-
-
-
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            conn.disconnect();
-            Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 1", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            conn.disconnect();
-            Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 2", Toast.LENGTH_SHORT).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            conn.disconnect();
-            Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 3", Toast.LENGTH_SHORT).show();
         }
     }
 

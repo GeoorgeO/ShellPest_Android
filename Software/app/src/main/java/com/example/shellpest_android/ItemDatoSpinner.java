@@ -11,6 +11,5 @@ public class ItemDatoSpinner {
     }
     public void setTexto(String texto){
         Texto=texto;
-
     }
 }

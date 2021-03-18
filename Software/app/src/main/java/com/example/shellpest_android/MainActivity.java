@@ -49,9 +49,6 @@ import java.util.function.Consumer;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Tablas_Sincronizadas Tabla;
-
-
-
     ListView Grid_Cambios;
     ArrayList<Tablas_Sincronizadas> arrayArticulos;
     Adaptador_Tabla Adapter;
@@ -77,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         arrayArticulos=new ArrayList<>();
 
-
         Date objDate = new Date();
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
@@ -93,11 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Usuario= getIntent().getStringExtra("usuario");
         Perfil= getIntent().getStringExtra("perfil");
         Huerta= getIntent().getStringExtra("huerta");
-    }
 
-    public void PasaDatosUser(String usuario,String perfil){
-        Usuario=usuario;
-        Perfil=perfil;
+
     }
 
 
@@ -153,9 +146,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void continuar(View view){
         Intent intento=new Intent(this,activity_Monitoreo.class);
-        intento.putExtra("usuario", Usuario);
-        intento.putExtra("perfil", Perfil);
-        intento.putExtra("huerta", Huerta);
+        intento.putExtra("usuario2", Usuario);
+        intento.putExtra("perfil2", Perfil);
+        intento.putExtra("huerta2", Huerta);
+        Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
     }
 
@@ -164,10 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
 
-
         SimpleDateFormat objSDF = new SimpleDateFormat("yyyyMMdd"); // La cadena de formato de fecha se pasa como un argumento al objeto
-
-
 
         Date date1=objDate;
         try {
@@ -175,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
 
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha="+objSDF.format(date1));
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha="+objSDF.format(date1));
@@ -197,29 +187,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       Grid_Cambios.setAdapter(null);
       arrayArticulos.clear();
 
-
-
         for (int i=0;i<Ligas_Web.size();i++){
             //Toast.makeText(MainActivity.this, Ligas_Web.get(i), Toast.LENGTH_SHORT).show();
             LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
-
-
         }
-
 
         if(arrayArticulos.size()>0){
             Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
             Grid_Cambios.setAdapter(Adapter);
-
-
         }else{
-            Toast.makeText(MainActivity.this, "Folio No encontrado", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(MainActivity.this, "No hay datos para sincronizar de la fecha seleccionada.", Toast.LENGTH_SHORT).show();
         }
-
-
         //ActualizaFechaSinc();
-
     }
 
     public void LlamarWebService(String Liga,int porcentaje,int ix,int total,View view){
@@ -242,8 +221,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         try {
-
-
             conn.setRequestMethod("GET");
             conn.connect();
 
@@ -278,9 +255,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (int i=0;i<jsonarr.length();i++){
                     jsonobject=jsonarr.getJSONObject(i);
 
-
-
-
                     int columnas=0;
 
                     Iterator llaves = jsonobject.keys();
@@ -292,12 +266,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (columnas==0){
                             NombreId=currentDynamicKey;
                         }
-
                         columnas++;
                     }
-
-
-
                 }
 
                 // declaración de switch
@@ -367,33 +337,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Actualiza_Zona(datos);
                         break; // break es opcional
                 }
-
             }
-
-
 
             conn.disconnect();
 
             porcentaje=((ix+1)*100)/total;
 
-
-
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
             conn.disconnect();
             Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
-
         } catch (IOException e) {
             e.printStackTrace();
             conn.disconnect();
             Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
-
         } catch (JSONException e) {
             e.printStackTrace();
             conn.disconnect();
             Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -415,21 +376,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
             Date date1=objDate;
 
-
             registro.put("Fecha_Sincroniza", objSDF.format(date1));
 
             BD.insert("FechaSincroniza",null,registro);
 
             BD.close();
 
-
-
         }catch (Exception e){
             Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
-
-
-
     }
 
     public void hayCalidades(){
@@ -450,7 +405,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Calidad",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -476,16 +430,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Calidad",Datos[x][0]);
                             registro.put("Nombre_Calidad",Datos[x][1]);
 
-
                             BD.insert("t_Calidad",null,registro);
                         }
-
-
-
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -501,7 +449,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Cultivo",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -527,14 +474,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Cultivo",Datos[x][0]);
                             registro.put("Nombre_Cultivo",Datos[x][1]);
 
-
                             BD.insert("t_Cultivo",null,registro);
                         }
 
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -550,7 +494,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Duenio",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -576,13 +519,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Duenio",Datos[x][0]);
                             registro.put("Nombre_Duenio",Datos[x][1]);
 
-
                             BD.insert("t_Duenio",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -598,7 +538,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Deteccion",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -624,13 +563,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Deteccion",Datos[x][0]);
                             registro.put("Nombre_Deteccion",Datos[x][1]);
 
-
                             BD.insert("t_Deteccion",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -672,13 +608,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Enfermedad",Datos[x][0]);
                             registro.put("Nombre_Enfermedad",Datos[x][1]);
 
-
                             BD.insert("t_Enfermedad",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -694,7 +627,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Humbral",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -723,13 +655,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Nombre_Humbral",Datos[x][2]);
                         registro.put("Color_Humbral",Datos[x][3]);
 
-
                         BD.insert("t_Humbral",null,registro);
                     }
-
                     BD.close();
                 }else{
-
                     BD.close();
                 }
                 }catch (SQLiteConstraintException sqle){
@@ -745,7 +674,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Plagas",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -771,13 +699,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Id_Plagas",Datos[x][0]);
                         registro.put("Nombre_Plagas",Datos[x][1]);
 
-
                         BD.insert("t_Plagas",null,registro);
                     }
-
                     BD.close();
                 }else{
-
                     BD.close();
                 }
                 }catch (SQLiteConstraintException sqle){
@@ -793,7 +718,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Productor",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -819,13 +743,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Productor",Datos[x][0]);
                             registro.put("Nombre_Productor",Datos[x][1]);
 
-
                             BD.insert("t_Productor",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -841,7 +762,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Pais",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -867,13 +787,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Pais",Datos[x][0]);
                             registro.put("Nombre_Pais",Datos[x][1]);
 
-
                             BD.insert("t_Pais",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -889,7 +806,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Estado",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -917,13 +833,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Nombre_Estado",Datos[x][1]);
                             registro.put("Id_Pais",Datos[x][2]);
 
-
                             BD.insert("t_Estado",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -939,7 +852,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Ciudades",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -967,13 +879,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Nombre_Ciudad",Datos[x][1]);
                             registro.put("Id_Estado",Datos[x][2]);
 
-
                             BD.insert("t_Ciudades",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
@@ -989,7 +898,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Huerta",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -1063,7 +971,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
 
-
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
@@ -1090,13 +997,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Huerta",Datos[x][1]);
                             registro.put("Nombre_Bloque",Datos[x][2]);
 
-
                             BD.insert("t_Bloque",null,registro);
                         }
-
                         BD.close();
                     }else{
-
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
