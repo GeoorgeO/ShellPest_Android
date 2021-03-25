@@ -26,12 +26,14 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Pais(Id_Pais text primary key,Nombre_Pais text)");
         BD.execSQL("create table t_Estado(Id_Estado text primary key,Nombre_Estado text,Id_Pais text)");
         BD.execSQL("create table t_Ciudades(Id_Ciudad text primary key,Nombre_Ciudad text,Id_Estado text)");
-        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Duenio text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta INTEGER,Id_zona text)");
+        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Productor text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta text,Id_zona text)");
         BD.execSQL("create table t_Bloque(Id_Bloque text primary key,Id_Huerta text,Nombre_Bloque text)");
         BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text primary key,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text)");
         BD.execSQL("create table t_Zona(Id_zona text primary key,Nombre_zona text)");
         BD.execSQL("create table t_Monitoreo_PE(Fecha text,Id_Huerta text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
-        BD.execSQL("create table t_Monitoreo_Eliminados_PE(Fecha text,Id_Huerta text,Id_Plaga text,Id_enfermedad text,Id_Plagas text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
+        BD.execSQL("create table t_Monitoreo_Eliminados_PE(Fecha text,Id_Huerta text,Id_enfermedad text,Id_Plagas text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
+        BD.execSQL("create table t_Individuo (Id_Individuo text primary key,No_Individuo text)");
+        BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text)");
     }
 
     @Override

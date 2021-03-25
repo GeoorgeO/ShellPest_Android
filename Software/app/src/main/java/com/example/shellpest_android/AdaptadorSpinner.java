@@ -38,9 +38,11 @@ public class AdaptadorSpinner extends ArrayAdapter<ItemDatoSpinner> {
         if(ItemActual!=null){
             textViewName.setText(ItemActual.getTexto());
             if (position==0){
-                textViewName.setBackgroundColor(Color.rgb(151,182,170));
+                textViewName.setTextAlignment( View.TEXT_ALIGNMENT_CENTER);
+               // textViewName.setBackgroundColor(Color.rgb(151,182,170));
             }else{
-                textViewName.setBackgroundColor(Color.WHITE);
+                textViewName.setTextAlignment( View.TEXT_ALIGNMENT_GRAVITY);
+                //textViewName.setBackgroundColor(Color.WHITE);
             }
         }
 

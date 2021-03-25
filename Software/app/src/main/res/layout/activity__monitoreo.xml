@@ -49,12 +49,17 @@
                 android:enabled="false" />
 
         </LinearLayout>
+        <Spinner
+            android:id="@+id/sp_Hue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08" />
 
         <LinearLayout
             android:id="@+id/ll_EP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08"
+            android:layout_weight="0.03"
             android:orientation="horizontal">
 
             <EditText
@@ -97,17 +102,12 @@
                 android:enabled="false" />
         </LinearLayout>
 
+
         <Spinner
             android:id="@+id/sp_PE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:layout_weight="0.08" />
-
-        <Spinner
-            android:id="@+id/sp_Hue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_weight="0.08" />
 
         <Spinner
@@ -148,6 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.3"
+                android:onClick="agregarAGrid"
                 android:text="Agregar" />
 
             <EditText
@@ -163,21 +164,21 @@
             android:id="@+id/ll_titlecolumns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08"
+            android:layout_weight="0.03"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/et_PuntoControl"
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
                 android:background="@color/teal_700"
 
                 android:editable="false"
                 android:enabled="false"
-                android:text="Punto"
+                android:text="P"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_EP"
@@ -187,41 +188,42 @@
                 android:background="@color/teal_700"
                 android:editable="false"
                 android:enabled="false"
-                android:text="EP"
+                android:text="PE"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_Organo"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
                 android:background="@color/teal_700"
                 android:editable="false"
                 android:enabled="false"
                 android:text="Organo"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_Individuo"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
                 android:background="@color/teal_700"
                 android:editable="false"
                 android:enabled="false"
                 android:text="N Individuo"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/lv_GridMonitoreo"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:layout_weight="0.28"
-            tools:listitem="@layout/item_grid_monitoreo"/>
+            android:layout_weight="0.38"
+            tools:listitem="@layout/item_grid_monitoreo" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
-        Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
     }
 
@@ -182,6 +182,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha="+objSDF.format(date1));
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha="+objSDF.format(date1));
         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha="+objSDF.format(date1));
+        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha="+objSDF.format(date1));
+        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha="+objSDF.format(date1));
         int regla3=0;
 
       Grid_Cambios.setAdapter(null);
@@ -279,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // Declaraciones
                         Actualiza_Calidad(datos);
                         break; // break es opcional
-
                     case "Id_Cultivo" :
                         // Declaraciones
                         Actualiza_Cultivo(datos);
@@ -335,6 +336,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "Id_zona" :
                         // Declaraciones
                         Actualiza_Zona(datos);
+                        break; // break es opcional
+                    case "Id_Individuo" :
+                        Actualiza_Individuo(datos);
+                        break; // break es opcional
+                    case "Id_monitoreo" :
+                        Actualiza_Valores(datos);
                         break; // break es opcional
                 }
             }
@@ -911,7 +918,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             registro.put("Nombre_Huerta",Datos[x][1]);
                             registro.put("Registro_Huerta",Datos[x][2]);
-                            registro.put("Id_Duenio",Datos[x][3]);
+                            registro.put("Id_Productor",Datos[x][3]);
                             registro.put("Id_Estado",Datos[x][4]);
                             registro.put("Id_Ciudad",Datos[x][5]);
                             registro.put("Id_Calidad",Datos[x][6]);
@@ -923,7 +930,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("asnm_Huerta",Datos[x][12]);
                             registro.put("latitud_Huerta",Datos[x][13]);
                             registro.put("longitud_Huerta",Datos[x][14]);
-                            registro.put("Activa_Huerta",Datos[x][15]);
+                            registro.put("Activa_Huerta",Datos[x][19]);
+                            registro.put("Id_zona",Datos[x][20]);
                             int cantidad=BD.update("t_Huerta",registro,"Id_Huerta='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
@@ -936,7 +944,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Huerta",Datos[x][0]);
                             registro.put("Nombre_Huerta",Datos[x][1]);
                             registro.put("Registro_Huerta",Datos[x][2]);
-                            registro.put("Id_Duenio",Datos[x][3]);
+                            registro.put("Id_Productor",Datos[x][3]);
                             registro.put("Id_Estado",Datos[x][4]);
                             registro.put("Id_Ciudad",Datos[x][5]);
                             registro.put("Id_Calidad",Datos[x][6]);
@@ -948,8 +956,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("asnm_Huerta",Datos[x][12]);
                             registro.put("latitud_Huerta",Datos[x][13]);
                             registro.put("longitud_Huerta",Datos[x][14]);
-                            registro.put("Activa_Huerta",Datos[x][15]);
-
+                            registro.put("Activa_Huerta",Datos[x][19]);
+                            registro.put("Id_zona",Datos[x][20]);
                             BD.insert("t_Huerta",null,registro);
                         }
 
@@ -1087,7 +1095,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int cantidad=BD.update("t_Zona",registro,"Id_zona='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
-                            Toast.makeText(this,"Se actualizo t_Puntocontrol correctamente.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this,"Se actualizo t_Zona correctamente.",Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Zona ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
@@ -1115,6 +1123,112 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void Actualiza_Individuo(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Individuo",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(Id_Individuo) from t_Individuo where Id_Individuo='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("No_Individuo",Datos[x][1]);
+
+
+                        int cantidad=BD.update("t_Individuo",registro,"Id_Individuo='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            Toast.makeText(this,"Se actualizo t_Individuo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Individuo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("Id_Individuo",Datos[x][0]);
+                        registro.put("No_Individuo",Datos[x][1]);
+
+
+
+                        BD.insert("t_Individuo",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_Valores(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Monitoreo",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(Id_monitoreo) from t_Monitoreo where Id_monitoreo='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Id_zona",Datos[x][1]);
+                        registro.put("Id_Plagas",Datos[x][2]);
+                        registro.put("Id_Enfermedad",Datos[x][3]);
+                        registro.put("Id_Deteccion",Datos[x][4]);
+                        registro.put("Id_Individuo",Datos[x][5]);
+                        registro.put("Id_Humbral",Datos[x][6]);
+
+                        int cantidad=BD.update("t_Monitoreo",registro,"Id_monitoreo='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            Toast.makeText(this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("Id_monitoreo",Datos[x][0]);
+                        registro.put("Id_zona",Datos[x][1]);
+                        registro.put("Id_Plagas",Datos[x][2]);
+                        registro.put("Id_Enfermedad",Datos[x][3]);
+                        registro.put("Id_Deteccion",Datos[x][4]);
+                        registro.put("Id_Individuo",Datos[x][5]);
+                        registro.put("Id_Humbral",Datos[x][6]);
+
+                        BD.insert("t_Monitoreo",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
 
     @Override
     public void onClick(View view) {
