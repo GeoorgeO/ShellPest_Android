@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.text.InputType;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText date_Sinc;
     private int dia,mes, anio;
     public String Usuario,Perfil,Huerta;
+
+    public String MyIp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +157,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intento);
     }
 
+    public void Obtener_Ip (){
+        WifiManager ip= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+
+        String Cip= Formatter.formatIpAddress(ip.getConnectionInfo().getIpAddress());
+        MyIp=Cip;
+        Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
+    }
+
     public void Sincroniza_Datos (String esaFecha,View view){
         List <String> Ligas_Web =new ArrayList<>();
 
@@ -167,23 +179,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Deteccion?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Enfermedad?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Humbral?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Plagas?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Pais?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha="+objSDF.format(date1));
-        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha="+objSDF.format(date1));
+        if (MyIp.length()>0 && !MyIp.equals("0.0.0.0")) {
+            //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
+            String sql;
+            if ("192.168.3".indexOf(MyIp) >= 0 || "10.0.2.16".indexOf(MyIp) >= 0) {
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+            } else {
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+            }
+        }
         int regla3=0;
 
       Grid_Cambios.setAdapter(null);

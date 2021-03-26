@@ -30,7 +30,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Bloque(Id_Bloque text primary key,Id_Huerta text,Nombre_Bloque text)");
         BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text primary key,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text)");
         BD.execSQL("create table t_Zona(Id_zona text primary key,Nombre_zona text)");
-        BD.execSQL("create table t_Monitoreo_PE(Fecha text,Id_Huerta text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
+        BD.execSQL("create table t_Monitoreo_PE(Fecha text,Id_Huerta text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text,Hora text)");
         BD.execSQL("create table t_Monitoreo_Eliminados_PE(Fecha text,Id_Huerta text,Id_enfermedad text,Id_Plagas text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
         BD.execSQL("create table t_Individuo (Id_Individuo text primary key,No_Individuo text)");
         BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text)");

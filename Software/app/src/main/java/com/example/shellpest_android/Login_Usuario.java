@@ -72,7 +72,7 @@ public class Login_Usuario extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.getString(0).length()>0){
-                Intent intento=new Intent(this,MainActivity.class);
+                Intent intento=new Intent(this,EnviaRecibe.class);
                 intento.putExtra("usuario", Renglon.getString(0));
                 intento.putExtra("perfil", Renglon.getString(1));
                 intento.putExtra("huerta", Renglon.getString(2));
@@ -144,11 +144,11 @@ public class Login_Usuario extends AppCompatActivity {
         if (MyIp.length()>0 && !MyIp.equals("0.0.0.0")) {
             //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
             String sql;
-            //if("192.168.3".indexOf(MyIp)>=0 || "10.0.2.16".indexOf(MyIp)>=0){
+            if(MyIp.indexOf("192.168.")>=0 || MyIp.indexOf("10.0.2.16")>=0){
             sql = "http://192.168.3.254:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
-            //}else{
-            //  sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User="+et_Usuario.getText().toString()+"&Pass="+et_Password.getText().toString();
-            //}
+            }else{
+                sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
+            }
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -199,7 +199,7 @@ public class Login_Usuario extends AppCompatActivity {
                     if (jsonobject.optString("Id_Usuario").length() > 0) {
 
                         Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"));
-                        Intent intento = new Intent(this, MainActivity.class);
+                        Intent intento = new Intent(this, EnviaRecibe.class);
                         intento.putExtra("usuario", jsonobject.optString("Id_Usuario"));
                         intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
                         intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));

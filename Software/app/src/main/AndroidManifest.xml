@@ -16,18 +16,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EnviaRecibe">
+        <activity android:name=".Enviar"></activity>
+        <activity android:name=".EnviaRecibe"></activity>
+        <activity
+            android:name=".activity_Monitoreo"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Login_Usuario">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity_Monitoreo"
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Login_Usuario">
-
         </activity>
         <activity android:name=".MainActivity" />
     </application>

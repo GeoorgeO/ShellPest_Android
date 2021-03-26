@@ -118,7 +118,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 if (i > 0) {
                     // Notify the selected item text
                     Huerta = CopiHue.getItem(i).getTexto().substring(0, 5);
-                    Zona = CopiHue.getItem(i).getTexto().substring(CopiHue.getItem(i).getTexto().length() - 4, CopiHue.getItem(i).getTexto().length());
+                    Zona = CopiHue.getItem(i).getTexto().substring(CopiHue.getItem(i).getTexto().length() - 4);
                     cargaSpinnerPto();
                     CopiPto = new AdaptadorSpinner(getApplicationContext(), ItemSPPto);
                     //CopiPto=AdaptadorSpiner;
@@ -173,13 +173,12 @@ public class activity_Monitoreo extends AppCompatActivity {
             }
         });
 
-       /* sp_Pto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sp_Ind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     // Notify the selected item text
-                    PCX=CopiPto.getItem(i).getTexto().substring(CopiPto.getItem(i).getTexto().indexOf("(")+1, CopiPto.getItem(i).getTexto().indexOf(","));
-                    PCY=CopiPto.getItem(i).getTexto().substring(CopiPto.getItem(i).getTexto().indexOf(",")+1, CopiPto.getItem(i).getTexto().length()-1);
+                    Humbral=CopiInd.getItem(i).getTexto().substring(CopiInd.getItem(i).getTexto().length() - 4);
                 }
             }
 
@@ -187,7 +186,7 @@ public class activity_Monitoreo extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
+        });
 
         rg_PE.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -201,7 +200,7 @@ public class activity_Monitoreo extends AppCompatActivity {
         arrayArticulos = new ArrayList<>();
         Cargagrid();
 
-
+        Localizacion();
     }
 
     private void Localizacion() {
@@ -350,14 +349,14 @@ public class activity_Monitoreo extends AppCompatActivity {
         Cursor Renglon;
 
         if(rb_Enfermedad.isChecked()){
-            Renglon=BD.rawQuery("select M.Id_Individuo,I.No_Individuo from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+            Renglon=BD.rawQuery("select M.Id_Individuo,I.No_Individuo,M.Id_Humbral from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
         }else{
-            Renglon=BD.rawQuery("select M.Id_Individuo,I.No_Individuo from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad=''",null);
+            Renglon=BD.rawQuery("select M.Id_Individuo,I.No_Individuo,M.Id_Humbral from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad=''",null);
         }
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+"         Humbral: "+Renglon.getString(2)));
             } while(Renglon.moveToNext());
 
 
@@ -381,6 +380,9 @@ public class activity_Monitoreo extends AppCompatActivity {
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = simpleDateFormat.format(new Date());
+
         ContentValues registro= new ContentValues();
         registro.put("Fecha",objSDF.format(date1));
         registro.put("Id_Huerta",Huerta);
@@ -398,7 +400,7 @@ public class activity_Monitoreo extends AppCompatActivity {
         registro.put("Id_Humbral",Humbral);
         registro.put("n_coordenadaX",CoorX);
         registro.put("n_coordenadaY",CoorY);
-
+        registro.put("Hora",currentTime);
         BD.insert("t_Monitoreo_PE",null,registro);
         BD.close();
 
