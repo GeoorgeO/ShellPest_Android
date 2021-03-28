@@ -30,38 +30,41 @@ import java.util.Iterator;
 public class Enviar extends AppCompatActivity {
 
     public String MyIp;
+    ConexionInternet obj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enviar);
+        obj = new ConexionInternet(this);
+        if (obj.isConnected()==false ) {
+            Toast.makeText(this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
+        }
     }
 
     public void Enviar(View view) {
-        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
-        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
+            AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
+            SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-        Cursor Renglon = BD.rawQuery("select Fecha,Id_Huerta,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Usuario,Id_Humbral,n_coordenadaX,n_coordenadaY,Hora from t_Monitoreo_PE", null);
+            Cursor Renglon = BD.rawQuery("select Fecha,Id_Huerta,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Usuario,Id_Humbral,n_coordenadaX,n_coordenadaY,Hora from t_Monitoreo_PE", null);
 
-
-
-
-        if (Renglon.moveToFirst()) {
+            if (Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
-            do {
+                do {
+                    insertWeb(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11));
+                } while (Renglon.moveToNext());
 
-
-
-                insertWeb(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11));
-            } while (Renglon.moveToNext());
-
-
-
-            BD.close();
-        } else {
-            Toast.makeText(this, "No hay usuarios guardados", Toast.LENGTH_SHORT).show();
-            BD.close();
+                BD.close();
+            } else {
+                Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+        }else{
+        Toast.makeText(this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
@@ -120,13 +123,12 @@ public class Enviar extends AppCompatActivity {
 
         Obtener_Ip();
         String Liga="";
-        if (MyIp.length()>0 && !MyIp.equals("0.0.0.0")) {
-            //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
-            String sql;
-
-            if(MyIp.indexOf("192.168.")>=0 || MyIp.indexOf("10.0.2.16")>=0){
+        if(MyIp.equals("0.0.0.0")){
+            Liga = "http://177.241.250.117:8090//Control/MonitoreoPE?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Huerta=" + Id_Huerta + "&Id_Plagas=" + Id_Plagas + "&Id_Enfermedad=" + Id_Enfermedad + "&Id_Deteccion=" + Id_Deteccion + "&Id_Individuo=" + Id_Individuo + "&Id_Humbral=" + Id_Humbral + "&Id_PuntoControl=" + Id_PuntoControl + "&Id_Usuario=" + Id_Usuario + "&n_CoordenadaX=" + n_coordenadaX + "&n_CoordenadaY=" + n_coordenadaY;
+        } else {
+            if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ){
                 Liga = "http://192.168.3.254:8090//Control/MonitoreoPE?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Huerta=" + Id_Huerta + "&Id_Plagas=" + Id_Plagas + "&Id_Enfermedad=" + Id_Enfermedad + "&Id_Deteccion=" + Id_Deteccion + "&Id_Individuo=" + Id_Individuo + "&Id_Humbral=" + Id_Humbral + "&Id_PuntoControl=" + Id_PuntoControl + "&Id_Usuario=" + Id_Usuario + "&n_CoordenadaX=" + n_coordenadaX + "&n_CoordenadaY=" + n_coordenadaY;
-            } else {
+            }else{
                 Liga = "http://177.241.250.117:8090//Control/MonitoreoPE?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Huerta=" + Id_Huerta + "&Id_Plagas=" + Id_Plagas + "&Id_Enfermedad=" + Id_Enfermedad + "&Id_Deteccion=" + Id_Deteccion + "&Id_Individuo=" + Id_Individuo + "&Id_Humbral=" + Id_Humbral + "&Id_PuntoControl=" + Id_PuntoControl + "&Id_Usuario=" + Id_Usuario + "&n_CoordenadaX=" + n_coordenadaX + "&n_CoordenadaY=" + n_coordenadaY;
             }
         }

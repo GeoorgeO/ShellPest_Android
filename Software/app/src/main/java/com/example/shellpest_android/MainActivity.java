@@ -16,6 +16,7 @@ import android.os.SystemClock;
 import android.text.InputType;
 import android.text.format.Formatter;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -60,10 +61,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public String MyIp;
 
+    ConexionInternet obj;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        obj = new ConexionInternet(this);
+        if (obj.isConnected()==false ) {
+            Toast.makeText(MainActivity.this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
+        }
+
         date_Sinc=(EditText)findViewById(R.id.date_Sinc);
         date_Sinc.setOnClickListener(this);
 
@@ -153,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
-        //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
     }
 
@@ -162,242 +171,273 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String Cip= Formatter.formatIpAddress(ip.getConnectionInfo().getIpAddress());
         MyIp=Cip;
-        Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
+
     }
 
     public void Sincroniza_Datos (String esaFecha,View view){
-        List <String> Ligas_Web =new ArrayList<>();
+        try{
+            if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
+                Obtener_Ip();
+                List <String> Ligas_Web =new ArrayList<>();
 
-        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
 
-        SimpleDateFormat objSDF = new SimpleDateFormat("yyyyMMdd"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                SimpleDateFormat objSDF = new SimpleDateFormat("yyyyMMdd"); // La cadena de formato de fecha se pasa como un argumento al objeto
 
-        Date date1=objDate;
-        try {
-            date1=new SimpleDateFormat("dd/MM/yyyy").parse(esaFecha);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+                Date date1=objDate;
+                try {
+                    date1=new SimpleDateFormat("dd/MM/yyyy").parse(esaFecha);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
-        if (MyIp.length()>0 && !MyIp.equals("0.0.0.0")) {
-            //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
-            String sql;
-            if ("192.168.3".indexOf(MyIp) >= 0 || "10.0.2.16".indexOf(MyIp) >= 0) {
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-            } else {
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
-                Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-            }
-        }
-        int regla3=0;
-
-      Grid_Cambios.setAdapter(null);
-      arrayArticulos.clear();
-
-        for (int i=0;i<Ligas_Web.size();i++){
-            //Toast.makeText(MainActivity.this, Ligas_Web.get(i), Toast.LENGTH_SHORT).show();
-            LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
-        }
-
-        if(arrayArticulos.size()>0){
-            Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
-            Grid_Cambios.setAdapter(Adapter);
-        }else{
-            Toast.makeText(MainActivity.this, "No hay datos para sincronizar de la fecha seleccionada.", Toast.LENGTH_SHORT).show();
-        }
-        //ActualizaFechaSinc();
-    }
-
-    public void LlamarWebService(String Liga,int porcentaje,int ix,int total,View view){
-        //Toast.makeText(MainActivity.this, Liga, Toast.LENGTH_SHORT).show();
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        URL url= null;
-        try {
-            url = new URL(Liga);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        HttpURLConnection conn= null;
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            conn.setRequestMethod("GET");
-            conn.connect();
-
-            BufferedReader in =new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String inputLine;
-
-            StringBuffer response =new StringBuffer();
-
-            String json="";
-
-            while ((inputLine=in.readLine())!=null){
-                response.append(inputLine);
-            }
-
-            json=response.toString();
-
-            JSONArray jsonarr=null;
-
-            try {
-                jsonarr=new JSONArray(json);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (jsonarr.length()>0){
-                String [][] datos;
-                JSONObject jsonobject=jsonarr.getJSONObject(0);
-                datos = new String[jsonarr.length()][jsonobject.length()];
-
-                String NombreId="";
-                for (int i=0;i<jsonarr.length();i++){
-                    jsonobject=jsonarr.getJSONObject(i);
-
-                    int columnas=0;
-
-                    Iterator llaves = jsonobject.keys();
-
-                    while(llaves.hasNext()) {
-                        String currentDynamicKey = (String)llaves.next();
-                        //Toast.makeText(MainActivity.this, currentDynamicKey, Toast.LENGTH_SHORT).show();
-                        datos[i][columnas]=jsonobject.optString(currentDynamicKey);
-                        if (columnas==0){
-                            NombreId=currentDynamicKey;
-                        }
-                        columnas++;
+                if(MyIp.equals("0.0.0.0")){
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                } else {
+                    if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ){
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                    }else{
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                     }
                 }
 
-                // declaración de switch
-                switch(NombreId)
-                {
-                    // declaración case
-                    // los valores deben ser del mismo tipo de la expresión
-                    case "Id_Calidad" :
-                        // Declaraciones
-                        Actualiza_Calidad(datos);
-                        break; // break es opcional
-                    case "Id_Cultivo" :
-                        // Declaraciones
-                        Actualiza_Cultivo(datos);
-                        break; // break es opcional
-                    case "Id_Duenio" :
-                        // Declaraciones
-                        Actualiza_Duenio(datos);
-                        break; // break es opcional
-                    case "Id_Deteccion" :
-                        // Declaraciones
-                        Actualiza_Deteccion(datos);
-                        break; // break es opcional
-                    case "Id_Enfermedad" :
-                        // Declaraciones
-                        Actualiza_Enfermedad(datos);
-                        break; // break es opcional
-                    case "Id_Humbral" :
-                        // Declaraciones
-                        Actualiza_Humbral(datos);
-                        break; // break es opcional
-                    case "Id_Plagas" :
-                        // Declaraciones
-                        Actualiza_Plagas(datos);
-                        break; // break es opcional
-                    case "Id_Productor" :
-                        // Declaraciones
-                        Actualiza_Productor(datos);
-                        break; // break es opcional
-                    case "Id_Pais" :
-                        // Declaraciones
-                        Actualiza_Pais(datos);
-                        break; // break es opcional
-                    case "Id_Estado" :
-                        // Declaraciones
-                        Actualiza_Estado(datos);
-                        break; // break es opcional
-                    case "Id_Ciudad" :
-                        // Declaraciones
-                        Actualiza_Ciudades(datos);
-                        break; // break es opcional
-                    case "Id_Huerta" :
-                        // Declaraciones
-                        Actualiza_Huerta(datos);
-                        break; // break es opcional
-                    case "Id_Bloque" :
-                        // Declaraciones
-                        Actualiza_Bloque(datos);
-                        break; // break es opcional
-                    case "Id_PuntoControl" :
-                        // Declaraciones
-                        Actualiza_Puntocontrol(datos);
-                        break; // break es opcional
-                    case "Id_zona" :
-                        // Declaraciones
-                        Actualiza_Zona(datos);
-                        break; // break es opcional
-                    case "Id_Individuo" :
-                        Actualiza_Individuo(datos);
-                        break; // break es opcional
-                    case "Id_monitoreo" :
-                        Actualiza_Valores(datos);
-                        break; // break es opcional
+                int regla3=0;
+
+                Grid_Cambios.setAdapter(null);
+                arrayArticulos.clear();
+
+                for (int i=0;i<Ligas_Web.size();i++){
+                    //Toast.makeText(MainActivity.this, Ligas_Web.get(i), Toast.LENGTH_SHORT).show();
+                    LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
                 }
+
+                if(arrayArticulos.size()>0){
+                    Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
+                    Grid_Cambios.setAdapter(Adapter);
+                }else{
+                    Toast.makeText(MainActivity.this, "No hay datos para sincronizar de la fecha seleccionada.", Toast.LENGTH_SHORT).show();
+                }
+                //ActualizaFechaSinc();
+            }else{
+                Toast.makeText(MainActivity.this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
+            }
+        }catch (WindowManager.BadTokenException E){
+
+        }
+
+
+    }
+
+    public void LlamarWebService(String Liga,int porcentaje,int ix,int total,View view){
+        try{
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            URL url= null;
+            try {
+                url = new URL(Liga);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
 
-            conn.disconnect();
+            HttpURLConnection conn= null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            porcentaje=((ix+1)*100)/total;
+            try {
+                conn.setRequestMethod("GET");
+                conn.connect();
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            conn.disconnect();
-            Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            conn.disconnect();
-            Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            conn.disconnect();
-            Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+                BufferedReader in =new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String inputLine;
+
+                StringBuffer response =new StringBuffer();
+
+                String json="";
+
+                while ((inputLine=in.readLine())!=null){
+                    response.append(inputLine);
+                }
+
+                json=response.toString();
+
+                JSONArray jsonarr=null;
+
+                try {
+                    jsonarr=new JSONArray(json);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (jsonarr.length()>0){
+                    String [][] datos;
+                    JSONObject jsonobject=jsonarr.getJSONObject(0);
+                    datos = new String[jsonarr.length()][jsonobject.length()];
+
+                    String NombreId="";
+                    for (int i=0;i<jsonarr.length();i++){
+                        jsonobject=jsonarr.getJSONObject(i);
+
+                        int columnas=0;
+
+                        Iterator llaves = jsonobject.keys();
+
+                        while(llaves.hasNext()) {
+                            String currentDynamicKey = (String)llaves.next();
+                            //Toast.makeText(MainActivity.this, currentDynamicKey, Toast.LENGTH_SHORT).show();
+                            datos[i][columnas]=jsonobject.optString(currentDynamicKey);
+                            if (columnas==0){
+                                NombreId=currentDynamicKey;
+                            }
+                            columnas++;
+                        }
+                    }
+
+                    // declaración de switch
+                    switch(NombreId)
+                    {
+                        // declaración case
+                        // los valores deben ser del mismo tipo de la expresión
+                        case "Id_Calidad" :
+                            // Declaraciones
+                            Actualiza_Calidad(datos);
+                            break; // break es opcional
+                        case "Id_Cultivo" :
+                            // Declaraciones
+                            Actualiza_Cultivo(datos);
+                            break; // break es opcional
+                        case "Id_Duenio" :
+                            // Declaraciones
+                            Actualiza_Duenio(datos);
+                            break; // break es opcional
+                        case "Id_Deteccion" :
+                            // Declaraciones
+                            Actualiza_Deteccion(datos);
+                            break; // break es opcional
+                        case "Id_Enfermedad" :
+                            // Declaraciones
+                            Actualiza_Enfermedad(datos);
+                            break; // break es opcional
+                        case "Id_Humbral" :
+                            // Declaraciones
+                            Actualiza_Humbral(datos);
+                            break; // break es opcional
+                        case "Id_Plagas" :
+                            // Declaraciones
+                            Actualiza_Plagas(datos);
+                            break; // break es opcional
+                        case "Id_Productor" :
+                            // Declaraciones
+                            Actualiza_Productor(datos);
+                            break; // break es opcional
+                        case "Id_Pais" :
+                            // Declaraciones
+                            Actualiza_Pais(datos);
+                            break; // break es opcional
+                        case "Id_Estado" :
+                            // Declaraciones
+                            Actualiza_Estado(datos);
+                            break; // break es opcional
+                        case "Id_Ciudad" :
+                            // Declaraciones
+                            Actualiza_Ciudades(datos);
+                            break; // break es opcional
+                        case "Id_Huerta" :
+                            // Declaraciones
+                            Actualiza_Huerta(datos);
+                            break; // break es opcional
+                        case "Id_Bloque" :
+                            // Declaraciones
+                            Actualiza_Bloque(datos);
+                            break; // break es opcional
+                        case "Id_PuntoControl" :
+                            // Declaraciones
+                            Actualiza_Puntocontrol(datos);
+                            break; // break es opcional
+                        case "Id_zona" :
+                            // Declaraciones
+                            Actualiza_Zona(datos);
+                            break; // break es opcional
+                        case "Id_Individuo" :
+                            Actualiza_Individuo(datos);
+                            break; // break es opcional
+                        case "Id_monitoreo" :
+                            Actualiza_Valores(datos);
+                            break; // break es opcional
+                    }
+                }
+
+                conn.disconnect();
+
+                porcentaje=((ix+1)*100)/total;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(MainActivity.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            }
+        }catch (WindowManager.BadTokenException E){
+
         }
     }
 
@@ -408,9 +448,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int cantidad= BD.delete("FechaSincroniza","id_Sincroniza<>'1000'",null);
 
             if(cantidad>0){
-                Toast.makeText(this,"Se Elimino FechaSinc.",Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,"Se Elimino FechaSinc.",Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(this,"Ocurrio un error al intentar eliminar FechaSinc, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar eliminar FechaSinc, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
             }
 
             ContentValues registro = new ContentValues();
@@ -426,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BD.close();
 
         }catch (Exception e){
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -437,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor Renglon =BD.rawQuery("select count(Id_Calidad) from t_Calidad",null);
 
         if(Renglon.moveToFirst()){
-            Toast.makeText(this,Renglon.getString(0),Toast.LENGTH_SHORT).show();
+            //////Toast.makeText(MainActivity.this,Renglon.getString(0),Toast.LENGTH_SHORT).show();
             }else{
 
             }
@@ -464,9 +504,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Calidad",registro,"Id_Calidad='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -480,9 +520,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -508,9 +548,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Cultivo",registro,"Id_Cultivo='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Cultivo correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Cultivo correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Cultivo, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Cultivo, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -525,9 +565,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -553,9 +593,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Duenio",registro,"Id_Duenio='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Duenio correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Duenio correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Duenio, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Duenio, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -569,9 +609,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -597,9 +637,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Deteccion",registro,"Id_Deteccion='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Deteccion correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Deteccion correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Deteccion, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Deteccion, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -613,9 +653,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -642,9 +682,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Enfermedad",registro,"Id_Enfermedad='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Enfermedad correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Enfermedad correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Enfermedad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Enfermedad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -658,9 +698,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -687,9 +727,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int cantidad=BD.update("t_Humbral",registro,"Id_Humbral='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
-                            Toast.makeText(this,"Se actualizo t_Humbral correctamente.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Humbral correctamente.",Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Humbral, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Humbral, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         ContentValues registro= new ContentValues();
@@ -705,9 +745,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BD.close();
                 }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -733,9 +773,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int cantidad=BD.update("t_Plagas",registro,"Id_Plagas='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
-                            Toast.makeText(this,"Se actualizo t_Plagas correctamente.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Plagas correctamente.",Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Plagas, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Plagas, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         ContentValues registro= new ContentValues();
@@ -749,9 +789,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BD.close();
                 }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -777,9 +817,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Productor",registro,"Id_Productor='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Productor correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Productor correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Productor, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Productor, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -793,9 +833,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -821,9 +861,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Pais",registro,"Id_Pais='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Pais correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Pais correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Pais, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Pais, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -837,9 +877,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -866,9 +906,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Estado",registro,"Id_Estado='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Estado correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Estado correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Estado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Estado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -883,9 +923,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -912,9 +952,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Ciudades",registro,"Id_Ciudad='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Ciudades correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Ciudades correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Ciudades, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Ciudades, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -929,9 +969,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -971,9 +1011,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Huerta",registro,"Id_Huerta='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Huerta correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Huerta correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Huerta, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Huerta, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -1003,9 +1043,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -1031,9 +1071,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Bloque",registro,"Id_Bloque='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Bloque correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Bloque correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Bloque, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Bloque, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -1048,9 +1088,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 }catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -1079,9 +1119,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int cantidad=BD.update("t_Puntocontrol",registro,"Id_PuntoControl='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
-                                Toast.makeText(this,"Se actualizo t_Puntocontrol correctamente.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Puntocontrol correctamente.",Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Puntocontrol ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Puntocontrol ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             ContentValues registro= new ContentValues();
@@ -1101,9 +1141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         BD.close();
                     }
                 } catch (SQLiteConstraintException sqle){
-                    Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 } catch (Exception e){
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -1131,9 +1171,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int cantidad=BD.update("t_Zona",registro,"Id_zona='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
-                            Toast.makeText(this,"Se actualizo t_Zona correctamente.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Zona correctamente.",Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Zona ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Zona ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         ContentValues registro= new ContentValues();
@@ -1151,9 +1191,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
-                Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
-                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -1181,9 +1221,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int cantidad=BD.update("t_Individuo",registro,"Id_Individuo='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
-                            Toast.makeText(this,"Se actualizo t_Individuo correctamente.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Individuo correctamente.",Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Individuo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Individuo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         ContentValues registro= new ContentValues();
@@ -1201,9 +1241,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
-                Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
-                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -1235,9 +1275,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int cantidad=BD.update("t_Monitoreo",registro,"Id_monitoreo='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
-                            Toast.makeText(this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         ContentValues registro= new ContentValues();
@@ -1258,9 +1298,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
-                Toast.makeText(this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
-                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
         }
