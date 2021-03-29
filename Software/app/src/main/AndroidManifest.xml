@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -15,6 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
+
+
         android:usesCleartextTraffic="true">
         <activity android:name=".Enviar"></activity>
         <activity android:name=".EnviaRecibe"></activity>
@@ -29,6 +34,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+
+
     </application>
 
 </manifest>
