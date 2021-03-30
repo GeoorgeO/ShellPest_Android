@@ -157,7 +157,7 @@ public class Login_Usuario extends AppCompatActivity {
                 if(MyIp.equals("0.0.0.0")){
                     sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
                 }else{
-                    if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ){
+                    if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0){
                         sql = "http://192.168.3.254:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
                     }else{
                         sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();

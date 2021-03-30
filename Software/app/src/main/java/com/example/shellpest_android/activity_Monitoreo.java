@@ -1,5 +1,6 @@
 package com.example.shellpest_android;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -7,14 +8,19 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -29,15 +35,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 public class activity_Monitoreo extends AppCompatActivity {
     TextView et_fecha, et_PuntoControl, et_EP, et_Organo, et_Individuo;
     Spinner sp_PE, sp_Hue, sp_Pto, sp_Org, sp_Ind;
-    RadioButton rb_Plaga, rb_Enfermedad;
+    RadioButton rb_Plaga, rb_Enfermedad,rb_SinPresencia;
     RadioGroup rg_PE;
     ListView lv_GridMonitoreo;
 
@@ -72,6 +81,7 @@ public class activity_Monitoreo extends AppCompatActivity {
 
         rb_Plaga = (RadioButton) findViewById(R.id.rb_Plaga);
         rb_Enfermedad = (RadioButton) findViewById(R.id.rb_Enfermedad);
+        rb_SinPresencia= (RadioButton) findViewById(R.id.rb_SinPresencia);
 
         rg_PE = (RadioGroup) findViewById(R.id.rg_PE);
 
@@ -110,7 +120,6 @@ public class activity_Monitoreo extends AppCompatActivity {
         ItemSPInd.add(new ItemDatoSpinner("Individuo"));
         CopiInd = new AdaptadorSpinner(this, ItemSPInd);
         sp_Ind.setAdapter(CopiInd);
-
 
         sp_Hue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -191,16 +200,120 @@ public class activity_Monitoreo extends AppCompatActivity {
         rg_PE.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                cargaSpinnerPE();
-                CopiPE = new AdaptadorSpinner(getApplicationContext(), ItemSPPE);
-                //CopiPE=AdaptadorSpiner;
-                sp_PE.setAdapter(CopiPE);
+                if(rb_SinPresencia.isChecked()){
+                    CopiPE=null;
+                    ItemSPPE=new ArrayList<>();
+                    ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad"));
+                    CopiPE = new AdaptadorSpinner(getApplicationContext(), ItemSPPE);
+                    //CopiInd=AdaptadorSpiner;
+                    sp_PE.setAdapter(CopiPE);
+                    sp_PE.setEnabled(false);
+                    sp_Org.setEnabled(false);
+                    sp_Ind.setEnabled(false);
+                }else{
+                    sp_PE.setEnabled(true);
+                    sp_Org.setEnabled(true);
+                    sp_Ind.setEnabled(true);
+                    cargaSpinnerPE();
+                    CopiPE = new AdaptadorSpinner(getApplicationContext(), ItemSPPE);
+                    //CopiPE=AdaptadorSpiner;
+                    sp_PE.setAdapter(CopiPE);
+                }
+            }
+        });
+
+        lv_GridMonitoreo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(activity_Monitoreo.this,"Hola",Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(activity_Monitoreo.this);
+                dialogo1.setTitle("ELIMINAR REGISTRO SELECCIONADO");
+                dialogo1.setMessage("¿ Quieres eliminar la P/E: "+arrayArticulos.get(i).getPE()+" en "+arrayArticulos.get(i).Nombre_Deteccion+". ?");
+                dialogo1.setCancelable(false);
+                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //aceptar();
+                        String e=arrayArticulos.get(i).Nombre_Deteccion;
+
+                    }
+                });
+                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //cancelar();
+                    }
+                });
+                dialogo1.show();
+                return false;
             }
         });
         arrayArticulos = new ArrayList<>();
-        Cargagrid();
 
-        Localizacion();
+        sp_Pto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i > 0) {
+                    // Notify the selected item text
+                    Cargagrid();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+       // Localizacion();
+    }
+
+
+    private void locationStart() {
+        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Localizacion Local = new Localizacion();
+        Local.setMainActivity(this);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+       // mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        Toast.makeText(activity_Monitoreo.this,mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude()+","+mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude(),Toast.LENGTH_SHORT).show();
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, (LocationListener) Local);
+        //latitud.setText("Localización agregada");
+        //direccion.setText("");
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
+    }
+
+    public void obtenerXeY(String X,String Y){
+
+    }
+
+    public void setLocation(Location loc) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        loc.getLatitude(), loc.getLongitude(), 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+                    //direccion.setText(DirCalle.getAddressLine(0));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void Localizacion() {
@@ -220,7 +333,6 @@ public class activity_Monitoreo extends AppCompatActivity {
 
             Toast.makeText(this,CoorX+","+CoorY,Toast.LENGTH_SHORT).show();
         }
-
     }
 
    private void cargaSpinnerPE(){
@@ -338,7 +450,6 @@ public class activity_Monitoreo extends AppCompatActivity {
     private void cargaSpinnerInd(){
         if(Huerta.length()>0 && !Huerta.equals("NULL") && sp_Org.getSelectedItemPosition()>0 && sp_PE.getSelectedItemPosition()>0){
 
-
         CopiInd=null;
 
         ItemSPInd=new ArrayList<>();
@@ -371,7 +482,11 @@ public class activity_Monitoreo extends AppCompatActivity {
     }
 
     public void agregarAGrid (View view){
-        Localizacion();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
 
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
@@ -404,6 +519,10 @@ public class activity_Monitoreo extends AppCompatActivity {
         BD.insert("t_Monitoreo_PE",null,registro);
         BD.close();
 
+        sp_Ind.setSelection(0);
+        sp_Org.setSelection(0);
+        sp_PE.setSelection(0);
+
         Cargagrid();
     }
     private void Cargagrid(){
@@ -429,7 +548,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "left join t_Plagas as Pl on M.Id_Plagas=Pl.Id_Plagas\n" +
                 "left join t_Enfermedad as E on M.Id_enfermedad=E.Id_enfermedad\n" +
                 "left join t_Individuo as I on I.Id_Individuo=M.Id_Individuo\n" +
-                "where M.Fecha='"+objSDF.format(date1)+"'",null);
+                "where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
@@ -454,5 +573,6 @@ public class activity_Monitoreo extends AppCompatActivity {
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }
+
     }
 }

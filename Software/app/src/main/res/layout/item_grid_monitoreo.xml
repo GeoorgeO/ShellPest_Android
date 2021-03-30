@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/txt_Punto"
             android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
 
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -27,7 +27,7 @@
         <TextView
             android:id="@+id/txt_PE"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_weight=".25"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -36,7 +36,7 @@
         <TextView
             android:id="@+id/txt_Organo"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
 
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -45,7 +45,7 @@
         <TextView
             android:id="@+id/txt_Individuo"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
 
             android:textAlignment="center"
             android:textColor="@color/white"

@@ -11,96 +11,65 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/ll_Fecha"
-            android:layout_width="match_parent"
+
+        <EditText
+            android:id="@+id/et_fecha"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08"
-            android:orientation="horizontal">
+            android:layout_weight="0.02"
 
-            <EditText
-                android:id="@+id/et_espacio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:background="#00000000"
-                android:enabled="false" />
+            android:enabled="false"
+            android:inputType="date"
+            android:textAlignment="center" />
 
-            <EditText
-                android:id="@+id/et_fecha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:autoText="false"
-                android:editable="false"
-                android:enabled="false"
-                android:inputType="date"
-                android:textAlignment="center" />
 
-            <EditText
-                android:id="@+id/et_espacio2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:background="#00000000"
-                android:enabled="false" />
-
-        </LinearLayout>
         <Spinner
             android:id="@+id/sp_Hue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08" />
+            android:layout_weight="0.0755" />
 
-        <LinearLayout
-            android:id="@+id/ll_EP"
+
+        <Spinner
+            android:id="@+id/sp_Pto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.03"
+            android:layout_weight="0.0755" />
+
+
+        <RadioGroup
+            android:id="@+id/rg_PE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.0555"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_espacio3"
+            <RadioButton
+                android:id="@+id/rb_Plaga"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:background="#00000000"
-                android:enabled="false" />
+                android:layout_weight="3.333"
+                android:text="Plaga" />
 
-            <RadioGroup
-                android:id="@+id/rg_PE"
+            <RadioButton
+                android:id="@+id/rb_Enfermedad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:orientation="horizontal">
+                android:layout_weight="3.333"
+                android:text="Enfermedad" />
 
-                <RadioButton
-                    android:id="@+id/rb_Plaga"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="Plaga" />
-
-                <RadioButton
-                    android:id="@+id/rb_Enfermedad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="Enfermedad" />
-
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/et_espacio4"
+            <RadioButton
+                android:id="@+id/rb_SinPresencia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:background="#00000000"
-                android:enabled="false" />
-        </LinearLayout>
+                android:layout_weight="3.333"
+                android:text="Sin Presencia" />
+
+        </RadioGroup>
 
 
         <Spinner
@@ -108,63 +77,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:layout_weight="0.08" />
-
-        <Spinner
-            android:id="@+id/sp_Pto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.08" />
+            android:layout_weight="0.0755" />
 
         <Spinner
             android:id="@+id/sp_Org"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08"
+            android:layout_weight="0.0755"
             android:text="Huerta" />
+
         <Spinner
             android:id="@+id/sp_Ind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08" />
+            android:layout_weight="0.0755" />
 
-        <LinearLayout
-            android:id="@+id/ll_Agrega"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/button"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08"
-            android:orientation="horizontal">
+            android:layout_weight="0.04"
+            android:onClick="agregarAGrid"
+            android:text="Agregar" />
 
-            <EditText
-                android:id="@+id/et_espacio5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:background="#00000000"
-                android:enabled="false" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:onClick="agregarAGrid"
-                android:text="Agregar" />
-
-            <EditText
-                android:id="@+id/et_espacio6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.3"
-                android:background="#00000000"
-                android:enabled="false" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_titlecolumns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.03"
+            android:layout_weight="0.025"
             android:orientation="horizontal">
 
             <EditText
@@ -222,8 +163,17 @@
             android:id="@+id/lv_GridMonitoreo"
             android:layout_width="match_parent"
             android:layout_height="173dp"
-            android:layout_weight="0.38"
-            tools:listitem="@layout/item_grid_monitoreo" />
+            android:layout_weight="0.41"
+            tools:listitem="@layout/item_grid_monitoreo">
+
+        </ListView>
+
+        <Button
+            android:id="@+id/btn_Guardar"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.04"
+            android:text="Guardar" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

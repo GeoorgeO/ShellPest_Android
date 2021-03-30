@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                 } else {
-                    if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ){
+                    if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
