@@ -999,15 +999,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Ciudad",Datos[x][5]);
                             registro.put("Id_Calidad",Datos[x][6]);
                             registro.put("Id_Cultivo",Datos[x][7]);
-                            registro.put("zona_Huerta",Datos[x][8]);
-                            registro.put("banda_Huerta",Datos[x][9]);
-                            registro.put("este_Huerta",Datos[x][10]);
-                            registro.put("norte_Huerta",Datos[x][11]);
-                            registro.put("asnm_Huerta",Datos[x][12]);
-                            registro.put("latitud_Huerta",Datos[x][13]);
-                            registro.put("longitud_Huerta",Datos[x][14]);
-                            registro.put("Activa_Huerta",Datos[x][19]);
-                            registro.put("Id_zona",Datos[x][20]);
+                            registro.put("Id_Tratamiento",Datos[x][8]);
+                            registro.put("zona_Huerta",Datos[x][9]);
+                            registro.put("banda_Huerta",Datos[x][10]);
+                            registro.put("este_Huerta",Datos[x][11]);
+                            registro.put("norte_Huerta",Datos[x][12]);
+                            registro.put("asnm_Huerta",Datos[x][13]);
+                            registro.put("latitud_Huerta",Datos[x][14]);
+                            registro.put("longitud_Huerta",Datos[x][15]);
+                            registro.put("Activa_Huerta",Datos[x][20]);
+                            registro.put("Id_zona",Datos[x][21]);
                             int cantidad=BD.update("t_Huerta",registro,"Id_Huerta='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
@@ -1025,15 +1026,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Ciudad",Datos[x][5]);
                             registro.put("Id_Calidad",Datos[x][6]);
                             registro.put("Id_Cultivo",Datos[x][7]);
-                            registro.put("zona_Huerta",Datos[x][8]);
-                            registro.put("banda_Huerta",Datos[x][9]);
-                            registro.put("este_Huerta",Datos[x][10]);
-                            registro.put("norte_Huerta",Datos[x][11]);
-                            registro.put("asnm_Huerta",Datos[x][12]);
-                            registro.put("latitud_Huerta",Datos[x][13]);
-                            registro.put("longitud_Huerta",Datos[x][14]);
-                            registro.put("Activa_Huerta",Datos[x][19]);
-                            registro.put("Id_zona",Datos[x][20]);
+                            registro.put("Id_Tratamiento",Datos[x][8]);
+                            registro.put("zona_Huerta",Datos[x][9]);
+                            registro.put("banda_Huerta",Datos[x][10]);
+                            registro.put("este_Huerta",Datos[x][11]);
+                            registro.put("norte_Huerta",Datos[x][12]);
+                            registro.put("asnm_Huerta",Datos[x][13]);
+                            registro.put("latitud_Huerta",Datos[x][14]);
+                            registro.put("longitud_Huerta",Datos[x][15]);
+                            registro.put("Activa_Huerta",Datos[x][20]);
+                            registro.put("Id_zona",Datos[x][21]);
                             BD.insert("t_Huerta",null,registro);
                         }
 

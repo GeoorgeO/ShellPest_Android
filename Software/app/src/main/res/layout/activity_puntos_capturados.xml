@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Puntos_Capturados">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.000001"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_CPunto"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:background="@color/design_default_color_secondary_variant"
+                android:text="Pto"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_CHuerta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/teal_700"
+                android:text="Huerta"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txt_CNPE"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:background="@color/teal_700"
+                android:text="N° P/E"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_Puntos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".83"
+            tools:listitem="@layout/item_grid_puntos" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.07"
+            android:text="Cerrar" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

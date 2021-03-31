@@ -11,12 +11,13 @@ import android.widget.Toast;
 
 public class Localizacion implements LocationListener {
     activity_Monitoreo mainActivity;
+
+    public String Lat,Long;
     public activity_Monitoreo getMainActivity() {
         return mainActivity;
     }
     public void setMainActivity(activity_Monitoreo mainActivity) {
         this.mainActivity = mainActivity;
-
     }
     @Override
     public void onLocationChanged(Location loc) {
@@ -26,12 +27,12 @@ public class Localizacion implements LocationListener {
         loc.getLongitude();
         String sLatitud = String.valueOf(loc.getLatitude());
         String sLongitud = String.valueOf(loc.getLongitude());
-        Toast.makeText(mainActivity,sLatitud+","+sLongitud,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mainActivity,sLatitud+","+sLongitud,Toast.LENGTH_SHORT).show();
         //CoorX.setText(sLatitud);
         //longitud.setText(sLongitud);
         //this.mainActivity.setLocation(loc);
-        this.mainActivity.CoorX=sLatitud;
-        this.mainActivity.CoorY=sLongitud;
+        Lat=sLatitud;
+        Long=sLongitud;
     }
 
 

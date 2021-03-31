@@ -50,16 +50,19 @@ public class activity_Monitoreo extends AppCompatActivity {
     RadioGroup rg_PE;
     ListView lv_GridMonitoreo;
 
-    private LocationManager Ubicacion;
+    //private LocationManager Ubicacion;
 
     Itemmonitoreo Tabla;
     Adaptador_GridMonitorio Adapter;
     ArrayList<Itemmonitoreo> arrayArticulos;
 
-    public String Usuario, Perfil, Huerta, Zona, Humbral,CoorX,CoorY;
+    public String Usuario, Perfil, Huerta, Zona, Humbral;
 
     private ArrayList<ItemDatoSpinner> ItemSPHue, ItemSPPE, ItemSPPto, ItemSPOrg, ItemSPInd;
     private AdaptadorSpinner CopiHue, CopiPE, CopiPto, CopiOrg, CopiInd;
+
+    LocationManager mlocManager ;
+    Localizacion Local ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,26 +266,40 @@ public class activity_Monitoreo extends AppCompatActivity {
             }
         });
 
+        Local= new Localizacion();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+
+
+            locationStart();
+        }
+
        // Localizacion();
     }
 
 
+
     private void locationStart() {
-        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Localizacion Local = new Localizacion();
-        Local.setMainActivity(this);
-        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!gpsEnabled) {
-            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(settingsIntent);
-        }
+
+        mlocManager= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
             return;
+        }else{
+            Local.setMainActivity(activity_Monitoreo.this);
+            final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!gpsEnabled) {
+
+                Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(settingsIntent);
+            }
+            mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
         }
        // mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
-        Toast.makeText(activity_Monitoreo.this,mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude()+","+mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude(),Toast.LENGTH_SHORT).show();
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, (LocationListener) Local);
+
+
+        //Toast.makeText(activity_Monitoreo.this,mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude()+","+mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude(),Toast.LENGTH_SHORT).show();
         //latitud.setText("Localización agregada");
         //direccion.setText("");
     }
@@ -295,8 +312,14 @@ public class activity_Monitoreo extends AppCompatActivity {
         }
     }
 
-    public void obtenerXeY(String X,String Y){
+    public void ListarPuntos(View view){
+        Intent intento = new Intent(this, Puntos_Capturados.class);
+        intento.putExtra("usuario", Usuario);
+        intento.putExtra("perfil", Perfil);
+        intento.putExtra("huerta", Huerta);
 
+        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+        startActivity(intento);
     }
 
     public void setLocation(Location loc) {
@@ -313,25 +336,6 @@ public class activity_Monitoreo extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private void Localizacion() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-           ActivityCompat.requestPermissions(this,new String[]{
-                   Manifest.permission.ACCESS_FINE_LOCATION
-           },1000);
-            return;
-        }
-
-        Ubicacion=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        Location loc = Ubicacion.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(Ubicacion!=null){
-            CoorX= String.valueOf(loc.getLatitude());
-            CoorY= String.valueOf(loc.getLongitude());
-
-            Toast.makeText(this,CoorX+","+CoorY,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -482,12 +486,12 @@ public class activity_Monitoreo extends AppCompatActivity {
     }
 
     public void agregarAGrid (View view){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
         } else {
             locationStart();
-        }
-
+        }*/
+        Toast.makeText(this,Local.Lat+","+Local.Long,Toast.LENGTH_SHORT).show();
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
 
@@ -513,15 +517,15 @@ public class activity_Monitoreo extends AppCompatActivity {
         registro.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
         registro.put("Id_Usuario",Usuario);
         registro.put("Id_Humbral",Humbral);
-        registro.put("n_coordenadaX",CoorX);
-        registro.put("n_coordenadaY",CoorY);
+        registro.put("n_coordenadaX",Local.Lat);
+        registro.put("n_coordenadaY",Local.Long);
         registro.put("Hora",currentTime);
         BD.insert("t_Monitoreo_PE",null,registro);
         BD.close();
 
-        sp_Ind.setSelection(0);
+        /*sp_Ind.setSelection(0);
         sp_Org.setSelection(0);
-        sp_PE.setSelection(0);
+        sp_PE.setSelection(0);*/
 
         Cargagrid();
     }
