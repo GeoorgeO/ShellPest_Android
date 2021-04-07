@@ -62,6 +62,7 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.07"
+            android:onClick="Regresar"
             android:text="Cerrar" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

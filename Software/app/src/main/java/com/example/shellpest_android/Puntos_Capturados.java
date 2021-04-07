@@ -1,10 +1,15 @@
 package com.example.shellpest_android;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,7 +37,34 @@ String Usuario,Perfil,Huerta;
         lv_Puntos = (ListView) findViewById(R.id.lv_Puntos);
 
         arrayArticulos = new ArrayList<>();
-        Cargagrid();
+
+
+        Cargagrid();  
+
+        lv_Puntos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Puntos_Capturados.this);
+                dialogo1.setTitle("ELIMINAR REGISTRO SELECCIONADO");
+                dialogo1.setMessage("¿ Quieres eliminar el registro seleccionado ?");
+                dialogo1.setCancelable(false);
+                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //aceptar();
+                        String e=arrayArticulos.get(i).getHuerta();
+
+                    }
+                });
+                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //cancelar();
+                    }
+                });
+                dialogo1.show();
+                return false;
+            }
+        });
+
     }
 
     private void Cargagrid(){
@@ -51,10 +83,11 @@ String Usuario,Perfil,Huerta;
         Cursor Renglon =BD.rawQuery("select P.Nombre_PuntoControl, \n" +
                 "\tH.Nombre_Huerta,\n" +
                 "\t count(M.Id_Individuo) \n" +
-                "from t_Monitoreo_PE as M \n" +
+                "from t_Monitoreo_PEDetalle as M \n" +
                 "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl \n" +
                 "inner join t_Bloque as B on P.Id_Bloque=B.Id_Bloque \n" +
                 "left join t_Huerta as H on B.Id_Huerta=H.Id_Huerta\n" +
+                "left join t_Monitoreo_PEEncabezado as ME on ME.Id_PuntoControl=M.Id_PuntoControl and M.Fecha=ME.Fecha \n "+
                 "where M.Fecha='"+objSDF.format(date1)+"' group by M.Fecha,H.Nombre_Huerta,P.Id_PuntoControl,P.Nombre_PuntoControl ",null);
 
         if(Renglon.moveToFirst()) {
@@ -80,6 +113,11 @@ String Usuario,Perfil,Huerta;
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }
+
+    }
+    public void Regresar(View view){
+
+            this.onBackPressed();
 
     }
 
