@@ -1,11 +1,12 @@
 package com.example.shellpest_android;
 
 public class ItemPuntosControl {
-    private String Nombre_PuntoControl,Nombre_Huerta,NoPE;
-    public ItemPuntosControl(String Nombre_PuntoControl, String Nombre_Huerta,String NoPE){
+    private String Nombre_PuntoControl,Nombre_Huerta,NoPE,cPto;
+    public ItemPuntosControl(String Nombre_PuntoControl, String Nombre_Huerta,String NoPE,String cPto){
         this.Nombre_PuntoControl=Nombre_PuntoControl;
         this.Nombre_Huerta=Nombre_Huerta;
         this.NoPE=NoPE;
+        this.cPto=cPto;
     }
     public String getPuntoControl(){
         return Nombre_PuntoControl;
@@ -27,6 +28,10 @@ public class ItemPuntosControl {
 
     public void setNoPE(String NoPE){
         this.NoPE=NoPE;
+    }
+
+    public String getcPto(){
+        return cPto;
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -51,8 +52,74 @@ String Usuario,Perfil,Huerta;
                 dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
                         //aceptar();
-                        String e=arrayArticulos.get(i).getHuerta();
 
+                        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                        Date date1=objDate;
+
+                        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Puntos_Capturados.this,"ShellPest",null,1);
+                        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+                        //BD.beginTransaction();
+                        Cursor Renglon =BD.rawQuery("select Fecha,Id_Huerta,Id_PuntoControl,Id_Usuario,n_coordenadaX,n_coordenadaY,Hora from t_Monitoreo_PEEncabezado where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' ",null);
+
+                            if (Renglon.moveToFirst()) {
+
+                                ContentValues registro= new ContentValues();
+                                do {
+                                    registro.put("Fecha",Renglon.getString(0));
+                                    registro.put("Id_Huerta",Renglon.getString(1));
+                                    registro.put("Id_PuntoControl",Renglon.getString(2));
+                                    registro.put("Id_Usuario",Renglon.getString(3));
+                                    registro.put("n_coordenadaX",Renglon.getString(4));
+                                    registro.put("n_coordenadaY",Renglon.getString(5));
+                                    registro.put("Hora",Renglon.getString(6));
+                                    BD.insert("t_Monitoreo_Eliminados_PEEncabezado",null,registro);
+
+                                    int cantidad= BD.delete("t_Monitoreo_PEEncabezado","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' ",null);
+
+                                    if(cantidad>0){
+
+                                    }else{
+                                        Toast.makeText(Puntos_Capturados.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                    }
+                                } while (Renglon.moveToNext());
+                            } else {
+                                //Toast.makeText(Puntos_Capturados.this, "No hay datos en t_Monitoreo_PE guardados", Toast.LENGTH_SHORT).show();
+                            }
+
+                        Cursor Renglon2 =BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral from t_Monitoreo_PEDetalle where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' ",null);
+
+                        if (Renglon.moveToFirst()) {
+
+                            ContentValues registro2= new ContentValues();
+                            do {
+
+                                registro2.put("Fecha",Renglon.getString(0));
+                                registro2.put("Id_PuntoControl",Renglon.getString(1));
+
+                                    registro2.put("Id_Plagas",Renglon.getString(2));
+                                    registro2.put("Id_Enfermedad",Renglon.getString(3));
+
+                                registro2.put("Id_Deteccion",Renglon.getString(4));
+                                registro2.put("Id_Individuo",Renglon.getString(5));
+                                registro2.put("Id_Humbral",Renglon.getString(6));
+                                BD.insert("t_Monitoreo_Eliminados_PEDetalle",null,registro2);
+
+                                int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' ",null);
+
+                                if(cantidad>0){
+
+                                }else{
+                                    //Toast.makeText(Puntos_Capturados.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                }
+                            } while (Renglon.moveToNext());
+                        } else {
+                            //Toast.makeText(Puntos_Capturados.this, "No hay datos en t_Monitoreo_PE guardados", Toast.LENGTH_SHORT).show();
+                        }
+
+                        //BD.endTransaction();
+                        BD.close();
+                        Cargagrid();
                     }
                 });
                 dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -82,13 +149,14 @@ String Usuario,Perfil,Huerta;
 
         Cursor Renglon =BD.rawQuery("select P.Nombre_PuntoControl, \n" +
                 "\tH.Nombre_Huerta,\n" +
-                "\t count(M.Id_Individuo) \n" +
-                "from t_Monitoreo_PEDetalle as M \n" +
-                "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl \n" +
-                "inner join t_Bloque as B on P.Id_Bloque=B.Id_Bloque \n" +
+                "\t count(M.Id_Individuo), \n" +
+                "\t ME.Id_PuntoControl \n" +
+                "from t_Monitoreo_PEEncabezado as ME \n" +
+                "left join  t_Monitoreo_PEDetalle as M on ME.Id_PuntoControl=M.Id_PuntoControl and M.Fecha=ME.Fecha \n "+
+                "left join t_Puntocontrol as P on ME.Id_PuntoControl=P.Id_PuntoControl \n" +
+                "left join t_Bloque as B on P.Id_Bloque=B.Id_Bloque \n" +
                 "left join t_Huerta as H on B.Id_Huerta=H.Id_Huerta\n" +
-                "left join t_Monitoreo_PEEncabezado as ME on ME.Id_PuntoControl=M.Id_PuntoControl and M.Fecha=ME.Fecha \n "+
-                "where M.Fecha='"+objSDF.format(date1)+"' group by M.Fecha,H.Nombre_Huerta,P.Id_PuntoControl,P.Nombre_PuntoControl ",null);
+                "where ME.Fecha='"+objSDF.format(date1)+"' group by ME.Fecha,H.Nombre_Huerta,ME.Id_PuntoControl,P.Nombre_PuntoControl ",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
@@ -96,7 +164,7 @@ String Usuario,Perfil,Huerta;
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new ItemPuntosControl(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2));
+                    Tabla=new ItemPuntosControl(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 

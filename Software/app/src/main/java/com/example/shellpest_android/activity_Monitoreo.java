@@ -235,8 +235,22 @@ public class activity_Monitoreo extends AppCompatActivity {
                 dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
                         //aceptar();
-                        String e=arrayArticulos.get(i).Nombre_Deteccion;
+                        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                        Date date1=objDate;
 
+                        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(activity_Monitoreo.this,"ShellPest",null,1);
+                        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+                        int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' and Id_Individuo='"+arrayArticulos.get(i).getcInd()+"' and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and  Id_Enfermedad='"+arrayArticulos.get(i).getcEnferma()+"' and Id_Plagas='"+arrayArticulos.get(i).getcPlaga()+"' ",null);
+                        BD.close();
+
+                        if(cantidad>0){
+
+                        }else{
+                            Toast.makeText(activity_Monitoreo.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                        Cargagrid();
                     }
                 });
                 dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -485,141 +499,177 @@ public class activity_Monitoreo extends AppCompatActivity {
     }
 
     public void agregarAGrid (View view){
-        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-        } else {
-            locationStart();
-        }*/
-        //Toast.makeText(this,Local.Lat+","+Local.Long,Toast.LENGTH_SHORT).show();
-        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
-
-        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
-        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-        Date date1=objDate;
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        String currentTime = simpleDateFormat.format(new Date());
-
-        Cursor Renglon;
-        Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
-        if(Renglon.moveToFirst()){
-
-            do {
-                if (Renglon.getInt(0)>0){
-                    if(rb_SinPresencia.isChecked()){
-
-                    }else{
-                        ContentValues registro = new ContentValues();
-
-                        registro.put("n_coordenadaX",Local.Lat);
-                        registro.put("n_coordenadaY",Local.Long);
-
-                        int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
-
-                        if(cantidad>0){
-                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+        if(sp_Pto.getSelectedItemPosition()>0){
+            boolean FaltoAlgo;
+            FaltoAlgo=false;
+            if(rb_Enfermedad.isChecked() || rb_Plaga.isChecked()){
+                if(sp_PE.getSelectedItemPosition()>0){
+                    if(sp_Org.getSelectedItemPosition()>0){
+                        if(sp_Ind.getSelectedItemPosition()>0){
+                            FaltoAlgo=false;
                         }else{
-                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            FaltoAlgo=true;
+                            Toast.makeText(this,"Falta seleccionar un numero de individuos.",Toast.LENGTH_SHORT).show();
                         }
+                    }else{
+                        FaltoAlgo=true;
+                        Toast.makeText(this,"Falta seleccionar el organo muestreado",Toast.LENGTH_SHORT).show();
                     }
-
-
                 }else{
-                    ContentValues registro= new ContentValues();
-                    registro.put("Fecha",objSDF.format(date1));
-                    registro.put("Id_Huerta",Huerta);
-
-                    registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
-
-                    registro.put("Id_Usuario",Usuario);
-
-                    registro.put("n_coordenadaX",Local.Lat);
-                    registro.put("n_coordenadaY",Local.Long);
-                    registro.put("Hora",currentTime);
-                    BD.insert("t_Monitoreo_PEEncabezado",null,registro);
+                    FaltoAlgo=true;
+                    Toast.makeText(this,"Falta seleccionar la plaga o enfermedad",Toast.LENGTH_SHORT).show();
                 }
 
-            } while(Renglon.moveToNext());
-
-
-
-        }else{
-            Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
-
-        }
-
-        if(rb_Enfermedad.isChecked()){
-            Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
-                    "from t_Monitoreo_PEDetalle " +
-                    "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                    "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                    "and  Fecha='"+objSDF.format(date1)+"' " +
-                    "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
-
-        }else{
-            if(rb_Plaga.isChecked()){
-                Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
-                        "from t_Monitoreo_PEDetalle " +
-                        "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
-                        "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                        "and  Fecha='"+objSDF.format(date1)+"' " +
-                        "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
-            }else{
-                Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
-                        "from t_Monitoreo_PEDetalle " +
-                        "where Id_Plagas='' and Id_Enfermedad='' " +
-                        "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                        "and  Fecha='"+objSDF.format(date1)+"' " +
-                        "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
-            }
-        }
-
-        if(Renglon.moveToFirst()){
-
-            if(Renglon.getInt(0)>0){
-                Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
             }else{
                 if(rb_SinPresencia.isChecked()){
+                    FaltoAlgo=false;
+                }else{
+                    FaltoAlgo=true;
+                    Toast.makeText(this,"Es necesario marcar 'Sin presencia' en caso de que no se detecte ninguna plaga o enfermedad.",Toast.LENGTH_SHORT).show();
+                }
+            }
+            if (!FaltoAlgo){
+                /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+                        } else {
+                            locationStart();
+                        }*/
+                //Toast.makeText(this,Local.Lat+","+Local.Long,Toast.LENGTH_SHORT).show();
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                Date date1=objDate;
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                String currentTime = simpleDateFormat.format(new Date());
+
+                Cursor Renglon;
+                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
+                if(Renglon.moveToFirst()){
+
+                    do {
+                        if (Renglon.getInt(0)>0){
+                            if(rb_SinPresencia.isChecked()){
+
+                            }else{
+                                ContentValues registro = new ContentValues();
+
+                                registro.put("n_coordenadaX",Local.Lat);
+                                registro.put("n_coordenadaY",Local.Long);
+
+                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+
+                                if(cantidad>0){
+                                    //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                                }else{
+                                    //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        }else{
+                            ContentValues registro= new ContentValues();
+                            registro.put("Fecha",objSDF.format(date1));
+                            registro.put("Id_Huerta",Huerta);
+
+                            registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
+
+                            registro.put("Id_Usuario",Usuario);
+
+                            registro.put("n_coordenadaX",Local.Lat);
+                            registro.put("n_coordenadaY",Local.Long);
+                            registro.put("Hora",currentTime);
+                            BD.insert("t_Monitoreo_PEEncabezado",null,registro);
+                        }
+
+                    } while(Renglon.moveToNext());
+
+
 
                 }else{
-                    ContentValues registro2= new ContentValues();
-                    registro2.put("Fecha",objSDF.format(date1));
-                    registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
-                    if(rb_Enfermedad.isChecked()){
-                        registro2.put("Id_Plagas","");
-                        registro2.put("Id_Enfermedad",CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4));
+                    Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+
+                }
+
+                if(rb_Enfermedad.isChecked()){
+                    Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
+                            "from t_Monitoreo_PEDetalle " +
+                            "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                            "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                            "and  Fecha='"+objSDF.format(date1)+"' " +
+                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+
+                }else{
+                    if(rb_Plaga.isChecked()){
+                        Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
+                                "from t_Monitoreo_PEDetalle " +
+                                "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
+                                "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
                     }else{
-                        if(rb_Plaga.isChecked()){
-                            registro2.put("Id_Plagas",CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4));
-                            registro2.put("Id_Enfermedad","");
+                        Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
+                                "from t_Monitoreo_PEDetalle " +
+                                "where Id_Plagas='' and Id_Enfermedad='' " +
+                                "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                    }
+                }
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(rb_SinPresencia.isChecked()){
+
                         }else{
-                            registro2.put("Id_Plagas","");
-                            registro2.put("Id_Enfermedad","");
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
+                            if(rb_Enfermedad.isChecked()){
+                                registro2.put("Id_Plagas","");
+                                registro2.put("Id_Enfermedad",CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4));
+                            }else{
+                                if(rb_Plaga.isChecked()){
+                                    registro2.put("Id_Plagas",CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4));
+                                    registro2.put("Id_Enfermedad","");
+                                }else{
+                                    registro2.put("Id_Plagas","");
+                                    registro2.put("Id_Enfermedad","");
+                                }
+
+                            }
+                            registro2.put("Id_Deteccion",CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4));
+                            registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
+                            registro2.put("Id_Humbral",Humbral);
+                            BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }
 
                     }
-                    registro2.put("Id_Deteccion",CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4));
-                    registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
-                    registro2.put("Id_Humbral",Humbral);
-                    BD.insert("t_Monitoreo_PEDetalle",null,registro2);
+
+                }else{
+                    Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
                 }
 
-            }
-
-        }else{
-            Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
-        }
 
 
-
-        BD.close();
+                BD.close();
 
         /*sp_Ind.setSelection(0);
         sp_Org.setSelection(0);
         sp_PE.setSelection(0);*/
 
-        Cargagrid();
+                Cargagrid();
+            }
+
+        }else{
+            Toast.makeText(activity_Monitoreo.this,"Falta seleccionar un punto de control",Toast.LENGTH_SHORT).show();
+        }
+
     }
     private void Cargagrid(){
         lv_GridMonitoreo.setAdapter(null);
@@ -637,7 +687,12 @@ public class activity_Monitoreo extends AppCompatActivity {
         Cursor Renglon =BD.rawQuery("select P.Nombre_PuntoControl, \n" +
                 "\tCASE  when length(TRIM(PL.Id_Plagas)) >0 then PL.Nombre_Plagas else E.Nombre_Enfermedad end as PE,\n" +
                 "\tD.Nombre_Deteccion,\n" +
-                "\tI.No_Individuo \n" +
+                "\tI.No_Individuo, \n" +
+                "\tM.Id_PuntoControl, \n" +
+                "\tM.Id_Deteccion, \n" +
+                "\tM.Id_Individuo, \n" +
+                "\tM.Id_Plagas, \n" +
+                "\tM.Id_Enfermedad \n" +
                 "from t_Monitoreo_PEDetalle as M \n" +
                 "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl \n" +
                 "inner join t_Deteccion as D on M.Id_Deteccion=D.Id_Deteccion \n" +
@@ -652,7 +707,7 @@ public class activity_Monitoreo extends AppCompatActivity {
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new Itemmonitoreo(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3));
+                    Tabla=new Itemmonitoreo(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
