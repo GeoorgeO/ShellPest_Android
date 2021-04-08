@@ -87,7 +87,7 @@ String Usuario,Perfil,Huerta;
                                 //Toast.makeText(Puntos_Capturados.this, "No hay datos en t_Monitoreo_PE guardados", Toast.LENGTH_SHORT).show();
                             }
 
-                        Cursor Renglon2 =BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral from t_Monitoreo_PEDetalle where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' ",null);
+                        Cursor Renglon2 =BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral,Hora from t_Monitoreo_PEDetalle where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' ",null);
 
                         if (Renglon.moveToFirst()) {
 
@@ -103,6 +103,7 @@ String Usuario,Perfil,Huerta;
                                 registro2.put("Id_Deteccion",Renglon.getString(4));
                                 registro2.put("Id_Individuo",Renglon.getString(5));
                                 registro2.put("Id_Humbral",Renglon.getString(6));
+                                registro2.put("Hora",Renglon.getString(7));
                                 BD.insert("t_Monitoreo_Eliminados_PEDetalle",null,registro2);
 
                                 int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' ",null);

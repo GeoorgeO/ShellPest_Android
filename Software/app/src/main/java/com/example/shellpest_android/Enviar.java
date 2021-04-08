@@ -56,6 +56,22 @@ public class Enviar extends AppCompatActivity {
                     insertWebEncabezado(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6));
                 } while (Renglon.moveToNext());
 
+
+            } else {
+                Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+            Cursor Renglon2 = BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral,Hora from t_Monitoreo_PEDetalle ", null);
+
+            if (Renglon2.moveToFirst()) {
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+                do {
+                    insertWebDetalle(Renglon2.getString(0),Renglon2.getString(1),Renglon2.getString(2),Renglon2.getString(3),Renglon2.getString(4),Renglon2.getString(5),Renglon2.getString(6),Renglon2.getString(7));
+                } while (Renglon2.moveToNext());
+
                 BD.close();
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();

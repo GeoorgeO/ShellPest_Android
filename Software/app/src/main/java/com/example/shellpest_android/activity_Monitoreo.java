@@ -599,6 +599,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and  Fecha='"+objSDF.format(date1)+"' " +
+
                             "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
                 }else{
@@ -608,6 +609,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
+
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
                     }else{
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
@@ -615,6 +617,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
+
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
                     }
                 }
@@ -646,6 +649,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro2.put("Id_Deteccion",CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
                             registro2.put("Id_Humbral",Humbral);
+                            registro2.put("Hora",currentTime);
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }
 
