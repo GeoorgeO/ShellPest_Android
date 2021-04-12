@@ -89,21 +89,20 @@ String Usuario,Perfil,Huerta;
 
                         Cursor Renglon2 =BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral,Hora from t_Monitoreo_PEDetalle where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' ",null);
 
-                        if (Renglon.moveToFirst()) {
+                        if (Renglon2.moveToFirst()) {
 
                             ContentValues registro2= new ContentValues();
                             do {
 
-                                registro2.put("Fecha",Renglon.getString(0));
-                                registro2.put("Id_PuntoControl",Renglon.getString(1));
-
-                                    registro2.put("Id_Plagas",Renglon.getString(2));
-                                    registro2.put("Id_Enfermedad",Renglon.getString(3));
-
-                                registro2.put("Id_Deteccion",Renglon.getString(4));
-                                registro2.put("Id_Individuo",Renglon.getString(5));
-                                registro2.put("Id_Humbral",Renglon.getString(6));
-                                registro2.put("Hora",Renglon.getString(7));
+                                registro2.put("Fecha",Renglon2.getString(0));
+                                registro2.put("Id_Plagas",Renglon2.getString(1));
+                                registro2.put("Id_Enfermedad",Renglon2.getString(2));
+                                registro2.put("Id_PuntoControl",Renglon2.getString(3));
+                                registro2.put("Id_Deteccion",Renglon2.getString(4));
+                                registro2.put("Id_Individuo",Renglon2.getString(5));
+                                registro2.put("Id_Humbral",Renglon2.getString(6));
+                                String tHora=Renglon2.getString(7);
+                                registro2.put("Hora",Renglon2.getString(7));
                                 BD.insert("t_Monitoreo_Eliminados_PEDetalle",null,registro2);
 
                                 int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' ",null);
@@ -113,7 +112,7 @@ String Usuario,Perfil,Huerta;
                                 }else{
                                     //Toast.makeText(Puntos_Capturados.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                                 }
-                            } while (Renglon.moveToNext());
+                            } while (Renglon2.moveToNext());
                         } else {
                             //Toast.makeText(Puntos_Capturados.this, "No hay datos en t_Monitoreo_PE guardados", Toast.LENGTH_SHORT).show();
                         }

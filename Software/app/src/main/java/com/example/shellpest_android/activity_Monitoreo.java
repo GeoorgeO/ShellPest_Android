@@ -546,11 +546,12 @@ public class activity_Monitoreo extends AppCompatActivity {
                 String currentTime = simpleDateFormat.format(new Date());
 
                 Cursor Renglon;
-                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
+                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
                 if(Renglon.moveToFirst()){
 
                     do {
                         if (Renglon.getInt(0)>0){
+                            currentTime=Renglon.getString(1);
                             if(rb_SinPresencia.isChecked()){
 
                             }else{
@@ -573,11 +574,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                             ContentValues registro= new ContentValues();
                             registro.put("Fecha",objSDF.format(date1));
                             registro.put("Id_Huerta",Huerta);
-
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
-
                             registro.put("Id_Usuario",Usuario);
-
                             registro.put("n_coordenadaX",Local.Lat);
                             registro.put("n_coordenadaY",Local.Long);
                             registro.put("Hora",currentTime);
@@ -599,7 +597,6 @@ public class activity_Monitoreo extends AppCompatActivity {
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and  Fecha='"+objSDF.format(date1)+"' " +
-
                             "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
                 }else{
@@ -609,7 +606,6 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
                     }else{
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
@@ -617,13 +613,11 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
                     }
                 }
 
                 if(Renglon.moveToFirst()){
-
                     if(Renglon.getInt(0)>0){
                         Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
                     }else{
