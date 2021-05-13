@@ -114,10 +114,10 @@ public class activity_Monitoreo extends AppCompatActivity {
         CopiPto = new AdaptadorSpinner(this, ItemSPPto);
         sp_Pto.setAdapter(CopiPto);
 
-        cargaSpinnerOrg();
+        /*cargaSpinnerOrg();
         CopiOrg = new AdaptadorSpinner(this, ItemSPOrg);
         //CopiOrg=AdaptadorSpiner;
-        sp_Org.setAdapter(CopiOrg);
+        sp_Org.setAdapter(CopiOrg);*/
 
         ItemSPInd = new ArrayList<>();
         ItemSPInd.add(new ItemDatoSpinner("Individuo"));
@@ -176,6 +176,11 @@ public class activity_Monitoreo extends AppCompatActivity {
                     CopiInd = new AdaptadorSpinner(getApplicationContext(), ItemSPInd);
                     //CopiInd=AdaptadorSpiner;
                     sp_Ind.setAdapter(CopiInd);
+
+                    cargaSpinnerOrg();
+                    CopiOrg = new AdaptadorSpinner(getApplicationContext(), ItemSPOrg);
+                    //CopiOrg=AdaptadorSpiner;
+                    sp_Org.setAdapter(CopiOrg);
                 }
             }
 
@@ -221,11 +226,13 @@ public class activity_Monitoreo extends AppCompatActivity {
                     CopiPE = new AdaptadorSpinner(getApplicationContext(), ItemSPPE);
                     //CopiPE=AdaptadorSpiner;
                     sp_PE.setAdapter(CopiPE);
+
+
                 }
             }
         });
 
-        lv_GridMonitoreo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+      /*  lv_GridMonitoreo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {   Lo quite para que no elimine bloques del punto
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder dialogo1 = new AlertDialog.Builder(activity_Monitoreo.this);
@@ -261,7 +268,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 dialogo1.show();
                 return false;
             }
-        });
+        });*/
         arrayArticulos = new ArrayList<>();
 
         sp_Pto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -447,8 +454,12 @@ public class activity_Monitoreo extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
+        if(rb_Enfermedad.isChecked()){
+            Renglon=BD.rawQuery("select distinct D.Id_Deteccion,D.Nombre_Deteccion from t_Deteccion as D inner join t_Monitoreo as M on M.Id_Deteccion=D.Id_Deteccion where M.Id_zona='"+Zona+"' and M.Id_Plagas='' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+        }else{
+            Renglon=BD.rawQuery("select distinct D.Id_Deteccion,D.Nombre_Deteccion from t_Deteccion as D inner join t_Monitoreo as M on M.Id_Deteccion=D.Id_Deteccion where M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad=''",null);
+        }
 
-        Renglon=BD.rawQuery("select Id_Deteccion,Nombre_Deteccion from t_Deteccion",null);
 
         if(Renglon.moveToFirst()){
 
@@ -487,10 +498,9 @@ public class activity_Monitoreo extends AppCompatActivity {
                 ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+"         Humbral: "+Renglon.getString(2)));
             } while(Renglon.moveToNext());
 
-
             BD.close();
         }else{
-            Toast.makeText(this,"No hay datos en t_Monitoreo guardados",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"No hay datos en t_Monitoreo guardados",Toast.LENGTH_SHORT).show();
             BD.close();
         }
         }else{

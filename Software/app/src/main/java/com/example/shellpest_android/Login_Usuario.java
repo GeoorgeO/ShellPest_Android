@@ -26,8 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Properties;
+
 
 
 public class Login_Usuario extends AppCompatActivity {
@@ -81,6 +80,7 @@ public class Login_Usuario extends AppCompatActivity {
 
                 //Toast.makeText(this,Renglon.getString(0)+","+Renglon.getString(1)+","+Renglon.getString(2),Toast.LENGTH_SHORT).show();
                 startActivity(intento);
+                finish();
             }
 
 
@@ -219,7 +219,11 @@ public class Login_Usuario extends AppCompatActivity {
                             intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
 
                             //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+
                             startActivity(intento);
+                            setVisible(false);
+
+                            finish();
                         } else {
                             Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();
                         }

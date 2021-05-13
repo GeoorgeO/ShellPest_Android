@@ -7,14 +7,30 @@
 
     tools:context=".EnviaRecibe">
 
+    <Button
+        android:id="@+id/btn_CerrarSesion"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/miniboton_redondo"
+        android:foreground="@android:drawable/ic_secure"
+        android:foregroundGravity="center"
+        android:onClick="CerrarSesion"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_marginTop="32dp"
         android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/btn_CerrarSesion">
 
         <Button
             android:id="@+id/btn_Recibir"
@@ -42,5 +58,7 @@
             android:background="@drawable/boton_redondo"
             android:onClick="Continuar"
             android:text="Capturar" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

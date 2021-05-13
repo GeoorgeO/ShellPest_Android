@@ -2,7 +2,6 @@ package com.example.shellpest_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
@@ -23,10 +22,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
 
 public class Enviar extends AppCompatActivity {
 
@@ -39,15 +34,16 @@ public class Enviar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enviar);
+        getSupportActionBar().hide();
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
             Toast.makeText(this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();
             super.onBackPressed();
         }
 
-        txt_NPuntos=(TextView)findViewById(R.id.txt_NPuntos);
+        txt_NPuntos=(TextView)findViewById(R.id.txt_NBloques);
         txt_NPE=(TextView)findViewById(R.id.txt_NPE);
-        txt_Fechas=(TextView)findViewById(R.id.txt_Fechas);
+        txt_Fechas=(TextView)findViewById(R.id.txt_RFechas);
 
         CargaDatos();
     }

@@ -28,7 +28,7 @@
                 android:background="@color/design_default_color_secondary_variant"
                 android:text="Pto"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/txt_CHuerta"
@@ -38,7 +38,7 @@
                 android:background="@color/teal_700"
                 android:text="Huerta"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/txt_CNPE"
@@ -47,7 +47,7 @@
                 android:background="@color/teal_700"
                 android:text="N° P/E"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <ListView

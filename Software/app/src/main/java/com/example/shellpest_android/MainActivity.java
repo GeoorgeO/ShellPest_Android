@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().hide();
+
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
             Toast.makeText(MainActivity.this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();

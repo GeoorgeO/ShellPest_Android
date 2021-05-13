@@ -31,6 +31,8 @@ String Usuario,Perfil,Huerta;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puntos_capturados);
 
+        getSupportActionBar().hide();
+
         Usuario = getIntent().getStringExtra("usuario");
         Perfil = getIntent().getStringExtra("perfil");
         Huerta = getIntent().getStringExtra("huerta");
@@ -145,7 +147,7 @@ String Usuario,Perfil,Huerta;
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
 
-        Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
 
         Cursor Renglon =BD.rawQuery("select P.Nombre_PuntoControl, \n" +
                 "\tH.Nombre_Huerta,\n" +
