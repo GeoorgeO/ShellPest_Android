@@ -232,6 +232,8 @@ public class activity_Monitoreo extends AppCompatActivity {
             }
         });
 
+
+
       /*  lv_GridMonitoreo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {   Lo quite para que no elimine bloques del punto
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -298,7 +300,173 @@ public class activity_Monitoreo extends AppCompatActivity {
        // Localizacion();
     }
 
+    public void MtdCerrar(View view){
 
+        if(sp_Pto.getSelectedItemPosition()>0){
+            boolean FaltoAlgo;
+            FaltoAlgo=false;
+            if(rb_Enfermedad.isChecked() || rb_Plaga.isChecked()){
+                if(sp_PE.getSelectedItemPosition()>0){
+                    if(sp_Org.getSelectedItemPosition()>0){
+                        if(sp_Ind.getSelectedItemPosition()>0){
+                            FaltoAlgo=false;
+                        }else{
+                            FaltoAlgo=true;
+                            Toast.makeText(this,"Falta seleccionar un numero de individuos.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        FaltoAlgo=true;
+                        Toast.makeText(this,"Falta seleccionar el organo muestreado",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    FaltoAlgo=true;
+                    Toast.makeText(this,"Falta seleccionar la plaga o enfermedad",Toast.LENGTH_SHORT).show();
+                }
+
+            }else{
+                if(rb_SinPresencia.isChecked()){
+                    FaltoAlgo=false;
+                }else{
+                    FaltoAlgo=true;
+                    Toast.makeText(this,"Es necesario marcar 'Sin presencia' en caso de que no se detecte ninguna plaga o enfermedad.",Toast.LENGTH_SHORT).show();
+                }
+            }
+            if (!FaltoAlgo){
+                /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+                        } else {
+                            locationStart();
+                        }*/
+                //Toast.makeText(this,Local.Lat+","+Local.Long,Toast.LENGTH_SHORT).show();
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                Date date1=objDate;
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                String currentTime = simpleDateFormat.format(new Date());
+
+                Cursor Renglon;
+                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
+                if(Renglon.moveToFirst()){
+
+                    do {
+                        if (Renglon.getInt(0)>0){
+                            currentTime=Renglon.getString(1);
+                            if(rb_SinPresencia.isChecked()){
+
+                            }else{
+                                ContentValues registro = new ContentValues();
+
+                                registro.put("n_coordenadaX",Local.Lat);
+                                registro.put("n_coordenadaY",Local.Long);
+
+                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+
+                                if(cantidad>0){
+                                    //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                                }else{
+                                    //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        }else{
+                            ContentValues registro= new ContentValues();
+                            registro.put("Fecha",objSDF.format(date1));
+                            registro.put("Id_Huerta",Huerta);
+                            registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
+                            registro.put("Id_Usuario",Usuario);
+                            registro.put("n_coordenadaX",Local.Lat);
+                            registro.put("n_coordenadaY",Local.Long);
+                            registro.put("Hora",currentTime);
+                            BD.insert("t_Monitoreo_PEEncabezado",null,registro);
+                        }
+
+                    } while(Renglon.moveToNext());
+
+
+
+                }else{
+                    Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+
+                }
+
+                if(rb_Enfermedad.isChecked()){
+                    Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
+                            "from t_Monitoreo_PEDetalle " +
+                            "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                            "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                            "and  Fecha='"+objSDF.format(date1)+"' " +
+                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+
+                }else{
+                    if(rb_Plaga.isChecked()){
+                        Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
+                                "from t_Monitoreo_PEDetalle " +
+                                "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
+                                "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                    }else{
+                        Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
+                                "from t_Monitoreo_PEDetalle " +
+                                "where Id_Plagas='' and Id_Enfermedad='' " +
+                                "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                    }
+                }
+
+                if(Renglon.moveToFirst()){
+                    if(Renglon.getInt(0)>0){
+                        Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(rb_SinPresencia.isChecked()){
+
+                        }else{
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
+                            if(rb_Enfermedad.isChecked()){
+                                registro2.put("Id_Plagas","");
+                                registro2.put("Id_Enfermedad",CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4));
+                            }else{
+                                if(rb_Plaga.isChecked()){
+                                    registro2.put("Id_Plagas",CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4));
+                                    registro2.put("Id_Enfermedad","");
+                                }else{
+                                    registro2.put("Id_Plagas","");
+                                    registro2.put("Id_Enfermedad","");
+                                }
+
+                            }
+                            registro2.put("Id_Deteccion",CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4));
+                            registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
+                            registro2.put("Id_Humbral",Humbral);
+                            registro2.put("Hora",currentTime);
+                            BD.insert("t_Monitoreo_PEDetalle",null,registro2);
+                        }
+
+                    }
+
+                }else{
+                    Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
+                }
+
+                BD.close();
+                Cargagrid();
+                Toast.makeText(this,"Punto Guardado",Toast.LENGTH_SHORT).show();
+            }
+
+        }else{
+            Toast.makeText(activity_Monitoreo.this,"Falta seleccionar un punto de control",Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 
     private void locationStart() {
 

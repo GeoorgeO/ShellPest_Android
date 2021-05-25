@@ -79,7 +79,7 @@ public class Enviar extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
                 do {
-                    Toast.makeText(this, Renglon.getString(6), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, Renglon.getString(6), Toast.LENGTH_SHORT).show();
                     insertWebEncabezado(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6));
                 } while (Renglon.moveToNext());
 
@@ -96,11 +96,11 @@ public class Enviar extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
                 do {
-                    Toast.makeText(this, Renglon2.getString(7), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, Renglon2.getString(7), Toast.LENGTH_SHORT).show();
                     insertWebDetalle(Renglon2.getString(0),Renglon2.getString(1),Renglon2.getString(2),Renglon2.getString(3),Renglon2.getString(4),Renglon2.getString(5),Renglon2.getString(6),Renglon2.getString(7));
                 } while (Renglon2.moveToNext());
             } else {
-                Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
             }
 
             Cursor Renglon3 = BD.rawQuery("select Fecha,Id_Huerta,Id_PuntoControl,Id_Usuario,n_coordenadaX,n_coordenadaY,Hora from t_Monitoreo_Eliminados_PEEncabezado ", null);
@@ -113,7 +113,7 @@ public class Enviar extends AppCompatActivity {
 
 
             } else {
-                Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -130,7 +130,7 @@ public class Enviar extends AppCompatActivity {
 
 
             } else {
-                Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
 
             }
             BD.close();
@@ -254,7 +254,11 @@ public class Enviar extends AppCompatActivity {
                                 RegistrosEnviados++;
                             }
 
-                    }
+                    }else{
+                            if (jsonobject.optString("Mensaje").indexOf("Violation of PRIMARY KEY")>=0){
+                                Toast.makeText(Enviar.this, "Ya se envio ese punto en la fecha indicada", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                 }
 
 
@@ -370,9 +374,6 @@ public class Enviar extends AppCompatActivity {
                     jsonobject = jsonarr.getJSONObject(i);
 
                     int columnas = 0;
-
-
-
                     int RegistrosEnviados=0;
 
 
