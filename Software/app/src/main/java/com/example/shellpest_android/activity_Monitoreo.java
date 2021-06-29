@@ -49,6 +49,7 @@ public class activity_Monitoreo extends AppCompatActivity {
     RadioButton rb_Plaga, rb_Enfermedad,rb_SinPresencia;
     RadioGroup rg_PE;
     ListView lv_GridMonitoreo;
+    Boolean SoloUnaHuerta;
 
     //private LocationManager Ubicacion;
 
@@ -69,6 +70,7 @@ public class activity_Monitoreo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__monitoreo);
 
+        SoloUnaHuerta=false;
         getSupportActionBar().hide();
         et_fecha = (TextView) findViewById(R.id.et_fecha);
         et_PuntoControl = (TextView) findViewById(R.id.et_PuntoControl);
@@ -127,7 +129,8 @@ public class activity_Monitoreo extends AppCompatActivity {
         sp_Hue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i > 0) {
+
+                if ((SoloUnaHuerta==true && i == 0 ) || (SoloUnaHuerta==false && i>0)) {
                     // Notify the selected item text
                     Huerta = CopiHue.getItem(i).getTexto().substring(0, 5);
                     Zona = CopiHue.getItem(i).getTexto().substring(CopiHue.getItem(i).getTexto().length() - 4);
@@ -565,12 +568,24 @@ public class activity_Monitoreo extends AppCompatActivity {
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
+
+
+
         if(Perfil.equals("001")){
-            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+
             Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True'",null);
         }else{
-            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"'",null);
-            sp_Hue.setEnabled(false);
+            Renglon=BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True'",null);
+            //Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"'",null);
+            //sp_Hue.setEnabled(false);
+        }
+
+        if(Renglon.getCount()>1){
+            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+        }else{
+            if(Renglon.getCount()==1){
+                SoloUnaHuerta=true;
+            }
         }
 
         if(Renglon.moveToFirst()){

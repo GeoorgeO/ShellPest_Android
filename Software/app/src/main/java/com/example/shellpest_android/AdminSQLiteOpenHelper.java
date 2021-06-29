@@ -40,6 +40,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text)");
         BD.execSQL("create table t_Riego (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
         BD.execSQL("create table t_RiegoEliminado (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
+        BD.execSQL("create table t_Usuario_Huerta (Id_Usuario text ,Id_Huerta text)");
     }
 
     @Override
@@ -69,6 +70,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Monitoreo_Eliminados_PEEncabezado");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Riego");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RiegoEliminado");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Usuario_Huerta");
         onCreate(sqLiteDatabase);
     }
 }

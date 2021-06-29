@@ -161,12 +161,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void continuar(View view){
-        Intent intento=new Intent(this,activity_Monitoreo.class);
+        Intent intento=new Intent(this,Aplicaciones.class);
+        intento.putExtra("usuario2", Usuario);
+        intento.putExtra("perfil2", Perfil);
+        intento.putExtra("huerta2", Huerta);
+        intento.putExtra("Accion", "Captura");
+        //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
+        startActivity(intento);
+
+        /*Intent intento=new Intent(this,activity_Monitoreo.class);
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
         //Toast.makeText(MainActivity.this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
-        startActivity(intento);
+        startActivity(intento);*/
     }
 
     public void Obtener_Ip (){
@@ -212,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -231,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios");
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -249,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
                     }
                 }
 
@@ -418,6 +429,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break; // break es opcional
                         case "Id_monitoreo" :
                             Actualiza_Valores(datos);
+                            break; // break es opcional
+                        case "Id_Usuario" :
+                            Actualiza_UsuHuerta(datos);
                             break; // break es opcional
                     }
                 }
@@ -1308,6 +1322,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
+        }
+    }
+
+    private void Actualiza_UsuHuerta(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Usuario_Huerta",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+
+
+
+                int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' and Id_Huerta='"+Datos[x][1].toString()+"' ", null);
+
+
+
+                    ContentValues registro= new ContentValues();
+                    registro.put("Id_Usuario",Datos[x][0]);
+                    registro.put("Id_Huerta",Datos[x][1]);
+
+                    BD.insert("t_Usuario_Huerta",null,registro);
+
+
+
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+            BD.close();
         }
     }
 

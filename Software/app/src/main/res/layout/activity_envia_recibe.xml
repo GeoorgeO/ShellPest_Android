@@ -26,7 +26,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
             android:id="@+id/btn_Recibir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Recibir"
             android:text="Recibir" />
@@ -45,7 +45,7 @@
             android:id="@+id/btn_Enviar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Enviar"
             android:text="Enviar" />
@@ -54,10 +54,19 @@
             android:id="@+id/btn_Siguiente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Continuar"
             android:text="Capturar" />
+
+        <Button
+            android:id="@+id/btn_Reportes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/boton_redondo"
+            android:onClick="Reportes"
+            android:text="Reportes" />
 
     </LinearLayout>
 

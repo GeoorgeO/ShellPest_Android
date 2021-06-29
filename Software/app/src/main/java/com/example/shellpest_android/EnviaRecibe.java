@@ -57,8 +57,16 @@ public class EnviaRecibe extends AppCompatActivity {
         intento.putExtra("Accion", "Enviar");
         //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
+    }
 
-
+    public void Reportes(View view){
+        Intent intento=new Intent(this,Aplicaciones.class);
+        intento.putExtra("usuario2", Usuario);
+        intento.putExtra("perfil2", Perfil);
+        intento.putExtra("huerta2", Huerta);
+        intento.putExtra("Accion", "Reportes");
+        //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
+        startActivity(intento);
     }
     public void CerrarSesion(View view){
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(EnviaRecibe.this);
