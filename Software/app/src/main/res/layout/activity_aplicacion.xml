@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Salidas">
+    tools:context=".aplicacion">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,18 +15,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/sp_Empresa"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".8"
+                android:text="Codigo:" />
+
+            <TextView
+                android:id="@+id/text_Codigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".3"
+                android:text="05-2021" />
+
+            <ImageButton
+                android:id="@+id/imageButton6"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/miniboton_redondo"
+                app:srcCompat="@android:drawable/ic_input_get" />
+        </LinearLayout>
 
         <Spinner
-            android:id="@+id/sp_Almacen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Spinner
-            android:id="@+id/sp_Responsable"
+            android:id="@+id/sp_huerta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -36,17 +55,48 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
+                android:id="@+id/textView29"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Fecha" />
+                android:layout_weight=".7"
+                android:text="Observaciones:" />
 
             <EditText
-                android:id="@+id/et_Fecha"
-                android:layout_width="wrap_content"
+                android:id="@+id/pt_Observaciones"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight=".3"
+                android:ems="10"
+                android:inputType="textPersonName" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/sp_TipoAplicacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/sp_Presentacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".8"
+                android:text="Fecha:" />
+
+            <EditText
+                android:id="@+id/etd_Fecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
                 android:ems="10"
                 android:inputType="date" />
         </LinearLayout>
@@ -57,19 +107,18 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_Producto"
+                android:id="@+id/textView26"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".8"
-                android:text="Producto" />
+                android:text="Producto:" />
 
             <AutoCompleteTextView
-                android:id="@+id/actv_Producto"
+                android:id="@+id/actv_Productos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
-                android:hint="Teclee nombre de producto"
-                android:text="" />
+                android:hint="Teclee Nombre de producto" />
         </LinearLayout>
 
         <LinearLayout
@@ -78,32 +127,19 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_Cantidad"
+                android:id="@+id/textView27"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".8"
                 android:text="Cantidad:" />
 
             <EditText
-                android:id="@+id/etn_Cantidad"
+                android:id="@+id/etn_ApliCantidad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
-
-                android:inputType="numberDecimal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/sp_Unidad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2" />
+                android:ems="10"
+                android:inputType="number" />
         </LinearLayout>
 
         <LinearLayout
@@ -111,19 +147,26 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/sp_Bloque"
+            <TextView
+                android:id="@+id/textView28"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2" />
+                android:layout_weight=".8"
+                android:text="N° Pipadas:" />
+
+            <EditText
+                android:id="@+id/etn_Pipadas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:inputType="number" />
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_Agregar"
+            android:id="@+id/btn_Agrega"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="agregargrid"
             android:text="Agregar" />
 
         <LinearLayout
@@ -132,52 +175,46 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/textView34"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Fecha"
-                android:textAlignment="center" />
+                android:text="Fecha" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/textView33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Producto"
-                android:textAlignment="center" />
+                android:text="Producto" />
 
             <TextView
-                android:id="@+id/textView22"
+                android:id="@+id/textView31"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cantidad"
-                android:textAlignment="center" />
+                android:text="Cantidad" />
 
             <TextView
-                android:id="@+id/textView23"
+                android:id="@+id/textView30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Unidad"
-                android:textAlignment="center" />
+                android:text="Unidad" />
 
             <TextView
-                android:id="@+id/textView24"
+                android:id="@+id/textView32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Centro Costo"
-                android:textAlignment="center" />
+                android:text="Pipadas" />
         </LinearLayout>
 
         <ListView
-            android:id="@+id/lv_GridSalidas"
+            android:id="@+id/lv_GridAplicacion"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textAlignment="center"
-            tools:listitem="@layout/item_grid_salida" />
+            tools:listitem="@layout/item_grid_aplicacion" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

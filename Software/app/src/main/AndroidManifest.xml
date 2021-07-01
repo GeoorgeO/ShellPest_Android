@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Salidas"></activity>
+        <activity android:name=".aplicacion"></activity>
+        <activity android:name=".Salidas" />
         <activity android:name=".enviarriego" />
         <activity android:name=".Riego" />
         <activity android:name=".Aplicaciones" />
