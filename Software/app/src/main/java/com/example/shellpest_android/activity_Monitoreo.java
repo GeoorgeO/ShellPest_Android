@@ -363,8 +363,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                             }else{
                                 ContentValues registro = new ContentValues();
 
-                                registro.put("n_coordenadaX",Local.Lat);
-                                registro.put("n_coordenadaY",Local.Long);
+                                registro.put("n_coordenadaX",Local.Long);
+                                registro.put("n_coordenadaY",Local.Lat);
 
                                 int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
@@ -382,8 +382,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro.put("Id_Huerta",Huerta);
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro.put("Id_Usuario",Usuario);
-                            registro.put("n_coordenadaX",Local.Lat);
-                            registro.put("n_coordenadaY",Local.Long);
+                            registro.put("n_coordenadaX",Local.Long);
+                            registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
                             BD.insert("t_Monitoreo_PEEncabezado",null,registro);
                         }
@@ -750,8 +750,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                             }else{
                                 ContentValues registro = new ContentValues();
 
-                                registro.put("n_coordenadaX",Local.Lat);
-                                registro.put("n_coordenadaY",Local.Long);
+                                registro.put("n_coordenadaX",Local.Long);
+                                registro.put("n_coordenadaY",Local.Lat);
 
                                 int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
@@ -769,8 +769,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro.put("Id_Huerta",Huerta);
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro.put("Id_Usuario",Usuario);
-                            registro.put("n_coordenadaX",Local.Lat);
-                            registro.put("n_coordenadaY",Local.Long);
+                            registro.put("n_coordenadaX",Local.Long);
+                            registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
                             BD.insert("t_Monitoreo_PEEncabezado",null,registro);
                         }
