@@ -46,7 +46,7 @@ public class Login_Usuario extends AppCompatActivity {
         Existe_Usuario();
     }
 
-    public void Agrega_Usuario(String perfil,String huerta){
+    public void Agrega_Usuario(String perfil,String huerta,String Nombre){
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
 
@@ -58,6 +58,7 @@ public class Login_Usuario extends AppCompatActivity {
         registro.put("Contrasena",Contrasena);
         registro.put("Id_Perfil",perfil);
         registro.put("Id_Huerta",huerta);
+        registro.put("Nombre",Nombre);
 
         BD.insert("UsuarioLogin",null,registro);
         BD.close();
@@ -212,7 +213,7 @@ public class Login_Usuario extends AppCompatActivity {
 
                         if (jsonobject.optString("Id_Usuario").length() > 0) {
 
-                            Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"));
+                            Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"),jsonobject.optString("Nombre_Usuario"));
                             Intent intento = new Intent(this, EnviaRecibe.class);
                             intento.putExtra("usuario", jsonobject.optString("Id_Usuario"));
                             intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));

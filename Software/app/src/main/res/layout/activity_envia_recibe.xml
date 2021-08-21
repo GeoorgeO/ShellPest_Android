@@ -66,7 +66,8 @@
             android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Reportes"
-            android:text="Reportes" />
+            android:text="Reportes"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

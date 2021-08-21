@@ -230,7 +230,7 @@ public class Riego extends AppCompatActivity {
         if(sp_Blq.getSelectedItemPosition()>0){
             boolean FaltoAlgo;
             FaltoAlgo=false;
-            if(Double.parseDouble(String.valueOf(txt_Precipitacion.getText()))>0){
+            if(Double.parseDouble(String.valueOf(txt_Precipitacion.getText()))>=0){
                 if(Double.parseDouble(String.valueOf(txt_CaudalIni.getText()))>0){
                     if(Double.parseDouble(String.valueOf(txt_CaudalFin.getText()))>0){
                         if(Double.parseDouble(String.valueOf(txt_Riego.getText()))>0){
@@ -335,6 +335,10 @@ public class Riego extends AppCompatActivity {
         }else{
             Toast.makeText(Riego.this,"Falta seleccionar un punto de control",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void cerrar(View view ){
+        this.onBackPressed();
     }
 
     private void Cargagrid(){

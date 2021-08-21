@@ -38,18 +38,18 @@ public class Adaptador_GridAplicacion extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater=(LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.item_grid_aplicacion,viewGroup,false);
-        TextView text_Fecha=(TextView)itemView.findViewById(R.id.txt_Fecha);
-        TextView text_Producto=(TextView)itemView.findViewById(R.id.text_Producto);
-        TextView text_Cantidad=(TextView)itemView.findViewById(R.id.text_Cantidad);
-        TextView text_Unidad=(TextView)itemView.findViewById(R.id.text_Unidad);
-        TextView text_CC=(TextView)itemView.findViewById(R.id.text_CC);
+        TextView text_Fecha=(TextView)itemView.findViewById(R.id.text_Fecha);
+        TextView text_ApliProducto=(TextView)itemView.findViewById(R.id.text_ApliProducto);
+        TextView text_ApliCantidad=(TextView)itemView.findViewById(R.id.text_ApliCantidad);
+        TextView text_ApliUnidad=(TextView)itemView.findViewById(R.id.text_ApliUnidad);
+        TextView text_ApliPipadas=(TextView)itemView.findViewById(R.id.text_ApliPipadas);
 
 
         text_Fecha.setText(""+itemlist.get(i).getFecha());
-        text_Producto.setText(""+itemlist.get(i).getNombre_Producto());
-        text_Cantidad.setText(""+itemlist.get(i).getCantidad());
-        text_Unidad.setText(""+itemlist.get(i).getNombre_Unidad());
-        text_CC.setText(""+itemlist.get(i).getCentro_Costos());
+        text_ApliProducto.setText(""+itemlist.get(i).getNombre_Producto());
+        text_ApliCantidad.setText(""+itemlist.get(i).getCantidad());
+        text_ApliUnidad.setText(""+itemlist.get(i).getNombre_Unidad());
+        text_ApliPipadas.setText(""+itemlist.get(i).getUnidades_aplicadas());
 
 
         return itemView;

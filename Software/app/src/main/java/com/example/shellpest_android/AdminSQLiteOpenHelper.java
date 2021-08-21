@@ -13,7 +13,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase BD) {
-        BD.execSQL("create table UsuarioLogin(Id_Usuario text primary key,Contrasena text, Id_Perfil text,Id_Huerta text)");
+        BD.execSQL("create table UsuarioLogin(Id_Usuario text primary key,Contrasena text, Id_Perfil text,Id_Huerta text,Nombre text)");
         BD.execSQL("create table FechaSincroniza(id_Sincroniza text primary key,Fecha_Sincroniza text)");
         BD.execSQL("create table t_Calidad(Id_Calidad text primary key,Nombre_Calidad text )");
         BD.execSQL("create table t_Cultivo(Id_Cultivo text primary key,Nombre_Cultivo text)");
@@ -41,6 +41,22 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Riego (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
         BD.execSQL("create table t_RiegoEliminado (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
         BD.execSQL("create table t_Usuario_Huerta (Id_Usuario text ,Id_Huerta text)");
+
+        BD.execSQL("create table t_Productos(c_codigo_pro text primary key,v_nombre_pro text,c_codigo_uni text,Existencia float,Stock_Min float,Movimientos float)");
+        BD.execSQL("create table t_Unidad(c_codigo_uni text primary key,v_nombre_uni text,v_abrevia_uni text)");
+        BD.execSQL("create table t_Presentacion(Id_Presentacion text primary key,Nombre_Presentacion text,Id_TipoAplicacion text,Id_Unidad text)");
+        BD.execSQL("create table t_TipoAplicacion(Id_TipoAplicacion text primary key,Nombre_TipoAplicacion text)");
+
+        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text primary key,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text)");
+        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text ,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text)");
+        BD.execSQL("create table t_Usuario_Empresa (c_codigo_usu text ,c_codigo_eps text)");
+        BD.execSQL("create table conempresa (c_codigo_eps text primary key,v_nombre_eps text,v_rfc_eps text)");
+
+        BD.execSQL("create table t_Almacen (Id_Almacen text primary key,Nombre_Almacen text,Id_Huerta text)");
+        BD.execSQL("create table t_Salidas (Id_Salida text primary key,c_codigo_eps text,Id_Responsable text,Id_Almacen text, Id_Aplicacion text,Fecha text,Id_Usuario text, F_Creacion text)");
+        BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text)");
+
+        BD.execSQL("create table invmovimiento (c_coddoc_mov text ,Secuencia text,c_tipodoc_mov text,c_codigo_pro text,n_movipro_mov float,n_exiant_mov float,n_cantidad_mov float)");
     }
 
     @Override
@@ -71,6 +87,20 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Riego");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RiegoEliminado");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Usuario_Huerta");
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Productos");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Unidad");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Presentacion");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_TipoAplicacion");
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Aplicaciones");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Aplicaciones_Det");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Usuario_Empresa");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS conempresa");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Salidas");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Salidas_Det");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Almacen");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS invmovimiento");
         onCreate(sqLiteDatabase);
     }
 }

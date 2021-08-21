@@ -20,13 +20,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:id="@+id/tv_Responsable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Responsable: " />
+
         <Spinner
             android:id="@+id/sp_Almacen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Spinner
-            android:id="@+id/sp_Responsable"
+            android:id="@+id/sp_Aplicacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -99,11 +105,12 @@
 
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/sp_Unidad"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_Unidad"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2" />
+                android:layout_weight=".2"
+                android:text="Unidad:" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="agregargrid"
+            android:onClick="Agregar"
             android:text="Agregar" />
 
         <LinearLayout

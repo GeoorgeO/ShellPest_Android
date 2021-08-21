@@ -1,15 +1,15 @@
 package com.example.shellpest_android;
 
 public class Itemaplicacion {
-    private String Fecha,Nombre_Producto,Cantidad,Nombre_Unidad,Centro_Costos;
+    private String Fecha,Nombre_Producto,Dosis,Unidades_aplicadas,Nombre_Unidad;
     private String cProducto,cUnidad;
 
-    public Itemaplicacion(String Fecha, String Nombre_Producto,String Cantidad,String Nombre_Unidad,String Centro_Costos,String cProducto,String cUnidad){
+    public Itemaplicacion(String Fecha, String cProducto,String Dosis,String Unidades_aplicadas,String cUnidad,String Nombre_Producto,String Nombre_Unidad){
         this.Fecha=Fecha;
         this.Nombre_Producto=Nombre_Producto;
-        this.Cantidad=Cantidad;
+        this.Dosis=Dosis;
         this.Nombre_Unidad=Nombre_Unidad;
-        this.Centro_Costos=Centro_Costos;
+        this.Unidades_aplicadas=Unidades_aplicadas;
         this.cProducto=cProducto;
         this.cUnidad=cUnidad;
 
@@ -28,15 +28,15 @@ public class Itemaplicacion {
     }
 
     public String getCantidad(){
-        return Cantidad;
+        return Dosis;
     }
 
     public String getNombre_Unidad(){
         return Nombre_Unidad;
     }
 
-    public String  getCentro_Costos(){
-        return Centro_Costos;
+    public String  getUnidades_aplicadas(){
+        return Unidades_aplicadas;
     }
 
     public String getcProducto(){

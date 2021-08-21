@@ -73,12 +73,12 @@ public class Aplicaciones extends AppCompatActivity {
             intento.putExtra("usuario2", Usuario);
             intento.putExtra("perfil2", Perfil);
             intento.putExtra("huerta2", Huerta);
-            startActivity(intento);
+
         }
         if (Accion.equals("Enviar")){
-            //intento=new Intent(this,enviarriego.class);
+            intento=new Intent(this,Enviar_Aplicaciones.class);
         }
-
+        startActivity(intento);
     }
 
 }

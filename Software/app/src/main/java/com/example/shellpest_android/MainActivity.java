@@ -221,6 +221,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -241,6 +247,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios");
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -260,6 +272,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                     }
                 }
 
@@ -432,6 +450,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break; // break es opcional
                         case "Id_Usuario" :
                             Actualiza_UsuHuerta(datos);
+                            break; // break es opcional
+                        case "c_codigo_pro" :
+                            Actualiza_Productos(datos);
+                            break; // break es opcional
+                        case "c_codigo_uni" :
+                            Actualiza_Unidades(datos);
+                            break; // break es opcional
+                        case "Id_Presentacion" :
+                            Actualiza_Presentasiones(datos);
+                            break; // break es opcional
+                        case "Id_TipoAplicacion" :
+                            Actualiza_TipoAplicaciones(datos);
+                            break; // break es opcional
+                        case "v_nombre_alm" :
+                            Actualiza_Almacenes(datos);
+                            break; // break es opcional
+                        case "c_codigo_eps" :
+                            Actualiza_Empresas(datos);
                             break; // break es opcional
                     }
                 }
@@ -1355,6 +1391,323 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
             BD.close();
+        }
+    }
+
+    private void Actualiza_Productos(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Productos",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("v_nombre_pro",Datos[x][1]);
+                        registro.put("c_codigo_uni",Datos[x][2]);
+
+                        registro.put("Stock_Min",Datos[x][4]);
+                        registro.put("Movimientos",Datos[x][5]);
+
+
+                        int cantidad=BD.update("t_Productos",registro,"c_codigo_pro='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("c_codigo_pro",Datos[x][0]);
+                        registro.put("v_nombre_pro",Datos[x][1]);
+                        registro.put("c_codigo_uni",Datos[x][2]);
+
+
+                        if(Datos[x][3]==null){
+                            registro.put("Stock_Min",0);
+                        }else{
+                            registro.put("Stock_Min",Double.parseDouble(Datos[x][3]));
+                        }
+
+                        if(Datos[x][4]==null){
+                            registro.put("Movimientos",0);
+                        }else{
+                            registro.put("Movimientos",Double.parseDouble(Datos[x][4]));
+                        }
+
+
+                        BD.insert("t_Productos",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+               Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_Unidades(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Unidad",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_uni) from t_Unidad where c_codigo_uni='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("v_nombre_uni",Datos[x][1]);
+                        registro.put("v_abrevia_uni",Datos[x][2]);
+
+
+
+                        int cantidad=BD.update("t_Unidad",registro,"c_codigo_uni='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("c_codigo_uni",Datos[x][0]);
+                        registro.put("v_nombre_uni",Datos[x][1]);
+                        registro.put("v_abrevia_uni",Datos[x][2]);
+
+
+                        BD.insert("t_Unidad",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_TipoAplicaciones(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("Id_TipoAplicacion",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(Id_TipoAplicacion) from t_TipoAplicacion where Id_TipoAplicacion='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Nombre_TipoAplicacion",Datos[x][1]);
+
+
+                        int cantidad=BD.update("t_TipoAplicacion",registro,"Id_TipoAplicacion='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("Id_TipoAplicacion",Datos[x][0]);
+                        registro.put("Nombre_TipoAplicacion",Datos[x][1]);
+
+
+                        BD.insert("t_TipoAplicacion",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_Presentasiones(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Presentacion",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(Id_Presentacion) from t_Presentacion where Id_Presentacion='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Nombre_Presentacion",Datos[x][1]);
+                        registro.put("Id_TipoAplicacion",Datos[x][2]);
+                        registro.put("Id_Unidad",Datos[x][3]);
+
+                        int cantidad=BD.update("t_Presentacion",registro,"Id_Presentacion='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("Id_Presentacion",Datos[x][0]);
+                        registro.put("Nombre_Presentacion",Datos[x][1]);
+                        registro.put("Id_TipoAplicacion",Datos[x][2]);
+                        registro.put("Id_Unidad",Datos[x][3]);
+
+                        BD.insert("t_Presentacion",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_Almacenes(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Almacen",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Nombre_Almacen",Datos[x][0]);
+                        registro.put("Id_Huerta",Datos[x][3]);
+
+
+                        int cantidad=BD.update("t_Almacen",registro,"Id_Almacen='"+Datos[x][2].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("Id_Almacen",Datos[x][2]);
+                        registro.put("Nombre_Almacen",Datos[x][0]);
+                        registro.put("Id_Huerta",Datos[x][3]);
+                        BD.insert("t_Almacen",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_Empresas(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("conempresa",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_eps) from conempresa where c_codigo_eps='"+Datos[x][0].toString()+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("v_nombre_eps",Datos[x][1]);
+                        registro.put("v_rfc_eps",Datos[x][2]);
+
+
+                        int cantidad=BD.update("conempresa",registro,"c_codigo_eps='"+Datos[x][0].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro= new ContentValues();
+                        registro.put("c_codigo_eps",Datos[x][0]);
+                        registro.put("v_nombre_eps",Datos[x][1]);
+                        registro.put("v_rfc_eps",Datos[x][2]);
+                        BD.insert("conempresa",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
