@@ -47,8 +47,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Presentacion(Id_Presentacion text primary key,Nombre_Presentacion text,Id_TipoAplicacion text,Id_Unidad text)");
         BD.execSQL("create table t_TipoAplicacion(Id_TipoAplicacion text primary key,Nombre_TipoAplicacion text)");
 
-        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text primary key,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text)");
-        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text ,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text)");
+        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text primary key,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text)");
+        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text ,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text,Enviado text)");
         BD.execSQL("create table t_Usuario_Empresa (c_codigo_usu text ,c_codigo_eps text)");
         BD.execSQL("create table conempresa (c_codigo_eps text primary key,v_nombre_eps text,v_rfc_eps text)");
 

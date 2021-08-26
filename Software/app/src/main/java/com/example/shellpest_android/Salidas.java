@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +44,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     Adaptador_GridSalida Adapter;
     ArrayList<Itemsalida> arrayArticulos;
 
+    DatePickerDialog dtpd;
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -196,6 +198,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         });
 
+
+
     }
 
     @Override
@@ -207,8 +211,11 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             mes=c.get(Calendar.MONTH);
             anio=c.get(Calendar.YEAR);
 
-            DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> et_Fecha.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
+            dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> et_Fecha.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
+
             dtpd.show();
+
+
         }
     }
 
@@ -406,11 +413,60 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
     }
 
-    public void Agregar(View view){
+    public void Agregar(View view) {
         boolean FaltoAlgo;
-        FaltoAlgo=false;
+        FaltoAlgo = false;
+        String Mensaje;
+        Mensaje = "";
 
-        if ()
+        if (sp_Empresa.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una empresa,Verifica por favor";
+        }
+        if (sp_Almacen.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar un almacen,Verifica por favor";
+        }
+        if (sp_Aplicacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una aplicacion,Verifica por favor";
+        }
+        if (actv_Producto.getText().toString().indexOf("|") >= 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta teclear un producto,Verifica por favor";
+        }
+        try {
+            if (Double.parseDouble(etn_Cantidad.getText().toString()) > 0) {
+
+            } else {
+                FaltoAlgo = true;
+                Mensaje = "Falta teclear la canrtidad de producto,Verifica por favor";
+            }
+        } catch (IllegalStateException e) {
+            etn_Cantidad.setText("0");
+        }
+        catch(NumberFormatException f)
+        {
+            etn_Cantidad.setText("0");
+        }
+        catch(Exception g)
+        {
+            etn_Cantidad.setText("0");
+        }
+        if(sp_Bloque.getSelectedItemPosition()>0){
+
+        }else{
+            FaltoAlgo=true;
+            Mensaje="Falta seleccionar un bloque,Verifica por favor";
+        }
 
         if (!FaltoAlgo){
             AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -449,7 +505,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                         registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
                         registro.put("Id_Responsable",Usuario);
                         registro.put("Id_Almacen",CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
-                        registro.put("Id_Aplicacion",CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto());
+                        registro.put("Id_Aplicacion",CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10));
                         registro.put("Fecha",et_Fecha.getText().toString());
                         registro.put("Id_Usuario",Usuario);
                         registro.put("F_Creacion",objSDF.format(date1));
@@ -462,14 +518,13 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
             }else{
                 Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
-
             }
 
 
             Renglon =BD.rawQuery("select count(Id_Salida) " +
                     "from t_Salidas_Det " +
                     "where Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
-                    "and ltrim(rtrim(c_codigo_pro)=ltrim(rtrim('"+ArrayProductos.get(1).substring(ArrayProductos.get(1).indexOf("|"))+2+"')) " ,null);
+                    "and ltrim(rtrim(c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' " ,null);
 
 
 
@@ -499,6 +554,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
             LimpiarDetalle();
             Cargagrid(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
+        }else{
+            Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -563,6 +620,10 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 BD.close();
             }
         }
+        else{
+            lv_GridSalidas.setAdapter(null);
+            arrayArticulos.clear();
+        }
     }
 
     private void Cargagrid(String Id){
@@ -588,7 +649,6 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 "from t_Salidas_Det as SD \n" +
                 "left join t_Productos as P on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) \n" +
                 "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni \n" +
-
                 "where SD.Id_Salida='"+Id+"'",null);
 
         if(Renglon.moveToFirst()) {
@@ -597,15 +657,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             if (Renglon.moveToFirst()) {
 
                 do {
-                    String Salida,cproducto,cantida,bloque,cunida,producto,unidad;
-                    Salida=Renglon.getString(0);
-                    cproducto=Renglon.getString(1);
-                    cantida=Renglon.getString(2);
-                    bloque=Renglon.getString(3);
-                    cunida=Renglon.getString(4);
-                    producto=Renglon.getString(5);
-                    unidad=Renglon.getString(6);
-                    Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6));
+
+                    Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 

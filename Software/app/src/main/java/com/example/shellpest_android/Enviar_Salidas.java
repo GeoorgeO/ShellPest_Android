@@ -2,7 +2,6 @@ package com.example.shellpest_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
@@ -24,16 +23,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Enviar_Aplicaciones extends AppCompatActivity {
+public class Enviar_Salidas extends AppCompatActivity {
 
     public String MyIp,CodAplicacion;
     ConexionInternet obj;
 
-    TextView text_NAplicaciones,text_Fechas;
+    TextView text_NAplicaciones2,text_Fechas2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enviar_aplicaciones);
+        setContentView(R.layout.activity_enviar_salidas);
 
         getSupportActionBar().hide();
         obj = new ConexionInternet(this);
@@ -42,23 +42,31 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
             super.onBackPressed();
         }
 
-        text_NAplicaciones=(TextView)findViewById(R.id.text_NAplicaciones);
-        text_Fechas=(TextView)findViewById(R.id.text_Fechas);
+        text_NAplicaciones2=(TextView)findViewById(R.id.text_NAplicaciones2);
+        text_Fechas2=(TextView)findViewById(R.id.text_Fechas2);
 
         CargaDatos();
-
     }
 
     private void CargaDatos(){
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-        Cursor Renglon = BD.rawQuery("select count(Id_Aplicacion) as Aplicaciones,fechas.Fini,Fechas.Ffin from t_Aplicaciones, (select min(Fecha) as Fini,max(Fecha) as Ffin from t_Aplicaciones_Det where Enviado='0' )as Fechas where Enviado='0' " , null);
+        Cursor Renglon = BD.rawQuery("select count(S.Id_Salida) as Aplicaciones, S.Fecha,D.productos from t_Salidas as S, (select count(c_codigo_pro) as productos from t_Salidas_Det) as  D " , null);
 
         if (Renglon.moveToFirst()) {
 
             do {
-                text_NAplicaciones.setText(Renglon.getString(0));
-                text_Fechas.setText(Renglon.getString(1)+" - "+Renglon.getString(2));
+                if(Renglon.getInt(0)>1){
+                    text_NAplicaciones2.setText(Renglon.getString(0));
+                }else{
+                    if (Renglon.getInt(0)==0){
+                        text_NAplicaciones2.setText(Renglon.getString(0));
+                    }else{
+                        text_NAplicaciones2.setText(Renglon.getString(0)+" salida del "+Renglon.getString(1));
+                    }
+
+                }
+                text_Fechas2.setText(Renglon.getString(2));
             } while (Renglon.moveToNext());
 
 
@@ -81,7 +89,7 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
             AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
             SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-            Cursor Renglon = BD.rawQuery("select A.Id_Aplicacion,A.Id_Huerta,A.Observaciones,A.Id_TipoAplicacion,A.Id_Presentacion,A.Id_Usuario,A.F_Creacion,(select min(AD.Fecha) from t_Aplicaciones_Det as AD where AD.Id_Aplicacion=A.Id_Aplicacion) as Fecha from t_Aplicaciones as A", null);
+            Cursor Renglon = BD.rawQuery("select S.Id_Salida,S.c_codigo_eps,S.Id_Responsable,S.Id_Almacen,S.Id_Aplicacion,S.Fecha,S.Id_Usuario,S.F_Creacion from t_Salidas as S", null);
 
             if (Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
@@ -97,10 +105,6 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
 
             }
 
-
-
-
-
             BD.close();
         }else{
             Toast.makeText(this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
@@ -109,48 +113,52 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         CargaDatos();
     }
 
-    private void insertWebEncabezado(String Id_Aplicacion,String Id_Huerta,String Observaciones,String Id_TipoAplicacion,String Id_Presentacion,String Id_Usuario,String F_Creacion,String Fecha) {
+    private void insertWebEncabezado(String Id_Salida,String c_codigo_eps,String Id_Responsable,String Id_Almacen,String Id_Aplicacion,String Fecha,String Id_Usuario,String F_Creacion) {
         //Toast.makeText(MainActivity.this, Liga, Toast.LENGTH_SHORT).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
 
-        if(Observaciones == null){
-            Observaciones="";
+        if(c_codigo_eps == null){
+            c_codigo_eps="";
         }
-        if(Id_Huerta== null){
-            Id_Huerta="";
+        if(Id_Responsable== null){
+            Id_Responsable="";
         }
 
-        if(Id_TipoAplicacion==null){
-            Id_TipoAplicacion="";
+        if(Id_Almacen==null){
+            Id_Almacen="";
+        }
+
+        if(Id_Aplicacion==null){
+            Id_Aplicacion="";
         }
 
         if(Id_Usuario==null){
             Id_Usuario="";
         }
-
-        if(Id_Presentacion==null){
-            Id_Presentacion="";
-        }
         if(F_Creacion==null){
             F_Creacion="";
         }
 
-        String dia,mes,ano,ano2;
+        String dia,mes,ano,dia2,mes2,ano2;
         ano=F_Creacion.substring(6);
         mes=F_Creacion.substring(3, 5);
         dia=F_Creacion.substring(0, 2);
+
         ano2=Fecha.substring(6);
+        mes2=Fecha.substring(3, 5);
+        dia2=Fecha.substring(0, 2);
+
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2 ;
+            Liga = "http://177.241.250.117:8090//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2 ;
+                Liga = "http://192.168.3.254:8090//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2 ;
+                Liga = "http://177.241.250.117:8090//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable +  "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
             }
         }
         URL url = null;
@@ -213,15 +221,15 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
 
                         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
                         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-                        Cursor Renglon2 = BD.rawQuery("select Fecha,c_codigo_pro,Dosis,Unidades_aplicadas,Id_Usuario,F_Creacion from t_Aplicaciones_Det where Id_Aplicacion='"+Id_Aplicacion+"'", null);
+                        Cursor Renglon2 = BD.rawQuery("select Id_Salida,c_codigo_pro,Cantidad,Id_Bloque from t_Salidas_Det where Id_Salida='"+Id_Salida+"'", null);
 
                         if (Renglon2.moveToFirst()) {
 
                             do {
                                 //Toast.makeText(this, Renglon2.getString(7), Toast.LENGTH_SHORT).show();
-                                insertWebDetalle(CodAplicacion,Renglon2.getString(0),Renglon2.getString(1),Renglon2.getString(2),Renglon2.getString(3),Renglon2.getString(4),Renglon2.getString(5));
+                                insertWebDetalle(Renglon2.getString(0),Renglon2.getString(1),Renglon2.getString(2),Renglon2.getString(3));
                             } while (Renglon2.moveToNext());
-                            if (EliminadeAplicacionEncabezado(Id_Aplicacion)){
+                            if (EliminadeSalidaEncabezado(Id_Salida)){
                                 RegistrosEnviados++;
                             }
                         } else {
@@ -230,14 +238,12 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
 
                     }else{
                         if (jsonobject.optString("Mensaje").indexOf("Violation of PRIMARY KEY")>=0){
-                            Toast.makeText(Enviar_Aplicaciones.this, "Ya se envio ese punto en la fecha indicada", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Enviar_Salidas.this, "Ya se envio ese punto en la fecha indicada", Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(Enviar_Aplicaciones.this, "Ocurrio error al intentar guardar, notifique al administrador del sistema.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Enviar_Salidas.this, "Ocurrio error al intentar guardar, notifique al administrador del sistema.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-
-
             }
 
             conn.disconnect();
@@ -245,19 +251,19 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Aplicaciones.this, "Fallo la conexion al servidor [MALFORMEDURLCAB]", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [MALFORMEDURLCAB]", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Aplicaciones.this, "Fallo la conexion al servidor [IOCAB]", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [IOCAB]", Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Aplicaciones.this, "Fallo la conexion al servidor [JSONCAB]", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [JSONCAB]", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void insertWebDetalle(String Id_Aplicacion,String Fecha,String c_codigo_pro,String Dosis,String Unidades_aplicadas,String Id_Usuario,String F_Creacion) {
+    private void insertWebDetalle(String Id_Salida,String c_codigo_pro,String Cantidad,String Id_Bloque) {
         //Toast.makeText(MainActivity.this, Liga, Toast.LENGTH_SHORT).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -267,38 +273,22 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         if(c_codigo_pro== null){
             c_codigo_pro="";
         }
-        if(Dosis==null){
-            Dosis="";
+        if(Cantidad==null){
+            Cantidad="0";
         }
-        if(Unidades_aplicadas==null){
-            Unidades_aplicadas="";
+        if(Id_Bloque==null){
+            Id_Bloque="";
         }
-        if(Id_Usuario==null){
-            Id_Usuario="";
-        }
-        if(F_Creacion==null){
-            F_Creacion="";
-        }
-
-
-        String dia,mes,ano,dia2,mes2,ano2;
-        ano=Fecha.substring(6);
-        mes=Fecha.substring(3, 5);
-        dia=Fecha.substring(0, 2);
-
-        ano2=F_Creacion.substring(6);
-        mes2=F_Creacion.substring(3, 5);
-        dia2=F_Creacion.substring(0, 2);
 
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis + "&Unidades_aplicadas=" + Unidades_aplicadas + "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2  ;
+            Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=E &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov=0 &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque   ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis + "&Unidades_aplicadas=" + Unidades_aplicadas + "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 ;
+                Liga = "http://192.168.3.254:8090//Control/Salidas_Det?c_tipodoc_mov=E &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov=0 &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis + "&Unidades_aplicadas=" + Unidades_aplicadas + "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 ;
+                Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=E &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov=0 &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  ;
             }
         }
         URL url = null;
@@ -353,10 +343,12 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
                     int columnas = 0;
                     int RegistrosEnviados=0;
 
+
                     if (jsonobject.optString("Mensaje").equals("1")) {
-                        if (EliminadeAplicacionDetalle(Id_Aplicacion,Fecha,c_codigo_pro)){
+                        if (EliminadeSalidaDetalle(Id_Salida,c_codigo_pro)){
                             RegistrosEnviados++;
                         }
+
                     }
                 }
             }
@@ -366,28 +358,24 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Aplicaciones.this, "Fallo la conexion al servidor [MALFORMEDDET]", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [MALFORMEDDET]", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Aplicaciones.this, "Fallo la conexion al servidor [IODET]", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [IODET]", Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Aplicaciones.this, "Fallo la conexion al servidor [JSONDET]", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [JSONDET]", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean EliminadeAplicacionEncabezado(String Id_Aplicacion) {
+    private boolean EliminadeSalidaEncabezado(String Id_Salida) {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
-       /* int cantidad = BD.delete("t_Aplicaciones", "Id_Aplicacion='"+Id_Aplicacion+"'", null);
-        BD.close();*/
-        ContentValues registro = new ContentValues();
 
-        registro.put("Enviado","1");
-
-        int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+Id_Aplicacion+"'",null);
+        int cantidad = BD.delete("t_Salidas", "Id_Salida='"+Id_Salida+"'", null);
+        BD.close();
 
         if (cantidad > 0) {
             return true;
@@ -396,24 +384,18 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         }
     }
 
-    private boolean EliminadeAplicacionDetalle(String Id_Aplicacion, String Fecha, String c_codigo_pro) {
+    private boolean EliminadeSalidaDetalle(String Id_Salida, String c_codigo_pro) {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
-        /*int cantidad = BD.delete("t_Aplicaciones_Det", "Id_Aplicacion='"+Id_Aplicacion+"' and Fecha='"+Fecha+"' and c_codigo_pro='"+c_codigo_pro+"'", null);
-        BD.close();*/
-        ContentValues registro = new ContentValues();
 
-        registro.put("Enviado","1");
-
-        int cantidad=BD.update("t_Aplicaciones_Det",registro,"Id_Aplicacion='"+Id_Aplicacion+"' and Fecha='"+Fecha+"' and c_codigo_pro='"+c_codigo_pro+"'",null);
+        int cantidad = BD.delete("t_Salidas_Det", "Id_Salida='"+Id_Salida+"' and c_codigo_pro='"+c_codigo_pro+"'", null);
+        BD.close();
 
         if (cantidad > 0) {
             return true;
         } else {
             return false;
         }
-
-
     }
 
 }

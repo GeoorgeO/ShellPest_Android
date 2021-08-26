@@ -145,7 +145,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
                     "from t_Aplicaciones as A \n" +
                     "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta \n "+
                     "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion \n" +
-                    " group by A.Id_Aplicacion ";
+                    " where A.Enviado='0' group by A.Id_Aplicacion ";
         }else{
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
@@ -154,7 +154,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
                     "from t_Aplicaciones as A \n" +
                     "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta \n "+
                     "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion \n" +
-                    "where A.Id_Huerta in (select tem.Id_Huerta from t_Usuario_Huerta as tem where tem.Id_Usuario='"+Usuario+"') group by A.Id_Aplicacion ";
+                    "where A.Enviado='0' and A.Id_Huerta in (select tem.Id_Huerta from t_Usuario_Huerta as tem where tem.Id_Usuario='"+Usuario+"') group by A.Id_Aplicacion ";
         }
 
         Cursor Renglon =BD.rawQuery(Consulta,null);

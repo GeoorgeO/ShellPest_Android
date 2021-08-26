@@ -311,6 +311,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
             DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> etd_Fecha.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
             dtpd.show();
+
         }
     }
 
@@ -414,7 +415,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             String currentTime = simpleDateFormat.format(new Date());
 
             Cursor Renglon;
-            Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+"001"+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' ",null);
+            Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+"001"+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Enviado='0' ",null);
             if(Renglon.moveToFirst()){
                 do {
                     if (Renglon.getInt(0)>0){
@@ -442,6 +443,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
                         registro.put("Id_Usuario",Usuario);
                         registro.put("F_Creacion",objSDF.format(date1));
+                        registro.put("Enviado","0");
                         BD.insert("t_Aplicaciones",null,registro);
                     }
 
