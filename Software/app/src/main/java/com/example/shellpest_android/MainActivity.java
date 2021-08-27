@@ -185,6 +185,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private boolean HaySalidas(){
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon = BD.rawQuery("select count(S.Id_Salida) as Movimientos from t_Salidas_Det as S " , null);
+
+        if (Renglon.moveToFirst()) {
+
+            do {
+                if(Renglon.getInt(0)>1){
+                   return false;
+                }else{
+                    return true;
+                }
+
+            } while (Renglon.moveToNext());
+
+
+        } else {
+            return true;
+
+        }
+    }
+
     public void Sincroniza_Datos (String esaFecha,View view){
         try{
             if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
@@ -221,12 +244,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                    if(HaySalidas()){
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                    }
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                    if(HaySalidas()){
+                        Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
+                    }
+
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -247,12 +276,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios");
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        if(HaySalidas()){
+                            Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        }
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                        if(HaySalidas()){
+                            Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
+                        }
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -272,12 +306,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        if(HaySalidas()){
+                            Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        }
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                        if(HaySalidas()){
+                            Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
+                        }
                     }
                 }
 
@@ -468,6 +507,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break; // break es opcional
                         case "c_codigo_eps" :
                             Actualiza_Empresas(datos);
+                            break; // break es opcional
+                        case "Existencia" :
+                            Actualiza_Existencias(datos);
                             break; // break es opcional
                     }
                 }
@@ -1695,6 +1737,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("v_nombre_eps",Datos[x][1]);
                         registro.put("v_rfc_eps",Datos[x][2]);
                         BD.insert("conempresa",null,registro);
+                    }
+
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_Existencias(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("Existencias",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][1]+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Existencia",Datos[x][0]);
+
+                        int cantidad=BD.update("t_Productos",registro,"c_codigo_pro='"+Datos[x][1].toString()+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+
                     }
 
                     BD.close();

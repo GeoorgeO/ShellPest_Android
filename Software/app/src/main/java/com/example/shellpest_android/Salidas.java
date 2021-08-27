@@ -2,16 +2,20 @@ package com.example.shellpest_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -39,6 +43,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     TextView tv_Responsable,tv_Unidad;
     Boolean SoloUnaHuerta;
     int secuencia;
+    double existencia;
+    Button btn_Agregar;
 
     Itemsalida Tabla;
     Adaptador_GridSalida Adapter;
@@ -69,6 +75,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         etn_Cantidad = (EditText) findViewById(R.id.etn_Cantidad);
         actv_Producto = (AutoCompleteTextView) findViewById(R.id.actv_Producto);
         tv_Responsable=(TextView) findViewById(R.id.tv_Responsable);
+        btn_Agregar=(Button) findViewById(R.id.btn_Agregar);
 
        /* ItemSPEmp = new ArrayList<>();
         ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
@@ -78,7 +85,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
         sp_Empresa.setAdapter(CopiEmp);
 
-
+        existencia=0;
 
         cargaSpinnerHue();
         CopiAlm = new AdaptadorSpinner(this, ItemSPAlm);
@@ -181,13 +188,14 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
                 //String pro;
                 //pro="select P.c_codigo_uni,U.v_nombre_uni from t_Productos as P left join  t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni where P.c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"'";
-                Renglon=BD.rawQuery("select P.c_codigo_uni,U.v_nombre_uni from t_Productos as P left join  t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"'",null);
+                Renglon=BD.rawQuery("select P.c_codigo_uni,U.v_nombre_uni,P.Existencia from t_Productos as P left join  t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
                     do {
-                        tv_Unidad.setText("Unidad: "+Renglon.getString(1));
+                        tv_Unidad.setText("Unidad: "+Renglon.getString(1) +" Existencia: "+Renglon.getDouble(2));
                         cUnidad=Renglon.getString(0);
+                        existencia=Renglon.getDouble(2);
                     } while(Renglon.moveToNext());
 
                     BD.close();
@@ -197,8 +205,75 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }
 
         });
+        etn_Cantidad.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (!String.valueOf(existencia).isEmpty() && etn_Cantidad.getText().toString().length()>0){
+                if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
+                    Toast.makeText(Salidas.this, "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
+                    btn_Agregar.setEnabled(false);
+                }else{
+                    btn_Agregar.setEnabled(true);
+                }
+                }else{
 
+                }
+                return false;
+            }
+        });
 
+          lv_GridSalidas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Salidas.this);
+                dialogo1.setTitle("ELIMINAR REGISTRO SELECCIONADO");
+                dialogo1.setMessage("¿ Quieres eliminar el producto: "+arrayArticulos.get(i).getNombre_Producto()+" de la salida?");
+                dialogo1.setCancelable(false);
+                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //aceptar();
+                        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                        Date date1=objDate;
+
+                        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Salidas.this,"ShellPest",null,1);
+                        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+                        int cantidad= BD.delete("t_Salidas_Det","Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_pro='"+arrayArticulos.get(i).getcProducto()+"'  ",null);
+
+                        if(cantidad>0){
+                            ContentValues registro3 = new ContentValues();
+
+                            registro3.put("Existencia", Double.parseDouble(arrayArticulos.get(i).getExistencia()) + Double.parseDouble(arrayArticulos.get(i).getCantidad()));
+
+                            int cantidad3=BD.update("t_Productos",registro3,"ltrim(rtrim(c_codigo_pro))='"+arrayArticulos.get(i).getcProducto().trim()+"'",null);
+
+                            if(cantidad3>0){
+                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                            }else{
+                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (lv_GridSalidas.getCount()==1){
+                                int cantidad4= BD.delete("t_Salidas","Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+
+                            }
+                        }else{
+                            Toast.makeText(Salidas.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                        BD.close();
+                        Cargagrid(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
+                    }
+                });
+                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //cancelar();
+                    }
+                });
+                dialogo1.show();
+                return false;
+            }
+        });
 
     }
 
@@ -236,7 +311,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         return Valor;
     }
 
-    public void agregargrid(View view){
+    /*public void agregargrid(View view){
         lv_GridSalidas.setAdapter(null);
 
         Tabla=new Itemsalida(et_Fecha.getText().toString(),actv_Producto.getText().toString(),etn_Cantidad.getText().toString(),tv_Unidad.getText().toString().substring(tv_Unidad.getText().toString().indexOf(":")+2),CopiBlo.getItem(sp_Bloque.getSelectedItemPosition()).getTexto(),actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim(),cUnidad);
@@ -247,10 +322,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }
-
-
-
-    }
+    } */
 
     private void LimpiarDetalle(){
         actv_Producto.setText("");
@@ -360,9 +432,6 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-
-
-
         if(Perfil.equals("001")){
 
             Renglon=BD.rawQuery("select Id_Almacen,Nombre_Almacen from t_Almacen",null);
@@ -392,7 +461,6 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     }
 
     private void cargarResponsable(){
-
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -541,7 +609,22 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     registro2.put("Id_Usuario",Usuario);
                     registro2.put("F_Creacion",objSDF.format(date1));
 
-                    BD.insert("t_Salidas_Det",null,registro2);
+                    long cantidad=BD.insert("t_Salidas_Det",null,registro2);
+                    if(cantidad>0){
+                        ContentValues registro3 = new ContentValues();
+
+                        registro3.put("Existencia", existencia - Double.parseDouble(etn_Cantidad.getText().toString()));
+
+                        int cantidad3=BD.update("t_Productos",registro3,"ltrim(rtrim(c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"'",null);
+
+                        if(cantidad3>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }else{
@@ -645,7 +728,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 "\tSD.Id_Bloque, \n" +
                 "\tP.c_codigo_uni, \n" +
                 "\tP.v_nombre_pro, \n" +
-                "\tU.v_nombre_uni \n" +
+                "\tU.v_nombre_uni,P.Existencia \n" +
                 "from t_Salidas_Det as SD \n" +
                 "left join t_Productos as P on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) \n" +
                 "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni \n" +
@@ -658,7 +741,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
                 do {
 
-                    Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4));
+                    Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4),Renglon.getString(7));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
