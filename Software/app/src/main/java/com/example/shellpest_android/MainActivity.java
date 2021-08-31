@@ -255,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(HaySalidas()){
                         Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
                     }
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
 
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
@@ -287,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(HaySalidas()){
                             Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
                         }
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/UsuarioEmpresa");
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -317,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(HaySalidas()){
                             Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
                         }
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
                     }
                 }
 
@@ -511,6 +514,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         case "Existencia" :
                             Actualiza_Existencias(datos);
                             break; // break es opcional
+                        case "Usu_Emp" :
+                            Actualiza_UsuEmp(datos);
+                            break;
                     }
                 }
 
@@ -1787,6 +1793,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     BD.close();
                 }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private void Actualiza_UsuEmp(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("Usuario_Empresa",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario!='333' ", null);
+
+
+
+                ContentValues registro= new ContentValues();
+                registro.put("Id_Usuario",Datos[x][0]);
+                registro.put("c_codigo_eps",Datos[x][1]);
+
+                BD.insert("t_Usuario_Empresa",null,registro);
+
+                BD.close();
+
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){

@@ -49,7 +49,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
         BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text primary key,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text)");
         BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text ,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text,Enviado text)");
-        BD.execSQL("create table t_Usuario_Empresa (c_codigo_usu text ,c_codigo_eps text)");
+        BD.execSQL("create table t_Usuario_Empresa (Id_Usuario text ,c_codigo_eps text)");
         BD.execSQL("create table conempresa (c_codigo_eps text primary key,v_nombre_eps text,v_rfc_eps text)");
 
         BD.execSQL("create table t_Almacen (Id_Almacen text primary key,Nombre_Almacen text,Id_Huerta text)");
@@ -57,6 +57,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text)");
 
         BD.execSQL("create table invmovimiento (c_coddoc_mov text ,Secuencia text,c_tipodoc_mov text,c_codigo_pro text,n_movipro_mov float,n_exiant_mov float,n_cantidad_mov float)");
+
     }
 
     @Override
@@ -101,6 +102,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Salidas_Det");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Almacen");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS invmovimiento");
+
         onCreate(sqLiteDatabase);
     }
 }

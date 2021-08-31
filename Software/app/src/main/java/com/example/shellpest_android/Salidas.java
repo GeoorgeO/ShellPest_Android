@@ -77,13 +77,14 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         tv_Responsable=(TextView) findViewById(R.id.tv_Responsable);
         btn_Agregar=(Button) findViewById(R.id.btn_Agregar);
 
-       /* ItemSPEmp = new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
-        ItemSPEmp.add(new ItemDatoSpinner("Desarrollo Agricola Alegro"));
-        ItemSPEmp.add(new ItemDatoSpinner("Alejandro Guerrero Vazquez"));*/
+
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
         sp_Empresa.setAdapter(CopiEmp);
+
+        if (sp_Empresa.getCount()==2){
+            sp_Empresa.setSelection(1);
+        }
 
         existencia=0;
 
@@ -92,47 +93,13 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         // CopiHue=AdaptadorSpiner;
         sp_Almacen.setAdapter(CopiAlm);
 
-       /* ItemSPAlm = new ArrayList<>();
-        ItemSPAlm.add(new ItemDatoSpinner("Almacen"));
-        ItemSPAlm.add(new ItemDatoSpinner("Arroyos"));
-        ItemSPAlm.add(new ItemDatoSpinner("Chimilpa"));
-        ItemSPAlm.add(new ItemDatoSpinner("Fontana"));
-        CopiAlm = new AdaptadorSpinner(this, ItemSPAlm);
-        sp_Almacen.setAdapter(CopiAlm);*/
-
         ItemSPApli = new ArrayList<>();
         ItemSPApli.add(new ItemDatoSpinner("Aplicación"));
-       /* ItemSPApli.add(new ItemDatoSpinner("Luis Olalde"));
-        ItemSPApli.add(new ItemDatoSpinner("Gonzalo Cano"));
-        CopiApli = new AdaptadorSpinner(this, ItemSPApli);
-        cargaSpinnerAplicacion();
-        sp_Aplicacion.setAdapter(CopiApli);*/
-
-       /* ItemSPUni = new ArrayList<>();
-        ItemSPUni.add(new ItemDatoSpinner("Unidad"));
-        ItemSPUni.add(new ItemDatoSpinner("Kilogramo"));
-        ItemSPUni.add(new ItemDatoSpinner("Litro"));
-        ItemSPUni.add(new ItemDatoSpinner("Pieza"));
-        CopiUni = new AdaptadorSpinner(this, ItemSPUni);
-        sp_Unidad.setAdapter(CopiUni);*/
-
-       /* ItemSPBlo = new ArrayList<>();
-        ItemSPBlo.add(new ItemDatoSpinner("Centro Costos"));
-        ItemSPBlo.add(new ItemDatoSpinner("Bloque 1"));
-        ItemSPBlo.add(new ItemDatoSpinner("Bloque 2"));
-        ItemSPBlo.add(new ItemDatoSpinner("Bloque 3"));*/
 
         cargarResponsable();
 
         ArrayProductos=new ArrayList<>();
-        /*ArrayProductos.add(new String("Agrex abc  Acidificante | EQUI0008"));
-        ArrayProductos.add(new String("INEX-A | FILM0025"));
-        ArrayProductos.add(new String("ACIDO NITRICO | MANT0007"));
-        ArrayProductos.add(new String("Agrex-F | PAPE0011"));
-        ArrayProductos.add(new String("Medal | PLU30018"));
-        ArrayProductos.add(new String("Xpander Plus | TANA0001"));
-        ArrayProductos.add(new String("Acigib | PAPE0032"));
-        ArrayProductos.add(new String("Pardy | MANT0008"));*/
+
         cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
         actv_Producto.setAdapter(Adaptador_Arreglos);
@@ -168,6 +135,11 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     sp_Aplicacion.setAdapter(CopiApli);
 
                     CargarSalida(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
+
+                    if (sp_Aplicacion.getCount()==2){
+                        sp_Aplicacion.setSelection(1);
+                    }
+
                 }
             }
 
@@ -341,7 +313,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E ",null);
+        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
 
         if(Renglon.moveToFirst()){
 
@@ -652,8 +624,19 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
 
-        Cursor Renglon =BD.rawQuery("select S.c_codigo_eps,E.v_nombre_eps,S.Id_Responsable,U.Nombre,S.Id_Almacen,A.Nombre_Almacen,S.Id_Aplicacion,S.Fecha " +
-                "from t_Salidas as S inner join conempresa as E on E.c_codigo_eps=S.c_codigo_eps " +
+        Cursor Renglon =BD.rawQuery("select S.c_codigo_eps," +
+                "E.v_nombre_eps," +
+                "S.Id_Responsable," +
+                "U.Nombre," +
+                "S.Id_Almacen," +
+                "A.Nombre_Almacen," +
+                "S.Id_Aplicacion," +
+                "S.Fecha," +
+                "TAD.Fmin," +
+                "TAD.Fmax " +
+                "from t_Salidas as S " +
+                "inner join conempresa as E on E.c_codigo_eps=S.c_codigo_eps " +
+                "inner join (select Min(AD.Fecha) as Fmin,Max(AD.Fecha) as Fmax, AD.Id_Aplicacion from t_Aplicaciones_Det as AD group by AD.Id_Aplicacion) as TAD on TAD.Id_Aplicacion=S.Id_Aplicacion "+
                 "inner join UsuarioLogin as U on U.Id_Usuario=S.Id_Responsable "+
                 "inner join t_Almacen as A on A.Id_Almacen=S.Id_Almacen "+
                 "where Id_Salida='"+Id+"'",null);
@@ -685,7 +668,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     sp_Almacen.setSelection(item);
                     item=0;
                     for (int x=0; x<ItemSPApli.size();x++){
-                        if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(6))){
+                        if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(6)+" - "+Renglon.getString(8)+" al "+Renglon.getString(9))){
                             item=x;
                             break;
                         }
