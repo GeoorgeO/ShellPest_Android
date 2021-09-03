@@ -22,12 +22,12 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Enfermedad(Id_Enfermedad text primary key,Nombre_Enfermedad text)");
         BD.execSQL("create table t_Humbral(Id_Humbral text primary key,Valor_Humbral text,Nombre_Humbral text,Color_Humbral text)");
         BD.execSQL("create table t_Plagas(Id_Plagas text primary key,Nombre_Plagas text)");
-        BD.execSQL("create table t_Productor(Id_Productor text primary key,Nombre_Productor text)");
+        BD.execSQL("create table t_Productor(Id_Productor text primary key,Nombre_Productor text,c_codigo_eps text)");
         BD.execSQL("create table t_Pais(Id_Pais text primary key,Nombre_Pais text)");
         BD.execSQL("create table t_Estado(Id_Estado text primary key,Nombre_Estado text,Id_Pais text)");
         BD.execSQL("create table t_Ciudades(Id_Ciudad text primary key,Nombre_Ciudad text,Id_Estado text)");
-        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Productor text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,Id_Tratamiento text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta text,Id_zona text)");
-        BD.execSQL("create table t_Bloque(Id_Bloque text primary key,Id_Huerta text,Nombre_Bloque text)");
+        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Productor text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,Id_Tratamiento text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta text,Id_zona text,c_codigo_eps text)");
+        BD.execSQL("create table t_Bloque(Id_Bloque text primary key,Id_Huerta text,Nombre_Bloque text,c_codigo_eps text)");
         BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text primary key,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text)");
         BD.execSQL("create table t_Zona(Id_zona text primary key,Nombre_zona text)");
         BD.execSQL("create table t_Monitoreo_PEEncabezado(Fecha text,Id_Huerta text,Id_PuntoControl text,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text)");
@@ -40,7 +40,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text)");
         BD.execSQL("create table t_Riego (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
         BD.execSQL("create table t_RiegoEliminado (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
-        BD.execSQL("create table t_Usuario_Huerta (Id_Usuario text ,Id_Huerta text)");
+        BD.execSQL("create table t_Usuario_Huerta (Id_Usuario text ,Id_Huerta text,c_codigo_eps text)");
 
         BD.execSQL("create table t_Productos(c_codigo_pro text primary key,v_nombre_pro text,c_codigo_uni text,Existencia float,Stock_Min float,Movimientos float)");
         BD.execSQL("create table t_Unidad(c_codigo_uni text primary key,v_nombre_uni text,v_abrevia_uni text)");

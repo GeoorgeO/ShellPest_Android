@@ -233,17 +233,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                     if(HaySalidas()){
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
                     }
@@ -266,17 +266,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios");
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
                             Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
                         }
@@ -297,17 +297,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
                             Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
                         }
@@ -906,7 +906,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Productor) from t_Productor where Id_Productor='"+Datos[x][0].toString()+"'",null);
+                    Cursor Renglon =BD.rawQuery("select count(Id_Productor) from t_Productor where Id_Productor='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][6]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -926,7 +926,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             ContentValues registro= new ContentValues();
                             registro.put("Id_Productor",Datos[x][0]);
                             registro.put("Nombre_Productor",Datos[x][1]);
-
+                            registro.put("c_codigo_eps",Datos[x][6]);
                             BD.insert("t_Productor",null,registro);
                         }
                         BD.close();
@@ -1086,7 +1086,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Huerta) from t_Huerta where Id_Huerta='"+Datos[x][0]+"'",null);
+                    Cursor Renglon =BD.rawQuery("select count(Id_Huerta) from t_Huerta where Id_Huerta='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][22]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1110,6 +1110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("longitud_Huerta",Datos[x][15]);
                             registro.put("Activa_Huerta",Datos[x][20]);
                             registro.put("Id_zona",Datos[x][21]);
+                            registro.put("c_codigo_eps",Datos[x][22]);
                             int cantidad=BD.update("t_Huerta",registro,"Id_Huerta='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
@@ -1137,6 +1138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("longitud_Huerta",Datos[x][15]);
                             registro.put("Activa_Huerta",Datos[x][20]);
                             registro.put("Id_zona",Datos[x][21]);
+                            registro.put("c_codigo_eps",Datos[x][22]);
                             BD.insert("t_Huerta",null,registro);
                         }
 
@@ -1161,7 +1163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Bloque) from t_Bloque where Id_Bloque='"+Datos[x][0].toString()+"'",null);
+                    Cursor Renglon =BD.rawQuery("select count(Id_Bloque) from t_Bloque where Id_Bloque='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][7]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1183,7 +1185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Bloque",Datos[x][0]);
                             registro.put("Id_Huerta",Datos[x][1]);
                             registro.put("Nombre_Bloque",Datos[x][2]);
-
+                            registro.put("c_codigo_eps",Datos[x][7]);
                             BD.insert("t_Bloque",null,registro);
                         }
                         BD.close();
@@ -1421,14 +1423,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-                int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' and Id_Huerta='"+Datos[x][1].toString()+"' ", null);
+                int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' ", null);
 
 
 
                     ContentValues registro= new ContentValues();
                     registro.put("Id_Usuario",Datos[x][0]);
                     registro.put("Id_Huerta",Datos[x][1]);
-
+                    registro.put("c_codigo_eps",Datos[x][2]);
                     BD.insert("t_Usuario_Huerta",null,registro);
 
 
