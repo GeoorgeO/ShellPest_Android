@@ -45,7 +45,7 @@ import java.util.Locale;
 
 public class activity_Monitoreo extends AppCompatActivity {
     TextView et_fecha, et_PuntoControl, et_EP, et_Organo, et_Individuo;
-    Spinner sp_PE, sp_Hue, sp_Pto, sp_Org, sp_Ind;
+    Spinner sp_PE, sp_Hue, sp_Pto, sp_Org, sp_Ind,sp_Empresa2;
     RadioButton rb_Plaga, rb_Enfermedad,rb_SinPresencia;
     RadioGroup rg_PE;
     ListView lv_GridMonitoreo;
@@ -59,8 +59,8 @@ public class activity_Monitoreo extends AppCompatActivity {
 
     public String Usuario, Perfil, Huerta, Zona, Humbral;
 
-    private ArrayList<ItemDatoSpinner> ItemSPHue, ItemSPPE, ItemSPPto, ItemSPOrg, ItemSPInd;
-    private AdaptadorSpinner CopiHue, CopiPE, CopiPto, CopiOrg, CopiInd;
+    private ArrayList<ItemDatoSpinner> ItemSPHue, ItemSPPE, ItemSPPto, ItemSPOrg, ItemSPInd,ItemSPEmp;
+    private AdaptadorSpinner CopiHue, CopiPE, CopiPto, CopiOrg, CopiInd,CopiEmp;
 
     LocationManager mlocManager ;
     Localizacion Local ;
@@ -83,6 +83,7 @@ public class activity_Monitoreo extends AppCompatActivity {
         sp_Pto = (Spinner) findViewById(R.id.sp_Pto);
         sp_Org = (Spinner) findViewById(R.id.sp_Org);
         sp_Ind = (Spinner) findViewById(R.id.sp_Ind);
+        sp_Empresa2 = (Spinner) findViewById(R.id.sp_Empresa2);
 
         rb_Plaga = (RadioButton) findViewById(R.id.rb_Plaga);
         rb_Enfermedad = (RadioButton) findViewById(R.id.rb_Enfermedad);
@@ -95,6 +96,14 @@ public class activity_Monitoreo extends AppCompatActivity {
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
         Huerta = getIntent().getStringExtra("huerta2");
+
+        cargaSpinnerEmpresa();
+        CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
+        sp_Empresa2.setAdapter(CopiEmp);
+
+        if (sp_Empresa2.getCount()==2){
+            sp_Empresa2.setSelection(1);
+        }
 
         Date objDate = new Date();
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
@@ -111,10 +120,18 @@ public class activity_Monitoreo extends AppCompatActivity {
         // CopiHue=AdaptadorSpiner;
         sp_Hue.setAdapter(CopiHue);
 
+        if (sp_Hue.getCount()==2){
+            sp_Hue.setSelection(1);
+        }
+
         ItemSPPto = new ArrayList<>();
         ItemSPPto.add(new ItemDatoSpinner("Punto de control"));
         CopiPto = new AdaptadorSpinner(this, ItemSPPto);
         sp_Pto.setAdapter(CopiPto);
+
+        if (sp_Pto.getCount()==2){
+            sp_Pto.setSelection(1);
+        }
 
         /*cargaSpinnerOrg();
         CopiOrg = new AdaptadorSpinner(this, ItemSPOrg);
@@ -303,6 +320,31 @@ public class activity_Monitoreo extends AppCompatActivity {
        // Localizacion();
     }
 
+    private void cargaSpinnerEmpresa(){
+        CopiEmp=null;
+
+        ItemSPEmp=new ArrayList<>();
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+
+        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
+
+        if(Renglon.moveToFirst()){
+
+            do {
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+            } while(Renglon.moveToNext());
+
+            BD.close();
+        }else{
+            BD.close();
+        }
+
+    }
+
     public void MtdCerrar(View view){
 
         if(sp_Pto.getSelectedItemPosition()>0){
@@ -352,7 +394,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 String currentTime = simpleDateFormat.format(new Date());
 
                 Cursor Renglon;
-                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
+                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                 if(Renglon.moveToFirst()){
 
                     do {
@@ -366,7 +408,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 registro.put("n_coordenadaX",Local.Long);
                                 registro.put("n_coordenadaY",Local.Lat);
 
-                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                                 if(cantidad>0){
                                     //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
@@ -385,6 +427,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro.put("n_coordenadaX",Local.Long);
                             registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
+                            registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
                             BD.insert("t_Monitoreo_PEEncabezado",null,registro);
                         }
 
@@ -403,7 +446,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and  Fecha='"+objSDF.format(date1)+"' " +
-                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                 }else{
                     if(rb_Plaga.isChecked()){
@@ -412,14 +455,14 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
                     }else{
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
                     }
                 }
 
@@ -450,6 +493,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
                             registro2.put("Id_Humbral",Humbral);
                             registro2.put("Hora",currentTime);
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }
 
@@ -572,10 +616,10 @@ public class activity_Monitoreo extends AppCompatActivity {
 
 
         if(Perfil.equals("001")){
-
-            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True'",null);
+            String vtemp="select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'";
+            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
         }else{
-            Renglon=BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True'",null);
+            Renglon=BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True' and Hue.c_codigo_eps='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
             //Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"'",null);
             //sp_Hue.setEnabled(false);
         }
@@ -612,7 +656,7 @@ public class activity_Monitoreo extends AppCompatActivity {
 
             ItemSPPto.add(new ItemDatoSpinner("Punto de control"));
 
-            Renglon=BD.rawQuery("select P.Id_PuntoControl,P.Nombre_PuntoControl,P.Id_Bloque,P.n_coordenadaX,P.n_coordenadaY from t_Puntocontrol as P, t_Bloque as B  where  P.Id_Bloque=B.Id_Bloque and B.Id_Huerta='"+Huerta+"'",null);
+            Renglon=BD.rawQuery("select P.Id_PuntoControl,P.Nombre_PuntoControl,P.Id_Bloque,P.n_coordenadaX,P.n_coordenadaY from t_Puntocontrol as P, t_Bloque as B  where  P.Id_Bloque=B.Id_Bloque and B.Id_Huerta='"+Huerta+"' and P.c_codigo_eps=B.c_codigo_eps and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
             if(Renglon.moveToFirst()){
                 do {
@@ -772,6 +816,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro.put("n_coordenadaX",Local.Long);
                             registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
+                            registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
                             BD.insert("t_Monitoreo_PEEncabezado",null,registro);
                         }
 
@@ -790,7 +835,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and  Fecha='"+objSDF.format(date1)+"' " +
-                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                 }else{
                     if(rb_Plaga.isChecked()){
@@ -799,14 +844,14 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                     }else{
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                     }
                 }
 
@@ -837,6 +882,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
                             registro2.put("Id_Humbral",Humbral);
                             registro2.put("Hora",currentTime);
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }
 
@@ -883,14 +929,15 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "\tM.Id_Deteccion, \n" +
                 "\tM.Id_Individuo, \n" +
                 "\tM.Id_Plagas, \n" +
-                "\tM.Id_Enfermedad \n" +
+                "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_nombre_eps \n" +
                 "from t_Monitoreo_PEDetalle as M \n" +
-                "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl \n" +
+                "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl and M.c_codigo_eps=P.c_codigo_eps \n" +
                 "inner join t_Deteccion as D on M.Id_Deteccion=D.Id_Deteccion \n" +
                 "left join t_Plagas as Pl on M.Id_Plagas=Pl.Id_Plagas\n" +
                 "left join t_Enfermedad as E on M.Id_enfermedad=E.Id_enfermedad\n" +
                 "left join t_Individuo as I on I.Id_Individuo=M.Id_Individuo\n" +
-                "where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                "left join conempresa as EPS on EPS.c_codigo_eps=M.c_codigo_eps\n" +
+                "where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));

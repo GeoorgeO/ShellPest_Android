@@ -1,9 +1,9 @@
 package com.example.shellpest_android;
 
 public class ItemRiego {
-    private String Fecha,Hora,Nombre_Bloque,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego;
+    private String Fecha,Hora,Nombre_Bloque,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,cEPS;
 
-    public ItemRiego(String Fecha,String Hora,String Nombre_Bloque,String Id_Bloque,String Precipitacion_Sistema,String Caudal_Inicio,String Caudal_Fin,String Horas_Riego){
+    public ItemRiego(String Fecha,String Hora,String Nombre_Bloque,String Id_Bloque,String Precipitacion_Sistema,String Caudal_Inicio,String Caudal_Fin,String Horas_Riego,String cEPS){
         this.Fecha= Fecha;
         this.Hora=Hora;
         this.Id_Bloque=Id_Bloque;
@@ -12,6 +12,7 @@ public class ItemRiego {
         this.Caudal_Fin=Caudal_Fin;
         this.Horas_Riego=Horas_Riego;
         this.Nombre_Bloque=Nombre_Bloque;
+        this.cEPS=cEPS;
     }
 
     public String getFecha(){
@@ -68,6 +69,10 @@ public class ItemRiego {
     }
     public void setHoras_Riego(String Horas_Riego){
         this.Horas_Riego=Horas_Riego;
+    }
+
+    public String getCEPS(){
+        return cEPS;
     }
 
 }

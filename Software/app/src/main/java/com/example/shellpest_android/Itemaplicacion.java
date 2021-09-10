@@ -2,9 +2,9 @@ package com.example.shellpest_android;
 
 public class Itemaplicacion {
     private String Fecha,Nombre_Producto,Dosis,Unidades_aplicadas,Nombre_Unidad;
-    private String cProducto,cUnidad;
+    private String cProducto,cUnidad,cEps;
 
-    public Itemaplicacion(String Fecha, String cProducto,String Dosis,String Unidades_aplicadas,String cUnidad,String Nombre_Producto,String Nombre_Unidad){
+    public Itemaplicacion(String Fecha, String cProducto,String Dosis,String Unidades_aplicadas,String cUnidad,String Nombre_Producto,String Nombre_Unidad,String cEps){
         this.Fecha=Fecha;
         this.Nombre_Producto=Nombre_Producto;
         this.Dosis=Dosis;
@@ -12,7 +12,7 @@ public class Itemaplicacion {
         this.Unidades_aplicadas=Unidades_aplicadas;
         this.cProducto=cProducto;
         this.cUnidad=cUnidad;
-
+        this.cEps=cEps;
     }
 
     public String getFecha(){
@@ -45,5 +45,9 @@ public class Itemaplicacion {
 
     public String getcUnidad(){
         return cUnidad;
+    }
+
+    public String getcEps(){
+        return cEps;
     }
 }

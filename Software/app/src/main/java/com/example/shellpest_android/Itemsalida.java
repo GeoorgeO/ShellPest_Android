@@ -2,9 +2,9 @@ package com.example.shellpest_android;
 
 public class Itemsalida {
     private String Fecha,Nombre_Producto,Cantidad,Nombre_Unidad,Centro_Costos;
-    private String cProducto,cUnidad,Existencia;
+    private String cProducto,cUnidad,Existencia,c_codigo_eps;
 
-    public Itemsalida(String Fecha, String Nombre_Producto,String Cantidad,String Nombre_Unidad,String Centro_Costos,String cProducto,String cUnidad,String Existencia){
+    public Itemsalida(String Fecha, String Nombre_Producto,String Cantidad,String Nombre_Unidad,String Centro_Costos,String cProducto,String cUnidad,String Existencia,String c_codigo_eps){
         this.Fecha=Fecha;
         this.Nombre_Producto=Nombre_Producto;
         this.Cantidad=Cantidad;
@@ -13,6 +13,7 @@ public class Itemsalida {
         this.cProducto=cProducto;
         this.cUnidad=cUnidad;
         this.Existencia=Existencia;
+        this.c_codigo_eps=c_codigo_eps;
     }
 
     public String getFecha(){
@@ -48,5 +49,7 @@ public class Itemsalida {
     }
 
     public String getExistencia(){return Existencia;}
+
+    public String getceps(){return c_codigo_eps;}
 
 }

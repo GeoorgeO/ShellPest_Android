@@ -15,49 +15,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.02"
-        android:orientation="horizontal">
-
-
-        <EditText
-            android:id="@+id/et_fecha"
-            android:layout_width="165dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.02"
+            android:orientation="horizontal">
 
-            android:layout_marginLeft="5dp"
-            android:enabled="false"
-            android:inputType="date"
-            android:textAlignment="center" />
 
-        <EditText
-            android:id="@+id/et_espacio"
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/et_fecha"
+                android:layout_width="165dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="5dp"
+                android:enabled="false"
+                android:inputType="date"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/et_espacio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:inputType="date"
+                android:textAlignment="center"
+                android:visibility="invisible"
+                tools:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btn_List"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+
+                android:layout_marginTop="1dp"
+
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/miniboton_redondo"
+                android:foreground="@android:drawable/ic_input_get"
+                android:foregroundGravity="center"
+                android:onClick="ListarPuntos"
+                android:text="" />
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/sp_Empresa2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:inputType="date"
-            android:textAlignment="center"
-            android:visibility="invisible"
-            tools:visibility="invisible" />
-
-        <Button
-            android:id="@+id/btn_List"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-
-            android:layout_marginTop="1dp"
-
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/miniboton_redondo"
-            android:foreground="@android:drawable/ic_input_get"
-            android:foregroundGravity="center"
-            android:onClick="ListarPuntos"
-            android:text="" />
-
-    </LinearLayout>
+            android:layout_weight="0.02" />
 
         <Spinner
             android:id="@+id/sp_Hue"

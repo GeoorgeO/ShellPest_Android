@@ -45,13 +45,18 @@
         </LinearLayout>
 
         <Spinner
+            android:id="@+id/sp_Empresa4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
             android:id="@+id/sp_huerta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:orientation="horizontal">
 
             <TextView
@@ -67,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".3"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <Spinner
@@ -82,7 +88,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:orientation="horizontal">
 
             <TextView
@@ -98,12 +104,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
                 android:ems="10"
-                android:inputType="date" />
+                android:inputType="date"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:orientation="horizontal">
 
             <TextView
@@ -118,7 +125,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
-                android:hint="Teclee Nombre de producto" />
+                android:hint="Teclee Nombre de producto"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <TextView
@@ -129,7 +137,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:orientation="horizontal">
 
             <TextView
@@ -145,12 +153,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
                 android:ems="10"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:orientation="horizontal">
 
             <TextView
@@ -165,7 +174,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <TextView

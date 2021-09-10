@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Perfil= getIntent().getStringExtra("perfil");
         Huerta= getIntent().getStringExtra("huerta");
 
-
     }
 
 
@@ -239,21 +238,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                     if(HaySalidas()){
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     }
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                     if(HaySalidas()){
                         Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
+                        Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm");
                     }
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
 
@@ -272,21 +272,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
-                            Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                            Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         if(HaySalidas()){
                             Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
+                            Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaProAlm");
                         }
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/UsuarioEmpresa");
                     }else{
@@ -303,21 +304,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
-                            Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1));
+                            Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         if(HaySalidas()){
                             Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
+                            Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm");
                         }
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
                     }
@@ -516,6 +518,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break; // break es opcional
                         case "Usu_Emp" :
                             Actualiza_UsuEmp(datos);
+                            break;
+                        case "cepsExisAlm" :
+                            Actualiza_ExistenciasAlm(datos);
                             break;
                     }
                 }
@@ -1209,7 +1214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_PuntoControl) from t_Puntocontrol where Id_PuntoControl='"+Datos[x][0].toString()+"'",null);
+                    Cursor Renglon =BD.rawQuery("select count(Id_PuntoControl) from t_Puntocontrol where Id_PuntoControl='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][9]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1235,7 +1240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Nombre_PuntoControl",Datos[x][2]);
                             registro.put("n_coordenadaX",Datos[x][3]);
                             registro.put("n_coordenadaY",Datos[x][4]);
-
+                            registro.put("c_codigo_eps",Datos[x][9]);
 
                             BD.insert("t_Puntocontrol",null,registro);
                         }
@@ -1453,7 +1458,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][0].toString()+"'",null);
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][5]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1492,7 +1497,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }else{
                             registro.put("Movimientos",Double.parseDouble(Datos[x][4]));
                         }
-
+                        registro.put("c_codigo_eps",Datos[x][5]);
 
                         BD.insert("t_Productos",null,registro);
                     }
@@ -1520,7 +1525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_uni) from t_Unidad where c_codigo_uni='"+Datos[x][0].toString()+"'",null);
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_uni) from t_Unidad where c_codigo_uni='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][3]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1544,7 +1549,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("c_codigo_uni",Datos[x][0]);
                         registro.put("v_nombre_uni",Datos[x][1]);
                         registro.put("v_abrevia_uni",Datos[x][2]);
-
+                        registro.put("c_codigo_eps",Datos[x][3]);
 
                         BD.insert("t_Unidad",null,registro);
                     }
@@ -1572,7 +1577,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_TipoAplicacion) from t_TipoAplicacion where Id_TipoAplicacion='"+Datos[x][0].toString()+"'",null);
+                Cursor Renglon =BD.rawQuery("select count(Id_TipoAplicacion) from t_TipoAplicacion where Id_TipoAplicacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][2]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1593,7 +1598,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro= new ContentValues();
                         registro.put("Id_TipoAplicacion",Datos[x][0]);
                         registro.put("Nombre_TipoAplicacion",Datos[x][1]);
-
+                        registro.put("c_codigo_eps",Datos[x][2]);
 
                         BD.insert("t_TipoAplicacion",null,registro);
                     }
@@ -1621,7 +1626,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Presentacion) from t_Presentacion where Id_Presentacion='"+Datos[x][0].toString()+"'",null);
+                Cursor Renglon =BD.rawQuery("select count(Id_Presentacion) from t_Presentacion where Id_Presentacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][4]+"' ",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1632,7 +1637,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Id_TipoAplicacion",Datos[x][2]);
                         registro.put("Id_Unidad",Datos[x][3]);
 
-                        int cantidad=BD.update("t_Presentacion",registro,"Id_Presentacion='"+Datos[x][0].toString()+"'",null);
+
+                        int cantidad=BD.update("t_Presentacion",registro,"Id_Presentacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
 
                         if(cantidad>0){
                             //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
@@ -1645,7 +1651,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Nombre_Presentacion",Datos[x][1]);
                         registro.put("Id_TipoAplicacion",Datos[x][2]);
                         registro.put("Id_Unidad",Datos[x][3]);
-
+                        registro.put("c_codigo_eps",Datos[x][4]);
                         BD.insert("t_Presentacion",null,registro);
                     }
 
@@ -1672,7 +1678,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2].toString()+"'",null);
+                Cursor Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1695,6 +1701,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Id_Almacen",Datos[x][2]);
                         registro.put("Nombre_Almacen",Datos[x][0]);
                         registro.put("Id_Huerta",Datos[x][3]);
+                        registro.put("c_codigo_eps",Datos[x][4]);
                         BD.insert("t_Almacen",null,registro);
                     }
 
@@ -1800,7 +1807,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1813,9 +1819,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario!='333' ", null);
-
-
+                int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario='"+Datos[x][0]+"' ", null);
 
                 ContentValues registro= new ContentValues();
                 registro.put("Id_Usuario",Datos[x][0]);
@@ -1826,11 +1830,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 BD.close();
 
             } catch (SQLiteConstraintException sqle){
-                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
-                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
 
+        }
+    }
+
+    private void Actualiza_ExistenciasAlm(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("Existencias_Almacen",Datos.length);
+        arrayArticulos.add(Tabla);
+        for(int x=0;x<Datos.length;x++){
+
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+            try{
+                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) as c_codigo_pro from t_existencias where c_codigo_eps='"+Datos[x][0]+"' and c_codigo_alm='"+Datos[x][2]+"' and c_codigo_pro='"+Datos[x][1]+"'",null);
+
+                if(Renglon.moveToFirst()){
+
+                    if(Renglon.getInt(0)>0){
+                        ContentValues registro = new ContentValues();
+
+                        registro.put("Existencia",Datos[x][3]);
+
+                        int cantidad=BD.update("t_existencias",registro,"c_codigo_eps='"+Datos[x][0]+"' and c_codigo_alm='"+Datos[x][2]+"' and c_codigo_pro='"+Datos[x][1]+"'",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        ContentValues registro2= new ContentValues();
+                        registro2.put("c_codigo_eps",Datos[x][0]);
+                        registro2.put("c_codigo_pro",Datos[x][1]);
+                        registro2.put("c_codigo_alm",Datos[x][2]);
+                        registro2.put("Existencia",Datos[x][3]);
+
+                       BD.insert("t_existencias",null,registro2);
+                    }
+                    BD.close();
+                }else{
+
+                    BD.close();
+                }
+            } catch (SQLiteConstraintException sqle){
+                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                String Pro=e.getMessage();
+                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

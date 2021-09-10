@@ -64,6 +64,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
                     intento.putExtra("perfil2", Perfil);
                     intento.putExtra("huerta2", Huerta);
                     intento.putExtra("ID",arrayArticulos.get(i).getId() );
+                    intento.putExtra("CEPS",arrayArticulos.get(i).getcEPS() );
 
                     //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
                     startActivity(intento);
@@ -92,10 +93,10 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
 
-                        int cantidad= BD.delete("t_Aplicaciones_Det","Id_Aplicacion='"+arrayArticulos.get(i).getId()+"'  ",null);
+                        int cantidad= BD.delete("t_Aplicaciones_Det","Id_Aplicacion='"+arrayArticulos.get(i).getId()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
 
                         if(cantidad>0){
-                            int cantidad2= BD.delete("t_Aplicaciones","Id_Aplicacion='"+arrayArticulos.get(i).getId()+"'  ",null);
+                            int cantidad2= BD.delete("t_Aplicaciones","Id_Aplicacion='"+arrayArticulos.get(i).getId()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'  ",null);
 
                             if(cantidad2>0){
 
@@ -141,20 +142,20 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
                     "\t min(Ad.Fecha) || ' - ' || max(AD.Fecha) as Fecha , \n" +
-                    "\t A.Id_Huerta \n" +
+                    "\t A.Id_Huerta,A.c_codigo_eps \n" +
                     "from t_Aplicaciones as A \n" +
-                    "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta \n "+
-                    "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion \n" +
-                    " where A.Enviado='0' group by A.Id_Aplicacion ";
+                    "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
+                    "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion and  AD.c_codigo_eps=A.c_codigo_eps \n" +
+                    " where A.Enviado='0' group by A.Id_Aplicacion,A.c_codigo_eps ";
         }else{
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
                     "\t min(Ad.Fecha)+ ' - '+max(AD.Fecha) as Fecha , \n" +
-                    "\t A.Id_Huerta \n" +
+                    "\t A.Id_Huerta,A.c_codigo_eps \n" +
                     "from t_Aplicaciones as A \n" +
-                    "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta \n "+
-                    "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion \n" +
-                    "where A.Enviado='0' and A.Id_Huerta in (select tem.Id_Huerta from t_Usuario_Huerta as tem where tem.Id_Usuario='"+Usuario+"') group by A.Id_Aplicacion ";
+                    "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
+                    "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion and  AD.c_codigo_eps=A.c_codigo_eps \n" +
+                    "where A.Enviado='0' and ltrim(rtrim(A.Id_Huerta))+ltrim(rtrim(A.c_codigo_eps)) in (select ltrim(rtrim(tem.Id_Huerta))+ltrim(rtrim(tem.c_codigo_eps)) from t_Usuario_Huerta as tem where tem.Id_Usuario='"+Usuario+"') group by A.Id_Aplicacion,A.c_codigo_eps ";
         }
 
         Cursor Renglon =BD.rawQuery(Consulta,null);
@@ -165,7 +166,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new ItemAplicaciones(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3));
+                    Tabla=new ItemAplicaciones(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 

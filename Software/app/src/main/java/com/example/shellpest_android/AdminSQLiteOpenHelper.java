@@ -22,42 +22,43 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Enfermedad(Id_Enfermedad text primary key,Nombre_Enfermedad text)");
         BD.execSQL("create table t_Humbral(Id_Humbral text primary key,Valor_Humbral text,Nombre_Humbral text,Color_Humbral text)");
         BD.execSQL("create table t_Plagas(Id_Plagas text primary key,Nombre_Plagas text)");
-        BD.execSQL("create table t_Productor(Id_Productor text primary key,Nombre_Productor text,c_codigo_eps text)");
+        BD.execSQL("create table t_Productor(Id_Productor text not null,Nombre_Productor text,c_codigo_eps text not null,primary key(Id_Productor,c_codigo_eps))");
         BD.execSQL("create table t_Pais(Id_Pais text primary key,Nombre_Pais text)");
         BD.execSQL("create table t_Estado(Id_Estado text primary key,Nombre_Estado text,Id_Pais text)");
         BD.execSQL("create table t_Ciudades(Id_Ciudad text primary key,Nombre_Ciudad text,Id_Estado text)");
-        BD.execSQL("create table t_Huerta(Id_Huerta text primary key,Nombre_Huerta text,Registro_Huerta text,Id_Productor text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,Id_Tratamiento text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta text,Id_zona text,c_codigo_eps text)");
+        BD.execSQL("create table t_Huerta(Id_Huerta text not null,Nombre_Huerta text,Registro_Huerta text,Id_Productor text,Id_Estado text,Id_Ciudad text,Id_Calidad text,Id_Cultivo text,Id_Tratamiento text,zona_Huerta text,banda_Huerta text,este_Huerta text,norte_Huerta text,asnm_Huerta text,latitud_Huerta text,longitud_Huerta text,Activa_Huerta text,Id_zona text,c_codigo_eps text not null,primary key(Id_Huerta,c_codigo_eps))");
         BD.execSQL("create table t_Bloque(Id_Bloque text primary key,Id_Huerta text,Nombre_Bloque text,c_codigo_eps text)");
-        BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text primary key,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text)");
+        BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text not null,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text,c_codigo_eps text not null,primary key(Id_PuntoControl,c_codigo_eps))");
         BD.execSQL("create table t_Zona(Id_zona text primary key,Nombre_zona text)");
-        BD.execSQL("create table t_Monitoreo_PEEncabezado(Fecha text,Id_Huerta text,Id_PuntoControl text,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text)");
-        BD.execSQL("create table t_Monitoreo_PEDetalle(Fecha text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Humbral text,Hora text)");
+        BD.execSQL("create table t_Monitoreo_PEEncabezado(Fecha text not null,Id_Huerta text,Id_PuntoControl text not null,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text,c_codigo_eps text not null,Primary key(Fecha,Id_PuntoControl,c_codigo_eps))");
+        BD.execSQL("create table t_Monitoreo_PEDetalle(Fecha text not null,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text not null,Id_Deteccion text not null,Id_Individuo text not null,Id_Humbral text,Hora text,c_codigo_eps text not null,primary key (Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,c_codigo_eps))");
         BD.execSQL("create table t_Monitoreo_PE(Fecha text,Id_Huerta text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text,Hora text)");
-        BD.execSQL("create table t_Monitoreo_Eliminados_PEEncabezado(Fecha text,Id_Huerta text,Id_PuntoControl text,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text)");
-        BD.execSQL("create table t_Monitoreo_Eliminados_PEDetalle(Fecha text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Humbral text,Hora text)");
+        BD.execSQL("create table t_Monitoreo_Eliminados_PEEncabezado(Fecha text not null,Id_Huerta text,Id_PuntoControl text not null,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text,c_codigo_eps text not null,primary key(Fecha,Id_PuntoControl,c_codigo_eps))");
+        BD.execSQL("create table t_Monitoreo_Eliminados_PEDetalle(Fecha text not null,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text not null,Id_Deteccion text not null,Id_Individuo text not null,Id_Humbral text,Hora text,c_codigo_eps not null,primary key(Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,c_codigo_eps))");
         BD.execSQL("create table t_Monitoreo_Eliminados_PE(Fecha text,Id_Huerta text,Id_enfermedad text,Id_Plagas text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
         BD.execSQL("create table t_Individuo (Id_Individuo text primary key,No_Individuo text)");
         BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text)");
-        BD.execSQL("create table t_Riego (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
-        BD.execSQL("create table t_RiegoEliminado (Fecha text ,Hora text,Id_Bloque text,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text)");
+        BD.execSQL("create table t_Riego (Fecha text not null,Hora text,Id_Bloque text not null,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text,c_codigo_eps text not null)");
+        BD.execSQL("create table t_RiegoEliminado (Fecha text not null,Hora text,Id_Bloque text not null,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text,c_codigo_eps text not null)");
         BD.execSQL("create table t_Usuario_Huerta (Id_Usuario text ,Id_Huerta text,c_codigo_eps text)");
 
-        BD.execSQL("create table t_Productos(c_codigo_pro text primary key,v_nombre_pro text,c_codigo_uni text,Existencia float,Stock_Min float,Movimientos float)");
-        BD.execSQL("create table t_Unidad(c_codigo_uni text primary key,v_nombre_uni text,v_abrevia_uni text)");
-        BD.execSQL("create table t_Presentacion(Id_Presentacion text primary key,Nombre_Presentacion text,Id_TipoAplicacion text,Id_Unidad text)");
-        BD.execSQL("create table t_TipoAplicacion(Id_TipoAplicacion text primary key,Nombre_TipoAplicacion text)");
+        BD.execSQL("create table t_Productos(c_codigo_pro text not null,v_nombre_pro text,c_codigo_uni text,Existencia float,Stock_Min float,Movimientos float,c_codigo_eps text not null,primary key (c_codigo_pro, c_codigo_eps))");
+        BD.execSQL("create table t_Unidad(c_codigo_uni text not null,v_nombre_uni text,v_abrevia_uni text,c_codigo_eps text not null,primary key(c_codigo_uni,c_codigo_eps))");
+        BD.execSQL("create table t_Presentacion(Id_Presentacion text, Nombre_Presentacion text,Id_TipoAplicacion text,Id_Unidad text,c_codigo_eps text,primary key(Id_Presentacion,c_codigo_eps))");
+        BD.execSQL("create table t_TipoAplicacion(Id_TipoAplicacion text not null,Nombre_TipoAplicacion text,c_codigo_eps text not null,primary key (Id_TipoAplicacion,c_codigo_eps))");
 
-        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text primary key,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text)");
-        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text ,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text,Enviado text)");
+        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text not null,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text,c_codigo_eps text not null, primary key(Id_Aplicacion,c_codigo_eps))");
+        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text not null,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text,Enviado text,c_codigo_eps text not null)");
         BD.execSQL("create table t_Usuario_Empresa (Id_Usuario text ,c_codigo_eps text)");
         BD.execSQL("create table conempresa (c_codigo_eps text primary key,v_nombre_eps text,v_rfc_eps text)");
 
-        BD.execSQL("create table t_Almacen (Id_Almacen text primary key,Nombre_Almacen text,Id_Huerta text)");
-        BD.execSQL("create table t_Salidas (Id_Salida text primary key,c_codigo_eps text,Id_Responsable text,Id_Almacen text, Id_Aplicacion text,Fecha text,Id_Usuario text, F_Creacion text)");
-        BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text)");
+        BD.execSQL("create table t_Almacen (Id_Almacen text not null,Nombre_Almacen text,Id_Huerta text,c_codigo_eps text NOT NULL,primary key(Id_Almacen,c_codigo_eps))");
+        BD.execSQL("create table t_Salidas (Id_Salida text not null,c_codigo_eps text not null,Id_Responsable text,Id_Almacen text, Id_Aplicacion text,Fecha text,Id_Usuario text, F_Creacion text,primary key(Id_Salida,c_codigo_eps))");
+        BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text,c_codigo_eps text)");
 
-        BD.execSQL("create table invmovimiento (c_coddoc_mov text ,Secuencia text,c_tipodoc_mov text,c_codigo_pro text,n_movipro_mov float,n_exiant_mov float,n_cantidad_mov float)");
+        BD.execSQL("create table invmovimiento (c_coddoc_mov text ,Secuencia text,c_tipodoc_mov text,c_codigo_pro text,n_movipro_mov float,n_exiant_mov float,n_cantidad_mov float,c_codigo_eps text)");
 
+        BD.execSQL("create table t_existencias (c_codigo_eps text not null ,c_codigo_pro text ,c_codigo_alm text not null,Existencia float ,primary key(c_codigo_eps,c_codigo_pro,c_codigo_alm))");
     }
 
     @Override
@@ -102,6 +103,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Salidas_Det");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Almacen");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS invmovimiento");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_existencias");
 
         onCreate(sqLiteDatabase);
     }

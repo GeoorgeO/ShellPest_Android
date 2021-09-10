@@ -26,6 +26,12 @@
             android:textAlignment="center" />
 
         <Spinner
+            android:id="@+id/sp_Empresa3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01" />
+
+        <Spinner
             android:id="@+id/sp_Hue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

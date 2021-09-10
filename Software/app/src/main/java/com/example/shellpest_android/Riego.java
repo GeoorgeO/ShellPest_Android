@@ -25,12 +25,12 @@ public class Riego extends AppCompatActivity {
     public String Usuario, Perfil, Huerta;
 
     TextView et_fecha;
-    Spinner sp_Blq, sp_Hue;
+    Spinner sp_Blq, sp_Hue,sp_Empresa3;
     EditText txt_Precipitacion,txt_CaudalIni,txt_CaudalFin,txt_Riego;
     ListView lv_GridRiego;
 
-    private AdaptadorSpinner CopiHue,CopiBlq;
-    private ArrayList<ItemDatoSpinner> ItemSPHue,ItemSPBlq;
+    private AdaptadorSpinner CopiHue,CopiBlq,CopiEmp;
+    private ArrayList<ItemDatoSpinner> ItemSPHue,ItemSPBlq,ItemSPEmp;
 
     ItemRiego Tabla;
     Adaptador_GridRiego Adapter;
@@ -49,6 +49,7 @@ public class Riego extends AppCompatActivity {
         et_fecha = (TextView) findViewById(R.id.et_fecha);
         sp_Hue = (Spinner) findViewById(R.id.sp_Hue);
         sp_Blq = (Spinner) findViewById(R.id.sp_Blo);
+        sp_Empresa3 = (Spinner) findViewById(R.id.sp_Empresa3);
 
         txt_Precipitacion=(EditText) findViewById(R.id.txt_Precipitacion);
         txt_CaudalIni=(EditText) findViewById(R.id.txt_CaudalIni);
@@ -62,6 +63,14 @@ public class Riego extends AppCompatActivity {
         Date date1 = objDate;
         et_fecha.setText("Fecha: " + objSDF.format(date1));
 
+        cargaSpinnerEmpresa();
+        CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
+        sp_Empresa3.setAdapter(CopiEmp);
+
+        if (sp_Empresa3.getCount()==2){
+            sp_Empresa3.setSelection(1);
+        }
+
         cargaSpinnerHue();
         CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
         // CopiHue=AdaptadorSpiner;
@@ -71,6 +80,10 @@ public class Riego extends AppCompatActivity {
         ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
         CopiBlq = new AdaptadorSpinner(Riego.this, ItemSPBlq);
         sp_Blq.setAdapter(CopiBlq);
+
+        if (sp_Hue.getCount()==2){
+            sp_Hue.setSelection(1);
+        }
 
         arrayArticulos = new ArrayList<>();
 
@@ -115,7 +128,7 @@ public class Riego extends AppCompatActivity {
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Riego.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
-                        Cursor Renglon =BD.rawQuery("select Fecha ,Hora,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,Id_Usuario from t_Riego where Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' ",null);
+                        Cursor Renglon =BD.rawQuery("select Fecha ,Hora,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,Id_Usuario,c_codigo_eps from t_Riego where Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' and c_codigo_eps='"+arrayArticulos.get(i).getCEPS()+"'  ",null);
 
                         if (Renglon.moveToFirst()) {
 
@@ -129,6 +142,7 @@ public class Riego extends AppCompatActivity {
                                 registro.put("Caudal_Fin",Renglon.getString(5));
                                 registro.put("Horas_Riego",Renglon.getString(6));
                                 registro.put("Id_Usuario",Renglon.getString(7));
+                                registro.put("c_codigo_eps",Renglon.getString(8));
                                 BD.insert("t_RiegoEliminado",null,registro);
 
                                 int cantidad= BD.delete("t_Riego","Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' ",null);
@@ -162,6 +176,31 @@ public class Riego extends AppCompatActivity {
 
     }
 
+    private void cargaSpinnerEmpresa(){
+        CopiEmp=null;
+
+        ItemSPEmp=new ArrayList<>();
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+
+        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
+
+        if(Renglon.moveToFirst()){
+
+            do {
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+            } while(Renglon.moveToNext());
+
+            BD.close();
+        }else{
+            BD.close();
+        }
+
+    }
+
     private void cargaSpinnerHue(){
         CopiHue=null;
 
@@ -173,9 +212,9 @@ public class Riego extends AppCompatActivity {
 
         if(Perfil.equals("001")){
             ItemSPHue.add(new ItemDatoSpinner("Huerta"));
-            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True'",null);
+            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
         }else{
-            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"'",null);
+            Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
             sp_Hue.setEnabled(false);
         }
 
@@ -203,7 +242,7 @@ public class Riego extends AppCompatActivity {
 
             ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
 
-            Renglon=BD.rawQuery("select B.Id_Bloque,B.Nombre_Bloque from t_Bloque as B  where B.Id_Huerta='"+Huerta+"'",null);
+            Renglon=BD.rawQuery("select B.Id_Bloque,B.Nombre_Bloque from t_Bloque as B  where B.Id_Huerta='"+Huerta+"' and B.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
             if(Renglon.moveToFirst()){
                 do {
@@ -268,7 +307,7 @@ public class Riego extends AppCompatActivity {
 
                 Renglon =BD.rawQuery("select count(Id_Bloque) " +
                             "from t_Riego " +
-                            "where Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
+                            "where Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                 if(Renglon.moveToFirst()){
                     if(Renglon.getInt(0)>0){
@@ -291,7 +330,7 @@ public class Riego extends AppCompatActivity {
                                     registro2.put("Caudal_Fin",Double.parseDouble(String.valueOf(txt_CaudalFin.getText())));
                                     registro2.put("Horas_Riego",Double.parseDouble(String.valueOf(txt_Riego.getText())));
                                     registro2.put("Id_Usuario",Usuario);
-
+                                    registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2));
                                     BD.insert("t_Riego",null,registro2);
 
                             }
@@ -315,7 +354,7 @@ public class Riego extends AppCompatActivity {
                         registro2.put("Caudal_Fin",Double.parseDouble(String.valueOf(txt_CaudalFin.getText())));
                         registro2.put("Horas_Riego",Double.parseDouble(String.valueOf(txt_Riego.getText())));
                         registro2.put("Id_Usuario",Usuario);
-
+                        registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2));
                         BD.insert("t_Riego",null,registro2);
                     }
 
@@ -361,10 +400,10 @@ public class Riego extends AppCompatActivity {
                 "\tR.Precipitacion_Sistema, \n" +
                 "\tR.Caudal_Inicio, \n" +
                 "\tR.Caudal_Fin, \n" +
-                "\tR.Horas_Riego \n" +
+                "\tR.Horas_Riego, R.c_codigo_eps \n" +
                 "from t_Riego as R \n" +
-                "left join t_Bloque as B on B.Id_Bloque=R.Id_Bloque\n" +
-                "where R.Fecha='"+objSDF.format(date1)+"' ",null);
+                "left join t_Bloque as B on B.Id_Bloque=R.Id_Bloque and B.c_codigo_eps=R.c_codigo_eps \n" +
+                "where R.Fecha='"+objSDF.format(date1)+"' and R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
@@ -372,7 +411,7 @@ public class Riego extends AppCompatActivity {
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new ItemRiego(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7));
+                    Tabla=new ItemRiego(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
