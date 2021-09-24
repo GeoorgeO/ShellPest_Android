@@ -398,4 +398,32 @@ public class Enviar_Salidas extends AppCompatActivity {
         }
     }
 
+    private void ActualizaExistenciaAlmacen(){
+        String LinkServerWeb;
+        LinkServerWeb="http://177.241.250.117:8090//Control/ExistenciaProAlm";
+    }
+
+    private boolean HaySalidas(){
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon = BD.rawQuery("select count(S.Id_Salida) as Movimientos from t_Salidas_Det as S " , null);
+
+        if (Renglon.moveToFirst()) {
+
+            do {
+                if(Renglon.getInt(0)>1){
+                    return false;
+                }else{
+                    return true;
+                }
+
+            } while (Renglon.moveToNext());
+
+
+        } else {
+            return true;
+
+        }
+    }
+
 }

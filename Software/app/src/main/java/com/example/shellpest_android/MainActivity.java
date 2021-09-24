@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Usuario= getIntent().getStringExtra("usuario");
         Perfil= getIntent().getStringExtra("perfil");
         Huerta= getIntent().getStringExtra("huerta");
-
     }
 
 
@@ -1428,7 +1427,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-                int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' ", null);
+                int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' and c_codigo_eps='"+Datos[x][2]+"' and Id_Huerta='"+Datos[x][1]+"'", null);
 
 
 
@@ -1819,7 +1818,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario='"+Datos[x][0]+"' ", null);
+                int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario='"+Datos[x][0]+"'  and c_codigo_eps='"+Datos[x][1]+"'", null);
 
                 ContentValues registro= new ContentValues();
                 registro.put("Id_Usuario",Datos[x][0]);

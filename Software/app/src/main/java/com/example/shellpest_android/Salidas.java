@@ -26,21 +26,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
     public String Usuario, Perfil, Huerta,cUnidad,FechaAnt;
-    Spinner sp_Empresa, sp_Almacen, sp_Aplicacion,sp_Bloque;
+    Spinner sp_Empresa, sp_Almacen, sp_Aplicacion;
     AutoCompleteTextView actv_Producto;
     EditText et_Fecha,etn_Cantidad;
     ListView lv_GridSalidas;
     private int dia,mes, anio;
-    private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPAlm, ItemSPApli,ItemSPBlo;
-    private ArrayList<String> ArrayProductos;
-    private AdaptadorSpinner CopiEmp, CopiAlm, CopiApli,CopiBlo;
+    private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPAlm, ItemSPApli;
+    private ArrayList<String> ArrayProductos,ArrayProductosClean;
+    private AdaptadorSpinner CopiEmp, CopiAlm, CopiApli;
     private ArrayAdapter Adaptador_Arreglos;
-    TextView tv_Responsable,tv_Unidad;
+    TextView tv_Responsable,tv_Unidad,tv_BloquesT;
     Boolean SoloUnaHuerta;
     int secuencia;
     double existencia;
@@ -51,10 +52,17 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     ArrayList<Itemsalida> arrayArticulos;
 
     DatePickerDialog dtpd;
+
+    boolean[] Diaseleccionado,Diasseleccionadoclean;
+    ArrayList<Integer> Listadias,ListadiasClean = new ArrayList<>();
+    String[] Arreglodias,ArreglosdiasClean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salidas);
+
+
 
         SoloUnaHuerta=false;
 
@@ -71,7 +79,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         sp_Aplicacion = (Spinner) findViewById(R.id.sp_Aplicacion);
         lv_GridSalidas = (ListView) findViewById(R.id.lv_GridSalidas);
         tv_Unidad = (TextView) findViewById(R.id.tv_Unidad);
-        sp_Bloque = (Spinner) findViewById(R.id.sp_Bloque);
+        tv_BloquesT=(TextView) findViewById(R.id.tv_BloquesT);
+
         etn_Cantidad = (EditText) findViewById(R.id.etn_Cantidad);
         actv_Producto = (AutoCompleteTextView) findViewById(R.id.actv_Producto);
         tv_Responsable=(TextView) findViewById(R.id.tv_Responsable);
@@ -88,10 +97,10 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         existencia=0;
 
-        cargaSpinnerHue();
+       /* cargaSpinnerHue();
         CopiAlm = new AdaptadorSpinner(this, ItemSPAlm);
         // CopiHue=AdaptadorSpiner;
-        sp_Almacen.setAdapter(CopiAlm);
+        sp_Almacen.setAdapter(CopiAlm);*/
 
         ItemSPApli = new ArrayList<>();
         ItemSPApli.add(new ItemDatoSpinner("Aplicación"));
@@ -99,6 +108,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         cargarResponsable();
 
         ArrayProductos=new ArrayList<>();
+        ArrayProductosClean=new ArrayList<>();
 
         cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
@@ -119,22 +129,45 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         arrayArticulos = new ArrayList<>();
 
+        sp_Empresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cargaSpinnerHue();
+                CopiAlm = new AdaptadorSpinner(getApplicationContext(), ItemSPAlm);
+                // CopiHue=AdaptadorSpiner;
+                sp_Almacen.setAdapter(CopiAlm);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         sp_Almacen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 if ((SoloUnaHuerta==true && i == 0 ) || (SoloUnaHuerta==false && i>0)) {
                     // Notify the selected item text
+
+                    Arreglodias=ArreglosdiasClean;
+                    Diaseleccionado=Diasseleccionadoclean;
+                    Listadias=ListadiasClean;
+                    Listadias.clear();
+                    tv_BloquesT.setText("Centro Costos");
                     Huerta = CopiAlm.getItem(i).getTexto().substring(0, 2);
 
                     cargaSpinnerBloque();
-                    CopiBlo = new AdaptadorSpinner(getApplicationContext(), ItemSPBlo);
-                    //CopiPto=AdaptadorSpiner;
-                    sp_Bloque.setAdapter(CopiBlo);
+
 
                     cargaSpinnerAplicacion();
                     CopiApli = new AdaptadorSpinner(getApplicationContext(), ItemSPApli);
                     sp_Aplicacion.setAdapter(CopiApli);
+
+                    cargarProductos();
+                    Adaptador_Arreglos=new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,ArrayProductos);
+                    actv_Producto.setAdapter(Adaptador_Arreglos);
 
                     CargarSalida(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
 
@@ -268,6 +301,58 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }
         });
 
+          tv_BloquesT.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  AlertDialog.Builder builder=new AlertDialog.Builder(
+                          Salidas.this
+                  );
+                  builder.setTitle("Selecciona los bloques");
+                  builder.setCancelable(false);
+                  builder.setMultiChoiceItems(Arreglodias, Diaseleccionado, new DialogInterface.OnMultiChoiceClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                          if(b){
+                              Listadias.add(i);
+                              Collections.sort(Listadias);
+                          }else{
+                              Listadias.remove(i);
+                          }
+                      }
+                  });
+                  builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialogInterface, int i) {
+                          StringBuilder stringBuilder=new StringBuilder();
+                          for(int j=0; j<Listadias.size();j++){
+                            stringBuilder.append(Arreglodias[Listadias.get(j)]);
+                            if(j!=Listadias.size()-1){
+                                stringBuilder.append(", ");
+                            }
+                          }
+                          tv_BloquesT.setText(stringBuilder.toString());
+                      }
+                  });
+                  builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialogInterface, int i) {
+                          dialogInterface.dismiss();
+                      }
+                  });
+                  builder.setNeutralButton("Limpiar todo", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialogInterface, int i) {
+                          for(int j=0;j<Diaseleccionado.length;j++){
+                              Diaseleccionado[j]=false;
+                              Listadias.clear();
+                              tv_BloquesT.setText("");
+                          }
+                      }
+                  });
+                  builder.show();
+              }
+          });
+
     }
 
     @Override
@@ -329,7 +414,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     }
 
     private void cargaSpinnerEmpresa(){
-        CopiEmp=null;
+        //CopiEmp=null;
 
         ItemSPEmp=new ArrayList<>();
         ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
@@ -354,7 +439,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     }
 
     private void cargaSpinnerAplicacion(){
-        CopiApli=null;
+        //CopiApli=null;
+        //CopiApli.clear();
 
         ItemSPApli=new ArrayList<>();
         ItemSPApli.add(new ItemDatoSpinner("Aplicacion"));
@@ -378,7 +464,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     }
 
     private void cargarProductos(){
-        //ArrayProductos=null;
+
+        ArrayProductos.clear();
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
@@ -396,10 +483,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     }
 
     private void cargaSpinnerBloque(){
-        CopiBlo=null;
 
-        ItemSPBlo=new ArrayList<>();
-        ItemSPBlo.add(new ItemDatoSpinner("Centro Costos"));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -408,20 +492,30 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         Renglon=BD.rawQuery("select B.Id_Bloque,B.Nombre_Bloque from t_Almacen as A inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and H.c_codigo_eps=A.c_codigo_eps inner join t_Bloque as B on B.Id_Huerta=H.Id_Huerta and B.c_codigo_eps=H.c_codigo_eps where A.Id_Almacen='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and A.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
         if(Renglon.moveToFirst()){
-
+            int tamanio;
+            tamanio=0;
+            Arreglodias=new String[Renglon.getCount()];
             do {
-                ItemSPBlo.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+
+
+                    Arreglodias[tamanio] =Renglon.getString(0)+" - "+Renglon.getString(1);
+                tamanio++;
+
             } while(Renglon.moveToNext());
 
             BD.close();
+
+            Diaseleccionado=new boolean[Arreglodias.length];
         }else{
             BD.close();
         }
 
+
     }
 
     private void cargaSpinnerHue(){
-        CopiAlm=null;
+       // CopiAlm=null;
+       // CopiAlm.clear();
 
         ItemSPAlm=new ArrayList<>();
 
@@ -526,7 +620,13 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         {
             etn_Cantidad.setText("0");
         }
-        if(sp_Bloque.getSelectedItemPosition()>0){
+        int seleccionados=0;
+        for (int i=0;i<Diaseleccionado.length;i++){
+            if(Diaseleccionado[i]){
+                seleccionados++;
+            }
+        }
+        if(seleccionados>0){
 
         }else{
             FaltoAlgo=true;
@@ -600,7 +700,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     registro2.put("Id_Salida",et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)); //objSDF.format(date1)
                     registro2.put("c_codigo_pro",actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim());
                     registro2.put("Cantidad",etn_Cantidad.getText().toString());
-                    registro2.put("Id_Bloque",CopiBlo.getItem(sp_Bloque.getSelectedItemPosition()).getTexto().substring(0,4));
+                    registro2.put("Id_Bloque","");
                     registro2.put("Id_Usuario",Usuario);
                     registro2.put("F_Creacion",objSDF.format(date1));
                     registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
