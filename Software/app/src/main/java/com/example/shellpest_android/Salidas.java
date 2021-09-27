@@ -38,7 +38,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     ListView lv_GridSalidas;
     private int dia,mes, anio;
     private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPAlm, ItemSPApli;
-    private ArrayList<String> ArrayProductos,ArrayProductosClean;
+    private ArrayList<String> ArrayProductos;
     private AdaptadorSpinner CopiEmp, CopiAlm, CopiApli;
     private ArrayAdapter Adaptador_Arreglos;
     TextView tv_Responsable,tv_Unidad,tv_BloquesT;
@@ -108,7 +108,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         cargarResponsable();
 
         ArrayProductos=new ArrayList<>();
-        ArrayProductosClean=new ArrayList<>();
+
 
         cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
@@ -155,7 +155,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     Diaseleccionado=Diasseleccionadoclean;
                     Listadias=ListadiasClean;
                     Listadias.clear();
-                    tv_BloquesT.setText("Centro Costos");
+                    tv_BloquesT.setText("V");
                     Huerta = CopiAlm.getItem(i).getTexto().substring(0, 2);
 
                     cargaSpinnerBloque();
@@ -307,7 +307,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                   AlertDialog.Builder builder=new AlertDialog.Builder(
                           Salidas.this
                   );
-                  builder.setTitle("Selecciona los bloques");
+                  builder.setTitle("Selecciona al menos un bloque");
                   builder.setCancelable(false);
                   builder.setMultiChoiceItems(Arreglodias, Diaseleccionado, new DialogInterface.OnMultiChoiceClickListener() {
                       @Override
@@ -325,7 +325,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                       public void onClick(DialogInterface dialogInterface, int i) {
                           StringBuilder stringBuilder=new StringBuilder();
                           for(int j=0; j<Listadias.size();j++){
-                            stringBuilder.append(Arreglodias[Listadias.get(j)]);
+                            stringBuilder.append(Arreglodias[Listadias.get(j)].substring(0,4));
                             if(j!=Listadias.size()-1){
                                 stringBuilder.append(", ");
                             }
@@ -700,10 +700,11 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     registro2.put("Id_Salida",et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)); //objSDF.format(date1)
                     registro2.put("c_codigo_pro",actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim());
                     registro2.put("Cantidad",etn_Cantidad.getText().toString());
-                    registro2.put("Id_Bloque","");
+                    registro2.put("Id_Bloque",tv_BloquesT.getText().toString().trim());
                     registro2.put("Id_Usuario",Usuario);
                     registro2.put("F_Creacion",objSDF.format(date1));
                     registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+                    registro2.put("n_exiant_mov",existencia);
                     long cantidad=BD.insert("t_Salidas_Det",null,registro2);
                     if(cantidad>0){
                         ContentValues registro3 = new ContentValues();

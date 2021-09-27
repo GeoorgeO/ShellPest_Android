@@ -2,13 +2,16 @@ package com.example.shellpest_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.format.Formatter;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 public class Enviar_Salidas extends AppCompatActivity {
 
@@ -102,14 +106,15 @@ public class Enviar_Salidas extends AppCompatActivity {
 
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
-
             }
 
             BD.close();
         }else{
             Toast.makeText(this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
         }
-
+        if (HaySalidas()){
+            ActualizaExistenciaAlmacen();
+        }
         CargaDatos();
     }
 
@@ -221,13 +226,13 @@ public class Enviar_Salidas extends AppCompatActivity {
 
                         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
                         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-                        Cursor Renglon2 = BD.rawQuery("select Id_Salida,c_codigo_pro,Cantidad,Id_Bloque from t_Salidas_Det where Id_Salida='"+Id_Salida+"'", null);
+                        Cursor Renglon2 = BD.rawQuery("select Id_Salida,c_codigo_pro,Cantidad,Id_Bloque,c_codigo_eps,n_exiant_mov from t_Salidas_Det where Id_Salida='"+Id_Salida+"' and c_codigo_eps='"+c_codigo_eps+"' ", null);
 
                         if (Renglon2.moveToFirst()) {
 
                             do {
                                 //Toast.makeText(this, Renglon2.getString(7), Toast.LENGTH_SHORT).show();
-                                insertWebDetalle(Renglon2.getString(0),Renglon2.getString(1),Renglon2.getString(2),Renglon2.getString(3));
+                                insertWebDetalle(Renglon2.getString(0),Renglon2.getString(1),Renglon2.getString(2),Renglon2.getString(3),Renglon2.getString(4),Renglon2.getString(5));
                             } while (Renglon2.moveToNext());
                             if (EliminadeSalidaEncabezado(Id_Salida)){
                                 RegistrosEnviados++;
@@ -263,7 +268,7 @@ public class Enviar_Salidas extends AppCompatActivity {
         }
     }
 
-    private void insertWebDetalle(String Id_Salida,String c_codigo_pro,String Cantidad,String Id_Bloque) {
+    private void insertWebDetalle(String Id_Salida,String c_codigo_pro,String Cantidad,String Id_Bloque,String c_codigo_eps,String n_exiant_mov) {
         //Toast.makeText(MainActivity.this, Liga, Toast.LENGTH_SHORT).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -283,12 +288,12 @@ public class Enviar_Salidas extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=E &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov=0 &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque   ;
+            Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  +" &c_codigo_eps="+ c_codigo_eps ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Salidas_Det?c_tipodoc_mov=E &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov=0 &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  ;
+                Liga = "http://192.168.3.254:8090//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=E &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov=0 &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  ;
+                Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
             }
         }
         URL url = null;
@@ -401,6 +406,135 @@ public class Enviar_Salidas extends AppCompatActivity {
     private void ActualizaExistenciaAlmacen(){
         String LinkServerWeb;
         LinkServerWeb="http://177.241.250.117:8090//Control/ExistenciaProAlm";
+        try{
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            URL url= null;
+            try {
+                url = new URL(LinkServerWeb);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection conn= null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try{
+                conn.setRequestMethod("GET");
+                conn.connect();
+
+                BufferedReader in =new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String inputLine;
+
+                StringBuffer response =new StringBuffer();
+
+                String json="";
+
+                while ((inputLine=in.readLine())!=null){
+                    response.append(inputLine);
+                }
+
+                json=response.toString();
+
+                JSONArray jsonarr=null;
+
+                try {
+                    jsonarr=new JSONArray(json);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (jsonarr.length()>0) {
+                    String[][] datos;
+                    JSONObject jsonobject = jsonarr.getJSONObject(0);
+                    datos = new String[jsonarr.length()][jsonobject.length()];
+
+                    String NombreId = "";
+                    for (int i = 0; i < jsonarr.length(); i++) {
+                        jsonobject = jsonarr.getJSONObject(i);
+
+                        int columnas = 0;
+
+                        Iterator llaves = jsonobject.keys();
+
+                        while (llaves.hasNext()) {
+                            String currentDynamicKey = (String) llaves.next();
+                            //Toast.makeText(MainActivity.this, currentDynamicKey, Toast.LENGTH_SHORT).show();
+                            datos[i][columnas] = jsonobject.optString(currentDynamicKey);
+                            if (columnas == 0) {
+                                NombreId = currentDynamicKey;
+                            }
+                            columnas++;
+                        }
+                    }
+
+                    for (int x = 0; x < datos.length; x++) {
+
+
+                        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
+                        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+                        try {
+                            Cursor Renglon = BD.rawQuery("select count(c_codigo_pro) as c_codigo_pro from t_existencias where c_codigo_eps='" + datos[x][0] + "' and c_codigo_alm='" + datos[x][2] + "' and c_codigo_pro='" + datos[x][1] + "'", null);
+
+                            if (Renglon.moveToFirst()) {
+
+                                if (Renglon.getInt(0) > 0) {
+                                    ContentValues registro = new ContentValues();
+
+                                    registro.put("Existencia", datos[x][3]);
+
+                                    int cantidad = BD.update("t_existencias", registro, "c_codigo_eps='" + datos[x][0] + "' and c_codigo_alm='" + datos[x][2] + "' and c_codigo_pro='" + datos[x][1] + "'", null);
+
+                                    if (cantidad > 0) {
+                                        //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    ContentValues registro2 = new ContentValues();
+                                    registro2.put("c_codigo_eps", datos[x][0]);
+                                    registro2.put("c_codigo_pro", datos[x][1]);
+                                    registro2.put("c_codigo_alm", datos[x][2]);
+                                    registro2.put("Existencia", datos[x][3]);
+
+                                    BD.insert("t_existencias", null, registro2);
+                                }
+                                BD.close();
+                            } else {
+
+                                BD.close();
+                            }
+                        } catch (SQLiteConstraintException sqle) {
+                            //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            String Pro = e.getMessage();
+                            Toast.makeText(Enviar_Salidas.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                conn.disconnect();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(Enviar_Salidas.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            }
+        }catch (WindowManager.BadTokenException E){
+
+        }
     }
 
     private boolean HaySalidas(){

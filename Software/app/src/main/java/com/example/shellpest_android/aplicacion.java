@@ -86,30 +86,30 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             sp_Empresa4.setSelection(1);
         }
 
-        cargaSpinnerHuertas();
+        /*cargaSpinnerHuertas();
         CopiHue = new AdaptadorSpinner(this, ItemSPHue);
         sp_huerta.setAdapter(CopiHue);
 
         if (sp_huerta.getCount()==2){
             sp_huerta.setSelection(1);
-        }
+        }*/
 
-        cargaSpinnerTipoAplicacion();
+        /*cargaSpinnerTipoAplicacion();
         CopiApli = new AdaptadorSpinner(this, ItemSPApli);
         sp_TipoAplicacion.setAdapter(CopiApli);
 
         if (sp_TipoAplicacion.getCount()==2){
             sp_TipoAplicacion.setSelection(1);
-        }
+        }*/
 
         ItemSPPre = new ArrayList<>();
         ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
 
         ArrayProductos=new ArrayList<>();
 
-        cargarProductos();
+        /*cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
-        actv_Productos.setAdapter(Adaptador_Arreglos);
+        actv_Productos.setAdapter(Adaptador_Arreglos);*/
 
         etd_Fecha=(EditText)findViewById(R.id.etd_Fecha);
         etd_Fecha.setOnClickListener(this);
@@ -155,6 +155,36 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 }
             }
 
+        });
+
+        sp_Empresa4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cargaSpinnerHuertas();
+                CopiHue = new AdaptadorSpinner(aplicacion.this, ItemSPHue);
+                sp_huerta.setAdapter(CopiHue);
+
+                if (sp_huerta.getCount()==2){
+                    sp_huerta.setSelection(1);
+                }
+
+                cargaSpinnerTipoAplicacion();
+                CopiApli = new AdaptadorSpinner(aplicacion.this, ItemSPApli);
+                sp_TipoAplicacion.setAdapter(CopiApli);
+
+                if (sp_TipoAplicacion.getCount()==2){
+                    sp_TipoAplicacion.setSelection(1);
+                }
+
+                cargarProductos();
+                Adaptador_Arreglos=new ArrayAdapter(aplicacion.this, android.R.layout.simple_list_item_1,ArrayProductos);
+                actv_Productos.setAdapter(Adaptador_Arreglos);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
 
         actv_Productos.setOnClickListener(new View.OnClickListener() {

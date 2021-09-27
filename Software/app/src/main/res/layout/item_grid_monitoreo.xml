@@ -21,7 +21,6 @@
             android:layout_height="20dp"
 
             android:textAlignment="center"
-            android:textColor="@color/white"
             android:textSize="10sp" />
 
         <TextView
@@ -30,7 +29,6 @@
             android:layout_height="20dp"
             android:layout_weight=".25"
             android:textAlignment="center"
-            android:textColor="@color/white"
             android:textSize="10sp" />
 
         <TextView
@@ -39,7 +37,6 @@
             android:layout_height="20dp"
 
             android:textAlignment="center"
-            android:textColor="@color/white"
             android:textSize="10sp" />
 
         <TextView
@@ -48,7 +45,6 @@
             android:layout_height="20dp"
 
             android:textAlignment="center"
-            android:textColor="@color/white"
             android:textSize="10sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

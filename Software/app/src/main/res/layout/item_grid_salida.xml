@@ -18,35 +18,30 @@
             android:id="@+id/txt_Fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/text_Producto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/text_Cantidad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/text_Unidad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/text_CC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
+            android:layout_weight="1" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

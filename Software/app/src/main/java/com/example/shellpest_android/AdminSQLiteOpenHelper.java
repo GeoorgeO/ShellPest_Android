@@ -54,7 +54,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
         BD.execSQL("create table t_Almacen (Id_Almacen text not null,Nombre_Almacen text,Id_Huerta text,c_codigo_eps text NOT NULL,primary key(Id_Almacen,c_codigo_eps))");
         BD.execSQL("create table t_Salidas (Id_Salida text not null,c_codigo_eps text not null,Id_Responsable text,Id_Almacen text, Id_Aplicacion text,Fecha text,Id_Usuario text, F_Creacion text,primary key(Id_Salida,c_codigo_eps))");
-        BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text,c_codigo_eps text)");
+        BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text,c_codigo_eps text,n_exiant_mov float)");
 
         BD.execSQL("create table invmovimiento (c_coddoc_mov text ,Secuencia text,c_tipodoc_mov text,c_codigo_pro text,n_movipro_mov float,n_exiant_mov float,n_cantidad_mov float,c_codigo_eps text)");
 

@@ -115,14 +115,14 @@ public class activity_Monitoreo extends AppCompatActivity {
         CopiPE = new AdaptadorSpinner(this, ItemSPPE);
         sp_PE.setAdapter(CopiPE);
 
-        cargaSpinnerHue();
+        /*cargaSpinnerHue();
         CopiHue = new AdaptadorSpinner(this, ItemSPHue);
         // CopiHue=AdaptadorSpiner;
         sp_Hue.setAdapter(CopiHue);
 
         if (sp_Hue.getCount()==2){
             sp_Hue.setSelection(1);
-        }
+        }*/
 
         ItemSPPto = new ArrayList<>();
         ItemSPPto.add(new ItemDatoSpinner("Punto de control"));
@@ -142,6 +142,25 @@ public class activity_Monitoreo extends AppCompatActivity {
         ItemSPInd.add(new ItemDatoSpinner("Individuo"));
         CopiInd = new AdaptadorSpinner(this, ItemSPInd);
         sp_Ind.setAdapter(CopiInd);
+
+        sp_Empresa2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cargaSpinnerHue();
+                CopiHue = new AdaptadorSpinner(activity_Monitoreo.this, ItemSPHue);
+                // CopiHue=AdaptadorSpiner;
+                sp_Hue.setAdapter(CopiHue);
+
+                if (sp_Hue.getCount()==2){
+                    sp_Hue.setSelection(1);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         sp_Hue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -616,7 +635,7 @@ public class activity_Monitoreo extends AppCompatActivity {
 
 
         if(Perfil.equals("001")){
-            String vtemp="select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'";
+
             Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
         }else{
             Renglon=BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True' and Hue.c_codigo_eps='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);

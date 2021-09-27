@@ -21,24 +21,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/teal_700"
                 android:text="ID. Aplicación"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/text_Huerta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/teal_700"
                 android:text="Huerta"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/text_FechaApli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/teal_700"
                 android:text="Fecha"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <ListView

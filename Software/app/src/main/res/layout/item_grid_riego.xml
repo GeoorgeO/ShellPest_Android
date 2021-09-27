@@ -17,35 +17,30 @@
             android:id="@+id/txt_RBloque"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/txt_RPrecipitacion"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/txt_RCaudalIni"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/txt_RCaudalFin"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/txt_RRiego"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textAlignment="center" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -71,10 +71,10 @@ public class Riego extends AppCompatActivity {
             sp_Empresa3.setSelection(1);
         }
 
-        cargaSpinnerHue();
+        /*cargaSpinnerHue();
         CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
         // CopiHue=AdaptadorSpiner;
-        sp_Hue.setAdapter(CopiHue);
+        sp_Hue.setAdapter(CopiHue);*/
 
         ItemSPBlq = new ArrayList<>();
         ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
@@ -86,6 +86,21 @@ public class Riego extends AppCompatActivity {
         }
 
         arrayArticulos = new ArrayList<>();
+
+        sp_Empresa3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cargaSpinnerHue();
+                CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
+                // CopiHue=AdaptadorSpiner;
+                sp_Hue.setAdapter(CopiHue);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         sp_Hue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

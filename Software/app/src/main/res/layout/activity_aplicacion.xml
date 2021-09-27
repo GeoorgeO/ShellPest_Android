@@ -202,37 +202,47 @@
                 android:id="@+id/textView34"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:background="@color/teal_700"
                 android:text="Fecha"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/textView33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/teal_700"
                 android:text="Producto"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/textView31"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:background="@color/teal_700"
                 android:text="Cantidad"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/textView30"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:background="@color/teal_700"
                 android:text="Unidad"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/textView32"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:background="@color/teal_700"
                 android:text="Pipadas"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <ListView

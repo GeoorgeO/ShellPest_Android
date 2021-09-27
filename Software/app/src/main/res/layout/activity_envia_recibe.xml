@@ -20,7 +20,7 @@
         android:onClick="CerrarSesion"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -39,7 +39,8 @@
             android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Recibir"
-            android:text="Recibir" />
+            android:text="Recibir"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/btn_Enviar"
@@ -48,7 +49,8 @@
             android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Enviar"
-            android:text="Enviar" />
+            android:text="Enviar"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/btn_Siguiente"
@@ -57,7 +59,8 @@
             android:layout_margin="8dp"
             android:background="@drawable/boton_redondo"
             android:onClick="Continuar"
-            android:text="Capturar" />
+            android:text="Capturar"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/btn_Reportes"
