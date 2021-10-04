@@ -15,11 +15,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_Responsable"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Responsable: " />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_Responsable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="80"
+                android:text="Responsable: " />
+
+            <ImageButton
+                android:id="@+id/abrirSalidas"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/miniboton_redondo"
+                android:onClick="AbrirSalidas"
+                app:srcCompat="@android:drawable/ic_input_get" />
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/sp_Empresa"
@@ -131,6 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="32"
+                android:background="@android:drawable/editbox_dropdown_light_frame"
                 android:text="V"
                 android:textAlignment="textEnd" />
         </LinearLayout>

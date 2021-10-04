@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Aplicaciones_Capturadas">
+    tools:context=".Salidas_Capturadas">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,27 +17,17 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_Id"
+                android:id="@+id/textView42"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/teal_700"
-                android:text="ID. Aplicación"
+                android:text="ID"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/text_Huerta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/teal_700"
-                android:text="Huerta"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/text_FechaApli"
+                android:id="@+id/textView43"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -45,20 +35,43 @@
                 android:text="Fecha"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/teal_700"
+                android:text="Almacen"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/teal_700"
+                android:text="Empresa"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
         </LinearLayout>
+
 
         <ListView
             android:id="@+id/lv_Salidas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_grid_aplicaciones" />
+            tools:listitem="@layout/item_grid_salidas">
 
+        </ListView>
         <Button
-            android:id="@+id/btn_CerrarApli"
+            android:id="@+id/btn_CerrarSal2"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="Regresar"
             android:text="Cerrar" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

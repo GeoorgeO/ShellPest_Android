@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -633,6 +634,19 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             Mensaje="Falta seleccionar un bloque,Verifica por favor";
         }
 
+        if (!String.valueOf(existencia).isEmpty() && etn_Cantidad.getText().toString().length()>0){
+            if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
+                FaltoAlgo=true;
+                Mensaje= "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.";
+
+            }
+        }
+
+        if(String.valueOf(existencia).isEmpty()){
+            FaltoAlgo=true;
+            Mensaje= "NO SE PUEDE DAR SALIDA. Existencia Nula.";
+        }
+
         if (!FaltoAlgo){
             AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
@@ -649,7 +663,6 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             if(Renglon.moveToFirst()){
                 do {
                     if (Renglon.getInt(0)>0){
-
 
                         ContentValues registro = new ContentValues();
 
@@ -736,6 +749,17 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         }else{
             Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void AbrirSalidas(View view){
+        Intent intento = new Intent(this, Salidas_Capturadas.class);
+        intento.putExtra("usuario", Usuario);
+        intento.putExtra("perfil", Perfil);
+        intento.putExtra("huerta", Huerta);
+
+        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+        startActivity(intento);
+        finish();
     }
 
     private void CargarSalida(String Id,String c_codigo_eps){

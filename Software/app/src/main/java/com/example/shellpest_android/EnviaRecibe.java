@@ -97,10 +97,6 @@ public class EnviaRecibe extends AppCompatActivity {
         }
     });
                 dialogo1.show();
-
-
-
-
     }
 
 }

@@ -54,7 +54,7 @@ public class Login_Usuario extends AppCompatActivity {
         String Contrasena=et_Password.getText().toString();
 
         ContentValues registro= new ContentValues();
-        registro.put("Id_Usuario",Id_Usuario);
+        registro.put("Id_Usuario",Id_Usuario.toUpperCase());
         registro.put("Contrasena",Contrasena);
         registro.put("Id_Perfil",perfil);
         registro.put("Id_Huerta",huerta);
@@ -68,18 +68,19 @@ public class Login_Usuario extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
 
-        Cursor Renglon =BD.rawQuery("select Id_Usuario,Id_Perfil,Id_Huerta from UsuarioLogin",null);
+        Cursor Renglon =BD.rawQuery("select distinct Id_Usuario,Id_Perfil,Id_Huerta from UsuarioLogin",null);
+
 
         if(Renglon.moveToFirst()){
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.getString(0).length()>0){
+                Toast.makeText(this,"Bienvenido "+Renglon.getString(0),Toast.LENGTH_SHORT).show();
                 Intent intento=new Intent(this,EnviaRecibe.class);
                 intento.putExtra("usuario", Renglon.getString(0));
                 intento.putExtra("perfil", Renglon.getString(1));
                 intento.putExtra("huerta", Renglon.getString(2));
 
-                //Toast.makeText(this,Renglon.getString(0)+","+Renglon.getString(1)+","+Renglon.getString(2),Toast.LENGTH_SHORT).show();
                 startActivity(intento);
                 finish();
             }
@@ -156,12 +157,12 @@ public class Login_Usuario extends AppCompatActivity {
                 //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
                 String sql;
                 if(MyIp.equals("0.0.0.0")){
-                    sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
+                    sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
                 }else{
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0){
-                        sql = "http://192.168.3.254:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
+                        sql = "http://192.168.3.254:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
                     }else{
-                        sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString() + "&Pass=" + et_Password.getText().toString();
+                        sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
                     }
                 }
 
@@ -215,7 +216,7 @@ public class Login_Usuario extends AppCompatActivity {
 
                             Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"),jsonobject.optString("Nombre_Usuario"));
                             Intent intento = new Intent(this, EnviaRecibe.class);
-                            intento.putExtra("usuario", jsonobject.optString("Id_Usuario"));
+                            intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
                             intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
                             intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
 
@@ -228,8 +229,6 @@ public class Login_Usuario extends AppCompatActivity {
                         } else {
                             Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                     conn.disconnect();
 

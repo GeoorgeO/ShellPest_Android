@@ -33,6 +33,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
     public String Usuario, Perfil, Huerta,Id,UnidadPro,cepsselapli;
 
+    boolean yasemovio;
+
     Spinner sp_TipoAplicacion, sp_Presentacion,sp_huerta,sp_Empresa4;
     AutoCompleteTextView actv_Productos;
     TextView text_Codigo,text_Aplicados,text_CantidadTotal,text_UnidadPro,textView32;
@@ -78,6 +80,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         text_UnidadPro= (TextView) findViewById(R.id.text_UnidadPro);
         textView32= (TextView) findViewById(R.id.textView32);
 
+        yasemovio=false;
+
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
         sp_Empresa4.setAdapter(CopiEmp);
@@ -101,12 +105,13 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         if (sp_TipoAplicacion.getCount()==2){
             sp_TipoAplicacion.setSelection(1);
         }*/
+if (Id==null){
+    ItemSPPre = new ArrayList<>();
+    ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
 
-        ItemSPPre = new ArrayList<>();
-        ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
 
+}
         ArrayProductos=new ArrayList<>();
-
         /*cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
         actv_Productos.setAdapter(Adaptador_Arreglos);*/
@@ -128,6 +133,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         arrayArticulos = new ArrayList<>();
 
         borrarAplicaciones15Days();
+
 
         actv_Productos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -168,17 +174,21 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     sp_huerta.setSelection(1);
                 }
 
-                cargaSpinnerTipoAplicacion();
-                CopiApli = new AdaptadorSpinner(aplicacion.this, ItemSPApli);
-                sp_TipoAplicacion.setAdapter(CopiApli);
+                if(Id==null){
+                    cargaSpinnerTipoAplicacion();
+                    CopiApli = new AdaptadorSpinner(aplicacion.this, ItemSPApli);
+                    sp_TipoAplicacion.setAdapter(CopiApli);
 
-                if (sp_TipoAplicacion.getCount()==2){
-                    sp_TipoAplicacion.setSelection(1);
+                    if (sp_TipoAplicacion.getCount()==2){
+                        sp_TipoAplicacion.setSelection(1);
+                    }
                 }
 
-                cargarProductos();
-                Adaptador_Arreglos=new ArrayAdapter(aplicacion.this, android.R.layout.simple_list_item_1,ArrayProductos);
-                actv_Productos.setAdapter(Adaptador_Arreglos);
+                if(Id==null) {
+                    cargarProductos();
+                    Adaptador_Arreglos = new ArrayAdapter(aplicacion.this, android.R.layout.simple_list_item_1, ArrayProductos);
+                    actv_Productos.setAdapter(Adaptador_Arreglos);
+                }
             }
 
             @Override
@@ -268,13 +278,15 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                     textView32.setText(CopiApli.getItem(i).getTexto().substring(CopiApli.getItem(i).getTexto().indexOf("-")+2)+"s");
 
-                    cargaSpinnerPresentacion();
-                    CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
-                    sp_Presentacion.setAdapter(CopiPre);
+                        cargaSpinnerPresentacion();
+                        CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
+                        sp_Presentacion.setAdapter(CopiPre);
 
-                    if (sp_Presentacion.getCount()==2){
-                        sp_Presentacion.setSelection(1);
-                    }
+
+                        if (sp_Presentacion.getCount() == 2) {
+                            sp_Presentacion.setSelection(1);
+                            yasemovio=true;
+                        }
 
                 }
             }
@@ -407,15 +419,19 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
-        Cursor Renglon;
+        Cursor Renglon10;
+        String Consulta;
 
-        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
 
-        if(Renglon.moveToFirst()){
+
+        Consulta="select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where ltrim(rtrim(UE.Id_Usuario))='"+Usuario+"' ";
+        Renglon10=BD.rawQuery(Consulta,null);
+
+        if(Renglon10.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
-            } while(Renglon.moveToNext());
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
+            } while(Renglon10.moveToNext());
 
             BD.close();
         }else{
@@ -445,10 +461,11 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
         Cursor Renglon;
-        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_nombre_eps " +
+        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_nombre_eps,U.v_abrevia_uni  " +
                 "from t_Aplicaciones as A " +
                 "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps " +
                 "inner join t_Presentacion as Pre on A.Id_Presentacion=Pre.Id_Presentacion and Pre.c_codigo_eps=H.c_codigo_eps " +
+                "inner join t_Unidad as U on U.c_codigo_uni=Pre.Id_Unidad and U.c_codigo_eps=Pre.c_codigo_eps "+
                 "inner join t_TipoAplicacion as ta on A.Id_TipoAplicacion=ta.Id_TipoAplicacion and Ta.c_codigo_eps=Pre.c_codigo_eps " +
                 "left join conempresa as eps on eps.c_codigo_eps=A.c_codigo_eps  " +
                 "where A.Id_Aplicacion='"+Id+"' and A.c_codigo_eps='"+cepsselapli+"'",null);
@@ -456,40 +473,27 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             do {
                 if (Renglon.getInt(0)>0){
 
-                    text_Codigo.setText(Id);
-                    int item;
-                    item=0;
-                    for (int x=0; x<ItemSPHue.size();x++){
-                       if( ItemSPHue.get(x).getTexto().equals(Renglon.getString(1)+" - "+Renglon.getString(5))){
-                           item=x;
-                           break;
-                       }
-                    }
-                    sp_huerta.setSelection(item);
-                    pt_Observaciones.setText(Renglon.getString(2));
-                    String Presentacion=Renglon.getString(4).trim()+" - "+Renglon.getString(6);
-                    String TIpo=Renglon.getString(3).trim()+" - "+Renglon.getString(7);
-                    item=0;
-                    for (int x=0; x<ItemSPPre.size();x++){
-                        if( ItemSPPre.get(x).getTexto().equals(Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim())){
-                            item=x;
-                            break;
+                    if(ItemSPHue==null){
+                        if(ItemSPEmp!=null){
+
+                            cargaSpinnerHuertas();
+                            CopiHue = new AdaptadorSpinner(aplicacion.this, ItemSPHue);
+                            sp_huerta.setAdapter(CopiHue);
+
+                            cargaSpinnerTipoAplicacion();
+                            CopiApli = new AdaptadorSpinner(aplicacion.this, ItemSPApli);
+                            sp_TipoAplicacion.setAdapter(CopiApli);
+
+                            cargarProductos();
+                            Adaptador_Arreglos=new ArrayAdapter(aplicacion.this, android.R.layout.simple_list_item_1,ArrayProductos);
+                            actv_Productos.setAdapter(Adaptador_Arreglos);
                         }
-                    }
-                    if(item>0){
-                        sp_Presentacion.setSelection(item);
                     }
 
-                    item=0;
-                    for (int x=0; x<ItemSPApli.size();x++){
-                        if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(3).trim()+" - "+Renglon.getString(7).trim())){
-                            item=x;
-                            break;
-                        }
-                    }
-                    if(item>0) {
-                        sp_TipoAplicacion.setSelection(item);
-                    }
+
+                    text_Codigo.setText(Id.substring(0,3)+"-"+Id.substring(3,5)+"-"+Id.substring(5,10));
+
+                    int item;
 
                     item=0;
                     for (int x=0; x<ItemSPEmp.size();x++){
@@ -502,6 +506,47 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         sp_Empresa4.setSelection(item);
                     }
 
+                    item=0;
+                    if(ItemSPHue!=null){
+                        for (int x=0; x<ItemSPHue.size();x++){
+                            if( ItemSPHue.get(x).getTexto().equals(Renglon.getString(1)+" - "+Renglon.getString(5))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        sp_huerta.setSelection(item);
+                        String PArrafo;
+                        PArrafo=Renglon.getString(2);
+                        pt_Observaciones.setText(Renglon.getString(2));
+                        String Presentacion=Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim()+ " "+ Renglon.getString(10);
+                        String TIpo=Renglon.getString(3).trim()+" - "+Renglon.getString(7);
+
+                        item=0;
+                        for (int x=0; x<ItemSPApli.size();x++){
+                            if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(3).trim()+" - "+Renglon.getString(7).trim())){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0) {
+                            sp_TipoAplicacion.setSelection(item);
+                        }
+
+                        cargaSpinnerPresentacion();
+                        CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
+                        sp_Presentacion.setAdapter(CopiPre);
+
+                        item=0;
+                        for (int x=0; x<ItemSPPre.size();x++){
+                            if( ItemSPPre.get(x).getTexto().equals(Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim()+ " "+ Renglon.getString(10))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0){
+                            sp_Presentacion.setSelection(item);
+                        }
+                    }
                 }else{
 
                 }
@@ -522,6 +567,81 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
     public void Agregar(View view){
         boolean FaltoAlgo;
         FaltoAlgo=false;
+        String Mensaje;
+        Mensaje = "";
+
+        if (sp_Empresa4.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una empresa,Verifica por favor";
+        }
+        if (sp_huerta.getSelectedItemPosition() > 0 ) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar un almacen,Verifica por favor";
+        }
+        if (sp_TipoAplicacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una tipo de aplicacion,Verifica por favor";
+        }
+
+        if (sp_Presentacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una Presentacion,Verifica por favor";
+        }
+
+        if (actv_Productos.getText().toString().indexOf("|") >= 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta teclear un producto,Verifica por favor";
+        }
+        try {
+            if (Double.parseDouble(etn_ApliCantidad.getText().toString()) > 0) {
+
+            } else {
+                FaltoAlgo = true;
+                Mensaje = "Falta teclear la cantidad de dosis,Verifica por favor";
+            }
+        } catch (IllegalStateException e) {
+            etn_ApliCantidad.setText("0");
+        }
+        catch(NumberFormatException f)
+        {
+            etn_ApliCantidad.setText("0");
+        }
+        catch(Exception g)
+        {
+            etn_ApliCantidad.setText("0");
+        }
+
+        try {
+            if (Double.parseDouble(etn_Pipadas.getText().toString()) > 0) {
+
+            } else {
+                FaltoAlgo = true;
+                Mensaje = "Falta teclear la cantidad de la aplicados,Verifica por favor";
+            }
+        } catch (IllegalStateException e) {
+            etn_Pipadas.setText("0");
+        }
+        catch(NumberFormatException f)
+        {
+            etn_Pipadas.setText("0");
+        }
+        catch(Exception g)
+        {
+            etn_Pipadas.setText("0");
+        }
+
+
+
 
         if (!FaltoAlgo){
             AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -540,12 +660,12 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 do {
                     if (Renglon.getInt(0)>0){
                             ContentValues registro = new ContentValues();
-
+                            String Parrafo=String.valueOf(pt_Observaciones.getText());
                             registro.put("Observaciones", String.valueOf(pt_Observaciones.getText()));
                             registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
                             registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
 
-                            int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+"001"+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                            int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                             if(cantidad>0){
                                 //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
@@ -554,6 +674,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                             }
                     }else{
                         ContentValues registro= new ContentValues();
+
+                        String Parrafo=String.valueOf(pt_Observaciones.getText());
                         registro.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5));
                         registro.put("Id_Huerta",Huerta);
                         registro.put("Observaciones",pt_Observaciones.getText().toString());
@@ -597,6 +719,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
             LimpiarDetalle();
             Cargagrid(text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+        }else{
+            Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -634,7 +758,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
-
 
                 BD.close();
             } else {
@@ -676,6 +799,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
         //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
         startActivity(intento);
+        finish();
     }
 
     private void cargaSpinnerTipoAplicacion(){

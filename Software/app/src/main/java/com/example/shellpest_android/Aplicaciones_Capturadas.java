@@ -3,7 +3,6 @@ package com.example.shellpest_android;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -39,7 +38,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         Perfil = getIntent().getStringExtra("perfil");
         Huerta = getIntent().getStringExtra("huerta");
 
-        lv_Aplicaciones = (ListView) findViewById(R.id.lv_Aplicaciones);
+        lv_Aplicaciones = (ListView) findViewById(R.id.lv_Salidas);
 
         arrayArticulos = new ArrayList<>();
 
@@ -141,7 +140,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         if (Perfil.equals("001")){
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
-                    "\t min(Ad.Fecha) || ' - ' || max(AD.Fecha) as Fecha , \n" +
+                    "\t min(Ad.Fecha) + ' - ' + max(AD.Fecha) as Fecha , \n" +
                     "\t A.Id_Huerta,A.c_codigo_eps \n" +
                     "from t_Aplicaciones as A \n" +
                     "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
@@ -150,7 +149,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         }else{
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
-                    "\t min(Ad.Fecha)+ ' - '+max(AD.Fecha) as Fecha , \n" +
+                    "\t min(Ad.Fecha)+ ' - ' +max(AD.Fecha) as Fecha , \n" +
                     "\t A.Id_Huerta,A.c_codigo_eps \n" +
                     "from t_Aplicaciones as A \n" +
                     "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
