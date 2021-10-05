@@ -38,7 +38,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         Perfil = getIntent().getStringExtra("perfil");
         Huerta = getIntent().getStringExtra("huerta");
 
-        lv_Aplicaciones = (ListView) findViewById(R.id.lv_Salidas);
+        lv_Aplicaciones = (ListView) findViewById(R.id.lv_Aplicaciones);
 
         arrayArticulos = new ArrayList<>();
 

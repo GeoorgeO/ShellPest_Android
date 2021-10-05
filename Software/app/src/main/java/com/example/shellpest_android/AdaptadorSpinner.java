@@ -49,4 +49,5 @@ public class AdaptadorSpinner extends ArrayAdapter<ItemDatoSpinner> {
 
         return convertView;
     }
+
 }

@@ -32,7 +32,7 @@ import java.util.Date;
 
 public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
-    public String Usuario, Perfil, Huerta,cUnidad,FechaAnt;
+    public String Usuario, Perfil, Huerta,cUnidad,FechaAnt,SID,SEPS;
     Spinner sp_Empresa, sp_Almacen, sp_Aplicacion;
     AutoCompleteTextView actv_Producto;
     EditText et_Fecha,etn_Cantidad;
@@ -63,8 +63,6 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salidas);
 
-
-
         SoloUnaHuerta=false;
 
         secuencia=0;
@@ -72,6 +70,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
         Huerta = getIntent().getStringExtra("huerta2");
+        SID = getIntent().getStringExtra("ID");
+        SEPS = getIntent().getStringExtra("CEPS");
 
         getSupportActionBar().hide();
 
@@ -109,7 +109,6 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         cargarResponsable();
 
         ArrayProductos=new ArrayList<>();
-
 
         cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
@@ -354,6 +353,98 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
               }
           });
 
+        if(SID!=null){
+
+            CargarAplicacion();
+            Cargagrid(SID,SEPS);
+        }
+
+    }
+
+    public void CargarAplicacion(){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Cursor Renglon;
+        Renglon=BD.rawQuery(" select A.Id_Salida,A.Id_Responsable,U.Nombre ,A.Id_Almacen ,A.Id_Aplicacion ,A.Fecha,Alm.Nombre_Almacen,A.c_codigo_eps, Emp.v_nombre_eps,AP.Fmin,AP.Fmax " +
+                "from t_Salidas as A " +
+                "inner join t_Almacen as Alm on Alm.Id_Almacen=A.Id_Almacen and A.c_codigo_eps=Alm.c_codigo_eps " +
+                "inner join UsuarioLogin as U on U.Id_Usuario=A.Id_Responsable  " +
+                "inner join conempresa as Emp on Emp.c_codigo_eps=A.c_codigo_eps  " +
+                "inner join (select AD.Id_Aplicacion,AD.c_Codigo_eps,Min(AD.Fecha) as Fmin,Max(AD.Fecha) as Fmax from  t_Aplicaciones_Det as AD group by AD.Id_Aplicacion,AD.c_Codigo_eps) as AP on Ap.Id_Aplicacion=A.Id_Aplicacion and Ap.c_codigo_eps=A.c_codigo_eps "+
+                "where A.Id_Salida='"+SID+"' and A.c_codigo_eps='"+SEPS+"'",null);
+        if(Renglon.moveToFirst()){
+            do {
+                if (Renglon.getInt(0)>0){
+
+                    if(ItemSPAlm==null){
+                        if(ItemSPEmp!=null){
+
+                            cargaSpinnerHue();
+                            CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+                            sp_Almacen.setAdapter(CopiAlm);
+
+                            cargaSpinnerAplicacion();
+                            CopiApli = new AdaptadorSpinner(Salidas.this, ItemSPApli);
+                            sp_Aplicacion.setAdapter(CopiApli);
+
+                            cargarProductos();
+                            Adaptador_Arreglos=new ArrayAdapter(Salidas.this, android.R.layout.simple_list_item_1,ArrayProductos);
+                            actv_Producto.setAdapter(Adaptador_Arreglos);
+                        }
+                    }
+
+
+                    int item;
+
+                    item=0;
+                    for (int x=0; x<ItemSPEmp.size();x++){
+                        if( ItemSPEmp.get(x).getTexto().equals(Renglon.getString(7).trim()+" - "+Renglon.getString(8).trim())){
+                            item=x;
+                            break;
+                        }
+                    }
+                    if(item>0){
+                        sp_Empresa.setSelection(item);
+                    }
+
+                    et_Fecha.setText(Renglon.getString(5));
+
+                    item=0;
+                    if(ItemSPAlm!=null){
+                        for (int x=0; x<ItemSPAlm.size();x++){
+                            if( ItemSPAlm.get(x).getTexto().equals(Renglon.getString(3)+" - "+Renglon.getString(6))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        sp_Almacen.setSelection(item);
+
+
+
+                        item=0;
+                        for (int x=0; x<ItemSPApli.size();x++){
+                            if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(4)+" - "+Renglon.getString(9)+" al "+Renglon.getString(10))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0) {
+                            sp_Aplicacion.setSelection(item);
+                        }
+
+                        tv_Responsable.setText(Renglon.getString(2));
+
+
+                    }
+                }else{
+
+                }
+            } while(Renglon.moveToNext());
+        }else{
+            Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+        }
+        BD.close();
     }
 
     @Override

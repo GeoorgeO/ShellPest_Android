@@ -59,17 +59,19 @@
 
 
         <ListView
-            android:id="@+id/lv_Salidas"
+            android:id="@+id/lv_GSalidas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_grid_salidas">
 
         </ListView>
+
         <Button
             android:id="@+id/btn_CerrarSal2"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:onClick="Regresar"
             android:text="Cerrar" />
 
     </LinearLayout>

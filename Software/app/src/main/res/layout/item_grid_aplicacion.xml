@@ -15,18 +15,21 @@
             android:id="@+id/text_Fecha"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/text_ApliProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_ApliCantidad"
-            android:layout_width="60dp"
+            android:layout_width="61dp"
             android:layout_height="wrap_content"
             android:textAlignment="center" />
 
@@ -38,7 +41,7 @@
 
         <TextView
             android:id="@+id/text_ApliPipadas"
-            android:layout_width="60dp"
+            android:layout_width="61dp"
             android:layout_height="wrap_content"
             android:textAlignment="center" />
     </LinearLayout>

@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_constraintVertical_weight="100"
     tools:context=".aplicacion">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:weightSum="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,238 +19,268 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="80"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.2858"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView35"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".8"
+                    android:text="Codigo:" />
+
+                <TextView
+                    android:id="@+id/text_Codigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".3" />
+
+                <ImageButton
+                    android:id="@+id/imageButton6"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/miniboton_redondo"
+                    android:onClick="ListarAplicaciones"
+                    app:srcCompat="@android:drawable/ic_input_get" />
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/sp_Empresa4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.1429" />
+
+            <Spinner
+                android:id="@+id/sp_huerta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.1429" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_weight="7"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".7"
+                    android:text="Observaciones:" />
+
+                <EditText
+                    android:id="@+id/pt_Observaciones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/sp_TipoAplicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.1429" />
+
+            <Spinner
+                android:id="@+id/sp_Presentacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.1429" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_weight="7.1429"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".8"
+                    android:text="Fecha:" />
+
+                <EditText
+                    android:id="@+id/etd_Fecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_weight="7.1429"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".8"
+                    android:text="Producto:" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/actv_Productos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:hint="Teclee Nombre de producto"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/textView35"
+                android:id="@+id/text_UnidadPro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight=".8"
-                android:text="Codigo:" />
+                android:layout_weight="7"
+                android:text="Unidad: " />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_weight="7.1429"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView27"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".8"
+                    android:text="Dosis:" />
+
+                <EditText
+                    android:id="@+id/etn_ApliCantidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_weight="7.1429"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_Aplicados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".8"
+                    android:text="Aplicados:" />
+
+                <EditText
+                    android:id="@+id/etn_Pipadas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:inputType="number"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/text_Codigo"
+                android:id="@+id/text_CantidadTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight=".3" />
+                android:layout_weight="7.1429"
+                android:text="Cantidad de Producto Aplicado"
+                android:textAlignment="center" />
 
-            <ImageButton
-                android:id="@+id/imageButton6"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/miniboton_redondo"
-                android:onClick="ListarAplicaciones"
-                app:srcCompat="@android:drawable/ic_input_get" />
-        </LinearLayout>
-
-        <Spinner
-            android:id="@+id/sp_Empresa4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Spinner
-            android:id="@+id/sp_huerta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView29"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".7"
-                android:text="Observaciones:" />
-
-            <EditText
-                android:id="@+id/pt_Observaciones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".3"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <Spinner
-            android:id="@+id/sp_TipoAplicacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Spinner
-            android:id="@+id/sp_Presentacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView25"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".8"
-                android:text="Fecha:" />
-
-            <EditText
-                android:id="@+id/etd_Fecha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:ems="10"
-                android:inputType="date"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView26"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".8"
-                android:text="Producto:" />
-
-            <AutoCompleteTextView
-                android:id="@+id/actv_Productos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:hint="Teclee Nombre de producto"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/text_UnidadPro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Unidad: " />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView27"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".8"
-                android:text="Dosis:" />
-
-            <EditText
-                android:id="@+id/etn_ApliCantidad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:ems="10"
-                android:inputType="numberDecimal"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/text_Aplicados"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".8"
-                android:text="Aplicados:" />
-
-            <EditText
-                android:id="@+id/etn_Pipadas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:inputType="number"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/text_CantidadTotal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="15 Litros de Producto Aplicados"
-            android:textAlignment="center" />
-
-        <Button
-            android:id="@+id/btn_Agrega"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:onClick="Agregar"
-            android:text="Agregar" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView34"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:background="@color/teal_700"
-                android:text="Fecha"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/textView33"
+            <Button
+                android:id="@+id/btn_Agrega"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/teal_700"
-                android:text="Producto"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="7.1429"
+                android:onClick="Agregar"
+                android:text="Agregar" />
 
-            <TextView
-                android:id="@+id/textView31"
-                android:layout_width="60dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
-                android:text="Cantidad"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:layout_weight="7"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView30"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:background="@color/teal_700"
-                android:text="Unidad"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/textView34"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/teal_700"
+                    android:text="Fecha"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/textView32"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:background="@color/teal_700"
-                android:text="Pipadas"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/textView33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/teal_700"
+                    android:text="Producto"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="61dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/teal_700"
+                    android:text="Cantidad"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/teal_700"
+                    android:text="Unidad"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView32"
+                    android:layout_width="61dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/teal_700"
+                    android:text="Pipadas"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
         </LinearLayout>
+
 
         <ListView
             android:id="@+id/lv_GridAplicacion"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
             tools:listitem="@layout/item_grid_aplicacion" />
 
     </LinearLayout>
