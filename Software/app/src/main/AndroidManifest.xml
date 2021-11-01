@@ -16,22 +16,24 @@
         android:roundIcon="@mipmap/ic_miicono_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
+
         android:usesCleartextTraffic="true">
         <activity android:name=".Salidas_Capturadas"></activity>
         <activity android:name=".Enviar_Salidas" />
         <activity android:name=".Enviar_Aplicaciones" />
         <activity android:name=".Aplicaciones_Capturadas" />
-        <activity android:name=".aplicacion" />
-        <activity android:name=".Salidas" />
+        <activity android:name=".aplicacion" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".Salidas" android:screenOrientation="portrait"/>
         <activity android:name=".enviarriego" />
-        <activity android:name=".Riego" />
+        <activity android:name=".Riego" android:screenOrientation="portrait"/>
         <activity android:name=".Aplicaciones" />
         <activity android:name=".Puntos_Capturados" />
         <activity android:name=".Enviar" />
         <activity android:name=".EnviaRecibe" />
         <activity
             android:name=".activity_Monitoreo"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Login_Usuario">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

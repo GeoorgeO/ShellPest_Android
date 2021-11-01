@@ -59,6 +59,9 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table invmovimiento (c_coddoc_mov text ,Secuencia text,c_tipodoc_mov text,c_codigo_pro text,n_movipro_mov float,n_exiant_mov float,n_cantidad_mov float,c_codigo_eps text)");
 
         BD.execSQL("create table t_existencias (c_codigo_eps text not null ,c_codigo_pro text ,c_codigo_alm text not null,Existencia float ,primary key(c_codigo_eps,c_codigo_pro,c_codigo_alm))");
+
+        BD.execSQL("create table t_Receta (Id_Receta text not null ,Fecha_Receta text ,Id_AsesorTecnico text ,Id_MonitoreoPE float ,Id_Cultivo text, Id_TipoAplicacion text,Id_Presentacion text,Observaciones text,Intervalo_Seguridad float,Intervalo_Reingreso float,c_codigo_eps text not null,primary key(Id_Receta,c_codigo_eps))");
+        BD.execSQL("create table t_RecetaDet (Id_Receta text not null ,Secuencia text ,c_codigo_pro text ,v_nombre_pro float ,c_codigo_cac text, c_codigo_uni text,Dosis float,Cantidad_Unitaria float,Descripcion text,c_codigo_eps text not null, primary key(Id_Receta,c_codigo_eps,Secuencia))");
     }
 
     @Override
@@ -104,6 +107,9 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Almacen");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS invmovimiento");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_existencias");
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Receta");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RecetaDet");
 
         onCreate(sqLiteDatabase);
     }

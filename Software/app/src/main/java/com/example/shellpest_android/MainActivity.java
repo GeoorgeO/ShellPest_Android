@@ -252,9 +252,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                     if(HaySalidas()){
                         Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
-                        Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm");
+                        Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                     }
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
 
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
@@ -286,9 +288,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         if(HaySalidas()){
                             Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
-                            Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaProAlm");
+                            Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                         }
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/UsuarioEmpresa");
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -318,9 +322,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         if(HaySalidas()){
                             Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
-                            Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm");
+                            Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                         }
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                     }
                 }
 
@@ -520,6 +526,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break;
                         case "cepsExisAlm" :
                             Actualiza_ExistenciasAlm(datos);
+                            break;
+                        case "Id_Receta":
+                            Actualiza_Recetas(datos);
+                            break;
+                        case "Id_RecetDet":
+                            Actualiza_RecetasDet(datos);
                             break;
                     }
                 }
@@ -1078,7 +1090,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
     }
 
@@ -1156,7 +1167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
     }
     private void Actualiza_Bloque(String [][] Datos ){
@@ -1201,7 +1211,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
     }
     private void Actualiza_Puntocontrol(String [][] Datos ){
@@ -1254,7 +1263,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
     }
 
@@ -1276,7 +1284,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         registro.put("Nombre_zona",Datos[x][1]);
 
-
                         int cantidad=BD.update("t_Zona",registro,"Id_zona='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
@@ -1288,8 +1295,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro= new ContentValues();
                         registro.put("Id_zona",Datos[x][0]);
                         registro.put("Nombre_zona",Datos[x][1]);
-
-
 
                         BD.insert("t_Zona",null,registro);
                     }
@@ -1304,7 +1309,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1312,7 +1316,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Individuo",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -1326,7 +1329,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         registro.put("No_Individuo",Datos[x][1]);
 
-
                         int cantidad=BD.update("t_Individuo",registro,"Id_Individuo='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
@@ -1338,8 +1340,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro= new ContentValues();
                         registro.put("Id_Individuo",Datos[x][0]);
                         registro.put("No_Individuo",Datos[x][1]);
-
-
 
                         BD.insert("t_Individuo",null,registro);
                     }
@@ -1354,7 +1354,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1411,7 +1410,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1420,24 +1418,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
 
-
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-
-
-
                 int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' and c_codigo_eps='"+Datos[x][2]+"' and Id_Huerta='"+Datos[x][1]+"'", null);
 
-
-
-                    ContentValues registro= new ContentValues();
-                    registro.put("Id_Usuario",Datos[x][0]);
-                    registro.put("Id_Huerta",Datos[x][1]);
-                    registro.put("c_codigo_eps",Datos[x][2]);
-                    BD.insert("t_Usuario_Huerta",null,registro);
-
-
+                ContentValues registro= new ContentValues();
+                registro.put("Id_Usuario",Datos[x][0]);
+                registro.put("Id_Huerta",Datos[x][1]);
+                registro.put("c_codigo_eps",Datos[x][2]);
+                BD.insert("t_Usuario_Huerta",null,registro);
 
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1470,7 +1460,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Stock_Min",Datos[x][4]);
                         registro.put("Movimientos",Datos[x][5]);
 
-
                         int cantidad=BD.update("t_Productos",registro,"c_codigo_pro='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
@@ -1479,11 +1468,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Monitoreo ["+x+"], favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        ContentValues registro= new ContentValues();
+                        ContentValues registro= new ContentValues();  
                         registro.put("c_codigo_pro",Datos[x][0]);
                         registro.put("v_nombre_pro",Datos[x][1]);
                         registro.put("c_codigo_uni",Datos[x][2]);
-
 
                         if(Datos[x][3]==null){
                             registro.put("Stock_Min",0);
@@ -1511,7 +1499,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1533,8 +1520,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         registro.put("v_nombre_uni",Datos[x][1]);
                         registro.put("v_abrevia_uni",Datos[x][2]);
-
-
 
                         int cantidad=BD.update("t_Unidad",registro,"c_codigo_uni='"+Datos[x][0].toString()+"'",null);
 
@@ -1563,7 +1548,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1584,7 +1568,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro = new ContentValues();
 
                         registro.put("Nombre_TipoAplicacion",Datos[x][1]);
-
 
                         int cantidad=BD.update("t_TipoAplicacion",registro,"Id_TipoAplicacion='"+Datos[x][0].toString()+"'",null);
 
@@ -1612,7 +1595,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1620,7 +1602,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tabla=new Tablas_Sincronizadas("t_Presentacion",Datos.length);
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
-
 
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
@@ -1664,7 +1645,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1714,7 +1694,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e){
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -1814,7 +1793,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         arrayArticulos.add(Tabla);
         for(int x=0;x<Datos.length;x++){
 
-
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
@@ -1873,7 +1851,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     BD.close();
                 }else{
-
                     BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
@@ -1883,6 +1860,87 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void Actualiza_Recetas(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Receta",Datos.length);
+        arrayArticulos.add(Tabla);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        int cantidad= BD.delete("t_Receta","Id_Receta!='-1' ",null);
+
+        if(cantidad>0){
+
+        }else{
+            Toast.makeText(MainActivity.this,"Error al actualizar Recetas",Toast.LENGTH_SHORT).show();
+        }
+        if(Datos.length>0){
+            for(int x=0;x<Datos.length;x++){
+                try{
+                    ContentValues registro= new ContentValues();
+                    registro.put("Id_Receta",Datos[x][0]);
+                    registro.put("Fecha_Receta",Datos[x][1]);
+                    registro.put("Id_AsesorTecnico",Datos[x][2]);
+                    registro.put("Id_MonitoreoPE",Datos[x][3]);
+                    registro.put("Id_Cultivo",Datos[x][4]);
+                    registro.put("Id_TipoAplicacion",Datos[x][5]);
+                    registro.put("Id_Presentacion",Datos[x][6]);
+                    registro.put("Observaciones",Datos[x][7]);
+                    registro.put("Intervalo_Seguridad",Datos[x][8]);
+                    registro.put("Intervalo_Reingreso",Datos[x][9]);
+                    registro.put("c_codigo_eps",Datos[x][10]);
+
+                    BD.insert("t_Receta",null,registro);
+
+                } catch (SQLiteConstraintException sqle){
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_RecetasDet(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_RecetaDet",Datos.length);
+        arrayArticulos.add(Tabla);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        int cantidad= BD.delete("t_RecetaDet","Id_Receta!='-1' ",null);
+
+        if(cantidad>0){
+
+        }else{
+            Toast.makeText(MainActivity.this,"Error al actualizar Recetas Detalle",Toast.LENGTH_SHORT).show();
+        }
+        if(Datos.length>0){
+            for(int x=0;x<Datos.length;x++){
+                try{
+                    ContentValues registro= new ContentValues();
+                    registro.put("Id_Receta",Datos[x][0]);
+                    registro.put("Secuencia",Datos[x][1]);
+                    registro.put("c_codigo_pro",Datos[x][2]);
+                    registro.put("v_nombre_pro",Datos[x][3]);
+                    registro.put("c_codigo_cac",Datos[x][4]);
+                    registro.put("c_codigo_uni",Datos[x][6]);
+                    registro.put("Dosis",Datos[x][7]);
+                    registro.put("Cantidad_Unitaria",Datos[x][8]);
+                    registro.put("Descripcion",Datos[x][9]);
+                    registro.put("c_codigo_eps",Datos[x][10]);
+
+                    BD.insert("t_RecetaDet",null,registro);
+
+                } catch (SQLiteConstraintException sqle){
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        BD.close();
     }
 
     @Override

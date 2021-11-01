@@ -35,14 +35,14 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
     boolean yasemovio;
 
-    Spinner sp_TipoAplicacion, sp_Presentacion,sp_huerta,sp_Empresa4;
+    Spinner sp_TipoAplicacion, sp_Presentacion,sp_huerta,sp_Empresa4,sp_Receta;
     AutoCompleteTextView actv_Productos;
     TextView text_Codigo,text_Aplicados,text_CantidadTotal,text_UnidadPro,textView32;
     EditText etd_Fecha,pt_Observaciones,etn_ApliCantidad,etn_Pipadas;
     ListView lv_GridAplicacion;
 
-    private ArrayList<ItemDatoSpinner> ItemSPApli, ItemSPPre, ItemSPHue,ItemSPEmp;
-    private AdaptadorSpinner CopiApli, CopiPre,CopiHue,CopiEmp;
+    private ArrayList<ItemDatoSpinner> ItemSPApli, ItemSPPre, ItemSPHue,ItemSPEmp,ItemSPRec;
+    private AdaptadorSpinner CopiApli, CopiPre,CopiHue,CopiEmp,CopiRec;
     private ArrayAdapter Adaptador_Arreglos;
     private ArrayList<String> ArrayProductos;
 
@@ -68,6 +68,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         sp_Presentacion = (Spinner) findViewById(R.id.sp_Presentacion);
         sp_huerta = (Spinner) findViewById(R.id.sp_huerta);
         sp_Empresa4 = (Spinner) findViewById(R.id.sp_Empresa4);
+        sp_Receta = (Spinner) findViewById(R.id.sp_Receta);
         text_Codigo = (TextView) findViewById(R.id.text_Codigo);
         lv_GridAplicacion = (ListView) findViewById(R.id.lv_GridAplicacion);
         pt_Observaciones = (EditText) findViewById(R.id.pt_Observaciones);
@@ -105,12 +106,11 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         if (sp_TipoAplicacion.getCount()==2){
             sp_TipoAplicacion.setSelection(1);
         }*/
-if (Id==null){
-    ItemSPPre = new ArrayList<>();
-    ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
+        if (Id==null){
+            ItemSPPre = new ArrayList<>();
+            ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
+        }
 
-
-}
         ArrayProductos=new ArrayList<>();
         /*cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
@@ -172,6 +172,14 @@ if (Id==null){
 
                 if (sp_huerta.getCount()==2){
                     sp_huerta.setSelection(1);
+                }
+
+                cargaSpinnerRecetas();
+                CopiRec = new AdaptadorSpinner(aplicacion.this, ItemSPRec);
+                sp_Receta.setAdapter(CopiRec);
+
+                if (sp_Receta.getCount()==2){
+                    sp_Receta.setSelection(1);
                 }
 
                 if(Id==null){
@@ -249,8 +257,6 @@ if (Id==null){
                     if(Renglon.moveToFirst()){
 
                         do {
-
-
                             MaxCod=("000"+String.valueOf(Renglon.getInt(0)+1)).substring(("000"+String.valueOf(Renglon.getInt(0)+1)).length()-3);
                         } while(Renglon.moveToNext());
 
@@ -278,16 +284,14 @@ if (Id==null){
 
                     textView32.setText(CopiApli.getItem(i).getTexto().substring(CopiApli.getItem(i).getTexto().indexOf("-")+2)+"s");
 
-                        cargaSpinnerPresentacion();
-                        CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
-                        sp_Presentacion.setAdapter(CopiPre);
+                    cargaSpinnerPresentacion();
+                    CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
+                    sp_Presentacion.setAdapter(CopiPre);
 
-
-                        if (sp_Presentacion.getCount() == 2) {
-                            sp_Presentacion.setSelection(1);
-                            yasemovio=true;
-                        }
-
+                    if (sp_Presentacion.getCount() == 2) {
+                        sp_Presentacion.setSelection(1);
+                        yasemovio=true;
+                    }
                 }
             }
 
@@ -339,6 +343,71 @@ if (Id==null){
             }
         });
 
+        sp_Receta.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if (CopiRec.getCount() > 0 && sp_Receta.getSelectedItemPosition()>0) {
+
+                    AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(aplicacion.this, "ShellPest", null, 1);
+                    SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+                    Cursor Renglon;
+
+                    String Consulta;
+
+                    Consulta = "select R.Id_TipoAplicacion,T.Nombre_TipoAplicacion,R.Id_Presentacion,P.Nombre_Presentacion,U.v_abrevia_uni " +
+                            "from t_Receta as R " +
+                            "inner join t_TipoAplicacion as T on T.Id_TipoAplicacion=R.Id_TipoAplicacion and T.c_codigo_eps=R.c_codigo_eps " +
+                            "inner join t_Presentacion as P on P.Id_Presentacion=R.Id_Presentacion and P.c_codigo_eps=R.c_codigo_eps " +
+                            "inner join t_Unidad as U on U.c_codigo_uni=P.Id_Unidad and U.c_codigo_eps=P.c_codigo_eps " +
+                            "where R.c_codigo_eps='" + CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2) + "' " +
+                            " and R.Id_Receta ='" + CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7) + "' ";
+                    Renglon = BD.rawQuery(Consulta, null);
+                    //strftime('%Y',)
+                    if (Renglon.moveToFirst()) {
+
+                        do {
+                            int item;
+
+                            item = 0;
+                            for (int x = 0; x < ItemSPApli.size(); x++) {
+                                if (ItemSPApli.get(x).getTexto().equals(Renglon.getString(0).trim() + " - " + Renglon.getString(1).trim())) {
+                                    item = x;
+                                    break;
+                                }
+                            }
+                            if (item > 0) {
+                                sp_TipoAplicacion.setSelection(item);
+                            }
+
+                            item = 0;
+                            for (int x = 0; x < ItemSPPre.size(); x++) {
+                                if (ItemSPPre.get(x).getTexto().equals(Renglon.getString(2) + " - " + Renglon.getString(3) + " " + Renglon.getString(4))) {
+                                    item = x;
+                                    break;
+                                }
+                            }
+                            if (item > 0) {
+                                sp_Presentacion.setSelection(item);
+                            }
+
+                        } while (Renglon.moveToNext());
+
+                        BD.close();
+
+                        cargaGridxReceta(CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
+                    } else {
+                        BD.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         if(Id!=null){
             Cargagrid(Id,cepsselapli);
             CargarAplicacion();
@@ -355,6 +424,164 @@ if (Id==null){
             DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> etd_Fecha.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
             dtpd.show();
         }
+    }
+
+    private void cargaGridxReceta(String Id,String c_codigo_eps){
+        lv_GridAplicacion.setAdapter(null);
+        arrayArticulos.clear();
+
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
+            String TC;
+            TC="select '"+etd_Fecha.getText().toString()+"' as Fecha , \n" +
+                    "R.c_codigo_pro,\n" +
+                    "R.Dosis, \n" +
+                    " '1'  , \n" +
+                    "R.c_codigo_uni, \n" +
+                    "P.v_nombre_pro, \n" +
+                    "U.v_abrevia_uni, " +
+                    "R.c_codigo_eps \n" +
+                    "from t_RecetaDet as R \n" +
+                    "left join t_Productos as P on rtrim(ltrim(R.c_codigo_pro))=rtrim(ltrim(P.c_codigo_pro)) and P.c_codigo_eps=R.c_codigo_eps \n" +
+                    "left join t_Unidad as U on U.c_codigo_uni=R.c_codigo_uni and U.c_codigo_eps=R.c_codigo_eps \n"+
+                    "where R.Id_Receta='"+Id+"' and R.c_codigo_eps='"+c_codigo_eps+"'";
+
+        Cursor Renglon =BD.rawQuery(TC,null);
+
+        if(Renglon.moveToFirst()) {
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+            if (Renglon.moveToFirst()) {
+
+                do {
+                    Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7));
+                    arrayArticulos.add(Tabla);
+                } while (Renglon.moveToNext());
+                if(arrayArticulos.size()>0){
+                    GuardaDeReceta();
+                }
+                BD.close();
+            } else {
+                Toast.makeText(this, "No hay datos en t_Aplicaciones guardados", Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+        }
+        if(arrayArticulos.size()>0){
+            Adapter=new Adaptador_GridAplicacion(getApplicationContext(),arrayArticulos);
+            lv_GridAplicacion.setAdapter(Adapter);
+        }else{
+            //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void GuardaDeReceta(){
+        boolean FaltoAlgo;
+        FaltoAlgo=false;
+        String Mensaje;
+        Mensaje = "";
+
+        if (sp_Empresa4.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una empresa,Verifica por favor";
+        }
+        if (sp_huerta.getSelectedItemPosition() > 0 ) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar un almacen,Verifica por favor";
+        }
+        if (sp_TipoAplicacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una tipo de aplicacion,Verifica por favor";
+        }
+
+        if (sp_Presentacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una Presentacion,Verifica por favor";
+        }
+
+        if (actv_Productos.getText().toString().indexOf("|") >= 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta teclear un producto,Verifica por favor";
+        }
+        try {
+            if (Double.parseDouble(etn_ApliCantidad.getText().toString()) > 0) {
+
+            } else {
+                FaltoAlgo = true;
+                Mensaje = "Falta teclear la cantidad de dosis,Verifica por favor";
+            }
+        } catch (IllegalStateException e) {
+            etn_ApliCantidad.setText("0");
+        }
+        catch(NumberFormatException f)
+        {
+            etn_ApliCantidad.setText("0");
+        }
+        catch(Exception g)
+        {
+            etn_ApliCantidad.setText("0");
+        }
+        if (!FaltoAlgo){
+            if (guardarEncabezado()){
+
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                Date date1=objDate;
+
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+                Cursor Renglon;
+
+                for(int i=0;i<arrayArticulos.size();i++){
+
+
+                    Renglon =BD.rawQuery("select count(Id_Aplicacion) " +
+                            "from t_Aplicaciones_Det " +
+                            "where Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
+                            "and c_codigo_pro='"+arrayArticulos.get(i).getcProducto()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
+
+                    if(Renglon.moveToFirst()){
+                        if(Renglon.getInt(0)>0){
+                            Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
+                            registro2.put("Fecha",etd_Fecha.getText().toString());
+                            registro2.put("c_codigo_pro",arrayArticulos.get(i).getcProducto());
+                            registro2.put("Dosis",arrayArticulos.get(i).getCantidad());
+                            registro2.put("Unidades_aplicadas", arrayArticulos.get(i).getUnidades_aplicadas());
+                            registro2.put("Id_Usuario",Usuario);
+                            registro2.put("F_Creacion",objSDF.format(date1));
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+                            BD.insert("t_Aplicaciones_Det",null,registro2);
+                        }
+                    }else{
+                        Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
+                    }
+                    BD.close();
+
+                    LimpiarDetalle();
+                }
+            }
+        }else{
+            Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void borrarAplicaciones15Days()  {
@@ -422,8 +649,6 @@ if (Id==null){
         Cursor Renglon10;
         String Consulta;
 
-
-
         Consulta="select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where ltrim(rtrim(UE.Id_Usuario))='"+Usuario+"' ";
         Renglon10=BD.rawQuery(Consulta,null);
 
@@ -489,7 +714,6 @@ if (Id==null){
                             actv_Productos.setAdapter(Adaptador_Arreglos);
                         }
                     }
-
 
                     text_Codigo.setText(Id.substring(0,3)+"-"+Id.substring(3,5)+"-"+Id.substring(5,10));
 
@@ -640,67 +864,25 @@ if (Id==null){
             etn_Pipadas.setText("0");
         }
 
-
-
-
         if (!FaltoAlgo){
-            AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+            if (guardarEncabezado()){
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                Date date1=objDate;
 
-            Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
-            SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-            Date date1=objDate;
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+                Cursor Renglon;
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-            String currentTime = simpleDateFormat.format(new Date());
+                Renglon =BD.rawQuery("select count(Id_Aplicacion) " +
+                        "from t_Aplicaciones_Det " +
+                        "where Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
+                        "and c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
 
-            Cursor Renglon;
-            Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Apli.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and Enviado='0' ",null);
-            if(Renglon.moveToFirst()){
-                do {
-                    if (Renglon.getInt(0)>0){
-                            ContentValues registro = new ContentValues();
-                            String Parrafo=String.valueOf(pt_Observaciones.getText());
-                            registro.put("Observaciones", String.valueOf(pt_Observaciones.getText()));
-                            registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
-                            registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
-
-                            int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-
-                            if(cantidad>0){
-                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
-                            }else{
-                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
-                            }
+                if(Renglon.moveToFirst()){
+                    if(Renglon.getInt(0)>0){
+                        Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
                     }else{
-                        ContentValues registro= new ContentValues();
-
-                        String Parrafo=String.valueOf(pt_Observaciones.getText());
-                        registro.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5));
-                        registro.put("Id_Huerta",Huerta);
-                        registro.put("Observaciones",pt_Observaciones.getText().toString());
-                        registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
-                        registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
-                        registro.put("Id_Usuario",Usuario);
-                        registro.put("F_Creacion",objSDF.format(date1));
-                        registro.put("Enviado","0");
-                        registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
-                        BD.insert("t_Aplicaciones",null,registro);
-                    }
-                } while(Renglon.moveToNext());
-            }else{
-                Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
-            }
-
-            Renglon =BD.rawQuery("select count(Id_Aplicacion) " +
-                    "from t_Aplicaciones_Det " +
-                    "where Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
-                    "and c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
-
-            if(Renglon.moveToFirst()){
-                if(Renglon.getInt(0)>0){
-                    Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
-                }else{
                         ContentValues registro2= new ContentValues();
                         registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
                         registro2.put("Fecha",etd_Fecha.getText().toString());
@@ -711,16 +893,71 @@ if (Id==null){
                         registro2.put("F_Creacion",objSDF.format(date1));
                         registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
                         BD.insert("t_Aplicaciones_Det",null,registro2);
+                    }
+                }else{
+                    Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
-            }
-            BD.close();
+                BD.close();
 
-            LimpiarDetalle();
-            Cargagrid(text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+                LimpiarDetalle();
+                Cargagrid(text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+            }
+
+
         }else{
             Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
+        }
+    }
+    private boolean guardarEncabezado(){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = simpleDateFormat.format(new Date());
+
+        Cursor Renglon;
+        Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Apli.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and Enviado='0' ",null);
+        if(Renglon.moveToFirst()){
+            do {
+                if (Renglon.getInt(0)>0){
+                    ContentValues registro = new ContentValues();
+                    String Parrafo=String.valueOf(pt_Observaciones.getText());
+                    registro.put("Observaciones", String.valueOf(pt_Observaciones.getText()));
+                    registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
+                    registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
+
+                    int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+
+                    if(cantidad>0){
+                        //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                    }else{
+                        //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }else{
+                    ContentValues registro= new ContentValues();
+
+                    String Parrafo=String.valueOf(pt_Observaciones.getText());
+                    registro.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5));
+                    registro.put("Id_Huerta",Huerta);
+                    registro.put("Observaciones",pt_Observaciones.getText().toString());
+                    registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
+                    registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
+                    registro.put("Id_Usuario",Usuario);
+                    registro.put("F_Creacion",objSDF.format(date1));
+                    registro.put("Enviado","0");
+                    registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+                    BD.insert("t_Aplicaciones",null,registro);
+                    return true;
+                }
+            } while(Renglon.moveToNext());
+        }else{
+            Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
@@ -878,5 +1115,28 @@ if (Id==null){
             }
     }
 
+    private void cargaSpinnerRecetas(){
+
+        CopiRec = null;
+
+        ItemSPRec = new ArrayList<>();
+        ItemSPRec.add(new ItemDatoSpinner("Receta"));
+
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+
+        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from t_Receta as R where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+
+        if (Renglon.moveToFirst()) {
+            do {
+                ItemSPRec.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1)));
+            } while (Renglon.moveToNext());
+
+            BD.close();
+        } else {
+            BD.close();
+        }
+    }
 
 }
