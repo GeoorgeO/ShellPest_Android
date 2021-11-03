@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -33,7 +34,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
     public String Usuario, Perfil, Huerta,Id,UnidadPro,cepsselapli;
 
-    boolean yasemovio;
+    boolean yasemovio,seldet;
+    int nseldet;
 
     Spinner sp_TipoAplicacion, sp_Presentacion,sp_huerta,sp_Empresa4,sp_Receta;
     AutoCompleteTextView actv_Productos;
@@ -46,9 +48,13 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
     private ArrayAdapter Adaptador_Arreglos;
     private ArrayList<String> ArrayProductos;
 
+    Button btn_Agrega;
+
     Itemaplicacion Tabla;
     Adaptador_GridAplicacion Adapter;
     ArrayList<Itemaplicacion> arrayArticulos;
+
+    double existencia;
 
     private int dia,mes, anio;
 
@@ -81,6 +87,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         text_UnidadPro= (TextView) findViewById(R.id.text_UnidadPro);
         textView32= (TextView) findViewById(R.id.textView32);
 
+        btn_Agrega=(Button) findViewById(R.id.btn_Agrega);
+
         yasemovio=false;
 
         cargaSpinnerEmpresa();
@@ -91,6 +99,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             sp_Empresa4.setSelection(1);
         }
 
+        existencia=0;
         /*cargaSpinnerHuertas();
         CopiHue = new AdaptadorSpinner(this, ItemSPHue);
         sp_huerta.setAdapter(CopiHue);
@@ -110,6 +119,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             ItemSPPre = new ArrayList<>();
             ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
         }
+
+        nseldet=-1;
 
         ArrayProductos=new ArrayList<>();
         /*cargarProductos();
@@ -146,13 +157,22 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                 //String pro;
                 //pro="select P.c_codigo_uni,U.v_nombre_uni from t_Productos as P left join  t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni where P.c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"'";
-                Renglon=BD.rawQuery("select P.c_codigo_uni,U.v_nombre_uni from t_Productos as P left join  t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps where ltrim(rtrim(P.c_codigo_pro))='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                Renglon=BD.rawQuery("select P.c_codigo_uni,U.v_nombre_uni,Texi.Existencia " +
+                        "from t_Productos as P " +
+                        "left join  t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps " +
+                        "left join (select exi.c_codigo_eps,exi.c_codigo_pro,sum(exi.Existencia) as Existencia " +
+                            "from t_existencias as exi " +
+                            "inner join  t_Almacen as alm on alm.Id_Almacen=exi.c_codigo_alm and alm.c_codigo_eps=exi.c_codigo_eps " +
+                            "where alm.Id_Huerta='"+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' "+
+                        "group by exi.c_codigo_eps,exi.c_codigo_pro,alm.Id_Huerta ) as Texi on ltrim(rtrim(Texi.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and Texi.c_codigo_eps=p.c_codigo_eps "+
+                        "where ltrim(rtrim(P.c_codigo_pro))='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                 if(Renglon.moveToFirst()){
 
                     do {
-                        text_UnidadPro.setText("Unidad: "+Renglon.getString(1));
+                        text_UnidadPro.setText("Unidad: "+Renglon.getString(1)+" Existencia: "+Renglon.getDouble(2));
                         UnidadPro=Renglon.getString(1)+"s";
+                        existencia=Renglon.getDouble(2);
                     } while(Renglon.moveToNext());
 
                     BD.close();
@@ -161,6 +181,40 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 }
             }
 
+        });
+
+        lv_GridAplicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(nseldet==i){
+                    seldet=false;
+                    nseldet=-1;
+
+                    actv_Productos.setText("");
+                    etn_ApliCantidad.setText("0");
+                    etn_Pipadas.setText("0");
+                    //etd_Fecha.setText(arrayArticulos.get(i).getFecha());
+                    text_UnidadPro.setText("Unidad:");
+                    UnidadPro="";
+                    text_CantidadTotal.setText("Cantidad de Producto Aplicado");
+
+                }else{
+                    seldet=true;
+                    nseldet=i;
+                    String tarrsay=arrayArticulos.get(i).getcProducto();
+
+                    if(!arrayArticulos.get(i).getcProducto().equals("")){
+                        actv_Productos.setText(arrayArticulos.get(i).getNombre_Producto().trim() +" | "+arrayArticulos.get(i).getcProducto().trim());
+                    }
+
+                    etn_ApliCantidad.setText(arrayArticulos.get(i).getCantidad());
+                    etn_Pipadas.setText(arrayArticulos.get(i).getUnidades_aplicadas());
+                    etd_Fecha.setText(arrayArticulos.get(i).getFecha());
+                    text_UnidadPro.setText("Unidad: "+arrayArticulos.get(i).getNombre_Unidad());
+                    UnidadPro=arrayArticulos.get(i).getNombre_Unidad()+"s";
+                    text_CantidadTotal.setText(String.valueOf(Double.parseDouble(etn_Pipadas.getText().toString())* Double.parseDouble(etn_ApliCantidad.getText().toString()))+" "+UnidadPro+" de Producto aplicados");
+                }
+            }
         });
 
         sp_Empresa4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -209,6 +263,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 actv_Productos.setText("");
+
             }
         });
 
@@ -227,6 +282,18 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         etn_ApliCantidad.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                if (!String.valueOf(existencia).isEmpty() && etn_ApliCantidad.getText().toString().length()>0){
+                    if(Double.parseDouble(etn_ApliCantidad.getText().toString())>existencia){
+                        Toast.makeText(aplicacion.this, "NO SE PUEDE APLICAR. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
+                        btn_Agrega.setEnabled(false);
+                    }else{
+                        btn_Agrega.setEnabled(true);
+                    }
+                }else{
+
+                }
+
                 if(  etn_Pipadas.getText().length()>0 && etn_ApliCantidad.getText().length()>0){
                     text_CantidadTotal.setText(String.valueOf(Double.parseDouble(etn_Pipadas.getText().toString())* Double.parseDouble(etn_ApliCantidad.getText().toString()))+" "+UnidadPro+" de Producto aplicados");
                 }
@@ -445,13 +512,17 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     " '1'  , \n" +
                     "R.c_codigo_uni, \n" +
                     "P.v_nombre_pro, \n" +
-                    "U.v_abrevia_uni, " +
-                    "R.c_codigo_eps \n" +
+                    "U.v_abrevia_uni, \n" +
+                    "R.c_codigo_eps, \n" +
+                    "P.c_codigo_pro \n" +
                     "from t_RecetaDet as R \n" +
-                    "left join t_Productos as P on rtrim(ltrim(R.c_codigo_pro))=rtrim(ltrim(P.c_codigo_pro)) and P.c_codigo_eps=R.c_codigo_eps \n" +
                     "left join t_Unidad as U on U.c_codigo_uni=R.c_codigo_uni and U.c_codigo_eps=R.c_codigo_eps \n"+
+                    "left join t_Productos as P on R.c_codigo_pro=P.c_codigo_pro and P.c_codigo_eps=R.c_codigo_eps \n" +
                     "where R.Id_Receta='"+Id+"' and R.c_codigo_eps='"+c_codigo_eps+"'";
 
+       // TC="select c_codigo_pro from t_Productos";
+        boolean Sinproducto=false,SG=false;
+        int SGC=0;
         Cursor Renglon =BD.rawQuery(TC,null);
 
         if(Renglon.moveToFirst()) {
@@ -460,10 +531,30 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7));
+                    String NProducto=Renglon.getString(1).trim();
+                    String cProducto=Renglon.getString(8);
+                    if (Renglon.getString(8)==null){
+                        Sinproducto=true;
+                        SGC++;
+                        if(SG==false){
+                            SG=true;
+                        }
+                    }else{
+                        Sinproducto=false;
+                    }
+                    if (Sinproducto){
+                        Tabla=new Itemaplicacion(Renglon.getString(0),"",Renglon.getString(2),Renglon.getString(3),Renglon.getString(4).trim(),Renglon.getString(1).trim() +"[Prod. Sin Existencia]",Renglon.getString(6),Renglon.getString(7));
+                    }else{
+                        Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1).trim(),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4).trim(),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7));
+                    }
+
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
+                if(SG){
+                    Toast.makeText(this, "Algunos productos de la receta no estan en existencia en tu almacen, favor de notificar al administrador de recetas, los productos son los que estan en codigo", Toast.LENGTH_SHORT).show();
+                }
                 if(arrayArticulos.size()>0){
+                    if(SGC!=arrayArticulos.size())
                     GuardaDeReceta();
                 }
                 BD.close();
@@ -512,30 +603,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             Mensaje = "Falta seleccionar una Presentacion,Verifica por favor";
         }
 
-        if (actv_Productos.getText().toString().indexOf("|") >= 0) {
 
-        } else {
-            FaltoAlgo = true;
-            Mensaje = "Falta teclear un producto,Verifica por favor";
-        }
-        try {
-            if (Double.parseDouble(etn_ApliCantidad.getText().toString()) > 0) {
-
-            } else {
-                FaltoAlgo = true;
-                Mensaje = "Falta teclear la cantidad de dosis,Verifica por favor";
-            }
-        } catch (IllegalStateException e) {
-            etn_ApliCantidad.setText("0");
-        }
-        catch(NumberFormatException f)
-        {
-            etn_ApliCantidad.setText("0");
-        }
-        catch(Exception g)
-        {
-            etn_ApliCantidad.setText("0");
-        }
         if (!FaltoAlgo){
             if (guardarEncabezado()){
 
@@ -549,34 +617,35 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                 for(int i=0;i<arrayArticulos.size();i++){
 
+                    if(arrayArticulos.get(i).getcProducto().trim().length()>0) {
+                        Renglon = BD.rawQuery("select count(Id_Aplicacion) " +
+                                "from t_Aplicaciones_Det " +
+                                "where Id_Aplicacion='" + text_Codigo.getText().toString().substring(0, 3) + objSDF.format(date1).substring(8, 10) + CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0, 5) + "' and Fecha='" + etd_Fecha.getText() + "' " +
+                                "and c_codigo_pro='" + arrayArticulos.get(i).getcProducto().trim() + "' and c_codigo_eps='" + CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2) + "' ", null);
 
-                    Renglon =BD.rawQuery("select count(Id_Aplicacion) " +
-                            "from t_Aplicaciones_Det " +
-                            "where Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
-                            "and c_codigo_pro='"+arrayArticulos.get(i).getcProducto()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
-
-                    if(Renglon.moveToFirst()){
-                        if(Renglon.getInt(0)>0){
-                            Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
-                        }else{
-                            ContentValues registro2= new ContentValues();
-                            registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
-                            registro2.put("Fecha",etd_Fecha.getText().toString());
-                            registro2.put("c_codigo_pro",arrayArticulos.get(i).getcProducto());
-                            registro2.put("Dosis",arrayArticulos.get(i).getCantidad());
-                            registro2.put("Unidades_aplicadas", arrayArticulos.get(i).getUnidades_aplicadas());
-                            registro2.put("Id_Usuario",Usuario);
-                            registro2.put("F_Creacion",objSDF.format(date1));
-                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
-                            BD.insert("t_Aplicaciones_Det",null,registro2);
+                        if (Renglon.moveToFirst()) {
+                            if (Renglon.getInt(0) > 0) {
+                                Toast.makeText(this, "Ya se encuntra ese producto en la lista, favor de revisar.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                ContentValues registro2 = new ContentValues();
+                                registro2.put("Id_Aplicacion", text_Codigo.getText().toString().substring(0, 3) + objSDF.format(date1).substring(8, 10) + CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0, 5)); //objSDF.format(date1)
+                                registro2.put("Fecha", etd_Fecha.getText().toString());
+                                registro2.put("c_codigo_pro", arrayArticulos.get(i).getcProducto().trim());
+                                registro2.put("Dosis", arrayArticulos.get(i).getCantidad());
+                                registro2.put("Unidades_aplicadas", arrayArticulos.get(i).getUnidades_aplicadas());
+                                registro2.put("Id_Usuario", Usuario);
+                                registro2.put("F_Creacion", objSDF.format(date1));
+                                registro2.put("c_codigo_eps", CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
+                                BD.insert("t_Aplicaciones_Det", null, registro2);
+                            }
+                        } else {
+                            Toast.makeText(this, "No Regreso nada la consulta de Detalle", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
                     }
-                    BD.close();
-
-                    LimpiarDetalle();
                 }
+                BD.close();
+
+                LimpiarDetalle();
             }
         }else{
             Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
@@ -686,13 +755,14 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
         Cursor Renglon;
-        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_nombre_eps,U.v_abrevia_uni  " +
+        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_nombre_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta  " +
                 "from t_Aplicaciones as A " +
                 "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps " +
                 "inner join t_Presentacion as Pre on A.Id_Presentacion=Pre.Id_Presentacion and Pre.c_codigo_eps=H.c_codigo_eps " +
                 "inner join t_Unidad as U on U.c_codigo_uni=Pre.Id_Unidad and U.c_codigo_eps=Pre.c_codigo_eps "+
                 "inner join t_TipoAplicacion as ta on A.Id_TipoAplicacion=ta.Id_TipoAplicacion and Ta.c_codigo_eps=Pre.c_codigo_eps " +
                 "left join conempresa as eps on eps.c_codigo_eps=A.c_codigo_eps  " +
+                "left join t_Receta as rec on rec.c_codigo_eps=A.c_codigo_eps and rec.Id_Receta=A.Id_Receta " +
                 "where A.Id_Aplicacion='"+Id+"' and A.c_codigo_eps='"+cepsselapli+"'",null);
         if(Renglon.moveToFirst()){
             do {
@@ -770,6 +840,17 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         if(item>0){
                             sp_Presentacion.setSelection(item);
                         }
+
+                       /* item=0;
+                        for (int x=0; x<ItemSPRec.size();x++){
+                            if( ItemSPRec.get(x).getTexto().equals(Renglon.getString(11) + " - " + Renglon.getString(12))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0) {
+                            sp_Receta.setSelection(item);
+                        }*/
                     }
                 }else{
 
@@ -880,20 +961,44 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         "and c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
 
                 if(Renglon.moveToFirst()){
-                    if(Renglon.getInt(0)>0){
-                        Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
+                    if(seldet){
+                        ContentValues registro3= new ContentValues();
+                        registro3.put("Fecha",etd_Fecha.getText().toString());
+                        registro3.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
+                        registro3.put("Dosis",etn_ApliCantidad.getText().toString());
+                        registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
+                        int cantidad=BD.update("t_Aplicaciones_Det",registro3,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+
+                                "' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'"+
+                                " and c_codigo_pro='"+arrayArticulos.get(nseldet).getcProducto()+"' and Fecha='"+arrayArticulos.get(nseldet).getFecha()+"' ",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
                     }else{
-                        ContentValues registro2= new ContentValues();
-                        registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
-                        registro2.put("Fecha",etd_Fecha.getText().toString());
-                        registro2.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
-                        registro2.put("Dosis",etn_ApliCantidad.getText().toString());
-                        registro2.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
-                        registro2.put("Id_Usuario",Usuario);
-                        registro2.put("F_Creacion",objSDF.format(date1));
-                        registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
-                        BD.insert("t_Aplicaciones_Det",null,registro2);
+                        if(Renglon.getInt(0)>0){
+                            if(seldet){
+
+                            }else{
+                                Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else{
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
+                            registro2.put("Fecha",etd_Fecha.getText().toString());
+                            registro2.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
+                            registro2.put("Dosis",etn_ApliCantidad.getText().toString());
+                            registro2.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
+                            registro2.put("Id_Usuario",Usuario);
+                            registro2.put("F_Creacion",objSDF.format(date1));
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+                            BD.insert("t_Aplicaciones_Det",null,registro2);
+                        }
                     }
+                    seldet=false;
+                    nseldet=-1;
                 }else{
                     Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
                 }
@@ -929,7 +1034,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("Observaciones", String.valueOf(pt_Observaciones.getText()));
                     registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
                     registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
-
+                    registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,6));
                     int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                     if(cantidad>0){
@@ -951,6 +1056,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("F_Creacion",objSDF.format(date1));
                     registro.put("Enviado","0");
                     registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+                    registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,7));
                     BD.insert("t_Aplicaciones",null,registro);
                     return true;
                 }

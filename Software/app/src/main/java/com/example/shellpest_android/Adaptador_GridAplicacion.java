@@ -55,4 +55,5 @@ public class Adaptador_GridAplicacion extends BaseAdapter {
         return itemView;
     }
 
+
 }

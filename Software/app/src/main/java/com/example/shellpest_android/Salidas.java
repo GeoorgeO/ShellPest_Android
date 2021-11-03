@@ -224,9 +224,9 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (!String.valueOf(existencia).isEmpty() && etn_Cantidad.getText().toString().length()>0){
-                if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
-                    Toast.makeText(Salidas.this, "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
-                    btn_Agregar.setEnabled(false);
+                        if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
+                            Toast.makeText(Salidas.this, "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
+                            btn_Agregar.setEnabled(false);
                 }else{
                     btn_Agregar.setEnabled(true);
                 }
