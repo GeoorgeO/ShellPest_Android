@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -462,7 +463,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                         BD.close();
 
-                        cargaGridxReceta(CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
+                        cargaGridxReceta(CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7),Id,CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
                     } else {
                         BD.close();
                     }
@@ -493,7 +494,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    private void cargaGridxReceta(String Id,String c_codigo_eps){
+    private void cargaGridxReceta(String Id,String IdAplica,String c_codigo_eps){
         lv_GridAplicacion.setAdapter(null);
         arrayArticulos.clear();
 
@@ -556,6 +557,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 if(arrayArticulos.size()>0){
                     if(SGC!=arrayArticulos.size())
                     GuardaDeReceta();
+                    DescansoEnMilisegundos(8000,IdAplica,c_codigo_eps);
+
                 }
                 BD.close();
             } else {
@@ -651,6 +654,22 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void DescansoEnMilisegundos(int milisegundos,String Id,String c_codigo_eps){
+        CountDownTimer contadorbajotiempo=new CountDownTimer(milisegundos,1000) {
+            @Override
+            public void onTick(long l) {
+                if((l/1000)>4)
+                Toast.makeText(getApplicationContext(), "Algunos productos de la receta no estan en existencia en tu almacen, favor de notificar al administrador de recetas.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(getApplicationContext(), "Se quitaron los productos que no tienen existencia.", Toast.LENGTH_SHORT).show();
+                Cargagrid(Id,c_codigo_eps);
+            }
+        }.start();
     }
 
     private void borrarAplicaciones15Days()  {
