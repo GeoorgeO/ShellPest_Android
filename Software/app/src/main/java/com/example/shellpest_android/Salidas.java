@@ -184,6 +184,18 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }
         });
 
+        sp_Aplicacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                CargarGridxAplicacion(CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10),et_Fecha.getText().toString(),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         actv_Producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -527,7 +539,54 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         }else{
             BD.close();
         }
+    }
 
+    private void CargarGridxAplicacion(String IdAplicacion,String Fecha,String c_codigo_eps){ //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        lv_GridSalidas.setAdapter(null);
+        arrayArticulos.clear();
+
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
+
+        Cursor Renglon =BD.rawQuery("select P.v_nombre_pro, \n" +
+                "\tAD.Dosis,\n" +
+                "\tA.Unidades_aplicadas,U.v_nombre_uni , AD.c_codigo_pro,P.c_codigo_uni,Texi.Existencia \n" +
+                "from t_Aplicaciones_Det as AD \n" +
+                "left join t_Aplicaciones as A on A.Id_Aplicacion=AD.Id_Aplicacion and A.c_codigo_eps=c_codigo_eps=AD.c_codigo_eps \n" +
+                "left join t_Productos as P on ltrim(rtrim(AD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and P.c_codigo_eps=AD.c_codigo_eps \n" +
+                "left join (select exi.c_codigo_pro,exi.c_codigo_eps,exi.c_codigo_alm,exi.Existencia from t_existencias as exi  where exi.c_codigo_eps='"+c_codigo_eps+"' and exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"')as Texi on ltrim(rtrim(AD.c_codigo_pro))=ltrim(rtrim(Texi.c_codigo_pro)) and Texi.c_codigo_eps=AD.c_codigo_eps \n" +
+                "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps \n" +
+                "where AD.Id_Aplicacion='"+IdAplicacion+"' and AD.Fecha='"+Fecha+"' and AD.c_codigo_eps='"+c_codigo_eps+"'",null);
+
+        if(Renglon.moveToFirst()) {
+
+            if (Renglon.moveToFirst()) {
+
+                do {
+
+                    Tabla=new Itemsalida(Fecha,Renglon.getString(0),String.valueOf(Renglon.getDouble(1) * Renglon.getDouble(2)),Renglon.getString(3),"",Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),c_codigo_eps);
+                    arrayArticulos.add(Tabla);
+                } while (Renglon.moveToNext());
+
+
+                BD.close();
+            } else {
+                Toast.makeText(this, "No hay datos en t_Aplicaciones guardados", Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+        }
+        if(arrayArticulos.size()>0){
+            Adapter=new Adaptador_GridSalida(getApplicationContext(),arrayArticulos);
+            lv_GridSalidas.setAdapter(Adapter);
+        }else{
+            //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cargaSpinnerAplicacion(){

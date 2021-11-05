@@ -1,9 +1,7 @@
 package com.example.shellpest_android;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +45,7 @@ public class Adaptador_GridAplicacion extends BaseAdapter {
         TextView text_ApliCantidad=(TextView)itemView.findViewById(R.id.text_ApliCantidad);
         TextView text_ApliUnidad=(TextView)itemView.findViewById(R.id.text_ApliUnidad);
         TextView text_ApliPipadas=(TextView)itemView.findViewById(R.id.text_ApliPipadas);
-        
+
         text_Fecha.setText(""+itemlist.get(i).getFecha());
         text_ApliProducto.setText(""+itemlist.get(i).getNombre_Producto());
         text_ApliCantidad.setText(""+itemlist.get(i).getCantidad());

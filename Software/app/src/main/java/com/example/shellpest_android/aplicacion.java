@@ -233,9 +233,9 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 CopiRec = new AdaptadorSpinner(aplicacion.this, ItemSPRec);
                 sp_Receta.setAdapter(CopiRec);
 
-                if (sp_Receta.getCount()==2){
+                /*if (sp_Receta.getCount()==2){
                     sp_Receta.setSelection(1);
-                }
+                }*/
 
                 if(Id==null){
                     cargaSpinnerTipoAplicacion();
@@ -352,11 +352,14 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                     textView32.setText(CopiApli.getItem(i).getTexto().substring(CopiApli.getItem(i).getTexto().indexOf("-")+2)+"s");
 
-                    cargaSpinnerPresentacion();
-                    CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
-                    sp_Presentacion.setAdapter(CopiPre);
+                    if(sp_Presentacion.getCount()>0){
+                        cargaSpinnerPresentacion();
+                        CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
+                        sp_Presentacion.setAdapter(CopiPre);
+                    }
 
-                    if (sp_Presentacion.getCount() == 2) {
+
+                    if (sp_Presentacion.getCount() == 2 && sp_Presentacion.getSelectedItemPosition()==0) {
                         sp_Presentacion.setSelection(1);
                         yasemovio=true;
                     }
@@ -448,9 +451,16 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                                 sp_TipoAplicacion.setSelection(item);
                             }
 
+                            cargaSpinnerPresentacion();
+                            CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
+                            sp_Presentacion.setAdapter(CopiPre);
+                            DescansoEnMilisegundos2(3);
                             item = 0;
                             for (int x = 0; x < ItemSPPre.size(); x++) {
-                                if (ItemSPPre.get(x).getTexto().equals(Renglon.getString(2) + " - " + Renglon.getString(3) + " " + Renglon.getString(4))) {
+                                String Presenta="";
+                                Presenta=Renglon.getString(2).trim() + " - " + Renglon.getString(3).trim() + " " + Renglon.getString(4).trim();
+                                Presenta=ItemSPPre.get(x).getTexto();
+                                if (ItemSPPre.get(x).getTexto().equals(Renglon.getString(2).trim() + " - " + Renglon.getString(3).trim() + " " + Renglon.getString(4).trim())) {
                                     item = x;
                                     break;
                                 }
@@ -635,7 +645,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                                 registro2.put("Fecha", etd_Fecha.getText().toString());
                                 registro2.put("c_codigo_pro", arrayArticulos.get(i).getcProducto().trim());
                                 registro2.put("Dosis", arrayArticulos.get(i).getCantidad());
-                                registro2.put("Unidades_aplicadas", arrayArticulos.get(i).getUnidades_aplicadas());
+                               // registro2.put("Unidades_aplicadas", arrayArticulos.get(i).getUnidades_aplicadas());
                                 registro2.put("Id_Usuario", Usuario);
                                 registro2.put("F_Creacion", objSDF.format(date1));
                                 registro2.put("c_codigo_eps", CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
@@ -660,7 +670,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         CountDownTimer contadorbajotiempo=new CountDownTimer(milisegundos,1000) {
             @Override
             public void onTick(long l) {
-                if((l/1000)>4)
+                if((l/1000)>5)
                 Toast.makeText(getApplicationContext(), "Algunos productos de la receta no estan en existencia en tu almacen, favor de notificar al administrador de recetas.", Toast.LENGTH_SHORT).show();
             }
 
@@ -668,6 +678,22 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             public void onFinish() {
                 Toast.makeText(getApplicationContext(), "Se quitaron los productos que no tienen existencia.", Toast.LENGTH_SHORT).show();
                 Cargagrid(Id,c_codigo_eps);
+            }
+        }.start();
+    }
+
+    private void DescansoEnMilisegundos2(int milisegundos){
+
+        CountDownTimer contadorbajotiempo=new CountDownTimer(milisegundos,1000) {
+            int C=0;
+            @Override
+            public void onTick(long l) {
+               C++;
+            }
+
+            @Override
+            public void onFinish() {
+                C=0;
             }
         }.start();
     }
@@ -985,7 +1011,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         registro3.put("Fecha",etd_Fecha.getText().toString());
                         registro3.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
                         registro3.put("Dosis",etn_ApliCantidad.getText().toString());
-                        registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
+                        //registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
                         int cantidad=BD.update("t_Aplicaciones_Det",registro3,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+
                                 "' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'"+
                                 " and c_codigo_pro='"+arrayArticulos.get(nseldet).getcProducto()+"' and Fecha='"+arrayArticulos.get(nseldet).getFecha()+"' ",null);
@@ -1054,6 +1080,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
                     registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
                     registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,6));
+                    registro.put("Unidades_aplicadas",etn_Pipadas.getText().toString());
                     int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                     if(cantidad>0){
@@ -1203,7 +1230,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
             if (Renglon.moveToFirst()) {
                 do {
-                    ItemSPPre.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1)+ " "+ Renglon.getString(2)));
+                    ItemSPPre.add(new ItemDatoSpinner(Renglon.getString(0).trim() + " - " + Renglon.getString(1).trim()+ " "+ Renglon.getString(2).trim()));
                 } while (Renglon.moveToNext());
 
                 BD.close();

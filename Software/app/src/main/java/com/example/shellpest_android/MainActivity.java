@@ -1890,7 +1890,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     registro.put("Intervalo_Seguridad",Datos[x][8]);
                     registro.put("Intervalo_Reingreso",Datos[x][9]);
                     registro.put("c_codigo_eps",Datos[x][10]);
-
+                    registro.put("Id_Huerta",Datos[x][11]);
                     BD.insert("t_Receta",null,registro);
 
                 } catch (SQLiteConstraintException sqle){

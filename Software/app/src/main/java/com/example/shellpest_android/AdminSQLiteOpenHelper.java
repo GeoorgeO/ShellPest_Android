@@ -47,8 +47,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Presentacion(Id_Presentacion text, Nombre_Presentacion text,Id_TipoAplicacion text,Id_Unidad text,c_codigo_eps text,primary key(Id_Presentacion,c_codigo_eps))");
         BD.execSQL("create table t_TipoAplicacion(Id_TipoAplicacion text not null,Nombre_TipoAplicacion text,c_codigo_eps text not null,primary key (Id_TipoAplicacion,c_codigo_eps))");
 
-        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text not null,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text,Id_Receta text,c_codigo_eps text not null, primary key(Id_Aplicacion,c_codigo_eps))");
-        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text not null,Fecha text,c_codigo_pro text,Dosis text,Unidades_aplicadas text ,Id_Usuario text, F_Creacion text,Enviado text,c_codigo_eps text not null)");
+        BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text not null,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text,Id_Receta text,Unidades_aplicadas text,c_codigo_eps text not null, primary key(Id_Aplicacion,c_codigo_eps))");
+        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text not null,Fecha text,c_codigo_pro text,Dosis text,Id_Usuario text, F_Creacion text,Enviado text,c_codigo_eps text not null)");
         BD.execSQL("create table t_Usuario_Empresa (Id_Usuario text ,c_codigo_eps text)");
         BD.execSQL("create table conempresa (c_codigo_eps text primary key,v_nombre_eps text,v_rfc_eps text)");
 
@@ -60,7 +60,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
         BD.execSQL("create table t_existencias (c_codigo_eps text not null ,c_codigo_pro text ,c_codigo_alm text not null,Existencia float ,primary key(c_codigo_eps,c_codigo_pro,c_codigo_alm))");
 
-        BD.execSQL("create table t_Receta (Id_Receta text not null ,Fecha_Receta text ,Id_AsesorTecnico text ,Id_MonitoreoPE float ,Id_Cultivo text, Id_TipoAplicacion text,Id_Presentacion text,Observaciones text,Intervalo_Seguridad float,Intervalo_Reingreso float,c_codigo_eps text not null,primary key(Id_Receta,c_codigo_eps))");
+        BD.execSQL("create table t_Receta (Id_Receta text not null ,Fecha_Receta text ,Id_AsesorTecnico text ,Id_MonitoreoPE float ,Id_Cultivo text, Id_TipoAplicacion text,Id_Presentacion text,Observaciones text,Intervalo_Seguridad float,Intervalo_Reingreso float,Id_Huerta text,c_codigo_eps text not null,primary key(Id_Receta,c_codigo_eps))");
         BD.execSQL("create table t_RecetaDet (Id_Receta text not null ,Secuencia text ,c_codigo_pro text ,v_nombre_pro float ,c_codigo_cac text, c_codigo_uni text,Dosis float,Cantidad_Unitaria float,Descripcion text,c_codigo_eps text not null, primary key(Id_Receta,c_codigo_eps,Secuencia))");
     }
 
