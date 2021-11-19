@@ -166,9 +166,8 @@
 
             <TextView
                 android:id="@+id/textView20"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@color/teal_700"
                 android:text="Fecha"
                 android:textAlignment="center"
@@ -186,19 +185,17 @@
 
             <TextView
                 android:id="@+id/textView22"
-                android:layout_width="wrap_content"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@color/teal_700"
-                android:text="Cantidad"
+                android:text="Cant."
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/textView23"
-                android:layout_width="wrap_content"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@color/teal_700"
                 android:text="Unidad"
                 android:textAlignment="center"
@@ -206,9 +203,8 @@
 
             <TextView
                 android:id="@+id/textView24"
-                android:layout_width="wrap_content"
+                android:layout_width="86dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@color/teal_700"
                 android:text="Centro Costo"
                 android:textAlignment="center"

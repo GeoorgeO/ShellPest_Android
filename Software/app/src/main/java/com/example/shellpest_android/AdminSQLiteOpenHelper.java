@@ -48,11 +48,11 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_TipoAplicacion(Id_TipoAplicacion text not null,Nombre_TipoAplicacion text,c_codigo_eps text not null,primary key (Id_TipoAplicacion,c_codigo_eps))");
 
         BD.execSQL("create table t_Aplicaciones (Id_Aplicacion text not null,Id_Huerta text,Observaciones text,Id_TipoAplicacion text,Id_Presentacion text ,Id_Usuario text, F_Creacion text,Enviado text,Id_Receta text,Unidades_aplicadas text,c_codigo_eps text not null, primary key(Id_Aplicacion,c_codigo_eps))");
-        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text not null,Fecha text,c_codigo_pro text,Dosis text,Id_Usuario text, F_Creacion text,Enviado text,c_codigo_eps text not null)");
+        BD.execSQL("create table t_Aplicaciones_Det (Id_Aplicacion text not null,Fecha text,c_codigo_pro text,Dosis text,Id_Usuario text, F_Creacion text,Enviado text, Centro_Costos text,c_codigo_eps text not null)");
         BD.execSQL("create table t_Usuario_Empresa (Id_Usuario text ,c_codigo_eps text)");
         BD.execSQL("create table conempresa (c_codigo_eps text primary key,v_nombre_eps text,v_rfc_eps text)");
 
-        BD.execSQL("create table t_Almacen (Id_Almacen text not null,Nombre_Almacen text,Id_Huerta text,c_codigo_eps text NOT NULL,primary key(Id_Almacen,c_codigo_eps))");
+        BD.execSQL("create table t_Almacen (Id_Almacen text not null,Nombre_Almacen text,Id_Huerta text not null,c_codigo_eps text NOT NULL,primary key(Id_Almacen,Id_Huerta,c_codigo_eps))");
         BD.execSQL("create table t_Salidas (Id_Salida text not null,c_codigo_eps text not null,Id_Responsable text,Id_Almacen text, Id_Aplicacion text,Fecha text,Id_Usuario text, F_Creacion text,primary key(Id_Salida,c_codigo_eps))");
         BD.execSQL("create table t_Salidas_Det (Id_Salida text,c_codigo_pro text,Cantidad text, Id_Bloque text,Id_Usuario text, F_Creacion text,c_codigo_eps text,n_exiant_mov float)");
 

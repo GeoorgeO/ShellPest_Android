@@ -44,13 +44,13 @@ public class Adaptador_GridAplicacion extends BaseAdapter {
         TextView text_ApliProducto=(TextView)itemView.findViewById(R.id.text_ApliProducto);
         TextView text_ApliCantidad=(TextView)itemView.findViewById(R.id.text_ApliCantidad);
         TextView text_ApliUnidad=(TextView)itemView.findViewById(R.id.text_ApliUnidad);
-        TextView text_ApliPipadas=(TextView)itemView.findViewById(R.id.text_ApliPipadas);
+
 
         text_Fecha.setText(""+itemlist.get(i).getFecha());
         text_ApliProducto.setText(""+itemlist.get(i).getNombre_Producto());
         text_ApliCantidad.setText(""+itemlist.get(i).getCantidad());
         text_ApliUnidad.setText(""+itemlist.get(i).getNombre_Unidad());
-        text_ApliPipadas.setText(""+itemlist.get(i).getUnidades_aplicadas());
+
 
         return itemView;
     }

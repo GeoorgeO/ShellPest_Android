@@ -2,48 +2,47 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_ApliPrincipal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintVertical_weight="100"
+    android:layout_weight="10"
     tools:context=".aplicacion">
 
     <LinearLayout
+        android:id="@+id/ll_ApliGeneral"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:weightSum="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/ll_ApliEncabezado"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="80"
-            android:orientation="vertical"
-            android:weightSum="100">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7.2858"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView35"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight=".8"
+                    android:layout_weight="1"
                     android:text="Codigo:" />
 
                 <TextView
                     android:id="@+id/text_Codigo"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight=".3" />
+                    android:layout_weight="9" />
 
                 <ImageButton
                     android:id="@+id/imageButton6"
@@ -57,19 +56,16 @@
             <Spinner
                 android:id="@+id/sp_Empresa4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="7.1429" />
+                android:layout_height="wrap_content" />
 
             <Spinner
                 android:id="@+id/sp_huerta"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="7.1429" />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
-                android:layout_weight="7"
                 android:orientation="horizontal">
 
                 <TextView
@@ -92,39 +88,57 @@
             <Spinner
                 android:id="@+id/sp_Receta"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="7.1429" />
+                android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/sp_TipoAplicacion"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7.1429" />
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/sp_TipoAplicacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5" />
+
+                <TextView
+                    android:id="@+id/text_Aplicados"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Aplicados:" />
+
+                <EditText
+                    android:id="@+id/etn_Pipadas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:inputType="number"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/sp_Presentacion"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="7.1429" />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
-                android:layout_weight="7.1429"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView25"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".8"
+                    android:layout_weight="2"
                     android:text="Fecha:" />
 
                 <EditText
                     android:id="@+id/etd_Fecha"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".2"
+                    android:layout_weight="8"
                     android:ems="10"
                     android:inputType="date"
                     android:textSize="14sp" />
@@ -133,74 +147,80 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
-                android:layout_weight="7.1429"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView26"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".8"
+                    android:layout_weight="2"
                     android:text="Producto:" />
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_Productos"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".2"
+                    android:layout_weight="8"
                     android:hint="Teclee Nombre de producto"
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_UnidadPro"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:text="Unidad: " />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_UnidadPro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Unidad: " />
+
+                <TextView
+                    android:id="@+id/text_EtiCenCos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="CC: " />
+
+                <TextView
+                    android:id="@+id/text_CenCos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_weight="7.5"
+                    android:text="V"
+                    android:textAlignment="textEnd" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
-                android:layout_weight="7.1429"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView27"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".2"
+                    android:layout_weight="2"
                     android:text="Dosis:" />
 
                 <EditText
                     android:id="@+id/etn_ApliCantidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".3"
+                    android:layout_weight="8"
                     android:inputType="numberDecimal"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/text_Aplicados"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".25"
-                    android:text="Aplicados:" />
 
-                <EditText
-                    android:id="@+id/etn_Pipadas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".25"
-                    android:inputType="number"
-                    android:textSize="14sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/text_CantidadTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7.1429"
                 android:text="Cantidad de Producto Aplicado"
                 android:textAlignment="center" />
 
@@ -209,14 +229,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="7.1429"
                 android:onClick="Agregar"
                 android:text="Agregar" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
                 android:orientation="horizontal">
 
                 <TextView
@@ -260,15 +278,6 @@
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/textView32"
-                    android:layout_width="61dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/teal_700"
-                    android:text="Pipadas"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -277,8 +286,7 @@
         <ListView
             android:id="@+id/lv_GridAplicacion"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="20"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/item_grid_aplicacion" />
 
     </LinearLayout>

@@ -39,10 +39,5 @@
             android:layout_height="wrap_content"
             android:textAlignment="center" />
 
-        <TextView
-            android:id="@+id/text_ApliPipadas"
-            android:layout_width="61dp"
-            android:layout_height="wrap_content"
-            android:textAlignment="center" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

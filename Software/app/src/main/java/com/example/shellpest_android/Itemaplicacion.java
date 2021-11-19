@@ -1,18 +1,20 @@
 package com.example.shellpest_android;
 
 public class Itemaplicacion {
-    private String Fecha,Nombre_Producto,Dosis,Unidades_aplicadas,Nombre_Unidad;
-    private String cProducto,cUnidad,cEps;
+    private String Fecha,Nombre_Producto,Dosis,Nombre_Unidad;
+    private String cProducto,cUnidad,cEps,CC;
 
-    public Itemaplicacion(String Fecha, String cProducto,String Dosis,String Unidades_aplicadas,String cUnidad,String Nombre_Producto,String Nombre_Unidad,String cEps){
+    public Itemaplicacion(String Fecha, String cProducto,String Dosis,String cUnidad,String Nombre_Producto,String Nombre_Unidad,String cEps,String CC){
         this.Fecha=Fecha;
         this.Nombre_Producto=Nombre_Producto;
         this.Dosis=Dosis;
         this.Nombre_Unidad=Nombre_Unidad;
-        this.Unidades_aplicadas=Unidades_aplicadas;
+
         this.cProducto=cProducto;
         this.cUnidad=cUnidad;
         this.cEps=cEps;
+
+        this.CC=CC;
     }
 
     public String getFecha(){
@@ -35,8 +37,8 @@ public class Itemaplicacion {
         return Nombre_Unidad;
     }
 
-    public String  getUnidades_aplicadas(){
-        return Unidades_aplicadas;
+    public String getCC(){
+        return CC;
     }
 
     public String getcProducto(){

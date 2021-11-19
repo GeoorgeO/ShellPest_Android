@@ -1657,7 +1657,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
+                Cursor Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2]+"' and Id_Huerta='"+Datos[x][3]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1665,10 +1665,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro = new ContentValues();
 
                         registro.put("Nombre_Almacen",Datos[x][0]);
-                        registro.put("Id_Huerta",Datos[x][3]);
 
 
-                        int cantidad=BD.update("t_Almacen",registro,"Id_Almacen='"+Datos[x][2].toString()+"'",null);
+                        int cantidad=BD.update("t_Almacen",registro,"Id_Almacen='"+Datos[x][2].toString()+"' and Id_Huerta='"+Datos[x][3]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
 
                         if(cantidad>0){
                             //////Toast.makeText(MainActivity.this,"Se actualizo t_Monitoreo correctamente.",Toast.LENGTH_SHORT).show();

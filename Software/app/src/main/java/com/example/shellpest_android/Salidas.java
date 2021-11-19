@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -33,6 +34,9 @@ import java.util.Date;
 public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
     public String Usuario, Perfil, Huerta,cUnidad,FechaAnt,SID,SEPS;
+
+    int LineEmpresa,LineAlmacen,LineAplicacion;
+
     Spinner sp_Empresa, sp_Almacen, sp_Aplicacion;
     AutoCompleteTextView actv_Producto;
     EditText et_Fecha,etn_Cantidad;
@@ -43,10 +47,12 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     private AdaptadorSpinner CopiEmp, CopiAlm, CopiApli;
     private ArrayAdapter Adaptador_Arreglos;
     TextView tv_Responsable,tv_Unidad,tv_BloquesT;
-    Boolean SoloUnaHuerta;
+    Boolean SoloUnaHuerta,EsporAplica,EsporSalida;
     int secuencia;
     double existencia;
     Button btn_Agregar;
+
+    boolean seAbrio,clicLargo;
 
     Itemsalida Tabla;
     Adaptador_GridSalida Adapter;
@@ -57,6 +63,10 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
     boolean[] Diaseleccionado,Diasseleccionadoclean;
     ArrayList<Integer> Listadias,ListadiasClean = new ArrayList<>();
     String[] Arreglodias,ArreglosdiasClean;
+
+    boolean[] DiaseleccionadoDT,DiasseleccionadocleanDT;
+    ArrayList<Integer> ListadiasDT,ListadiasCleanDT = new ArrayList<>();
+    String[] ArreglodiasDT,ArreglosdiasCleanDT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -72,6 +82,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         Huerta = getIntent().getStringExtra("huerta2");
         SID = getIntent().getStringExtra("ID");
         SEPS = getIntent().getStringExtra("CEPS");
+        seAbrio = getIntent().getBooleanExtra("seAbrio",false);
 
         getSupportActionBar().hide();
 
@@ -87,6 +98,14 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         tv_Responsable=(TextView) findViewById(R.id.tv_Responsable);
         btn_Agregar=(Button) findViewById(R.id.btn_Agregar);
 
+        LineEmpresa=0;
+        LineAlmacen=0;
+        LineAplicacion=0;
+
+        EsporAplica=false;
+        EsporSalida=false;
+
+        clicLargo=false;
 
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
@@ -132,10 +151,39 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         sp_Empresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                cargaSpinnerHue();
-                CopiAlm = new AdaptadorSpinner(getApplicationContext(), ItemSPAlm);
-                // CopiHue=AdaptadorSpiner;
-                sp_Almacen.setAdapter(CopiAlm);
+                SoloUnaHuerta=false;
+                seAbrio=false;
+
+                if(ItemSPAlm==null){
+                    cargaSpinnerHue();
+                    CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+                    sp_Almacen.setAdapter(CopiAlm);
+
+                    if (sp_Almacen.getCount()==2){
+                        sp_Almacen.setSelection(1);
+                    }
+                }else{
+                    if((ItemSPAlm.size()<=1  ) || LineEmpresa!=i){
+                        cargaSpinnerHue();
+                        CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+                        sp_Almacen.setAdapter(CopiAlm);
+
+
+                        if(LineEmpresa>0){
+                            sp_Almacen.setSelection(LineEmpresa);
+                        }else{
+                            if (sp_Almacen.getCount()==2){
+                                sp_Almacen.setSelection(1);
+                            }
+                        }
+                    }
+                }
+
+                   /* cargaSpinnerHue();
+                    CopiAlm = new AdaptadorSpinner(getApplicationContext(), ItemSPAlm);
+                    // CopiHue=AdaptadorSpiner;
+                    sp_Almacen.setAdapter(CopiAlm);
+                    LineEmpresa=i;*/
             }
 
             @Override
@@ -147,7 +195,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         sp_Almacen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                seAbrio=false;
                 if ((SoloUnaHuerta==true && i == 0 ) || (SoloUnaHuerta==false && i>0)) {
                     // Notify the selected item text
 
@@ -155,15 +203,41 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     Diaseleccionado=Diasseleccionadoclean;
                     Listadias=ListadiasClean;
                     Listadias.clear();
+
+                    ArreglodiasDT=ArreglosdiasCleanDT;
+                    DiaseleccionadoDT=DiasseleccionadocleanDT;
+                    ListadiasDT=ListadiasCleanDT;
+                    ListadiasDT.clear();
+
                     tv_BloquesT.setText("V");
                     Huerta = CopiAlm.getItem(i).getTexto().substring(0, 2);
 
                     cargaSpinnerBloque();
 
 
-                    cargaSpinnerAplicacion();
+                    if(ItemSPApli==null){
+                        cargaSpinnerAplicacion();
+                        CopiApli = new AdaptadorSpinner(Salidas.this, ItemSPApli);
+                        sp_Aplicacion.setAdapter(CopiApli);
+
+                        if (sp_Aplicacion.getCount()==2){
+                            sp_Aplicacion.setSelection(1);
+                        }
+                    }else{
+                        if(ItemSPApli.size()<=1 || LineEmpresa!=i){
+                            cargaSpinnerAplicacion();
+                            CopiApli = new AdaptadorSpinner(Salidas.this, ItemSPApli);
+                            sp_Aplicacion.setAdapter(CopiApli);
+
+                            if (sp_Aplicacion.getCount()==2){
+                                sp_Aplicacion.setSelection(1);
+                            }
+                        }
+                    }
+
+                   /* cargaSpinnerAplicacion(i);
                     CopiApli = new AdaptadorSpinner(getApplicationContext(), ItemSPApli);
-                    sp_Aplicacion.setAdapter(CopiApli);
+                    sp_Aplicacion.setAdapter(CopiApli);*/
 
                     cargarProductos();
                     Adaptador_Arreglos=new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,ArrayProductos);
@@ -171,11 +245,16 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
                     CargarSalida(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
 
+                    if(!EsporSalida){
                     if (sp_Aplicacion.getCount()==2){
-                        sp_Aplicacion.setSelection(1);
+                            EsporAplica=true;
+                            sp_Aplicacion.setSelection(1);
+                        }
+
                     }
 
                 }
+                LineAlmacen=i;
             }
 
             @Override
@@ -187,7 +266,18 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         sp_Aplicacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                CargarGridxAplicacion(CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10),et_Fecha.getText().toString(),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+                seAbrio=false;
+                int aplicasel,empsel;
+                aplicasel=sp_Aplicacion.getSelectedItemPosition();
+                empsel=sp_Empresa.getSelectedItemPosition();
+                if(LineAplicacion==0 && lv_GridSalidas.getCount()==0 && SID==null){
+                    CargarGridxAplicacion(CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10),et_Fecha.getText().toString(),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+                    if(arrayArticulos.size()>0 ){
+                        GuardarxAplicacion();
+                    }
+                }
+
+                LineAplicacion=i;
             }
 
             @Override
@@ -205,15 +295,16 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
                 Cursor Renglon;
 
-               // String pro;
-               // pro="select P.c_codigo_uni,U.v_nombre_uni,Exi.Existencia from t_Productos as P left join t_existencias as exi on exi.c_codigo_pro=P.c_codigo_pro and exi.c_codigo_eps=p.c_codigo_eps left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' and exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"'";
-                Renglon=BD.rawQuery("select P.c_codigo_uni,U.v_nombre_uni,Texi.Existencia from t_Productos as P left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps left join (select exi.c_codigo_eps,exi.c_codigo_pro,exi.c_codigo_alm,exi.Existencia from  t_existencias as exi where exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"') as Texi on ltrim(rtrim(Texi.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and Texi.c_codigo_eps=p.c_codigo_eps  where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+                String pro;
+                pro="select P.c_codigo_uni,U.v_nombre_uni,Texi.Existencia from t_Productos as P left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps left join (select exi.c_codigo_eps,exi.c_codigo_pro,exi.c_codigo_alm,exi.Existencia from  t_existencias as exi where exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"') as Texi on ltrim(rtrim(Texi.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and Texi.c_codigo_eps=p.c_codigo_eps  where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' ";
+                Renglon=BD.rawQuery(pro,null);
                // Renglon=BD.rawQuery("select '000','LITROTE',exi.Existencia from  t_existencias as exi where exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' and ltrim(rtrim(c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"'",null);
                 if(Renglon.moveToFirst()){
 
                     do {
                         tv_Unidad.setText("Unidad: "+Renglon.getString(1) +" Existencia: "+Renglon.getDouble(2));
                         cUnidad=Renglon.getString(0);
+
                         existencia=Renglon.getDouble(2);
                     } while(Renglon.moveToNext());
 
@@ -236,12 +327,12 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (!String.valueOf(existencia).isEmpty() && etn_Cantidad.getText().toString().length()>0){
-                        if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
-                            Toast.makeText(Salidas.this, "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
-                            btn_Agregar.setEnabled(false);
-                }else{
-                    btn_Agregar.setEnabled(true);
-                }
+                    /*if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
+                        Toast.makeText(Salidas.this, "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
+                        btn_Agregar.setEnabled(false);
+                    }else{
+                        btn_Agregar.setEnabled(true);
+                    }*/
                 }else{
 
                 }
@@ -259,9 +350,91 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }
         });*/
 
+        lv_GridSalidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (clicLargo == false) {
+                    //ArreglodiasDT=ArreglosdiasCleanDT;
+                    DiaseleccionadoDT = DiasseleccionadocleanDT;
+                    ListadiasDT = ListadiasCleanDT;
+                    ListadiasDT.clear();
+
+                    int TrenglonGrid = i;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                            Salidas.this
+                    );
+                    builder.setTitle("Selecciona al menos un bloque");
+                    builder.setCancelable(false);
+                    builder.setMultiChoiceItems(ArreglodiasDT, DiaseleccionadoDT, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                            if (b) {
+                                ListadiasDT.add(i);
+                                Collections.sort(ListadiasDT);
+                            } else {
+                                ListadiasDT.remove(i);
+                            }
+                        }
+                    });
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            for (int j = 0; j < ListadiasDT.size(); j++) {
+                                stringBuilder.append(ArreglodiasDT[ListadiasDT.get(j)].substring(0, 4));
+                                if (j != ListadiasDT.size() - 1) {
+                                    stringBuilder.append(", ");
+                                }
+                            }
+                            String TCC;
+                            TCC=stringBuilder.toString();
+                            arrayArticulos.get(TrenglonGrid).setCentro_Costos(stringBuilder.toString());
+                            TCC=stringBuilder.toString();
+                            UpdateCentrosCosto(arrayArticulos.get(TrenglonGrid).getFecha(),arrayArticulos.get(TrenglonGrid).getcProducto().trim(),stringBuilder.toString());
+                            TCC=stringBuilder.toString();
+                            lv_GridSalidas.setAdapter(null);
+                            if (arrayArticulos.size() > 0) {
+                                Adapter = new Adaptador_GridSalida(getApplicationContext(), arrayArticulos);
+                                lv_GridSalidas.setAdapter(Adapter);
+                            } else {
+                                //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.setNeutralButton("Limpiar todo", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            for (int j = 0; j < DiaseleccionadoDT.length; j++) {
+                                DiaseleccionadoDT[j] = false;
+                                ListadiasDT.clear();
+                                arrayArticulos.get(TrenglonGrid).setCentro_Costos("");
+                                lv_GridSalidas.setAdapter(null);
+                                if (arrayArticulos.size() > 0) {
+                                    Adapter = new Adaptador_GridSalida(getApplicationContext(), arrayArticulos);
+                                    lv_GridSalidas.setAdapter(Adapter);
+                                } else {
+                                    //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+                clicLargo=false;
+            }
+        });
+
           lv_GridSalidas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                clicLargo=true;
+
                 AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Salidas.this);
                 dialogo1.setTitle("ELIMINAR REGISTRO SELECCIONADO");
                 dialogo1.setMessage("¿ Quieres eliminar el producto: "+arrayArticulos.get(i).getNombre_Producto()+" de la salida?");
@@ -279,24 +452,15 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                         int cantidad= BD.delete("t_Salidas_Det","Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_pro='"+arrayArticulos.get(i).getcProducto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getceps()+"'  ",null);
 
                         if(cantidad>0){
-                            ContentValues registro3 = new ContentValues();
+                            SumarExistencia(Double.parseDouble(arrayArticulos.get(i).getCantidad()),arrayArticulos.get(i).getcProducto().trim(),CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),arrayArticulos.get(i).getceps());
 
-                            registro3.put("Existencia", Double.parseDouble(arrayArticulos.get(i).getExistencia()) + Double.parseDouble(arrayArticulos.get(i).getCantidad()));
-
-                            int cantidad3=BD.update("t_existencias",registro3,"ltrim(rtrim(c_codigo_pro))='"+arrayArticulos.get(i).getcProducto().trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-
-                            if(cantidad3>0){
-                                //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
-                            }else{
-                                //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
-                            }
 
                             if (lv_GridSalidas.getCount()==1){
                                 int cantidad4= BD.delete("t_Salidas","Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
 
                             }
                         }else{
-                            Toast.makeText(Salidas.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Salidas.this,"Ocurrio un error al intentar eliminar el detalle de la salida, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                         BD.close();
                         Cargagrid(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
@@ -366,11 +530,31 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
           });
 
         if(SID!=null){
-
             CargarAplicacion();
             Cargagrid(SID,SEPS);
-        }
 
+        }
+    }
+
+    private void DescansoEnMilisegundos(int milisegundos){
+        CountDownTimer contadorbajotiempo=new CountDownTimer(milisegundos,1000) {
+            @Override
+            public void onTick(long l) {
+                int a;
+                a=1;
+                if((l/1000)>5){
+                    a++;
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(Salidas.this, "Ya.", Toast.LENGTH_SHORT).show();
+
+
+            }
+        }.start();
     }
 
     public void CargarAplicacion(){
@@ -378,77 +562,92 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
         Cursor Renglon;
-        Renglon=BD.rawQuery(" select A.Id_Salida,A.Id_Responsable,U.Nombre ,A.Id_Almacen ,A.Id_Aplicacion ,A.Fecha,Alm.Nombre_Almacen,A.c_codigo_eps, Emp.v_nombre_eps,AP.Fmin,AP.Fmax " +
+        Renglon=BD.rawQuery(" select distinct  A.Id_Salida,A.Id_Responsable,U.Nombre ,A.Id_Almacen ,A.Id_Aplicacion ,A.Fecha,Alm.Nombre_Almacen,A.c_codigo_eps, Emp.v_nombre_eps,AP.Fmin,AP.Fmax " +
                 "from t_Salidas as A " +
-                "inner join t_Almacen as Alm on Alm.Id_Almacen=A.Id_Almacen and A.c_codigo_eps=Alm.c_codigo_eps " +
-                "inner join UsuarioLogin as U on U.Id_Usuario=A.Id_Responsable  " +
-                "inner join conempresa as Emp on Emp.c_codigo_eps=A.c_codigo_eps  " +
-                "inner join (select AD.Id_Aplicacion,AD.c_Codigo_eps,Min(AD.Fecha) as Fmin,Max(AD.Fecha) as Fmax from  t_Aplicaciones_Det as AD group by AD.Id_Aplicacion,AD.c_Codigo_eps) as AP on Ap.Id_Aplicacion=A.Id_Aplicacion and Ap.c_codigo_eps=A.c_codigo_eps "+
+                "left join t_Almacen as Alm on Alm.Id_Almacen=A.Id_Almacen and A.c_codigo_eps=Alm.c_codigo_eps " +
+                "left join UsuarioLogin as U on U.Id_Usuario=A.Id_Responsable  " +
+                "left join conempresa as Emp on Emp.c_codigo_eps=A.c_codigo_eps  " +
+                "left join (select AD.Id_Aplicacion,AD.c_codigo_eps,Min(AD.Fecha) as Fmin,Max(AD.Fecha) as Fmax from  t_Aplicaciones_Det as AD group by AD.Id_Aplicacion,AD.c_codigo_eps) as AP on Ap.Id_Aplicacion=A.Id_Aplicacion and Ap.c_codigo_eps=A.c_codigo_eps "+
                 "where A.Id_Salida='"+SID+"' and A.c_codigo_eps='"+SEPS+"'",null);
         if(Renglon.moveToFirst()){
             do {
                 if (Renglon.getInt(0)>0){
-
-                    if(ItemSPAlm==null){
-                        if(ItemSPEmp!=null){
-
-                            cargaSpinnerHue();
-                            CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
-                            sp_Almacen.setAdapter(CopiAlm);
-
-                            cargaSpinnerAplicacion();
-                            CopiApli = new AdaptadorSpinner(Salidas.this, ItemSPApli);
-                            sp_Aplicacion.setAdapter(CopiApli);
-
-                            cargarProductos();
-                            Adaptador_Arreglos=new ArrayAdapter(Salidas.this, android.R.layout.simple_list_item_1,ArrayProductos);
-                            actv_Producto.setAdapter(Adaptador_Arreglos);
-                        }
-                    }
-
-
                     int item;
 
-                    item=0;
-                    for (int x=0; x<ItemSPEmp.size();x++){
-                        if( ItemSPEmp.get(x).getTexto().equals(Renglon.getString(7).trim()+" - "+Renglon.getString(8).trim())){
-                            item=x;
-                            break;
-                        }
-                    }
-                    if(item>0){
-                        sp_Empresa.setSelection(item);
-                    }
-
-                    et_Fecha.setText(Renglon.getString(5));
-
-                    item=0;
-                    if(ItemSPAlm!=null){
-                        for (int x=0; x<ItemSPAlm.size();x++){
-                            if( ItemSPAlm.get(x).getTexto().equals(Renglon.getString(3)+" - "+Renglon.getString(6))){
+                    if(sp_Empresa.getSelectedItemPosition()<2){
+                        item=0;
+                        for (int x=0; x<ItemSPEmp.size();x++){
+                            if( ItemSPEmp.get(x).getTexto().equals(Renglon.getString(7).trim()+" - "+Renglon.getString(8).trim())){
                                 item=x;
                                 break;
                             }
                         }
-                        sp_Almacen.setSelection(item);
+                        if(item>0){
+                            sp_Empresa.setSelection(item);
+                            LineEmpresa=item;
+                        }
+                    }
 
+                    if(ItemSPAlm==null){
+                        cargaSpinnerHue();
+                        CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+                        sp_Almacen.setAdapter(CopiAlm);
+                    }else{
+                        if (ItemSPAlm.size()<=1){
+                            cargaSpinnerHue();
+                            CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+                            sp_Almacen.setAdapter(CopiAlm);
+                        }
+                    }
+                    String THuerta;
+                    THuerta=Renglon.getString(3)+" - "+Renglon.getString(6);
+                    item=0;
+                    if(ItemSPAlm!=null) {
+                        for (int x = 0; x < ItemSPAlm.size(); x++) {
+                            THuerta = ItemSPAlm.get(x).getTexto();
+                            if (ItemSPAlm.get(x).getTexto().equals(Renglon.getString(3) + " - " + Renglon.getString(6))) {
+                                item = x;
+                                break;
+                            }
+                        }
+                        if (item > 0) {
+                            sp_Almacen.setSelection(item);
+                            LineAlmacen = item;
+                        }
+                    }
 
-
-                        item=0;
-                        for (int x=0; x<ItemSPApli.size();x++){
-                            if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(4)+" - "+Renglon.getString(9)+" al "+Renglon.getString(10))){
-                                item=x;
+                    if(ItemSPApli==null){
+                        cargaSpinnerAplicacion();
+                        CopiApli= new AdaptadorSpinner(Salidas.this, ItemSPApli);
+                        sp_Aplicacion.setAdapter(CopiApli);
+                    }else{
+                        if (ItemSPApli.size()<=1){
+                            cargaSpinnerAplicacion();
+                            CopiApli = new AdaptadorSpinner(Salidas.this, ItemSPApli);
+                            sp_Aplicacion.setAdapter(CopiApli);
+                        }
+                    }
+                    item=0;
+                    if(ItemSPApli!=null) {
+                        String TAplica;
+                        for (int x = 0; x < ItemSPApli.size(); x++) {
+                            TAplica=ItemSPApli.get(x).getTexto()+" == "+Renglon.getString(4) + " - " + Renglon.getString(9) + " al " + Renglon.getString(10);
+                            if (ItemSPApli.get(x).getTexto().equals(Renglon.getString(4) + " - " + Renglon.getString(9) + " al " + Renglon.getString(10))) {
+                                item = x;
                                 break;
                             }
                         }
                         if(item>0) {
                             sp_Aplicacion.setSelection(item);
+                            LineAplicacion=item;
                         }
-
-                        tv_Responsable.setText(Renglon.getString(2));
-
-
                     }
+
+                    et_Fecha.setText(Renglon.getString(5));
+
+                    tv_Responsable.setText(Renglon.getString(2));
+
+
                 }else{
 
                 }
@@ -556,9 +755,9 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         Cursor Renglon =BD.rawQuery("select P.v_nombre_pro, \n" +
                 "\tAD.Dosis,\n" +
-                "\tA.Unidades_aplicadas,U.v_nombre_uni , AD.c_codigo_pro,P.c_codigo_uni,Texi.Existencia \n" +
+                "\tA.Unidades_aplicadas,U.v_nombre_uni , AD.c_codigo_pro,P.c_codigo_uni,ifnull(Texi.Existencia,0) as  Existencia, AD.Centro_Costos\n" +
                 "from t_Aplicaciones_Det as AD \n" +
-                "left join t_Aplicaciones as A on A.Id_Aplicacion=AD.Id_Aplicacion and A.c_codigo_eps=c_codigo_eps=AD.c_codigo_eps \n" +
+                "left join t_Aplicaciones as A on A.Id_Aplicacion=AD.Id_Aplicacion and A.c_codigo_eps=AD.c_codigo_eps \n" +
                 "left join t_Productos as P on ltrim(rtrim(AD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and P.c_codigo_eps=AD.c_codigo_eps \n" +
                 "left join (select exi.c_codigo_pro,exi.c_codigo_eps,exi.c_codigo_alm,exi.Existencia from t_existencias as exi  where exi.c_codigo_eps='"+c_codigo_eps+"' and exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"')as Texi on ltrim(rtrim(AD.c_codigo_pro))=ltrim(rtrim(Texi.c_codigo_pro)) and Texi.c_codigo_eps=AD.c_codigo_eps \n" +
                 "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps \n" +
@@ -570,7 +769,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
                 do {
 
-                    Tabla=new Itemsalida(Fecha,Renglon.getString(0),String.valueOf(Renglon.getDouble(1) * Renglon.getDouble(2)),Renglon.getString(3),"",Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),c_codigo_eps);
+                    Tabla=new Itemsalida(Fecha,Renglon.getString(0),String.valueOf(Renglon.getDouble(1) * Renglon.getDouble(2)),Renglon.getString(3),Renglon.getString(7),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),c_codigo_eps);
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
@@ -596,21 +795,30 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         ItemSPApli=new ArrayList<>();
         ItemSPApli.add(new ItemDatoSpinner("Aplicacion"));
 
-        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
-        Cursor Renglon;
 
-        Renglon=BD.rawQuery("select A.Id_Aplicacion,Min(Fecha) as Fmin,Max(AD.Fecha) as Fmax from t_Aplicaciones as A inner join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion and A.c_codigo_eps=AD.c_codigo_eps inner join t_Huerta as Hue on Hue.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=Hue.c_codigo_eps inner join t_Almacen as Alm on Alm.Id_Huerta=Hue.Id_Huerta and Alm.c_codigo_eps=Hue.c_codigo_eps where Alm.Id_Almacen='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and A.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' group by A.Id_Aplicacion",null);
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+            Cursor Renglon;
 
-        if(Renglon.moveToFirst()){
-            do {
-                ItemSPApli.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" al "+Renglon.getString(2)));
-            } while(Renglon.moveToNext());
+            String consulta="select A.Id_Aplicacion ,Min(Fecha) as Fmin,Max(AD.Fecha) as Fmax " +
+                    "from t_Aplicaciones as A " +
+                    "left join  t_Almacen as Alm on ltrim(rtrim(Alm.Id_Huerta))=ltrim(rtrim(A.Id_Huerta)) and Alm.c_codigo_eps=A.c_codigo_eps " +
+                    "left join  t_Aplicaciones_Det as AD on ltrim(rtrim(AD.Id_Aplicacion))=ltrim(rtrim(A.Id_Aplicacion)) and A.c_codigo_eps=AD.c_codigo_eps " +
+                    //"left join  t_Huerta as Hue on ltrim(rtrim(Hue.Id_Huerta))=ltrim(rtrim(A.Id_Huerta)) and A.c_codigo_eps=Hue.c_codigo_eps " +
+                    "where ltrim(rtrim(Alm.Id_Almacen))='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and A.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
+                    "group by A.Id_Aplicacion, A.c_codigo_eps ";
 
-            BD.close();
-        }else{
-            BD.close();
-        }
+            Renglon=BD.rawQuery(consulta,null);
+
+            if(Renglon.moveToFirst()){
+                do {
+                    ItemSPApli.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" al "+Renglon.getString(2)));
+                } while(Renglon.moveToNext());
+
+                BD.close();
+            }else{
+                BD.close();
+            }
 
     }
 
@@ -646,10 +854,12 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             int tamanio;
             tamanio=0;
             Arreglodias=new String[Renglon.getCount()];
+            ArreglodiasDT=new String[Renglon.getCount()];
             do {
 
 
                     Arreglodias[tamanio] =Renglon.getString(0)+" - "+Renglon.getString(1);
+                    ArreglodiasDT[tamanio] =Renglon.getString(0)+" - "+Renglon.getString(1);
                 tamanio++;
 
             } while(Renglon.moveToNext());
@@ -657,11 +867,10 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             BD.close();
 
             Diaseleccionado=new boolean[Arreglodias.length];
+            DiaseleccionadoDT=new boolean[ArreglodiasDT.length];
         }else{
             BD.close();
         }
-
-
     }
 
     private void cargaSpinnerHue(){
@@ -675,8 +884,12 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         Cursor Renglon;
 
         if(Perfil.equals("001")){
+            if(sp_Empresa.getSelectedItemPosition()==0){
+                Renglon=BD.rawQuery("select Id_Almacen,Nombre_Almacen from t_Almacen where c_codigo_eps='"+SEPS+"' group by c_codigo_eps,Id_Almacen",null);
+            }else{
+                Renglon=BD.rawQuery("select Id_Almacen,Nombre_Almacen from t_Almacen where c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' group by c_codigo_eps,Id_Almacen",null);
+            }
 
-            Renglon=BD.rawQuery("select Id_Almacen,Nombre_Almacen from t_Almacen where c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
         }else{
             Renglon=BD.rawQuery("select Hue.Id_Almacen,Hue.Nombre_Almacen from t_Almacen as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta and Hue.c_codigo_eps=UH.c_codigo_eps where UH.Id_Usuario='"+Usuario+"' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
             //Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"'",null);
@@ -721,6 +934,58 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             BD.close();
         }
 
+    }
+
+    private void GuardarEcabezado(){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = simpleDateFormat.format(new Date());
+
+        Cursor Renglon;
+        Renglon=BD.rawQuery("select count(sal.Id_Salida) as Sihay from t_Salidas as sal where sal.Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and sal.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+        if(Renglon.moveToFirst()){
+            do {
+                if (Renglon.getInt(0)>0){
+
+                    ContentValues registro = new ContentValues();
+
+                    registro.put("c_codigo_eps", CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+                    registro.put("Id_Aplicacion",CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10));
+                    registro.put("Id_Usuario",Usuario);
+                    registro.put("F_Creacion",objSDF.format(date1));
+                    int cantidad=BD.update("t_Salidas",registro,"Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+
+                    if(cantidad>0){
+                        //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                    }else{
+                        //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    ContentValues registro= new ContentValues();
+                    registro.put("Id_Salida",et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
+                    registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+                    registro.put("Id_Responsable",Usuario);
+                    registro.put("Id_Almacen",CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
+                    registro.put("Id_Aplicacion",CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10));
+                    registro.put("Fecha",et_Fecha.getText().toString());
+                    registro.put("Id_Usuario",Usuario);
+                    registro.put("F_Creacion",objSDF.format(date1));
+                    BD.insert("t_Salidas",null,registro);
+                }
+
+            } while(Renglon.moveToNext());
+
+
+
+        }else{
+            Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void Agregar(View view) {
@@ -784,118 +1049,75 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             Mensaje="Falta seleccionar un bloque,Verifica por favor";
         }
 
-        if (!String.valueOf(existencia).isEmpty() && etn_Cantidad.getText().toString().length()>0){
+        /*if (!String.valueOf(existencia).isEmpty() && etn_Cantidad.getText().toString().length()>0){
             if(Double.parseDouble(etn_Cantidad.getText().toString())>existencia){
                 FaltoAlgo=true;
                 Mensaje= "NO SE PUEDE DAR SALIDA. La cantidad ingresada excede la existencia de producto.";
 
             }
-        }
+        }*/
 
-        if(String.valueOf(existencia).isEmpty()){
+        /*if(String.valueOf(existencia).isEmpty()){
             FaltoAlgo=true;
             Mensaje= "NO SE PUEDE DAR SALIDA. Existencia Nula.";
-        }
+        }*/
 
         if (!FaltoAlgo){
-            AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+            GuardarEcabezado();
 
-            Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
-            SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-            Date date1=objDate;
+            InsertarSalidaDet(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim(),Double.parseDouble(etn_Cantidad.getText().toString()),tv_BloquesT.getText().toString().trim(),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2),existencia,CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-            String currentTime = simpleDateFormat.format(new Date());
-
-            Cursor Renglon;
-            Renglon=BD.rawQuery("select count(sal.Id_Salida) as Sihay from t_Salidas as sal where sal.Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and sal.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-            if(Renglon.moveToFirst()){
-                do {
-                    if (Renglon.getInt(0)>0){
-
-                        ContentValues registro = new ContentValues();
-
-                        registro.put("c_codigo_eps", CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
-                        registro.put("Id_Aplicacion",CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
-                        registro.put("Id_Usuario",Usuario);
-                        registro.put("F_Creacion",objSDF.format(date1));
-                        int cantidad=BD.update("t_Salidas",registro,"Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-
-                        if(cantidad>0){
-                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
-                        }else{
-                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
-                        }
-                    }else{
-                        ContentValues registro= new ContentValues();
-                        registro.put("Id_Salida",et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
-                        registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
-                        registro.put("Id_Responsable",Usuario);
-                        registro.put("Id_Almacen",CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2));
-                        registro.put("Id_Aplicacion",CopiApli.getItem(sp_Aplicacion.getSelectedItemPosition()).getTexto().substring(0,10));
-                        registro.put("Fecha",et_Fecha.getText().toString());
-                        registro.put("Id_Usuario",Usuario);
-                        registro.put("F_Creacion",objSDF.format(date1));
-                        BD.insert("t_Salidas",null,registro);
-                    }
-
-                } while(Renglon.moveToNext());
-
-
-
-            }else{
-                Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
-            }
-
-
-            Renglon =BD.rawQuery("select count(Id_Salida) " +
-                    "from t_Salidas_Det " +
-                    "where Id_Salida='"+et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
-                    "and ltrim(rtrim(c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
-
-            if(Renglon.moveToFirst()){
-                if(Renglon.getInt(0)>0){
-                    Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
-                }else{
-
-                    ContentValues registro2= new ContentValues();
-                    registro2.put("Id_Salida",et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)); //objSDF.format(date1)
-                    registro2.put("c_codigo_pro",actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim());
-                    registro2.put("Cantidad",etn_Cantidad.getText().toString());
-                    registro2.put("Id_Bloque",tv_BloquesT.getText().toString().trim());
-                    registro2.put("Id_Usuario",Usuario);
-                    registro2.put("F_Creacion",objSDF.format(date1));
-                    registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
-                    registro2.put("n_exiant_mov",existencia);
-                    long cantidad=BD.insert("t_Salidas_Det",null,registro2);
-                    if(cantidad>0){
-                        ContentValues registro3 = new ContentValues();
-
-                        registro3.put("Existencia", existencia - Double.parseDouble(etn_Cantidad.getText().toString()));
-
-                        int cantidad3=BD.update("t_existencias",registro3,"ltrim(rtrim(c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' and c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-
-                        if(cantidad3>0){
-                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
-                        }else{
-                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
-                        }
-                    }else{
-                        //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }else{
-                Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
-            }
-
-
-
-            BD.close();
 
             LimpiarDetalle();
             Cargagrid(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+        }else{
+            Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void GuardarxAplicacion(){
+        boolean FaltoAlgo;
+        FaltoAlgo = false;
+        String Mensaje;
+        Mensaje = "";
+
+        if (sp_Empresa.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una empresa,Verifica por favor";
+        }
+        if (sp_Almacen.getSelectedItemPosition() > 0 || SoloUnaHuerta==true) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar un almacen,Verifica por favor";
+        }
+        if (sp_Aplicacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una aplicacion,Verifica por favor";
+        }
+
+        if (!FaltoAlgo){
+            GuardarEcabezado();
+
+            for(int i=0;i<arrayArticulos.size();i++) {
+
+                if (arrayArticulos.get(i).getcProducto().trim().length() > 0) {
+                    InsertarSalidaDet(et_Fecha.getText().toString().substring(6)+et_Fecha.getText().toString().substring(3,5)+et_Fecha.getText().toString().substring(0,2)+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),arrayArticulos.get(i).getcProducto().trim(),Double.parseDouble(arrayArticulos.get(i).getCantidad()),arrayArticulos.get(i).getCentro_Costos(),arrayArticulos.get(i).getceps(),Double.parseDouble(arrayArticulos.get(i).getExistencia()),CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0, 2));
+
+
+                    int almsel;
+                    almsel=sp_Almacen.getSelectedItemPosition();
+                    if(sp_Almacen.getSelectedItemPosition()>1) {
+                        Cargagrid(et_Fecha.getText().toString().substring(6) + et_Fecha.getText().toString().substring(3, 5) + et_Fecha.getText().toString().substring(0, 2) + CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0, 2), CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0, 2));
+                    }
+                }
+            }
+
+
         }else{
             Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
         }
@@ -909,7 +1131,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
         startActivity(intento);
-        finish();
+       finish();
     }
 
     private void CargarSalida(String Id,String c_codigo_eps){
@@ -934,9 +1156,9 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 "TAD.Fmax " +
                 "from t_Salidas as S " +
                 "inner join conempresa as E on E.c_codigo_eps=S.c_codigo_eps " +
-                "inner join (select Min(AD.Fecha) as Fmin,Max(AD.Fecha) as Fmax, AD.Id_Aplicacion from t_Aplicaciones_Det as AD group by AD.Id_Aplicacion) as TAD on TAD.Id_Aplicacion=S.Id_Aplicacion "+
+                "inner join (select Min(AD.Fecha) as Fmin,Max(AD.Fecha) as Fmax, AD.Id_Aplicacion,AD.c_codigo_eps from t_Aplicaciones_Det as AD group by AD.Id_Aplicacion, AD.c_codigo_eps) as TAD on TAD.Id_Aplicacion=S.Id_Aplicacion and TAD.c_codigo_eps=S.c_codigo_eps "+
                 "inner join UsuarioLogin as U on U.Id_Usuario=S.Id_Responsable "+
-                "inner join t_Almacen as A on A.Id_Almacen=S.Id_Almacen "+
+                "inner join t_Almacen as A on A.Id_Almacen=S.Id_Almacen and A.c_codigo_eps=S.c_codigo_eps "+
                 "where Id_Salida='"+Id+"' and S.c_codigo_eps='"+c_codigo_eps+"'",null);
 
         if(Renglon.moveToFirst()) {
@@ -945,25 +1167,33 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             if (Renglon.moveToFirst()) {
 
                 do {
-
+                    EsporSalida=true;
                     int item;
-                    item=0;
-                    for (int x=0; x<ItemSPEmp.size();x++){
-                        if( ItemSPEmp.get(x).getTexto().equals(Renglon.getString(0)+" - "+Renglon.getString(1))){
-                            item=x;
-                            break;
+                    if(EsporAplica==false){
+
+                        item=0;
+                        for (int x=0; x<ItemSPEmp.size();x++){
+                            if( ItemSPEmp.get(x).getTexto().equals(Renglon.getString(0)+" - "+Renglon.getString(1))){
+                                item=x;
+                                break;
+                            }
                         }
+                        sp_Empresa.setSelection(item);
+
+
+                        item=0;
+                        for (int x=0; x<ItemSPAlm.size();x++){
+                            String TAlmacen;
+                            TAlmacen= ItemSPAlm.get(x).getTexto();
+                            if( ItemSPAlm.get(x).getTexto().equals(Renglon.getString(4)+" - "+Renglon.getString(5))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        sp_Almacen.setSelection(item);
                     }
-                    sp_Empresa.setSelection(item);
                     tv_Responsable.setText("Responsable: "+Renglon.getString(3));
-                    item=0;
-                    for (int x=0; x<ItemSPAlm.size();x++){
-                        if( ItemSPAlm.get(x).getTexto().equals(Renglon.getString(4)+" - "+Renglon.getString(5))){
-                            item=x;
-                            break;
-                        }
-                    }
-                    sp_Almacen.setSelection(item);
+
                     item=0;
                     for (int x=0; x<ItemSPApli.size();x++){
                         if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(6)+" - "+Renglon.getString(8)+" al "+Renglon.getString(9))){
@@ -994,51 +1224,222 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         lv_GridSalidas.setAdapter(null);
         arrayArticulos.clear();
 
-        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-
-        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
-        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-        Date date1=objDate;
-
-        // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
-
-        Cursor Renglon =BD.rawQuery("select SD.Id_Salida, \n" +
-                "\tSD.c_codigo_pro,\n" +
-                "\tSD.Cantidad,\n" +
-                "\tSD.Id_Bloque, \n" +
-                "\tP.c_codigo_uni, \n" +
-                "\tP.v_nombre_pro, \n" +
-                "\tU.v_nombre_uni,Texi.Existencia,SD.c_codigo_eps \n" +
-                "from t_Salidas_Det as SD \n" +
-                "left join t_Productos as P on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and P.c_codigo_eps=SD.c_codigo_eps \n" +
-                "left join (select exi.c_codigo_pro,exi.c_codigo_eps,exi.c_codigo_alm,exi.Existencia from t_existencias as exi  where exi.c_codigo_eps='"+c_codigo_eps+"' and exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"')as Texi on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(Texi.c_codigo_pro)) and Texi.c_codigo_eps=SD.c_codigo_eps \n" +
-                "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps \n" +
-                "where SD.Id_Salida='"+Id+"' and SD.c_codigo_eps='"+c_codigo_eps+"'",null);
-
-        if(Renglon.moveToFirst()) {
-            /*et_Usuario.setText(Renglon.getString(0));
-            et_Password.setText(Renglon.getString(1));*/
-            if (Renglon.moveToFirst()) {
-
-                do {
-
-                    Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4),Renglon.getString(7),Renglon.getString(8));
-                    arrayArticulos.add(Tabla);
-                } while (Renglon.moveToNext());
-
-
-                BD.close();
-            } else {
-                Toast.makeText(this, "No hay datos en t_Aplicaciones guardados", Toast.LENGTH_SHORT).show();
-                BD.close();
+        if(ItemSPAlm==null){
+            cargaSpinnerHue();
+            CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+            sp_Almacen.setAdapter(CopiAlm);
+        }else{
+            if (ItemSPAlm.size()<=1){
+                cargaSpinnerHue();
+                CopiAlm = new AdaptadorSpinner(Salidas.this, ItemSPAlm);
+                sp_Almacen.setAdapter(CopiAlm);
             }
         }
+
+        if(LineAlmacen>0){
+            AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+            Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+            SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+            Date date1=objDate;
+
+            // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
+
+            Cursor Renglon =BD.rawQuery("select SD.Id_Salida, \n" +
+                    "\tSD.c_codigo_pro,\n" +
+                    "\tSD.Cantidad,\n" +
+                    "\tSD.Id_Bloque, \n" +
+                    "\tP.c_codigo_uni, \n" +
+                    "\tP.v_nombre_pro, \n" +
+                    "\tU.v_nombre_uni,Texi.Existencia,SD.c_codigo_eps \n" +
+                    "from t_Salidas_Det as SD \n" +
+                    "left join t_Productos as P on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and P.c_codigo_eps=SD.c_codigo_eps \n" +
+                    "left join (select exi.c_codigo_pro,exi.c_codigo_eps,exi.c_codigo_alm,exi.Existencia from t_existencias as exi  where exi.c_codigo_eps='"+c_codigo_eps+"' and exi.c_codigo_alm='"+CopiAlm.getItem(LineAlmacen).getTexto().substring(0,2)+"')as Texi on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(Texi.c_codigo_pro)) and Texi.c_codigo_eps=SD.c_codigo_eps \n" +
+                    "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps \n" +
+                    "where SD.Id_Salida='"+Id+"' and SD.c_codigo_eps='"+c_codigo_eps+"'",null);
+
+            if(Renglon.moveToFirst()) {
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+                if (Renglon.moveToFirst()) {
+
+                    do {
+
+                        Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4),Renglon.getString(7),Renglon.getString(8));
+                        arrayArticulos.add(Tabla);
+                    } while (Renglon.moveToNext());
+
+                    BD.close();
+                } else {
+                    Toast.makeText(this, "No hay datos en t_Aplicaciones guardados", Toast.LENGTH_SHORT).show();
+                    BD.close();
+                }
+            }
+        }
+
         if(arrayArticulos.size()>0){
             Adapter=new Adaptador_GridSalida(getApplicationContext(),arrayArticulos);
             lv_GridSalidas.setAdapter(Adapter);
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean SumarExistencia(Double Cantidad,String Producto,String Almacen,String Empresa){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
+        Renglon =BD.rawQuery("select Existencia " +
+                "from t_existencias " +
+                "where c_codigo_eps='"+Empresa+"' " +
+                "and ltrim(rtrim(c_codigo_pro))='"+Producto+"' and c_codigo_alm='"+Almacen+"' " ,null);
+
+        if(Renglon.moveToFirst()) {
+            if (Renglon.getInt(0) > 0) {
+                existencia=Renglon.getDouble(0);
+
+            }
+        }else {
+            InsertarProAExiAlm(Producto,Almacen,Empresa);
+        }
+        ContentValues registro3 = new ContentValues();
+
+        registro3.put("Existencia", existencia +  Cantidad);
+
+        int cantidad3=BD.update("t_existencias",registro3,"ltrim(rtrim(c_codigo_pro))='"+Producto.trim()+"' and c_codigo_eps='"+Empresa+"' and c_codigo_alm='"+Almacen+"'",null);
+
+        if(cantidad3>0){
+            BD.close();
+            return true;
+        }else{
+            BD.close();
+            return false;
+        }
+
+    }
+    private boolean RestarExistencia(Double Cantidad,String Producto,String Almacen,String Empresa){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
+        Renglon =BD.rawQuery("select Existencia " +
+                "from t_existencias " +
+                "where c_codigo_eps='"+Empresa+"' " +
+                "and ltrim(rtrim(c_codigo_pro))='"+Producto+"' and c_codigo_alm='"+Almacen+"' " ,null);
+
+        if(Renglon.moveToFirst()) {
+            if (Renglon.getInt(0) > 0) {
+                existencia=Renglon.getDouble(0);
+
+            }
+        }else {
+            InsertarProAExiAlm(Producto,Almacen,Empresa);
+        }
+        ContentValues registro3 = new ContentValues();
+
+        registro3.put("Existencia", existencia - Cantidad);
+
+        int cantidad3=BD.update("t_existencias",registro3,"ltrim(rtrim(c_codigo_pro))='"+Producto.trim()+"' and c_codigo_eps='"+Empresa+"' and c_codigo_alm='"+Almacen+"'",null);
+
+        if(cantidad3>0){
+            BD.close();
+            return true;
+        }else{
+            BD.close();
+            return false;
+        }
+    }
+
+    private boolean InsertarProAExiAlm(String Producto,String Alamcen,String Empresa){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        ContentValues registro2= new ContentValues();
+        registro2.put("c_codigo_eps",Empresa); //objSDF.format(date1)
+        registro2.put("c_codigo_pro",Producto.trim());
+        registro2.put("c_codigo_alm",Alamcen);
+        registro2.put("Existencia",0);
+
+        long cantidad=BD.insert("t_existencias",null,registro2);
+        if(cantidad>0){
+            BD.close();
+            return true;
+        }else{
+            BD.close();
+            return false;
+        }
+
+    }
+
+    private boolean InsertarSalidaDet(String Salida,String Producto,Double Cantidad,String CC,String Empresa,Double Existencia, String Almacen){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        Renglon =BD.rawQuery("select count(Id_Salida) " +
+                "from t_Salidas_Det " +
+                "where Id_Salida='"+Salida+"' " +
+                "and ltrim(rtrim(c_codigo_pro))='"+Producto.trim()+"' and c_codigo_eps='"+ Empresa+"' " ,null);
+
+        if(Renglon.moveToFirst()){
+            if(Renglon.getInt(0)>0){
+                Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
+                BD.close();
+                return true;
+            }else{
+                //if (Double.parseDouble(arrayArticulos.get(i).getExistencia())>0 && Double.parseDouble(arrayArticulos.get(i).getCantidad())>0){
+                //if(Double.parseDouble(arrayArticulos.get(i).getCantidad())<=Double.parseDouble(arrayArticulos.get(i).getExistencia())){
+                ContentValues registro2= new ContentValues();
+                registro2.put("Id_Salida",Salida); //objSDF.format(date1)
+                registro2.put("c_codigo_pro",Producto.trim());
+                registro2.put("Cantidad",Cantidad);
+                registro2.put("Id_Bloque",CC);
+                registro2.put("Id_Usuario",Usuario);
+                registro2.put("F_Creacion",objSDF.format(date1));
+                registro2.put("c_codigo_eps",Empresa);
+                registro2.put("n_exiant_mov",Existencia);
+                long cantidad=BD.insert("t_Salidas_Det",null,registro2);
+                if(cantidad>0){
+                    BD.close();
+                    return RestarExistencia(Cantidad,Producto,Almacen,Empresa);
+
+                }else{
+                    BD.close();
+                    return false;
+                }
+
+            }
+
+        }else{
+            BD.close();
+            Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean UpdateCentrosCosto(String Salida,String Producto,String CC){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        ContentValues registro2= new ContentValues();
+        registro2.put("Id_Bloque",CC); //objSDF.format(date1)
+
+        long cantidad=BD.update("t_Salidas_Det",registro2,"Id_Salida='"+Salida+"' and c_codigo_pro='"+Producto+"' ",null);
+        if(cantidad>0){
+            BD.close();
+            return true;
+        }else{
+            BD.close();
+            return false;
         }
     }
 

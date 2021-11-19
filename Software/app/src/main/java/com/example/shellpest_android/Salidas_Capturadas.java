@@ -61,6 +61,7 @@ public class Salidas_Capturadas extends AppCompatActivity {
                     intento.putExtra("huerta2", Huerta);
                     intento.putExtra("ID",arrayArticulos.get(i).getId() );
                     intento.putExtra("CEPS",arrayArticulos.get(i).getcEPS() );
+                    intento.putExtra("seAbrio",true );
 
                     //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
                     startActivity(intento);
@@ -86,7 +87,7 @@ public class Salidas_Capturadas extends AppCompatActivity {
         //Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
         String Consulta;
         if (Perfil.equals("001")){
-            Consulta="select A.Id_Salida, \n" +
+            Consulta="select distinct A.Id_Salida, \n" +
                     "\t H.Nombre_Almacen,\n" +
                     "\t Fecha , \n" +
                     "\t A.Id_Almacen,A.c_codigo_eps \n" +

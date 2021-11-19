@@ -52,4 +52,8 @@ public class Itemsalida {
 
     public String getceps(){return c_codigo_eps;}
 
+    public void  setCentro_Costos(String Centro_Costos){
+         this.Centro_Costos=Centro_Costos;
+    }
+
 }
