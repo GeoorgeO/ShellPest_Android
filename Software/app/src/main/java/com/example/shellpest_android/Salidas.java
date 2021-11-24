@@ -296,16 +296,21 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 Cursor Renglon;
 
                 String pro;
-                pro="select P.c_codigo_uni,U.v_nombre_uni,Texi.Existencia from t_Productos as P left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps left join (select exi.c_codigo_eps,exi.c_codigo_pro,exi.c_codigo_alm,exi.Existencia from  t_existencias as exi where exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"') as Texi on ltrim(rtrim(Texi.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and Texi.c_codigo_eps=p.c_codigo_eps  where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' ";
+                pro="select P.c_codigo_uni,U.v_nombre_uni " +
+                        "from t_Productos as P " +
+                        "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps    " +
+                        "where ltrim(rtrim(P.c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"' " +
+                        "and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' ";
                 Renglon=BD.rawQuery(pro,null);
                // Renglon=BD.rawQuery("select '000','LITROTE',exi.Existencia from  t_existencias as exi where exi.c_codigo_alm='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' and ltrim(rtrim(c_codigo_pro))='"+actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim()+"'",null);
                 if(Renglon.moveToFirst()){
 
                     do {
-                        tv_Unidad.setText("Unidad: "+Renglon.getString(1) +" Existencia: "+Renglon.getDouble(2));
+                        existencia=SelectExistencias(CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2),actv_Producto.getText().toString().substring(actv_Producto.getText().toString().indexOf("|")+2).trim(),CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2));
+                        tv_Unidad.setText("Unidad: "+Renglon.getString(1) +" Existencia: "+existencia);
                         cUnidad=Renglon.getString(0);
 
-                        existencia=Renglon.getDouble(2);
+
                     } while(Renglon.moveToNext());
 
                     BD.close();
@@ -768,7 +773,9 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             if (Renglon.moveToFirst()) {
 
                 do {
-
+                    String Existencia,producto;
+                    Existencia=Renglon.getString(6);
+                    producto=Renglon.getString(4);
                     Tabla=new Itemsalida(Fecha,Renglon.getString(0),String.valueOf(Renglon.getDouble(1) * Renglon.getDouble(2)),Renglon.getString(3),Renglon.getString(7),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),c_codigo_eps);
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
@@ -848,7 +855,12 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select B.Id_Bloque,B.Nombre_Bloque from t_Almacen as A inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and H.c_codigo_eps=A.c_codigo_eps inner join t_Bloque as B on B.Id_Huerta=H.Id_Huerta and B.c_codigo_eps=H.c_codigo_eps where A.Id_Almacen='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' and A.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+        Renglon=BD.rawQuery("select B.Id_Bloque,B.Nombre_Bloque " +
+                "from t_Almacen as A " +
+                "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and H.c_codigo_eps=A.c_codigo_eps " +
+                "inner join t_Bloque as B on B.Id_Huerta=H.Id_Huerta and B.c_codigo_eps=H.c_codigo_eps " +
+                "where A.Id_Almacen='"+CopiAlm.getItem(sp_Almacen.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
+                "and A.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' and B.TipoBloque='B'",null);
 
         if(Renglon.moveToFirst()){
             int tamanio;
@@ -889,9 +901,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }else{
                 Renglon=BD.rawQuery("select Id_Almacen,Nombre_Almacen from t_Almacen where c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"' group by c_codigo_eps,Id_Almacen",null);
             }
-
         }else{
-            Renglon=BD.rawQuery("select Hue.Id_Almacen,Hue.Nombre_Almacen from t_Almacen as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta and Hue.c_codigo_eps=UH.c_codigo_eps where UH.Id_Usuario='"+Usuario+"' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+            Renglon=BD.rawQuery("select distinct Hue.Id_Almacen,Hue.Nombre_Almacen from t_Almacen as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta and Hue.c_codigo_eps=UH.c_codigo_eps where UH.Id_Usuario='"+Usuario+"' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
             //Renglon=BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and Id_Huerta='"+Huerta+"'",null);
             //sp_Hue.setEnabled(false);
         }
@@ -1252,10 +1263,9 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                     "\tSD.Id_Bloque, \n" +
                     "\tP.c_codigo_uni, \n" +
                     "\tP.v_nombre_pro, \n" +
-                    "\tU.v_nombre_uni,Texi.Existencia,SD.c_codigo_eps \n" +
+                    "\tU.v_nombre_uni,SD.c_codigo_eps \n" +
                     "from t_Salidas_Det as SD \n" +
                     "left join t_Productos as P on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and P.c_codigo_eps=SD.c_codigo_eps \n" +
-                    "left join (select exi.c_codigo_pro,exi.c_codigo_eps,exi.c_codigo_alm,exi.Existencia from t_existencias as exi  where exi.c_codigo_eps='"+c_codigo_eps+"' and exi.c_codigo_alm='"+CopiAlm.getItem(LineAlmacen).getTexto().substring(0,2)+"')as Texi on ltrim(rtrim(SD.c_codigo_pro))=ltrim(rtrim(Texi.c_codigo_pro)) and Texi.c_codigo_eps=SD.c_codigo_eps \n" +
                     "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps \n" +
                     "where SD.Id_Salida='"+Id+"' and SD.c_codigo_eps='"+c_codigo_eps+"'",null);
 
@@ -1266,7 +1276,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
                     do {
 
-                        Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4),Renglon.getString(7),Renglon.getString(8));
+                        Tabla=new Itemsalida(Renglon.getString(0),Renglon.getString(5),Renglon.getString(2),Renglon.getString(6),Renglon.getString(3),Renglon.getString(1),Renglon.getString(4),String.valueOf(SelectExistencias(CopiAlm.getItem(LineAlmacen).getTexto().substring(0,2),Renglon.getString(1),Renglon.getString(8))),Renglon.getString(7));
                         arrayArticulos.add(Tabla);
                     } while (Renglon.moveToNext());
 
@@ -1290,7 +1300,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
 
-        Cursor Renglon;
+        existencia=SelectExistencias(Almacen,Producto,Empresa);
+        /*Cursor Renglon;
 
         Renglon =BD.rawQuery("select Existencia " +
                 "from t_existencias " +
@@ -1304,7 +1315,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }
         }else {
             InsertarProAExiAlm(Producto,Almacen,Empresa);
-        }
+        }*/
         ContentValues registro3 = new ContentValues();
 
         registro3.put("Existencia", existencia +  Cantidad);
@@ -1324,7 +1335,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
 
-        Cursor Renglon;
+        existencia=SelectExistencias(Almacen,Producto,Empresa);
+       /* Cursor Renglon;
 
         Renglon =BD.rawQuery("select Existencia " +
                 "from t_existencias " +
@@ -1338,7 +1350,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
             }
         }else {
             InsertarProAExiAlm(Producto,Almacen,Empresa);
-        }
+        }*/
         ContentValues registro3 = new ContentValues();
 
         registro3.put("Existencia", existencia - Cantidad);
@@ -1392,7 +1404,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         if(Renglon.moveToFirst()){
             if(Renglon.getInt(0)>0){
-                Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Ya se encuentra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
                 BD.close();
                 return true;
             }else{
@@ -1407,8 +1419,8 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
                 registro2.put("F_Creacion",objSDF.format(date1));
                 registro2.put("c_codigo_eps",Empresa);
                 registro2.put("n_exiant_mov",Existencia);
-                long cantidad=BD.insert("t_Salidas_Det",null,registro2);
-                if(cantidad>0){
+                long Temcantidad=BD.insert("t_Salidas_Det",null,registro2);
+                if(Temcantidad>0){
                     BD.close();
                     return RestarExistencia(Cantidad,Producto,Almacen,Empresa);
 
@@ -1440,6 +1452,31 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         }else{
             BD.close();
             return false;
+        }
+    }
+
+    private double SelectExistencias(String Almacen,String Producto,String Empresa){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Cursor Renglon;
+
+        Renglon =BD.rawQuery("select Existencia " +
+                "from t_existencias " +
+                "where c_codigo_eps='"+Empresa+"' " +
+                "and ltrim(rtrim(c_codigo_pro))='"+Producto+"' and c_codigo_alm='"+Almacen+"' " ,null);
+
+        if(Renglon.moveToFirst()) {
+            BD.close();
+                return Renglon.getDouble(0);
+        }else {
+            if (InsertarProAExiAlm(Producto,Almacen,Empresa)){
+                BD.close();
+                return 0;
+            }else{
+                BD.close();
+                return 0;
+            }
         }
     }
 

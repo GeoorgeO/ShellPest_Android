@@ -1186,7 +1186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             registro.put("Id_Huerta",Datos[x][1]);
                             registro.put("Nombre_Bloque",Datos[x][2]);
-
+                            registro.put("TipoBloque",Datos[x][8]);
                             int cantidad=BD.update("t_Bloque",registro,"Id_Bloque='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
@@ -1200,6 +1200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             registro.put("Id_Huerta",Datos[x][1]);
                             registro.put("Nombre_Bloque",Datos[x][2]);
                             registro.put("c_codigo_eps",Datos[x][7]);
+                            registro.put("TipoBloque",Datos[x][8]);
                             BD.insert("t_Bloque",null,registro);
                         }
                         BD.close();

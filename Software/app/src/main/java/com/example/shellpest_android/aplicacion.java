@@ -268,20 +268,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     }
                 }
 
-                if(ItemSPRec==null){
-                    cargaSpinnerRecetas();
-                    CopiRec = new AdaptadorSpinner(aplicacion.this, ItemSPRec);
-                    sp_Receta.setAdapter(CopiRec);
-                }else{
-                    if(ItemSPRec.size()<=1 || LineEmpresa!=i){
-                        cargaSpinnerRecetas();
-                        CopiRec = new AdaptadorSpinner(aplicacion.this, ItemSPRec);
-                        sp_Receta.setAdapter(CopiRec);
-                    }
-                    if(LineReceta>0){
-                        sp_Receta.setSelection(LineReceta);
-                    }
-                }
+
 
 
 
@@ -410,6 +397,22 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 Listadias.clear();
 
                 cargaSpinnerBloque();
+
+                if(ItemSPRec==null){
+                    cargaSpinnerRecetas();
+                    CopiRec = new AdaptadorSpinner(aplicacion.this, ItemSPRec);
+                    sp_Receta.setAdapter(CopiRec);
+                }else{
+                    if(ItemSPRec.size()<=1 || LineEmpresa!=i){
+                        cargaSpinnerRecetas();
+                        CopiRec = new AdaptadorSpinner(aplicacion.this, ItemSPRec);
+                        sp_Receta.setAdapter(CopiRec);
+                    }
+                    if(LineReceta>0){
+                        sp_Receta.setSelection(LineReceta);
+                    }
+                }
+
                 LineHuerta=i;
             }
 
@@ -656,7 +659,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 "from  t_Huerta as H  " +
                 "inner join t_Bloque as B on B.Id_Huerta=H.Id_Huerta and B.c_codigo_eps=H.c_codigo_eps " +
                 "where H.Id_Huerta='"+Huerta+"' " +
-                "and H.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                "and H.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and B.TipoBloque='B'",null);
 
         if(Renglon.moveToFirst()){
             int tamanio;
@@ -738,9 +741,9 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
-                if(SG){
+               /* if(SG){
                     Toast.makeText(this, "Algunos productos de la receta no estan en existencia en tu almacen, favor de notificar al administrador de recetas, los productos son los que estan en codigo", Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 if(arrayArticulos.size()>0){
                     if(SGC!=arrayArticulos.size())
                     GuardaDeReceta();
@@ -853,7 +856,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public void onFinish() {
-                Toast.makeText(getApplicationContext(), "Se quitaron los productos que no tienen existencia.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Se quitaron los productos que no tienen existencia.", Toast.LENGTH_SHORT).show();
                 Cargagrid(Id,c_codigo_eps);
             }
         }.start();
@@ -1524,7 +1527,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from t_Receta as R where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from t_Receta as R where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and R.Id_Huerta='"+Huerta+"' ",null);
 
         if (Renglon.moveToFirst()) {
             do {

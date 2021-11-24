@@ -479,7 +479,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
-                                "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                                "and Id_Deteccion='' "+ //'"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
                     }
@@ -490,7 +490,13 @@ public class activity_Monitoreo extends AppCompatActivity {
                         Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
                     }else{
                         if(rb_SinPresencia.isChecked()){
-
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
+                            registro2.put("Id_Humbral","0001");
+                            registro2.put("Hora",currentTime);
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
+                            BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }else{
                             ContentValues registro2= new ContentValues();
                             registro2.put("Fecha",objSDF.format(date1));
@@ -868,7 +874,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
-                                "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                                "and Id_Deteccion='' "+ // '"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                     }
@@ -879,7 +885,15 @@ public class activity_Monitoreo extends AppCompatActivity {
                         Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
                     }else{
                         if(rb_SinPresencia.isChecked()){
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
 
+
+                            registro2.put("Id_Humbral","0001");
+                            registro2.put("Hora",currentTime);
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
+                            BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }else{
                             ContentValues registro2= new ContentValues();
                             registro2.put("Fecha",objSDF.format(date1));
@@ -951,7 +965,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_nombre_eps \n" +
                 "from t_Monitoreo_PEDetalle as M \n" +
                 "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl and M.c_codigo_eps=P.c_codigo_eps \n" +
-                "inner join t_Deteccion as D on M.Id_Deteccion=D.Id_Deteccion \n" +
+                "left join t_Deteccion as D on M.Id_Deteccion=D.Id_Deteccion \n" +
                 "left join t_Plagas as Pl on M.Id_Plagas=Pl.Id_Plagas\n" +
                 "left join t_Enfermedad as E on M.Id_enfermedad=E.Id_enfermedad\n" +
                 "left join t_Individuo as I on I.Id_Individuo=M.Id_Individuo\n" +

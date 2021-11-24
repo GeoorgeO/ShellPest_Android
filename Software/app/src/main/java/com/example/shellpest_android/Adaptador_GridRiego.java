@@ -42,6 +42,8 @@ public class Adaptador_GridRiego extends BaseAdapter {
         TextView txt_RCaudalIni=(TextView)itemView.findViewById(R.id.txt_RCaudalIni);
         TextView txt_RCaudalFin=(TextView)itemView.findViewById(R.id.txt_RCaudalFin);
         TextView txt_RRiego=(TextView)itemView.findViewById(R.id.txt_RRiego);
+        TextView txt_RTemperatura=(TextView)itemView.findViewById(R.id.txt_RTemperatura);
+        TextView txt_RET=(TextView)itemView.findViewById(R.id.txt_RET);
 
 
         txt_RBloque.setText(""+itemlist.get(i).getNombre_Bloque());
@@ -49,6 +51,8 @@ public class Adaptador_GridRiego extends BaseAdapter {
         txt_RCaudalIni.setText(""+itemlist.get(i).getCaudal_Inicio());
         txt_RCaudalFin.setText(""+itemlist.get(i).getCaudal_Fin());
         txt_RRiego.setText(""+itemlist.get(i).getHoras_Riego());
+        txt_RTemperatura.setText(""+itemlist.get(i).getTemperatura());
+        txt_RET.setText(""+itemlist.get(i).getET());
 
 
         return itemView;

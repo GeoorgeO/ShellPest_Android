@@ -1,9 +1,9 @@
 package com.example.shellpest_android;
 
 public class ItemRiego {
-    private String Fecha,Hora,Nombre_Bloque,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,cEPS;
+    private String Fecha,Hora,Nombre_Bloque,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,cEPS,Temperatura,ET;
 
-    public ItemRiego(String Fecha,String Hora,String Nombre_Bloque,String Id_Bloque,String Precipitacion_Sistema,String Caudal_Inicio,String Caudal_Fin,String Horas_Riego,String cEPS){
+    public ItemRiego(String Fecha,String Hora,String Nombre_Bloque,String Id_Bloque,String Precipitacion_Sistema,String Caudal_Inicio,String Caudal_Fin,String Horas_Riego,String cEPS,String Temperatura,String ET){
         this.Fecha= Fecha;
         this.Hora=Hora;
         this.Id_Bloque=Id_Bloque;
@@ -13,6 +13,8 @@ public class ItemRiego {
         this.Horas_Riego=Horas_Riego;
         this.Nombre_Bloque=Nombre_Bloque;
         this.cEPS=cEPS;
+        this.Temperatura=Temperatura;
+        this.ET=ET;
     }
 
     public String getFecha(){
@@ -69,6 +71,28 @@ public class ItemRiego {
     }
     public void setHoras_Riego(String Horas_Riego){
         this.Horas_Riego=Horas_Riego;
+    }
+
+    public String getTemperatura(){
+        if(Temperatura==null){
+           return "0";
+        }else{
+            return Temperatura;
+        }
+    }
+    public void setTemperatura(String Temperatura){
+        this.Temperatura=Temperatura;
+    }
+
+    public String getET(){
+        if(ET==null){
+            return "0";
+        }else{
+            return ET;
+        }
+    }
+    public void setET(String ET){
+        this.ET=ET;
     }
 
     public String getCEPS(){

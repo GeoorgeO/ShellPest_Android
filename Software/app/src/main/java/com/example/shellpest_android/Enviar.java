@@ -659,8 +659,14 @@ public class Enviar extends AppCompatActivity {
     private boolean EliminadeMonitoreoDetalle(String Fecha,String Id_Plagas,String Id_Enfermedad,String Id_PuntoControl,String Id_Deteccion,String Id_Individuo) {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+        int cantidad;
+        cantidad=0;
+        if(Id_Deteccion.length()==0){
+            cantidad= BD.delete("t_Monitoreo_PEDetalle", "Fecha='"+Fecha+"' and Id_PuntoControl='"+Id_PuntoControl+"' ", null);
+        }else{
+            cantidad = BD.delete("t_Monitoreo_PEDetalle", "Fecha='"+Fecha+"' and Id_Plagas='"+Id_Plagas+"' and Id_Enfermedad='"+Id_Enfermedad+"' and Id_PuntoControl='"+Id_PuntoControl+"' and  Id_Deteccion='" + Id_Deteccion + "' and Id_Individuo='"+Id_Individuo+"'", null);
+        }
 
-        int cantidad = BD.delete("t_Monitoreo_PEDetalle", "Fecha='"+Fecha+"' and Id_Plagas='"+Id_Plagas+"' and Id_Enfermedad='"+Id_Enfermedad+"' and Id_PuntoControl='"+Id_PuntoControl+"' and  Id_Deteccion='" + Id_Deteccion + "' and Id_Individuo='"+Id_Individuo+"'", null);
         BD.close();
 
         if (cantidad > 0) {
