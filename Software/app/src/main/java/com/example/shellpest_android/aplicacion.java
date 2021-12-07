@@ -943,7 +943,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         Cursor Renglon10;
         String Consulta;
 
-        Consulta="select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where ltrim(rtrim(UE.Id_Usuario))='"+Usuario+"' ";
+        Consulta="select E.c_codigo_eps,E.v_abrevia_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where ltrim(rtrim(UE.Id_Usuario))='"+Usuario+"' ";
         Renglon10=BD.rawQuery(Consulta,null);
 
         if(Renglon10.moveToFirst()){
@@ -1000,7 +1000,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
         Cursor Renglon;
-        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_nombre_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta,A.Unidades_aplicadas  " +
+        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_abrevia_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta,A.Unidades_aplicadas  " +
                 "from t_Aplicaciones as A " +
                 "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps " +
                 "inner join t_Presentacion as Pre on A.Id_Presentacion=Pre.Id_Presentacion and Pre.c_codigo_eps=H.c_codigo_eps " +

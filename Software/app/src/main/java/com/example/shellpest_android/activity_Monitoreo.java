@@ -143,6 +143,11 @@ public class activity_Monitoreo extends AppCompatActivity {
         CopiInd = new AdaptadorSpinner(this, ItemSPInd);
         sp_Ind.setAdapter(CopiInd);
 
+        ItemSPOrg=new ArrayList<>();
+        ItemSPOrg.add(new ItemDatoSpinner("Organo muestreado"));
+        CopiOrg = new AdaptadorSpinner(this, ItemSPOrg);
+        sp_Org.setAdapter(CopiOrg);
+
         sp_Empresa2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -193,10 +198,16 @@ public class activity_Monitoreo extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     // Notify the selected item text
+
+
                     cargaSpinnerInd();
                     CopiInd = new AdaptadorSpinner(getApplicationContext(), ItemSPInd);
                     //CopiInd=AdaptadorSpiner;
                     sp_Ind.setAdapter(CopiInd);
+
+                    if (sp_Ind.getCount()==2){
+                        sp_Ind.setSelection(1);
+                    }
                 }
             }
 
@@ -210,16 +221,22 @@ public class activity_Monitoreo extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
-                    // Notify the selected item text
-                    cargaSpinnerInd();
-                    CopiInd = new AdaptadorSpinner(getApplicationContext(), ItemSPInd);
-                    //CopiInd=AdaptadorSpiner;
-                    sp_Ind.setAdapter(CopiInd);
-
                     cargaSpinnerOrg();
                     CopiOrg = new AdaptadorSpinner(getApplicationContext(), ItemSPOrg);
                     //CopiOrg=AdaptadorSpiner;
                     sp_Org.setAdapter(CopiOrg);
+
+                    if (sp_Org.getCount()==2){
+                        sp_Org.setSelection(1);
+                    }
+
+                    // Notify the selected item text
+                   /* cargaSpinnerInd();
+                    CopiInd = new AdaptadorSpinner(getApplicationContext(), ItemSPInd);
+                    //CopiInd=AdaptadorSpiner;
+                    sp_Ind.setAdapter(CopiInd);*/
+
+
                 }
             }
 
@@ -349,7 +366,7 @@ public class activity_Monitoreo extends AppCompatActivity {
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
+        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_abrevia_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
 
         if(Renglon.moveToFirst()){
 
@@ -651,6 +668,7 @@ public class activity_Monitoreo extends AppCompatActivity {
 
         if(Renglon.getCount()>1){
             ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+            SoloUnaHuerta=false;
         }else{
             if(Renglon.getCount()==1){
                 SoloUnaHuerta=true;
@@ -962,7 +980,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "\tM.Id_Deteccion, \n" +
                 "\tM.Id_Individuo, \n" +
                 "\tM.Id_Plagas, \n" +
-                "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_nombre_eps \n" +
+                "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_abrevia_eps \n" +
                 "from t_Monitoreo_PEDetalle as M \n" +
                 "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl and M.c_codigo_eps=P.c_codigo_eps \n" +
                 "left join t_Deteccion as D on M.Id_Deteccion=D.Id_Deteccion \n" +

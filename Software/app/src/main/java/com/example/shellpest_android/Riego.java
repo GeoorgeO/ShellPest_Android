@@ -88,9 +88,7 @@ public class Riego extends AppCompatActivity {
         CopiBlq = new AdaptadorSpinner(Riego.this, ItemSPBlq);
         sp_Blq.setAdapter(CopiBlq);
 
-        if (sp_Hue.getCount()==2){
-            sp_Hue.setSelection(1);
-        }
+
 
         arrayArticulos = new ArrayList<>();
 
@@ -112,8 +110,8 @@ public class Riego extends AppCompatActivity {
                         sp_Hue.setAdapter(CopiHue);
 
 
-                        if(LineEmpresa>0){
-                            sp_Hue.setSelection(LineEmpresa);
+                        if(LineHuerta>0){
+                            LineHuerta=0;
                         }else{
                             if (sp_Hue.getCount()==2){
                                 sp_Hue.setSelection(1);
@@ -139,16 +137,13 @@ public class Riego extends AppCompatActivity {
         sp_Hue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // Notify the selected item text
+                Huerta = CopiHue.getItem(i).getTexto().substring(0, 5);
 
-                    // Notify the selected item text
-                    Huerta = CopiHue.getItem(i).getTexto().substring(0, 5);
-
-                    cargaSpinnerBlq();
-                    CopiBlq = new AdaptadorSpinner(getApplicationContext(), ItemSPBlq);
-
-                    sp_Blq.setAdapter(CopiBlq);
-
-
+                cargaSpinnerBlq();
+                CopiBlq = new AdaptadorSpinner(getApplicationContext(), ItemSPBlq);
+                sp_Blq.setAdapter(CopiBlq);
+                
                 LineHuerta=i;
             }
 
@@ -236,7 +231,7 @@ public class Riego extends AppCompatActivity {
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_nombre_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
+        Renglon=BD.rawQuery("select E.c_codigo_eps,E.v_abrevia_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where UE.Id_Usuario='"+Usuario+"' ",null);
 
         if(Renglon.moveToFirst()){
 
@@ -265,6 +260,11 @@ public class Riego extends AppCompatActivity {
         }else{
             Renglon=BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
             //sp_Hue.setEnabled(false);
+        }
+
+        if(Renglon.getCount()>1){
+            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+
         }
 
         /*if(Perfil.equals("001")){

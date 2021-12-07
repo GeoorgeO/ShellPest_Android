@@ -1715,7 +1715,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         registro.put("v_nombre_eps",Datos[x][1]);
                         registro.put("v_rfc_eps",Datos[x][2]);
-
+                        registro.put("v_abrevia_eps",Datos[x][3]);
 
                         int cantidad=BD.update("conempresa",registro,"c_codigo_eps='"+Datos[x][0].toString()+"'",null);
 
@@ -1729,6 +1729,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("c_codigo_eps",Datos[x][0]);
                         registro.put("v_nombre_eps",Datos[x][1]);
                         registro.put("v_rfc_eps",Datos[x][2]);
+                        registro.put("v_abrevia_eps",Datos[x][3]);
                         BD.insert("conempresa",null,registro);
                     }
 
