@@ -96,7 +96,7 @@
         android:layout_height="60dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="43dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/imageButton4"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:srcCompat="?attr/actionModePasteDrawable" />
@@ -107,7 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="-15dp"
         android:text="Requisiciones"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="@+id/imageButton5"
         app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

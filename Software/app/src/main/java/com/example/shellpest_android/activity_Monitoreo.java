@@ -27,6 +27,7 @@ import android.view.View;
 
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -51,13 +52,15 @@ public class activity_Monitoreo extends AppCompatActivity {
     ListView lv_GridMonitoreo;
     Boolean SoloUnaHuerta;
 
+    EditText et_individuos;
+
     //private LocationManager Ubicacion;
 
     Itemmonitoreo Tabla;
     Adaptador_GridMonitorio Adapter;
     ArrayList<Itemmonitoreo> arrayArticulos;
 
-    public String Usuario, Perfil, Huerta, Zona, Humbral;
+    public String Usuario, Perfil, Huerta, Zona, Humbral,Individuo;
 
     private ArrayList<ItemDatoSpinner> ItemSPHue, ItemSPPE, ItemSPPto, ItemSPOrg, ItemSPInd,ItemSPEmp;
     private AdaptadorSpinner CopiHue, CopiPE, CopiPto, CopiOrg, CopiInd,CopiEmp;
@@ -92,6 +95,8 @@ public class activity_Monitoreo extends AppCompatActivity {
         rg_PE = (RadioGroup) findViewById(R.id.rg_PE);
 
         lv_GridMonitoreo = (ListView) findViewById(R.id.lv_GridMonitoreo);
+
+        et_individuos=(EditText) findViewById(R.id.et_individuos) ;
 
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
@@ -139,7 +144,7 @@ public class activity_Monitoreo extends AppCompatActivity {
         sp_Org.setAdapter(CopiOrg);*/
 
         ItemSPInd = new ArrayList<>();
-        ItemSPInd.add(new ItemDatoSpinner("Individuo"));
+        ItemSPInd.add(new ItemDatoSpinner("Est.Fenologico"));
         CopiInd = new AdaptadorSpinner(this, ItemSPInd);
         sp_Ind.setAdapter(CopiInd);
 
@@ -147,6 +152,8 @@ public class activity_Monitoreo extends AppCompatActivity {
         ItemSPOrg.add(new ItemDatoSpinner("Organo muestreado"));
         CopiOrg = new AdaptadorSpinner(this, ItemSPOrg);
         sp_Org.setAdapter(CopiOrg);
+
+        et_individuos.setText("0");
 
         sp_Empresa2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -180,10 +187,10 @@ public class activity_Monitoreo extends AppCompatActivity {
                     //CopiPto=AdaptadorSpiner;
                     sp_Pto.setAdapter(CopiPto);
 
-                    cargaSpinnerInd();
+                  /*  cargaSpinnerInd();
                     CopiInd = new AdaptadorSpinner(getApplicationContext(), ItemSPInd);
                     //CopiInd=AdaptadorSpiner;
-                    sp_Ind.setAdapter(CopiInd);
+                    sp_Ind.setAdapter(CopiInd);*/
                 }
             }
 
@@ -251,7 +258,7 @@ public class activity_Monitoreo extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     // Notify the selected item text
-                    Humbral=CopiInd.getItem(i).getTexto().substring(CopiInd.getItem(i).getTexto().length() - 4);
+                   // Humbral=CopiInd.getItem(i).getTexto().substring(CopiInd.getItem(i).getTexto().length() - 4);
                 }
             }
 
@@ -532,10 +539,12 @@ public class activity_Monitoreo extends AppCompatActivity {
 
                             }
                             registro2.put("Id_Deteccion",CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4));
-                            registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
+                            registro2.put("Id_Individuo",Individuo);
                             registro2.put("Id_Humbral",Humbral);
                             registro2.put("Hora",currentTime);
                             registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
+                            registro2.put("Cant_Individuos",Integer.parseInt( et_individuos.getText().toString()));
+                            registro2.put("Id_Fenologico",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2));
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }
 
@@ -751,21 +760,24 @@ public class activity_Monitoreo extends AppCompatActivity {
         CopiInd=null;
 
         ItemSPInd=new ArrayList<>();
-        ItemSPInd.add(new ItemDatoSpinner("Individuo"));
+        ItemSPInd.add(new ItemDatoSpinner("Est.Fenologico"));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
+        String Consulta;
         if(rb_Enfermedad.isChecked()){
-            Renglon=BD.rawQuery("select M.Id_Individuo,I.No_Individuo,M.Id_Humbral from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+            Renglon=BD.rawQuery("select M.Id_Fenologico,I.Nombre_Fenologico from t_Monitoreo as M inner join t_Est_Fenologico as I on I.Id_Fenologico=M.Id_Fenologico where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' group by M.Id_Fenologico,I.Nombre_Fenologico",null);
         }else{
-            Renglon=BD.rawQuery("select M.Id_Individuo,I.No_Individuo,M.Id_Humbral from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad=''",null);
+            //Consulta="select Id_Fenologico,Nombre_Fenologico from t_Est_Fenologico";
+            Consulta="select M.Id_Fenologico,I.Nombre_Fenologico from t_Monitoreo as M left join t_Est_Fenologico as I on I.Id_Fenologico=M.Id_Fenologico where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' group by M.Id_Fenologico,I.Nombre_Fenologico";
+            Renglon=BD.rawQuery(Consulta,null);
         }
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+"         Humbral: "+Renglon.getString(2)));
+                ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
             } while(Renglon.moveToNext());
 
             BD.close();
@@ -777,6 +789,39 @@ public class activity_Monitoreo extends AppCompatActivity {
 
         }
     }
+
+    private boolean EscogerNivelInfeccion(int cantidad){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+        if(rb_Enfermedad.isChecked()){
+            Renglon=BD.rawQuery("select I.No_Inicial,I.No_Final,M.Id_Individuo,M.Id_Humbral from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Fenologico='"+CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+        }else{
+            Renglon=BD.rawQuery("select I.No_Inicial,I.No_Final,M.Id_Individuo,M.Id_Humbral from t_Monitoreo as M inner join t_Individuo as I on I.Id_Individuo=M.Id_Individuo where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad='' and Id_Fenologico='"+CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+        }
+        if(Renglon.moveToFirst()){
+
+            do {
+                if(cantidad >= Renglon.getInt(0) && cantidad<=Renglon.getInt(1)){
+                    Humbral=Renglon.getString(3);
+                    Individuo=Renglon.getString(2);
+                    return false;
+                }
+
+            } while(Renglon.moveToNext());
+            Humbral="";
+            Individuo="";
+            BD.close();
+            return false; //Regresar a true cuando se llene la tabla de niveles de infeccion
+        }else{
+
+            //Toast.makeText(this,"No hay datos en t_Monitoreo guardados",Toast.LENGTH_SHORT).show();
+            BD.close();
+            return true;
+        }
+    }
+
+
 
     public void agregarAGrid (View view){
         if(sp_Pto.getSelectedItemPosition()>0){
@@ -808,6 +853,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                     Toast.makeText(this,"Es necesario marcar 'Sin presencia' en caso de que no se detecte ninguna plaga o enfermedad.",Toast.LENGTH_SHORT).show();
                 }
             }
+            FaltoAlgo=EscogerNivelInfeccion(Integer.parseInt(et_individuos.getText().toString()));
+
             if (!FaltoAlgo){
                 /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
@@ -826,6 +873,11 @@ public class activity_Monitoreo extends AppCompatActivity {
                 String currentTime = simpleDateFormat.format(new Date());
 
                 Cursor Renglon;
+
+
+
+
+
                 Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
                 if(Renglon.moveToFirst()){
 
@@ -871,6 +923,8 @@ public class activity_Monitoreo extends AppCompatActivity {
                     Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
 
                 }
+
+
 
                 if(rb_Enfermedad.isChecked()){
                     Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
@@ -930,10 +984,12 @@ public class activity_Monitoreo extends AppCompatActivity {
 
                             }
                             registro2.put("Id_Deteccion",CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4));
-                            registro2.put("Id_Individuo",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,5));
+                            registro2.put("Id_Individuo",Individuo);
                             registro2.put("Id_Humbral",Humbral);
                             registro2.put("Hora",currentTime);
                             registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
+                            registro2.put("Cant_Individuos",Integer.parseInt( et_individuos.getText().toString()));
+                            registro2.put("Id_Fenologico",CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2));
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }
 
@@ -980,7 +1036,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "\tM.Id_Deteccion, \n" +
                 "\tM.Id_Individuo, \n" +
                 "\tM.Id_Plagas, \n" +
-                "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_abrevia_eps \n" +
+                "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_abrevia_eps,M.Cant_Individuos \n" +
                 "from t_Monitoreo_PEDetalle as M \n" +
                 "inner join t_Puntocontrol as P on M.Id_PuntoControl=P.Id_PuntoControl and M.c_codigo_eps=P.c_codigo_eps \n" +
                 "left join t_Deteccion as D on M.Id_Deteccion=D.Id_Deteccion \n" +
@@ -996,7 +1052,7 @@ public class activity_Monitoreo extends AppCompatActivity {
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new Itemmonitoreo(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
+                    Tabla=new Itemmonitoreo(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(11),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 

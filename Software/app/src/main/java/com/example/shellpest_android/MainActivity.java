@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
-
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos" );
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/UsuarioEmpresa");
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Fenologicos");
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -327,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
                     }
                 }
 
@@ -532,6 +534,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break;
                         case "Id_RecetDet":
                             Actualiza_RecetasDet(datos);
+                            break;
+                        case "Id_Fenologico":
+                            Actualiza_Fenologicos(datos);
                             break;
                     }
                 }
@@ -1329,7 +1334,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro = new ContentValues();
 
                         registro.put("No_Individuo",Datos[x][1]);
-
+                        registro.put("No_Inicial",Datos[x][6]);
+                        registro.put("No_Final",Datos[x][7]);
                         int cantidad=BD.update("t_Individuo",registro,"Id_Individuo='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
@@ -1341,7 +1347,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ContentValues registro= new ContentValues();
                         registro.put("Id_Individuo",Datos[x][0]);
                         registro.put("No_Individuo",Datos[x][1]);
-
+                        registro.put("No_Inicial",Datos[x][6]);
+                        registro.put("No_Final",Datos[x][7]);
                         BD.insert("t_Individuo",null,registro);
                     }
 
@@ -1380,7 +1387,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Id_Deteccion",Datos[x][4]);
                         registro.put("Id_Individuo",Datos[x][5]);
                         registro.put("Id_Humbral",Datos[x][6]);
-
+                        registro.put("Id_Fenologico",Datos[x][11]);
                         int cantidad=BD.update("t_Monitoreo",registro,"Id_monitoreo='"+Datos[x][0].toString()+"'",null);
 
                         if(cantidad>0){
@@ -1397,7 +1404,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         registro.put("Id_Deteccion",Datos[x][4]);
                         registro.put("Id_Individuo",Datos[x][5]);
                         registro.put("Id_Humbral",Datos[x][6]);
-
+                        registro.put("Id_Fenologico",Datos[x][11]);
                         BD.insert("t_Monitoreo",null,registro);
                     }
 
@@ -1933,6 +1940,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     registro.put("c_codigo_eps",Datos[x][10]);
 
                     BD.insert("t_RecetaDet",null,registro);
+
+                } catch (SQLiteConstraintException sqle){
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_Fenologicos(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Est_Fenologico",Datos.length);
+        arrayArticulos.add(Tabla);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        int cantidad= BD.delete("t_Est_Fenologico","Id_Fenologico!='-1' ",null);
+
+        if(cantidad>0){
+
+        }else{
+            Toast.makeText(MainActivity.this,"Error al actualizar el estado fenologico",Toast.LENGTH_SHORT).show();
+        }
+        if(Datos.length>0){
+            for(int x=0;x<Datos.length;x++){
+                try{
+                    ContentValues registro= new ContentValues();
+                    registro.put("Id_Fenologico",Datos[x][0]);
+                    registro.put("Nombre_Fenologico",Datos[x][1]);
+
+                    BD.insert("t_Est_Fenologico",null,registro);
 
                 } catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();

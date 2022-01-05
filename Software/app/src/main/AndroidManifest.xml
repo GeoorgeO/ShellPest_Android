@@ -32,7 +32,7 @@
         <activity android:name=".EnviaRecibe" />
         <activity
             android:name=".activity_Monitoreo"
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity android:name=".Login_Usuario">
             <intent-filter>

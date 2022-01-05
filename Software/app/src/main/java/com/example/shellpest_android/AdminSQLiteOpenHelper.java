@@ -31,13 +31,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Puntocontrol(Id_PuntoControl text not null,Id_Bloque text,Nombre_PuntoControl text,n_coordenadaX text,n_coordenadaY text,c_codigo_eps text not null,primary key(Id_PuntoControl,c_codigo_eps))");
         BD.execSQL("create table t_Zona(Id_zona text primary key,Nombre_zona text)");
         BD.execSQL("create table t_Monitoreo_PEEncabezado(Fecha text not null,Id_Huerta text,Id_PuntoControl text not null,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text,c_codigo_eps text not null,Primary key(Fecha,Id_PuntoControl,c_codigo_eps))");
-        BD.execSQL("create table t_Monitoreo_PEDetalle(Fecha text not null,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text not null,Id_Deteccion text ,Id_Individuo text ,Id_Humbral text,Hora text,c_codigo_eps text not null,primary key (Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,c_codigo_eps))");
+        BD.execSQL("create table t_Monitoreo_PEDetalle(Fecha text not null,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text not null,Id_Deteccion text ,Id_Individuo text ,Id_Humbral text,Hora text,c_codigo_eps text not null,Cant_Individuos float,Id_Fenologico text,primary key (Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,c_codigo_eps))");
         BD.execSQL("create table t_Monitoreo_PE(Fecha text,Id_Huerta text,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text,Hora text)");
         BD.execSQL("create table t_Monitoreo_Eliminados_PEEncabezado(Fecha text not null,Id_Huerta text,Id_PuntoControl text not null,Id_Usuario text,n_coordenadaX text,n_coordenadaY text,Hora text,c_codigo_eps text not null,primary key(Fecha,Id_PuntoControl,c_codigo_eps))");
-        BD.execSQL("create table t_Monitoreo_Eliminados_PEDetalle(Fecha text not null,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text not null,Id_Deteccion text not null,Id_Individuo text not null,Id_Humbral text,Hora text,c_codigo_eps not null,primary key(Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,c_codigo_eps))");
+        BD.execSQL("create table t_Monitoreo_Eliminados_PEDetalle(Fecha text not null,Id_Plagas text,Id_Enfermedad text,Id_PuntoControl text not null,Id_Deteccion text not null,Id_Individuo text not null,Id_Humbral text,Hora text,c_codigo_eps not null,Cant_Individuos float,Id_Fenologico text,primary key(Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,c_codigo_eps))");
         BD.execSQL("create table t_Monitoreo_Eliminados_PE(Fecha text,Id_Huerta text,Id_enfermedad text,Id_Plagas text,Id_PuntoControl text,Id_Deteccion text,Id_Individuo text,Id_Usuario text,Id_Humbral text,n_coordenadaX text,n_coordenadaY text)");
-        BD.execSQL("create table t_Individuo (Id_Individuo text primary key,No_Individuo text)");
-        BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text)");
+        BD.execSQL("create table t_Individuo (Id_Individuo text primary key,No_Individuo text,No_Inicial float,No_Final float)");
+        BD.execSQL("create table t_Monitoreo (Id_monitoreo text primary key,Id_zona text,Id_Plagas text,Id_Enfermedad text,Id_Deteccion text,Id_Individuo text,Id_Humbral text,Id_Fenologico text)");
         BD.execSQL("create table t_Riego (Fecha text not null,Hora text,Id_Bloque text not null,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text,c_codigo_eps text not null,Temperatura float,ET float)");
         BD.execSQL("create table t_RiegoEliminado (Fecha text not null,Hora text,Id_Bloque text not null,Precipitacion_Sistema float,Caudal_Inicio float,Caudal_Fin float,Horas_Riego float,Id_Usuario text,c_codigo_eps text not null,Temperatura float,ET float)");
         BD.execSQL("create table t_Usuario_Huerta (Id_Usuario text ,Id_Huerta text,c_codigo_eps text)");
@@ -62,6 +62,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
         BD.execSQL("create table t_Receta (Id_Receta text not null ,Fecha_Receta text ,Id_AsesorTecnico text ,Id_MonitoreoPE float ,Id_Cultivo text, Id_TipoAplicacion text,Id_Presentacion text,Observaciones text,Intervalo_Seguridad float,Intervalo_Reingreso float,Id_Huerta text,c_codigo_eps text not null,primary key(Id_Receta,c_codigo_eps))");
         BD.execSQL("create table t_RecetaDet (Id_Receta text not null ,Secuencia text ,c_codigo_pro text ,v_nombre_pro float ,c_codigo_cac text, c_codigo_uni text,Dosis float,Cantidad_Unitaria float,Descripcion text,c_codigo_eps text not null, primary key(Id_Receta,c_codigo_eps,Secuencia))");
+
+        BD.execSQL("create table t_Est_Fenologico (Id_Fenologico text not null,Nombre_Fenologico text, primary key(Id_Fenologico))");
     }
 
     @Override
@@ -110,6 +112,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Receta");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RecetaDet");
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Est_Fenologico");
 
         onCreate(sqLiteDatabase);
     }
