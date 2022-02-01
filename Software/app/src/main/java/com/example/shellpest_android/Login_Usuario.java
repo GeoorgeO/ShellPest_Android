@@ -26,7 +26,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 
 public class Login_Usuario extends AppCompatActivity {
@@ -76,6 +77,8 @@ public class Login_Usuario extends AppCompatActivity {
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.getString(0).length()>0){
                 Toast.makeText(this,"Bienvenido "+Renglon.getString(0),Toast.LENGTH_SHORT).show();
+
+
                 Intent intento=new Intent(this,EnviaRecibe.class);
                 intento.putExtra("usuario", Renglon.getString(0));
                 intento.putExtra("perfil", Renglon.getString(1));
@@ -215,14 +218,33 @@ public class Login_Usuario extends AppCompatActivity {
                         if (jsonobject.optString("Id_Usuario").length() > 0) {
 
                             Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"),jsonobject.optString("Nombre_Usuario"));
-                            Intent intento = new Intent(this, EnviaRecibe.class);
-                            intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
-                            intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
-                            intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
 
-                            //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+                            if (RevisaFechaSync().trim().length()>0){
+                                Date fechaactual = new Date(System.currentTimeMillis());
+                               if( fechaactual.getTime() - Date.valueOf( RevisaFechaSync()).getTime() >2){
 
-                            startActivity(intento);
+                                   Intent intento = new Intent(this, EnviaRecibe.class);
+                                   intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
+                                   intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
+                                   intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
+
+                                   //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+
+                                   startActivity(intento);
+
+                               }
+                            }else{
+
+                                Intent intento = new Intent(this, MainActivity.class);
+                                intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
+                                intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
+                                intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
+
+                                //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+                                startActivity(intento);
+                            }
+
+
                             setVisible(false);
 
                             finish();
@@ -252,6 +274,52 @@ public class Login_Usuario extends AppCompatActivity {
         }else{
             Toast.makeText(this, "Ingresar usuario y contraseña.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String RevisaFechaSync(){
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+
+        Cursor Renglon =BD.rawQuery("select Fecha_Sincroniza from FechaSincroniza",null);
+
+
+        if(Renglon.moveToFirst()){
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+            if (Renglon.getString(0).length()>0){
+               return Renglon.getString(0);
+            }
+
+
+            BD.close();
+        }else{
+            if(obj.isConnected())
+            {
+               return "";
+            }else{
+                Toast.makeText(Login_Usuario.this, "Es necesario tener internet para iniciar sesion por primera vez.", Toast.LENGTH_SHORT).show();
+            }
+
+            BD.close();
+        }
+        return "";
+    }
+
+    private void AgregarFechaSync (){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        java.util.Date objDate = new java.util.Date();
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        java.util.Date date1=objDate;
+
+        ContentValues registro= new ContentValues();
+        registro.put("id_Sincroniza","1");
+        registro.put("Fecha_Sincroniza",objSDF.format(date1));
+
+
+        BD.insert("FechaSincroniza",null,registro);
+        BD.close();
     }
 
 }

@@ -129,6 +129,8 @@ public class activity_Monitoreo extends AppCompatActivity {
             sp_Hue.setSelection(1);
         }*/
 
+
+
         ItemSPPto = new ArrayList<>();
         ItemSPPto.add(new ItemDatoSpinner("Punto de control"));
         CopiPto = new AdaptadorSpinner(this, ItemSPPto);
@@ -165,6 +167,14 @@ public class activity_Monitoreo extends AppCompatActivity {
 
                 if (sp_Hue.getCount()==2){
                     sp_Hue.setSelection(1);
+                }else{
+                    if (sp_Hue.getCount()<=1){
+                        ItemSPHue = new ArrayList<>();
+                        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                        CopiHue = new AdaptadorSpinner(activity_Monitoreo.this, ItemSPHue);
+                        sp_Hue.setAdapter(CopiHue);
+                    }
+
                 }
             }
 
@@ -297,7 +307,7 @@ public class activity_Monitoreo extends AppCompatActivity {
 
 
 
-      /*  lv_GridMonitoreo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {   Lo quite para que no elimine bloques del punto
+        lv_GridMonitoreo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder dialogo1 = new AlertDialog.Builder(activity_Monitoreo.this);
@@ -313,14 +323,20 @@ public class activity_Monitoreo extends AppCompatActivity {
 
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(activity_Monitoreo.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+                        String SQLWhere;
+                        if (arrayArticulos.get(i).getcPlaga().trim().length()>0){
+                            SQLWhere="Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"'  and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and Id_Plagas='"+arrayArticulos.get(i).getcPlaga()+"' and Id_Fenologico='"+arrayArticulos.get(i).getcInd()+"' ";
+                        }else{
+                            SQLWhere="Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"'  and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and  Id_Enfermedad='"+arrayArticulos.get(i).getcEnferma()+"' and Id_Fenologico='"+arrayArticulos.get(i).getcInd()+"' ";
+                        }
 
-                        int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' and Id_Individuo='"+arrayArticulos.get(i).getcInd()+"' and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and  Id_Enfermedad='"+arrayArticulos.get(i).getcEnferma()+"' and Id_Plagas='"+arrayArticulos.get(i).getcPlaga()+"' ",null);
+                        int cantidad= BD.delete("t_Monitoreo_PEDetalle",SQLWhere,null);
                         BD.close();
 
                         if(cantidad>0){
 
                         }else{
-                            Toast.makeText(activity_Monitoreo.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity_Monitoreo.this,"Ocurrio un error al intentar eliminar el detalle seleccionado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                         }
                         Cargagrid();
                     }
@@ -333,7 +349,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 dialogo1.show();
                 return false;
             }
-        });*/
+        });
         arrayArticulos = new ArrayList<>();
 
         sp_Pto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -736,7 +752,8 @@ public class activity_Monitoreo extends AppCompatActivity {
         if(rb_Enfermedad.isChecked()){
             Renglon=BD.rawQuery("select distinct D.Id_Deteccion,D.Nombre_Deteccion from t_Deteccion as D inner join t_Monitoreo as M on M.Id_Deteccion=D.Id_Deteccion where M.Id_zona='"+Zona+"' and M.Id_Plagas='' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
         }else{
-            Renglon=BD.rawQuery("select distinct D.Id_Deteccion,D.Nombre_Deteccion from t_Deteccion as D inner join t_Monitoreo as M on M.Id_Deteccion=D.Id_Deteccion where M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad=''",null);
+            //Renglon=BD.rawQuery("select distinct D.Id_Deteccion,D.Nombre_Deteccion from t_Deteccion as D inner join t_Monitoreo as M on M.Id_Deteccion=D.Id_Deteccion where M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_Enfermedad=''",null); Quite para que salgan todos los Organos
+            Renglon=BD.rawQuery("select distinct D.Id_Deteccion,D.Nombre_Deteccion from t_Deteccion as D ",null);
         }
 
 
@@ -768,10 +785,11 @@ public class activity_Monitoreo extends AppCompatActivity {
 
         String Consulta;
         if(rb_Enfermedad.isChecked()){
-            Renglon=BD.rawQuery("select M.Id_Fenologico,I.Nombre_Fenologico from t_Monitoreo as M inner join t_Est_Fenologico as I on I.Id_Fenologico=M.Id_Fenologico where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' group by M.Id_Fenologico,I.Nombre_Fenologico",null);
+            //Renglon=BD.rawQuery("select I.Id_Fenologico,I.Nombre_Fenologico from t_Est_Fenologico as I where PoE='E' ",null);
+            Renglon=BD.rawQuery("select M.Id_Fenologico,I.Nombre_Fenologico from t_Monitoreo as M inner join t_Est_Fenologico as I on I.Id_Fenologico=M.Id_Fenologico where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and I.PoE='E' group by M.Id_Fenologico,I.Nombre_Fenologico,I.PoE",null);
         }else{
-            //Consulta="select Id_Fenologico,Nombre_Fenologico from t_Est_Fenologico";
-            Consulta="select M.Id_Fenologico,I.Nombre_Fenologico from t_Monitoreo as M left join t_Est_Fenologico as I on I.Id_Fenologico=M.Id_Fenologico where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' group by M.Id_Fenologico,I.Nombre_Fenologico";
+            Consulta="select Id_Fenologico,Nombre_Fenologico from t_Est_Fenologico where PoE='P'";
+            //Consulta="select M.Id_Fenologico,I.Nombre_Fenologico from t_Monitoreo as M left join t_Est_Fenologico as I on I.Id_Fenologico=M.Id_Fenologico where M.Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.Id_zona='"+Zona+"' and M.Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' group by M.Id_Fenologico,I.Nombre_Fenologico"; Lo quite para que aparescan todas los estados fenologicos
             Renglon=BD.rawQuery(Consulta,null);
         }
         if(Renglon.moveToFirst()){
@@ -817,7 +835,7 @@ public class activity_Monitoreo extends AppCompatActivity {
 
             //Toast.makeText(this,"No hay datos en t_Monitoreo guardados",Toast.LENGTH_SHORT).show();
             BD.close();
-            return true;
+            return false; //Regresar a true cuando se llene la tabla de niveles de infeccion
         }
     }
 
@@ -834,7 +852,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                             FaltoAlgo=false;
                         }else{
                             FaltoAlgo=true;
-                            Toast.makeText(this,"Falta seleccionar un numero de individuos.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this,"Falta seleccionar su estado Fenologico.",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         FaltoAlgo=true;
@@ -932,7 +950,9 @@ public class activity_Monitoreo extends AppCompatActivity {
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and  Fecha='"+objSDF.format(date1)+"' " +
-                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                            "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
+                            "and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'" +
+                            "and Id_Fenologico='"+CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
 
                 }else{
                     if(rb_Plaga.isChecked()){
@@ -941,14 +961,16 @@ public class activity_Monitoreo extends AppCompatActivity {
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'" +
+                                "and Id_Fenologico='"+CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                     }else{
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='' "+ // '"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                                 "and  Fecha='"+objSDF.format(date1)+"' " +
-                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+                                "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
+                                "and Id_Fenologico='' ",null);
                     }
                 }
 
@@ -960,8 +982,6 @@ public class activity_Monitoreo extends AppCompatActivity {
                             ContentValues registro2= new ContentValues();
                             registro2.put("Fecha",objSDF.format(date1));
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
-
-
                             registro2.put("Id_Humbral","0001");
                             registro2.put("Hora",currentTime);
                             registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
@@ -1034,7 +1054,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "\tI.No_Individuo, \n" +
                 "\tM.Id_PuntoControl, \n" +
                 "\tM.Id_Deteccion, \n" +
-                "\tM.Id_Individuo, \n" +
+                "\tM.Id_Fenologico, \n" +
                 "\tM.Id_Plagas, \n" +
                 "\tM.Id_Enfermedad,M.c_codigo_eps,EPS.v_abrevia_eps,M.Cant_Individuos \n" +
                 "from t_Monitoreo_PEDetalle as M \n" +

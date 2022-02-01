@@ -63,7 +63,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         BD.execSQL("create table t_Receta (Id_Receta text not null ,Fecha_Receta text ,Id_AsesorTecnico text ,Id_MonitoreoPE float ,Id_Cultivo text, Id_TipoAplicacion text,Id_Presentacion text,Observaciones text,Intervalo_Seguridad float,Intervalo_Reingreso float,Id_Huerta text,c_codigo_eps text not null,primary key(Id_Receta,c_codigo_eps))");
         BD.execSQL("create table t_RecetaDet (Id_Receta text not null ,Secuencia text ,c_codigo_pro text ,v_nombre_pro float ,c_codigo_cac text, c_codigo_uni text,Dosis float,Cantidad_Unitaria float,Descripcion text,c_codigo_eps text not null, primary key(Id_Receta,c_codigo_eps,Secuencia))");
 
-        BD.execSQL("create table t_Est_Fenologico (Id_Fenologico text not null,Nombre_Fenologico text, primary key(Id_Fenologico))");
+        BD.execSQL("create table t_Est_Fenologico (Id_Fenologico text not null,Nombre_Fenologico text,PoE text, primary key(Id_Fenologico))");
     }
 
     @Override

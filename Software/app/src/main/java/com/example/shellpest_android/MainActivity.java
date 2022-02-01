@@ -49,15 +49,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity /*implements View.OnClickListener inhabilite*/  {
 
     Tablas_Sincronizadas Tabla;
     ListView Grid_Cambios;
     ArrayList<Tablas_Sincronizadas> arrayArticulos;
     Adaptador_Tabla Adapter;
-    EditText date_Sinc;
+    //EditText date_Sinc;
+    ProgressBar pb_Progreso;
     private int dia,mes, anio;
     public String Usuario,Perfil,Huerta;
+
+
 
     public String MyIp;
 
@@ -76,10 +79,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onBackPressed();
         }
 
-        date_Sinc=(EditText)findViewById(R.id.date_Sinc);
-        date_Sinc.setOnClickListener(this);
+       // date_Sinc=(EditText)findViewById(R.id.date_Sinc);  inhabilite
+        //date_Sinc.setOnClickListener(this);
 
         Grid_Cambios=(ListView) findViewById(R.id.lv_Cambios);
+
+        pb_Progreso=(ProgressBar) findViewById(R.id.db_Progreso) ;
 
         Grid_Cambios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,13 +103,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (ParseException e) {
             e.printStackTrace();
         }*/
-        date_Sinc.setText(objSDF.format(date1));
-        date_Sinc.setInputType(InputType.TYPE_NULL);
-        date_Sinc.requestFocus();
+        //date_Sinc.setText(objSDF.format(date1));
+        //date_Sinc.setInputType(InputType.TYPE_NULL);  inhabilite
+        //date_Sinc.requestFocus();
 
         Usuario= getIntent().getStringExtra("usuario");
         Perfil= getIntent().getStringExtra("perfil");
         Huerta= getIntent().getStringExtra("huerta");
+
+        ActualizaFechaSinc();
+
+        Existe_Sinc(getCurrentFocus());
     }
 
 
@@ -113,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
         try {
-            date1=new SimpleDateFormat("dd/MM/yyyy").parse(date_Sinc.getText().toString());
+            date1=new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+          //  date1=new SimpleDateFormat("dd/MM/yyyy").parse(date_Sinc.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -337,17 +347,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Grid_Cambios.setAdapter(null);
                 arrayArticulos.clear();
 
-                for (int i=0;i<Ligas_Web.size();i++){
-                    //Toast.makeText(MainActivity.this, Ligas_Web.get(i), Toast.LENGTH_SHORT).show();
-                    LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
-                }
 
-                if(arrayArticulos.size()>0){
-                    Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
-                    Grid_Cambios.setAdapter(Adapter);
-                }else{
-                    Toast.makeText(MainActivity.this, "No hay datos para sincronizar de la fecha seleccionada.", Toast.LENGTH_SHORT).show();
-                }
+
+                    //Toast.makeText(MainActivity.this, Ligas_Web.get(i), Toast.LENGTH_SHORT).show();
+
+
+
+                    Thread hilo=new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            for (int i=0;i<Ligas_Web.size();i++){
+
+                                LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
+                                pb_Progreso.setProgress( ((i+1)*100)/Ligas_Web.size());
+                            }
+                            if(arrayArticulos.size()>0){
+                                Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
+
+                                Grid_Cambios.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Grid_Cambios.setAdapter(Adapter);
+                                    }
+                                });
+
+
+                            }else{
+                                Toast.makeText(MainActivity.this, "No hay datos para sincronizar de la fecha seleccionada.", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    });
+                    hilo.start();
+
+
+
+
                 //ActualizaFechaSinc();
             }else{
                 Toast.makeText(MainActivity.this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
@@ -358,6 +395,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+
 
     public void LlamarWebService(String Liga,int porcentaje,int ix,int total,View view){
         try{
@@ -1815,9 +1854,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 BD.close();
 
             } catch (SQLiteConstraintException sqle){
-                Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             } catch (Exception e){
-                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
         }
@@ -1865,7 +1916,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
                 String Pro=e.getMessage();
-                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         }
     }
@@ -1881,7 +1938,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(cantidad>0){
 
         }else{
-            Toast.makeText(MainActivity.this,"Error al actualizar Recetas",Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"Error al actualizar Recetas",Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
         if(Datos.length>0){
             for(int x=0;x<Datos.length;x++){
@@ -1922,7 +1985,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(cantidad>0){
 
         }else{
-            Toast.makeText(MainActivity.this,"Error al actualizar Recetas Detalle",Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"Error al actualizar Recetas Detalle",Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
         if(Datos.length>0){
             for(int x=0;x<Datos.length;x++){
@@ -1962,7 +2031,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(cantidad>0){
 
         }else{
-            Toast.makeText(MainActivity.this,"Error al actualizar el estado fenologico",Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"Error al actualizar el estado fenologico",Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
         if(Datos.length>0){
             for(int x=0;x<Datos.length;x++){
@@ -1970,7 +2045,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ContentValues registro= new ContentValues();
                     registro.put("Id_Fenologico",Datos[x][0]);
                     registro.put("Nombre_Fenologico",Datos[x][1]);
-
+                    registro.put("PoE",Datos[x][2]);
                     BD.insert("t_Est_Fenologico",null,registro);
 
                 } catch (SQLiteConstraintException sqle){
@@ -1983,7 +2058,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BD.close();
     }
 
-    @Override
+   /* @Override  inhabilite
     public void onClick(View view) {
         if(view==date_Sinc){
             final Calendar c=Calendar.getInstance();
@@ -1995,5 +2070,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> date_Sinc.setText(i2+"/"+(i1+1)+"/"+i),anio,mes,dia);
             dtpd.show();
         }
-    }
+    } */
 }

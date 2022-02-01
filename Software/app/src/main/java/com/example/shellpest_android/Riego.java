@@ -102,6 +102,13 @@ public class Riego extends AppCompatActivity {
 
                     if (sp_Hue.getCount()==2){
                         sp_Hue.setSelection(1);
+                    }else{
+                        if (sp_Hue.getCount()<=1){
+                            ItemSPHue = new ArrayList<>();
+                            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                            CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
+                            sp_Hue.setAdapter(CopiHue);
+                        }
                     }
                 }else{
                     if((ItemSPHue.size()<=1  ) || LineEmpresa!=i){
@@ -115,6 +122,13 @@ public class Riego extends AppCompatActivity {
                         }else{
                             if (sp_Hue.getCount()==2){
                                 sp_Hue.setSelection(1);
+                            }else{
+                                if (sp_Hue.getCount()<=1){
+                                    ItemSPHue = new ArrayList<>();
+                                    ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                                    CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
+                                    sp_Hue.setAdapter(CopiHue);
+                                }
                             }
                         }
                     }

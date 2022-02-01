@@ -124,8 +124,71 @@ public class Enviar extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
                 do {
-                    String Tho=Renglon4.getString(7);
-                    insertWebDetalleElim(Renglon4.getString(0),Renglon4.getString(1),Renglon4.getString(2),Renglon4.getString(3),Renglon4.getString(4),Renglon4.getString(5),Renglon4.getString(6),Renglon4.getString(7),Renglon2.getString(8),Renglon2.getString(9),Renglon2.getString(10));
+                    String Tho0;
+                    if (Renglon4.getString(0).isEmpty()){
+                        Tho0="";
+                    }else{
+                        Tho0=Renglon4.getString(0);
+                    }
+                    String Tho1;
+                    if (Renglon4.getString(1).isEmpty()){
+                        Tho1="";
+                    }else{
+                        Tho1=Renglon4.getString(1);
+                    }
+                    String Tho2;
+                    if (Renglon4.getString(2).isEmpty()){
+                        Tho2="";
+                    }else{
+                        Tho2=Renglon4.getString(2);
+                    }
+                    String Tho3;
+                    if (Renglon4.getString(3).isEmpty()){
+                        Tho3="";
+                    }else{
+                        Tho3=Renglon4.getString(3);
+                    }
+                    String Tho4;
+                    if (Renglon4.getString(4).isEmpty()){
+                        Tho4="";
+                    }else{
+                        Tho4=Renglon4.getString(4);
+                    }
+                    String Tho5;
+                    if (Renglon4.getString(5).isEmpty()){
+                        Tho5="";
+                    }else{
+                        Tho5=Renglon4.getString(5);
+                    }
+                    String Tho6;
+                    if (Renglon4.getString(6).isEmpty()){
+                        Tho6="";
+                    }else{
+                        Tho6=Renglon4.getString(6);
+                    }
+                    String Tho7;
+                    if (Renglon4.getString(7).isEmpty()){
+                        Tho7="";
+                    }else{
+                        Tho7=Renglon4.getString(7);
+                    }
+                    int Tho8;
+
+                        Tho8=Renglon4.getInt(8);
+
+                    String Tho9;
+                    if (Renglon4.getString(9).isEmpty()){
+                        Tho9="";
+                    }else{
+                        Tho9=Renglon4.getString(9);
+                    }
+                    String Tho10;
+                    if (Renglon4.getString(10).isEmpty()){
+                        Tho10="";
+                    }else{
+                        Tho10=Renglon4.getString(10);
+                    }
+                    insertWebDetalleElim(Tho0,Tho1,Tho2,Tho3,Tho4,Tho5,Tho6,Tho7,String.valueOf(Tho8),Tho9,Tho10);
                 } while (Renglon4.moveToNext());
 
 
