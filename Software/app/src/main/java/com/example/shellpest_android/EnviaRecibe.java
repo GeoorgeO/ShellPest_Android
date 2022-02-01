@@ -78,7 +78,9 @@ public class EnviaRecibe extends AppCompatActivity {
                 AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(EnviaRecibe.this,"ShellPest",null,1);
                 SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
 
-                int cantidad= BD.delete("UsuarioLogin","Id_Usuario<>'root'",null);
+                int cantidad=0;
+                cantidad=BD.delete("UsuarioLogin","Id_Usuario<>'root'",null);
+
                 BD.close();
 
                 if(cantidad>0){

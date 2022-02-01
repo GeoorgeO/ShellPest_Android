@@ -27,7 +27,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class Login_Usuario extends AppCompatActivity {
@@ -76,15 +78,48 @@ public class Login_Usuario extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.getString(0).length()>0){
+
                 Toast.makeText(this,"Bienvenido "+Renglon.getString(0),Toast.LENGTH_SHORT).show();
 
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                ParsePosition pp1 = new ParsePosition(0);
+                java.util.Date convertidaFecha=formato.parse( RevisaFechaSync(), pp1);
 
-                Intent intento=new Intent(this,EnviaRecibe.class);
-                intento.putExtra("usuario", Renglon.getString(0));
-                intento.putExtra("perfil", Renglon.getString(1));
-                intento.putExtra("huerta", Renglon.getString(2));
+                if (RevisaFechaSync().trim().length()>0){
 
-                startActivity(intento);
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    java.util.Date fechaactual = cal.getTime(); //Para tomas solo fecha sin horas ni min.
+
+                    if( fechaactual.getTime() - convertidaFecha.getTime() >172800000){ //la resta arroja los datos en milisegundos, la cantidad permitida son 2 dias
+
+                        Intent intento = new Intent(this, MainActivity.class);
+                        intento.putExtra("usuario", Renglon.getString(0));
+                        intento.putExtra("perfil", Renglon.getString(1));
+                        intento.putExtra("huerta", Renglon.getString(2));
+
+                        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+
+                        startActivity(intento);
+
+                    }
+                    else{
+                        Intent intento = new Intent(this, EnviaRecibe.class);
+                        intento.putExtra("usuario", Renglon.getString(0));
+                        intento.putExtra("perfil", Renglon.getString(1));
+                        intento.putExtra("huerta", Renglon.getString(2));
+
+                        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+
+                        startActivity(intento);
+                    }
+                }
+
+
+
                 finish();
             }
 
@@ -305,21 +340,6 @@ public class Login_Usuario extends AppCompatActivity {
         return "";
     }
 
-    private void AgregarFechaSync (){
-        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
 
-        java.util.Date objDate = new java.util.Date();
-        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-        java.util.Date date1=objDate;
-
-        ContentValues registro= new ContentValues();
-        registro.put("id_Sincroniza","1");
-        registro.put("Fecha_Sincroniza",objSDF.format(date1));
-
-
-        BD.insert("FechaSincroniza",null,registro);
-        BD.close();
-    }
 
 }

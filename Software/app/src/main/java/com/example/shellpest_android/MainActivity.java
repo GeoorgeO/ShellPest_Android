@@ -122,12 +122,18 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
         try {
-            date1=new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+            if (RevisaFechaSync().trim().length()>0){
+                date1=new SimpleDateFormat("dd/MM/yyyy").parse(RevisaFechaSync());
+            }else{
+                date1=new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+            }
+
           //  date1=new SimpleDateFormat("dd/MM/yyyy").parse(date_Sinc.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        Toast.makeText(MainActivity.this, "Obteniendo datos del servidor, por favor espere", Toast.LENGTH_SHORT).show();
         Sincroniza_Datos(objSDF.format(date1),view);
 
         /*AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -2056,6 +2062,35 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
             }
         }
         BD.close();
+    }
+
+    private String RevisaFechaSync(){
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+
+        Cursor Renglon =BD.rawQuery("select Fecha_Sincroniza from FechaSincroniza",null);
+
+
+        if(Renglon.moveToFirst()){
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+            if (Renglon.getString(0).length()>0){
+                return Renglon.getString(0);
+            }
+
+
+            BD.close();
+        }else{
+            if(obj.isConnected())
+            {
+                return "";
+            }else{
+                Toast.makeText(MainActivity.this, "Es necesario tener internet para iniciar sesion por primera vez.", Toast.LENGTH_SHORT).show();
+            }
+
+            BD.close();
+        }
+        return "";
     }
 
    /* @Override  inhabilite
