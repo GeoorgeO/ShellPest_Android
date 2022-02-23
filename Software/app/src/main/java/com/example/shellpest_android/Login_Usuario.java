@@ -31,7 +31,6 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
 public class Login_Usuario extends AppCompatActivity {
 
     private EditText et_Usuario,et_Password;
@@ -73,7 +72,6 @@ public class Login_Usuario extends AppCompatActivity {
 
         Cursor Renglon =BD.rawQuery("select distinct Id_Usuario,Id_Perfil,Id_Huerta from UsuarioLogin",null);
 
-
         if(Renglon.moveToFirst()){
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
@@ -101,10 +99,9 @@ public class Login_Usuario extends AppCompatActivity {
                         intento.putExtra("perfil", Renglon.getString(1));
                         intento.putExtra("huerta", Renglon.getString(2));
 
+
                         //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
-
                         startActivity(intento);
-
                     }
                     else{
                         Intent intento = new Intent(this, EnviaRecibe.class);
@@ -116,14 +113,18 @@ public class Login_Usuario extends AppCompatActivity {
 
                         startActivity(intento);
                     }
+                }else{
+                    Intent intento = new Intent(this, MainActivity.class);
+                    intento.putExtra("usuario", Renglon.getString(0));
+                    intento.putExtra("perfil", Renglon.getString(1));
+                    intento.putExtra("huerta", Renglon.getString(2));
+
+                    //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+
+                    startActivity(intento);
                 }
-
-
-
                 finish();
             }
-
-
             BD.close();
         }else{
             if(obj.isConnected())
@@ -135,7 +136,6 @@ public class Login_Usuario extends AppCompatActivity {
 
             BD.close();
         }
-
         //String Id_Usuario=et_Usuario.getText().toString();
         //String Contrasena=et_Password.getText().toString();
         /*if(!Id_Usuario.isEmpty() && !Contrasena.isEmpty()){
@@ -222,8 +222,6 @@ public class Login_Usuario extends AppCompatActivity {
                 }
 
                 try {
-
-
                     conn.setRequestMethod("GET");
                     conn.connect();
 
@@ -243,9 +241,7 @@ public class Login_Usuario extends AppCompatActivity {
 
                     JSONArray jsonarr = null;
 
-
                     jsonarr = new JSONArray(json);
-
 
                     for (int i = 0; i < jsonarr.length(); i++) {
                         JSONObject jsonobject = jsonarr.getJSONObject(i);
@@ -254,22 +250,42 @@ public class Login_Usuario extends AppCompatActivity {
 
                             Agrega_Usuario(jsonobject.optString("Id_Perfil"), jsonobject.optString("Id_Huerta"),jsonobject.optString("Nombre_Usuario"));
 
-                            if (RevisaFechaSync().trim().length()>0){
-                                Date fechaactual = new Date(System.currentTimeMillis());
-                               if( fechaactual.getTime() - Date.valueOf( RevisaFechaSync()).getTime() >2){
+                            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                            ParsePosition pp1 = new ParsePosition(0);
+                            java.util.Date convertidaFecha=formato.parse( RevisaFechaSync(), pp1);
 
-                                   Intent intento = new Intent(this, EnviaRecibe.class);
-                                   intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
-                                   intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
-                                   intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
+                            if (RevisaFechaSync().trim().length()>0){
+
+                                Calendar cal = Calendar.getInstance();
+                                cal.set(Calendar.HOUR_OF_DAY, 0);
+                                cal.set(Calendar.MINUTE, 0);
+                                cal.set(Calendar.SECOND, 0);
+                                cal.set(Calendar.MILLISECOND, 0);
+                                java.util.Date fechaactual = cal.getTime(); //Para tomas solo fecha sin horas ni min.
+
+                                //Date fechaactual = new Date(System.currentTimeMillis());
+                                if( fechaactual.getTime() - convertidaFecha.getTime() >172800000){
+
+                                    Intent intento = new Intent(this, MainActivity.class);
+                                    intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
+                                    intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
+                                    intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
+
 
                                    //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
 
                                    startActivity(intento);
+                               }else{
 
-                               }
+                                    Intent intento = new Intent(this, EnviaRecibe.class);
+                                    intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
+                                    intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
+                                    intento.putExtra("huerta", jsonobject.optString("Id_Huerta"));
+
+                                    //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+                                    startActivity(intento);
+                                }
                             }else{
-
                                 Intent intento = new Intent(this, MainActivity.class);
                                 intento.putExtra("usuario", jsonobject.optString("Id_Usuario").toUpperCase());
                                 intento.putExtra("perfil", jsonobject.optString("Id_Perfil"));
@@ -279,16 +295,14 @@ public class Login_Usuario extends AppCompatActivity {
                                 startActivity(intento);
                             }
 
-
                             setVisible(false);
-
                             finish();
+
                         } else {
                             Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();
                         }
                     }
                     conn.disconnect();
-
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -317,15 +331,12 @@ public class Login_Usuario extends AppCompatActivity {
 
         Cursor Renglon =BD.rawQuery("select Fecha_Sincroniza from FechaSincroniza",null);
 
-
         if(Renglon.moveToFirst()){
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.getString(0).length()>0){
                return Renglon.getString(0);
             }
-
-
             BD.close();
         }else{
             if(obj.isConnected())
@@ -339,7 +350,4 @@ public class Login_Usuario extends AppCompatActivity {
         }
         return "";
     }
-
-
-
 }

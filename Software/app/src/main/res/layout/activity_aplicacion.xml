@@ -174,21 +174,22 @@
                     android:id="@+id/text_UnidadPro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1.5"
                     android:text="Unidad: " />
 
                 <TextView
                     android:id="@+id/text_EtiCenCos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="CC: " />
+                    android:layout_weight="1"
+                    android:text="Bloque's: " />
 
                 <TextView
                     android:id="@+id/text_CenCos"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_weight="7.5"
+                    android:background="@android:drawable/btn_default_small"
                     android:text="V"
                     android:textAlignment="textEnd" />
 

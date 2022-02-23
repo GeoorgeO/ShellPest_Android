@@ -111,9 +111,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         Perfil= getIntent().getStringExtra("perfil");
         Huerta= getIntent().getStringExtra("huerta");
 
-        ActualizaFechaSinc();
+
 
         Existe_Sinc(getCurrentFocus());
+        ActualizaFechaSinc();
     }
 
 
@@ -273,7 +274,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos" );
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -310,6 +312,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Fenologicos");
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RH" );
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -345,6 +348,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
                     }
                 }
 
@@ -352,11 +356,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                 Grid_Cambios.setAdapter(null);
                 arrayArticulos.clear();
-
-
-
-                    //Toast.makeText(MainActivity.this, Ligas_Web.get(i), Toast.LENGTH_SHORT).show();
-
 
 
                     Thread hilo=new Thread(new Runnable() {
@@ -396,13 +395,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 Toast.makeText(MainActivity.this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
             }
         }catch (WindowManager.BadTokenException E){
-
         }
-
-
     }
-
-
 
     public void LlamarWebService(String Liga,int porcentaje,int ix,int total,View view){
         try{
@@ -582,6 +576,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             break;
                         case "Id_Fenologico":
                             Actualiza_Fenologicos(datos);
+                            break;
+                        case "Id_recetaHuerta":
+                            Actualiza_RecetaHuerta(datos);
                             break;
                     }
                 }
@@ -2053,6 +2050,44 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     registro.put("Nombre_Fenologico",Datos[x][1]);
                     registro.put("PoE",Datos[x][2]);
                     BD.insert("t_Est_Fenologico",null,registro);
+
+                } catch (SQLiteConstraintException sqle){
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_RecetaHuerta(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("t_Receta_Huerta",Datos.length);
+        arrayArticulos.add(Tabla);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        int cantidad= BD.delete("t_Receta_Huerta","Id_Receta!='-1' ",null);
+
+        if(cantidad>0){
+
+        }else{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"Error al actualizar  t_Receta_Huerta",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+        if(Datos.length>0){
+            for(int x=0;x<Datos.length;x++){
+                try{
+                    ContentValues registro= new ContentValues();
+                    registro.put("Id_Receta",Datos[x][0]);
+                    registro.put("Id_Huerta",Datos[x][1]);
+                    registro.put("c_codigo_eps",Datos[x][2]);
+                    BD.insert("t_Receta_Huerta",null,registro);
 
                 } catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();

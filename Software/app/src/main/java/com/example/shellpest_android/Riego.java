@@ -337,12 +337,30 @@ public class Riego extends AppCompatActivity {
     }
 
     public void AddRenglon(View view){
+        if(txt_Precipitacion.getText().length()==0){
+            txt_Precipitacion.setText("0");
+        }
+        if(txt_CaudalIni.getText().length()==0){
+            txt_CaudalIni.setText("0");
+        }
+        if(txt_CaudalFin.getText().length()==0){
+            txt_CaudalFin.setText("0");
+        }
+        if(txt_Riego.getText().length()==0){
+            txt_Riego.setText("0");
+        }
+        if(txt_Temperatura.getText().length()==0){
+            txt_Temperatura.setText("0");
+        }
+        if(txt_ET.getText().length()==0){
+            txt_ET.setText("0");
+        }
         if(sp_Blq.getSelectedItemPosition()>0){
             boolean FaltoAlgo;
             FaltoAlgo=false;
             if(Double.parseDouble(String.valueOf(txt_Precipitacion.getText()))>=0){
-                if(Double.parseDouble(String.valueOf(txt_CaudalIni.getText()))>0){
-                    if(Double.parseDouble(String.valueOf(txt_CaudalFin.getText()))>0){
+                if(Double.parseDouble(String.valueOf(txt_CaudalIni.getText()))>=0){
+                    if(Double.parseDouble(String.valueOf(txt_CaudalFin.getText()))>=0){
                         if(Double.parseDouble(String.valueOf(txt_Riego.getText()))>=0){
                             if(Double.parseDouble(String.valueOf(txt_Temperatura.getText()))>0){
                                 if(Double.parseDouble(String.valueOf(txt_ET.getText()))>0){

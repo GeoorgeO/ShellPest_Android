@@ -42,7 +42,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
     Spinner sp_TipoAplicacion, sp_Presentacion,sp_huerta,sp_Empresa4,sp_Receta;
     AutoCompleteTextView actv_Productos;
-    TextView text_Codigo,text_Aplicados,text_CantidadTotal,text_UnidadPro,text_CenCos;
+    TextView text_Codigo,text_Aplicados,text_CantidadTotal ,text_UnidadPro,text_CenCos;
     EditText etd_Fecha,pt_Observaciones,etn_ApliCantidad,etn_Pipadas;
     ListView lv_GridAplicacion;
 
@@ -112,8 +112,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             sp_Empresa4.setSelection(1);
         }
 
-
-
         existencia=0;
         /*cargaSpinnerHuertas();
         CopiHue = new AdaptadorSpinner(this, ItemSPHue);
@@ -137,7 +135,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
         nseldet=-1;
 
-
         /*cargarProductos();
         Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
         actv_Productos.setAdapter(Adaptador_Arreglos);*/
@@ -159,7 +156,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         arrayArticulos = new ArrayList<>();
 
         borrarAplicaciones15Days();
-
 
         actv_Productos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -221,7 +217,12 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     String tarrsay=arrayArticulos.get(i).getcProducto();
 
                     if(!arrayArticulos.get(i).getcProducto().equals("")){
-                        actv_Productos.setText(arrayArticulos.get(i).getNombre_Producto().trim() +" | "+arrayArticulos.get(i).getcProducto().trim());
+                        if (arrayArticulos.get(i).getNombre_Producto()!=null){
+                            actv_Productos.setText(arrayArticulos.get(i).getNombre_Producto().trim() +" | "+arrayArticulos.get(i).getcProducto().trim());
+                        }else{
+                            actv_Productos.setText(" | "+arrayArticulos.get(i).getcProducto().trim());
+                        }
+
                     }
 
                     etn_ApliCantidad.setText(arrayArticulos.get(i).getCantidad());
@@ -251,25 +252,24 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     if (sp_huerta.getCount()==2){
                         sp_huerta.setSelection(1);
                     }
-                }else{
-                    if((ItemSPHue.size()<=1  ) || LineEmpresa!=i){
-                        cargaSpinnerHuertas();
-                        CopiHue = new AdaptadorSpinner(aplicacion.this, ItemSPHue);
-                        sp_huerta.setAdapter(CopiHue);
+                }else {
+                    if (CopiHue.getItem(i).getTexto().trim().equals("Huerta")){
+                        if ((ItemSPHue.size() <= 1) || LineEmpresa != i) {
+                            cargaSpinnerHuertas();
+                            CopiHue = new AdaptadorSpinner(aplicacion.this, ItemSPHue);
+                            sp_huerta.setAdapter(CopiHue);
 
 
-                        if(LineEmpresa>0){
-                            sp_huerta.setSelection(LineEmpresa);
-                        }else{
-                            if (sp_huerta.getCount()==2){
-                                sp_huerta.setSelection(1);
+                            if (LineEmpresa > 0) {
+                                sp_huerta.setSelection(LineEmpresa);
+                            } else {
+                                if (sp_huerta.getCount() == 2) {
+                                    sp_huerta.setSelection(1);
+                                }
                             }
                         }
                     }
                 }
-
-
-
 
 
                 /*if (sp_Receta.getCount()==2){
@@ -322,8 +322,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-
-
         etn_Pipadas.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -337,7 +335,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         etn_ApliCantidad.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-
+                /* INHABILITE POR QUE NO SE REQUIERE VALIDAR EXISTENCIA, ABILITAR SI SE REQUIERE
                 if (!String.valueOf(existencia).isEmpty() && etn_ApliCantidad.getText().toString().length()>0){
                     if(Double.parseDouble(etn_ApliCantidad.getText().toString())>existencia){
                         Toast.makeText(aplicacion.this, "NO SE PUEDE APLICAR. La cantidad ingresada excede la existencia de producto.", Toast.LENGTH_SHORT).show();
@@ -347,7 +345,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     }
                 }else{
 
-                }
+                }*/
 
                 if(  etn_Pipadas.getText().length()>0 && etn_ApliCantidad.getText().length()>0){
                     text_CantidadTotal.setText(String.valueOf(Double.parseDouble(etn_Pipadas.getText().toString())* Double.parseDouble(etn_ApliCantidad.getText().toString()))+" "+UnidadPro+" de Producto aplicados");
@@ -506,12 +504,12 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     String Consulta;
 
                     Consulta = "select R.Id_TipoAplicacion,T.Nombre_TipoAplicacion,R.Id_Presentacion,P.Nombre_Presentacion,U.v_abrevia_uni " +
-                            "from t_Receta as R " +
+                            "from t_Receta as R "+
                             "inner join t_TipoAplicacion as T on T.Id_TipoAplicacion=R.Id_TipoAplicacion and T.c_codigo_eps=R.c_codigo_eps " +
                             "inner join t_Presentacion as P on P.Id_Presentacion=R.Id_Presentacion and P.c_codigo_eps=R.c_codigo_eps " +
                             "inner join t_Unidad as U on U.c_codigo_uni=P.Id_Unidad and U.c_codigo_eps=P.c_codigo_eps " +
                             "where R.c_codigo_eps='" + CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2) + "' " +
-                            " and R.Id_Receta ='" + CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7) + "' ";
+                           " and R.Id_Receta ='" + CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7) + "' ";
                     Renglon = BD.rawQuery(Consulta, null);
                     //strftime('%Y',)
                     if (Renglon.moveToFirst()) {
@@ -609,6 +607,11 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                             }
                         }
                         text_CenCos.setText(stringBuilder.toString());
+                        if(text_CenCos.getText().toString().trim().length()>0 ){
+                            if(Id!=null){
+                                ActualizaCentroCostos(Id,cepsselapli);
+                            }
+                        }
                     }
                 });
                 builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -747,7 +750,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 if(arrayArticulos.size()>0){
                     if(SGC!=arrayArticulos.size())
                     GuardaDeReceta();
-                    DescansoEnMilisegundos(8000,IdAplica,c_codigo_eps);
+                    //DescansoEnMilisegundos(8000,IdAplica,c_codigo_eps); inhabilite por que no se requiere validar si hay existencias en el producto
 
                 }
                 BD.close();
@@ -994,13 +997,31 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    private void ActualizaCentroCostos(String Id,String EPS){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+        Cursor Renglon;
+
+        ContentValues registro3= new ContentValues();
+
+        registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
+        //registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
+        int cantidad=BD.update("t_Aplicaciones",registro3,"Id_Aplicacion='"+Id+
+                "' and c_codigo_eps='"+EPS+"' ",null);
+
+        if(cantidad>0){
+            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+        }else{
+            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void CargarAplicacion(){
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
         Cursor Renglon;
-        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_abrevia_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta,A.Unidades_aplicadas  " +
+        Renglon=BD.rawQuery(" select A.Id_Aplicacion,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_abrevia_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta,A.Unidades_aplicadas, A.Centro_Costos  " +
                 "from t_Aplicaciones as A " +
                 "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps " +
                 "inner join t_Presentacion as Pre on A.Id_Presentacion=Pre.Id_Presentacion and Pre.c_codigo_eps=H.c_codigo_eps " +
@@ -1014,6 +1035,13 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 if (Renglon.getInt(0)>0){
 
                     text_Codigo.setText(Id.substring(0,3)+"-"+Id.substring(3,5)+"-"+Id.substring(5,10));
+
+                    if(Renglon.getString(14)==null){
+                        text_CenCos.setText("");
+                    }else{
+                        text_CenCos.setText(Renglon.getString(14).trim());
+                    }
+
 
                     int item;
 
@@ -1527,7 +1555,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from t_Receta as R where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and R.Id_Huerta='"+Huerta+"' ",null);
+        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from  t_Receta_Huerta  as RH  inner join t_Receta as R on RH.Id_Receta=R.Id_Receta and RH.c_codigo_eps=R.c_codigo_eps where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and RH.Id_Huerta='"+Huerta+"' ",null);
 
         if (Renglon.moveToFirst()) {
             do {
