@@ -113,31 +113,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         }
 
         existencia=0;
-        /*cargaSpinnerHuertas();
-        CopiHue = new AdaptadorSpinner(this, ItemSPHue);
-        sp_huerta.setAdapter(CopiHue);
-
-        if (sp_huerta.getCount()==2){
-            sp_huerta.setSelection(1);
-        }*/
-
-        /*cargaSpinnerTipoAplicacion();
-        CopiApli = new AdaptadorSpinner(this, ItemSPApli);
-        sp_TipoAplicacion.setAdapter(CopiApli);
-
-        if (sp_TipoAplicacion.getCount()==2){
-            sp_TipoAplicacion.setSelection(1);
-        }*/
-        /*if (Id==null){
-            ItemSPPre = new ArrayList<>();
-
-        }*/
 
         nseldet=-1;
-
-        /*cargarProductos();
-        Adaptador_Arreglos=new ArrayAdapter(this, android.R.layout.simple_list_item_1,ArrayProductos);
-        actv_Productos.setAdapter(Adaptador_Arreglos);*/
 
         etd_Fecha=(EditText)findViewById(R.id.etd_Fecha);
         etd_Fecha.setOnClickListener(this);
@@ -192,7 +169,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     BD.close();
                 }
             }
-
         });
 
         lv_GridAplicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -204,12 +180,12 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                     actv_Productos.setText("");
                     etn_ApliCantidad.setText("0");
-                    etn_Pipadas.setText("0");
+                    //etn_Pipadas.setText("0");
                     //etd_Fecha.setText(arrayArticulos.get(i).getFecha());
                     text_UnidadPro.setText("Unidad:");
                     UnidadPro="";
                     text_CantidadTotal.setText("Cantidad de Producto Aplicado");
-                    text_CenCos.setText("");
+
 
                 }else{
                     seldet=true;
@@ -232,11 +208,10 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     UnidadPro=arrayArticulos.get(i).getNombre_Unidad()+"s";
                     text_CantidadTotal.setText(String.valueOf(Double.parseDouble(etn_Pipadas.getText().toString())* Double.parseDouble(etn_ApliCantidad.getText().toString()))+" "+UnidadPro+" de Producto aplicados");
                     if (arrayArticulos.get(i).getCC()==null){
-                        text_CenCos.setText("");
+                       // text_CenCos.setText("");
                     }else{
-                        text_CenCos.setText(arrayArticulos.get(i).getCC().trim());
+                        //text_CenCos.setText(arrayArticulos.get(i).getCC().trim());
                     }
-
                 }
             }
         });
@@ -253,20 +228,24 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         sp_huerta.setSelection(1);
                     }
                 }else {
-                    if (CopiHue.getItem(i).getTexto().trim().equals("Huerta")){
+                    if (ItemSPHue.get(0).getTexto().trim().equals("Huerta") /*CopiHue.getItem(i).getTexto().trim().equals("Huerta")*/){
                         if ((ItemSPHue.size() <= 1) || LineEmpresa != i) {
                             cargaSpinnerHuertas();
                             CopiHue = new AdaptadorSpinner(aplicacion.this, ItemSPHue);
                             sp_huerta.setAdapter(CopiHue);
 
 
-                            if (LineEmpresa > 0) {
-                                sp_huerta.setSelection(LineEmpresa);
+                            if (LineHuerta > 0) {
+                                //sp_huerta.setSelection(LineHuerta);
                             } else {
                                 if (sp_huerta.getCount() == 2) {
                                     sp_huerta.setSelection(1);
                                 }
                             }
+
+                        }
+                        if(LineEmpresa == i && LineHuerta>0){
+                            sp_huerta.setSelection(LineHuerta);
                         }
                     }
                 }
@@ -296,8 +275,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                             }
                         }
                     }
-
-
                 }
 
                 //if(Id==null) {
@@ -318,7 +295,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 actv_Productos.setText("");
-
             }
         });
 
@@ -803,6 +779,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         if (!FaltoAlgo){
             if (guardarEncabezado()){
 
+
                 Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
                 SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
                 Date date1=objDate;
@@ -991,7 +968,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 "' and c_codigo_eps='"+EPS+"' ",null);
 
         if(cantidad>0){
-            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(aplicacion.this,"Se actualizo el numero de pipadas.",Toast.LENGTH_SHORT).show();
         }else{
             //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
         }
@@ -1010,7 +987,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 "' and c_codigo_eps='"+EPS+"' ",null);
 
         if(cantidad>0){
-            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(aplicacion.this,"Se actualizo el o los Bloques.",Toast.LENGTH_SHORT).show();
         }else{
             //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
         }
@@ -1048,7 +1025,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     if(sp_Empresa4.getSelectedItemPosition()<2){
                         item=0;
                         for (int x=0; x<ItemSPEmp.size();x++){
-                            if( ItemSPEmp.get(x).getTexto().equals(Renglon.getString(8).trim()+" - "+Renglon.getString(9).trim())){
+                            if( ItemSPEmp.get(x).getTexto().trim().equals(Renglon.getString(8).trim()+" - "+Renglon.getString(9).trim())){
                                 item=x;
                                 break;
                             }
@@ -1347,6 +1324,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Apli.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and Enviado='0' ",null);
         if(Renglon.moveToFirst()){
             do {
+
+
                 if (Renglon.getInt(0)>0){
                     ContentValues registro = new ContentValues();
                     String Parrafo=String.valueOf(pt_Observaciones.getText());
@@ -1358,6 +1337,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                     if(cantidad>0){
+                        Id=text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);
+                        cepsselapli=CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2);
                         //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
                     }else{
                         //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
@@ -1379,6 +1360,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,7));
                     registro.put("Unidades_aplicadas",etn_Pipadas.getText().toString());
                     BD.insert("t_Aplicaciones",null,registro);
+                    Id=text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);
+                    cepsselapli=CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2);
                     return true;
                 }
             } while(Renglon.moveToNext());

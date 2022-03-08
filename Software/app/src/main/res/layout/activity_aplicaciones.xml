@@ -1,113 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Aplicaciones">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="43dp"
-        android:onClick="Monitoreo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_mapmode" />
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:columnCount="3"
+      >
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="43dp"
-        android:onClick="Riego"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?android:attr/textSelectHandle" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-10dp"
-        android:text="Monitoreo"
-        app:layout_constraintStart_toStartOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        <Button
+            android:id="@+id/imageButton"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:onClick="Monitoreo"
+            android:text="Monitoreo"
+            android:drawableTop="@android:drawable/ic_menu_mapmode" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="Riego"
-        app:layout_constraintStart_toStartOf="@+id/imageButton2"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
 
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="43dp"
-        android:onClick="Salida"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/stat_sys_upload_done" />
+        <Button
+            android:id="@+id/imageButton4"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:onClick="Aplicacion"
+            android:text="Aplicacion"
+            android:drawableTop="@android:drawable/ic_menu_myplaces" />
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="Salidas"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/imageButton3"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
+        <Button
+            android:id="@+id/imageButton7"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:onClick="Poda"
+            android:text="Poda"
+            android:drawableTop="@drawable/podas" />
 
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="43dp"
-        android:onClick="Aplicacion"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:srcCompat="@android:drawable/ic_menu_myplaces" />
+        <Button
+            android:id="@+id/imageButton3"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:onClick="Salida"
+            android:text="Salida"
+            android:drawableTop="@android:drawable/stat_sys_upload_done" />
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-10dp"
-        android:text="Aplicaciones"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@+id/imageButton4"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton4" />
+        <Button
+            android:id="@+id/imageButton2"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:onClick="Riego"
+            android:text="Riego"
+            android:drawableTop="?android:attr/textSelectHandle" />
 
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="43dp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/imageButton4"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:srcCompat="?attr/actionModePasteDrawable" />
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-15dp"
-        android:text="Requisiciones"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/imageButton5"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/imageButton5"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:text="Requisicion"
+            android:drawableTop="?attr/actionModePasteDrawable" />
+
+
+
+        <Button
+            android:id="@+id/imageButton8"
+            android:layout_columnWeight="1"
+            android:layout_height="100sp"
+            android:text="Cosechas"
+            android:drawableTop="@drawable/cosecha" />
+
+        <Button
+            android:id="@+id/imageButton9"
+            android:layout_height="100sp"
+            android:layout_columnWeight="1"
+            android:drawableTop="@drawable/fertilizacion"
+            android:text="Fertiliza" />
+
+    </GridLayout>
+
+</ScrollView>

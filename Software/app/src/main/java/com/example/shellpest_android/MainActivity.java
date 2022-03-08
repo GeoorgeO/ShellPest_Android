@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
     Tablas_Sincronizadas Tabla;
     ListView Grid_Cambios;
+    TextView tv_Porcentaje;
     ArrayList<Tablas_Sincronizadas> arrayArticulos;
     Adaptador_Tabla Adapter;
     //EditText date_Sinc;
@@ -92,6 +93,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //Toast.makeText(MainActivity.this, arrayArticulos.get(position).getArticuloDescripcion(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        tv_Porcentaje=(TextView)findViewById(R.id.tv_Porcentaje);
 
         arrayArticulos=new ArrayList<>();
 
@@ -363,9 +366,26 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         public void run() {
 
                             for (int i=0;i<Ligas_Web.size();i++){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        tv_Porcentaje.setVisibility(View.VISIBLE); // aqui truena
+                                    }
+                                });
 
                                 LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
                                 pb_Progreso.setProgress( ((i+1)*100)/Ligas_Web.size());
+
+                                runOnUiThread(new Runnable() { // Aqui puedo agregar Etiqueta con porcentaje
+                                    @Override
+                                    public void run() {
+                                        tv_Porcentaje.setText(String.valueOf(pb_Progreso.getProgress()) + "%");
+                                    }
+                                });
+                                if(i==Ligas_Web.size()-1){
+                                    tv_Porcentaje.setVisibility(View.INVISIBLE);
+                                }
+
                             }
                             if(arrayArticulos.size()>0){
                                 Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
@@ -386,10 +406,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         }
                     });
                     hilo.start();
-
-
-
-
                 //ActualizaFechaSinc();
             }else{
                 Toast.makeText(MainActivity.this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
@@ -634,19 +650,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         }
     }
 
-    public void hayCalidades(){
-        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
-
-        Cursor Renglon =BD.rawQuery("select count(Id_Calidad) from t_Calidad",null);
-
-        if(Renglon.moveToFirst()){
-            //////Toast.makeText(MainActivity.this,Renglon.getString(0),Toast.LENGTH_SHORT).show();
-            }else{
-
-            }
-        BD.close();
-    }
 
     private void Actualiza_Calidad(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Calidad",Datos.length);
@@ -2072,12 +2075,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         if(cantidad>0){
 
         }else{
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this,"Error al actualizar  t_Receta_Huerta",Toast.LENGTH_SHORT).show();
-                }
-            });
+
 
         }
         if(Datos.length>0){
