@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -85,11 +84,11 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
         sp_TipoAplicacion = (Spinner) findViewById(R.id.sp_TipoAplicacion);
         sp_Presentacion = (Spinner) findViewById(R.id.sp_Presentacion);
-        sp_huerta = (Spinner) findViewById(R.id.sp_huerta);
-        sp_Empresa4 = (Spinner) findViewById(R.id.sp_Empresa4);
+        sp_huerta = (Spinner) findViewById(R.id.sp_huerta5);
+        sp_Empresa4 = (Spinner) findViewById(R.id.sp_Empresa5);
         sp_Receta = (Spinner) findViewById(R.id.sp_Receta);
         text_Codigo = (TextView) findViewById(R.id.text_Codigo);
-        lv_GridAplicacion = (ListView) findViewById(R.id.lv_GridAplicacion);
+        lv_GridAplicacion = (ListView) findViewById(R.id.lv_GridPodas);
         pt_Observaciones = (EditText) findViewById(R.id.pt_Observaciones);
         etn_ApliCantidad = (EditText) findViewById(R.id.etn_ApliCantidad);
         etn_Pipadas = (EditText) findViewById(R.id.etn_Pipadas);
@@ -774,7 +773,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             FaltoAlgo = true;
             Mensaje = "Falta seleccionar una Presentacion,Verifica por favor";
         }
-
 
         if (!FaltoAlgo){
             if (guardarEncabezado()){

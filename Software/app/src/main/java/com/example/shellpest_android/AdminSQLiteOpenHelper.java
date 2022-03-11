@@ -391,6 +391,28 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Nombre_Fenologico text," +
                 "PoE text, " +
                 "primary key(Id_Fenologico))");
+
+        BD.execSQL("create table cosactividad " +
+                "(c_codigo_act text not null," +
+                "v_nombre_act text," +
+                "primary key(c_codigo_act))");
+
+        BD.execSQL("create table t_Podas " +
+                "(Fecha text not null, " +
+                "Id_bloque text not null, " +
+                "N_arboles float, " +
+                "Observaciones text, " +
+                "Id_Usuario text not null, " +
+                "F_Creacion text not null, " +
+                "c_codigo_eps text not null, " +
+                "primary key(Fecha,Id_bloque,c_codigo_eps))");
+
+        BD.execSQL("create table t_PodasDet " +
+                "(Fecha text not null, " +
+                "Id_bloque text not null, " +
+                "c_codigo_eps text not null, " +
+                "actividad text not null, " +
+                "primary key(Fecha,Id_bloque,c_codigo_eps,actividad))");
     }
 
     @Override
@@ -421,12 +443,10 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Riego");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RiegoEliminado");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Usuario_Huerta");
-
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Productos");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Unidad");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Presentacion");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_TipoAplicacion");
-
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Aplicaciones");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Aplicaciones_Det");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Usuario_Empresa");
@@ -436,11 +456,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Almacen");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS invmovimiento");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_existencias");
-
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Receta");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RecetaDet");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Receta_Huerta");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Est_Fenologico");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS cosactividad");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Podas");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_PodasDet");
 
         onCreate(sqLiteDatabase);
     }

@@ -85,8 +85,8 @@ public class Aplicaciones extends AppCompatActivity {
         Intent intento=null;
         if (Accion.equals("Captura")){
             intento=new Intent(this,Podas.class);
-            intento.putExtra("usuario2", Usuario);
-            intento.putExtra("perfil2", Perfil);
+            intento.putExtra("usuario3", Usuario);
+            intento.putExtra("perfil3", Perfil);
             intento.putExtra("huerta2", Huerta);
 
         }

@@ -13,7 +13,6 @@
         android:columnCount="3"
       >
 
-
         <Button
             android:id="@+id/imageButton"
             android:layout_columnWeight="1"
@@ -55,15 +54,12 @@
             android:text="Riego"
             android:drawableTop="?android:attr/textSelectHandle" />
 
-
         <Button
             android:id="@+id/imageButton5"
             android:layout_columnWeight="1"
             android:layout_height="100sp"
             android:text="Requisicion"
             android:drawableTop="?attr/actionModePasteDrawable" />
-
-
 
         <Button
             android:id="@+id/imageButton8"

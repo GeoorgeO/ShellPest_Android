@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         Perfil= getIntent().getStringExtra("perfil");
         Huerta= getIntent().getStringExtra("huerta");
 
-
-
         Existe_Sinc(getCurrentFocus());
         ActualizaFechaSinc();
     }
@@ -279,6 +277,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda" );
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -316,6 +315,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Fenologicos");
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RH" );
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesPoda" );
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -351,7 +351,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH");
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda");
                     }
                 }
 
@@ -365,13 +366,15 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         @Override
                         public void run() {
 
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tv_Porcentaje.setVisibility(View.VISIBLE); // aqui truena
+                                }
+                            });
+
                             for (int i=0;i<Ligas_Web.size();i++){
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        tv_Porcentaje.setVisibility(View.VISIBLE); // aqui truena
-                                    }
-                                });
+
 
                                 LlamarWebService(Ligas_Web.get(i),regla3,i,Ligas_Web.size(),view);
                                 pb_Progreso.setProgress( ((i+1)*100)/Ligas_Web.size());
@@ -382,11 +385,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                                         tv_Porcentaje.setText(String.valueOf(pb_Progreso.getProgress()) + "%");
                                     }
                                 });
-                                if(i==Ligas_Web.size()-1){
-                                    tv_Porcentaje.setVisibility(View.INVISIBLE);
-                                }
+
 
                             }
+                            tv_Porcentaje.setVisibility(View.INVISIBLE);
                             if(arrayArticulos.size()>0){
                                 Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
 
@@ -596,6 +598,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         case "Id_recetaHuerta":
                             Actualiza_RecetaHuerta(datos);
                             break;
+                        case "c_codigo_act":
+                            Actualiza_Actividad(datos);
+                            break;
                     }
                 }
 
@@ -643,23 +648,28 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
             BD.insert("FechaSincroniza",null,registro);
 
-            BD.close();
 
         }catch (Exception e){
+            BD.close();
             //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
+        BD.close();
     }
 
 
     private void Actualiza_Calidad(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Calidad",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Calidad) from t_Calidad where Id_Calidad='"+Datos[x][0].toString()+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Calidad) from t_Calidad where Id_Calidad='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -682,28 +692,33 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Calidad",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Cultivo(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Cultivo",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Cultivo) from t_Cultivo where Id_Cultivo='"+Datos[x][0].toString()+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Cultivo) from t_Cultivo where Id_Cultivo='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -727,9 +742,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             BD.insert("t_Cultivo",null,registro);
                         }
 
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -738,17 +753,21 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 }
 
         }
+        BD.close();
     }
 
     private void Actualiza_Duenio(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Duenio",Datos.length);
         arrayArticulos.add(Tabla);
-        for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
+        for(int x=0;x<Datos.length;x++){
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Duenio) from t_Duenio where Id_Duenio='"+Datos[x][0].toString()+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Duenio) from t_Duenio where Id_Duenio='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -771,28 +790,33 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Duenio",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Deteccion(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Deteccion",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Deteccion) from t_Deteccion where Id_Deteccion='"+Datos[x][0].toString()+"'",null);
+                    Renglon =BD.rawQuery("select count(Id_Deteccion) from t_Deteccion where Id_Deteccion='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -815,9 +839,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Deteccion",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -825,19 +849,24 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
-
+        BD.close();
     }
 
     private void Actualiza_Enfermedad(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Enfermedad",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Enfermedad) from t_Enfermedad where Id_Enfermedad='"+Datos[x][0].toString()+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Enfermedad) from t_Enfermedad where Id_Enfermedad='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -860,28 +889,32 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Enfermedad",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Humbral(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Humbral",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Humbral) from t_Humbral where Id_Humbral='"+Datos[x][0].toString()+"'",null);
+                Renglon =BD.rawQuery("select count(Id_Humbral) from t_Humbral where Id_Humbral='"+Datos[x][0].toString()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -907,28 +940,33 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                         BD.insert("t_Humbral",null,registro);
                     }
-                    BD.close();
+
                 }else{
-                    BD.close();
+
                 }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Plagas(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Plagas",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Plagas) from t_Plagas where Id_Plagas='"+Datos[x][0].toString()+"'",null);
+                Renglon =BD.rawQuery("select count(Id_Plagas) from t_Plagas where Id_Plagas='"+Datos[x][0].toString()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -951,9 +989,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                         BD.insert("t_Plagas",null,registro);
                     }
-                    BD.close();
+
                 }else{
-                    BD.close();
+
                 }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -961,18 +999,23 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
-
+        BD.close();
     }
 
     private void Actualiza_Productor(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Productor",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Productor) from t_Productor where Id_Productor='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][6]+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Productor) from t_Productor where Id_Productor='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][6]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -995,28 +1038,33 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             registro.put("c_codigo_eps",Datos[x][6]);
                             BD.insert("t_Productor",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Pais(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Pais",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Pais) from t_Pais where Id_Pais='"+Datos[x][0].toString()+"'",null);
+                    Renglon =BD.rawQuery("select count(Id_Pais) from t_Pais where Id_Pais='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1039,28 +1087,31 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Pais",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Estado(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Estado",Datos.length);
         arrayArticulos.add(Tabla);
-        for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
+        for(int x=0;x<Datos.length;x++){
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Estado) from t_Estado where Id_Estado='"+Datos[x][0].toString()+"'",null);
+                    Renglon =BD.rawQuery("select count(Id_Estado) from t_Estado where Id_Estado='"+Datos[x][0].toString()+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1085,28 +1136,33 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Estado",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-
         }
+        BD.close();
     }
 
     private void Actualiza_Ciudades(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Ciudades",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Ciudad) from t_Ciudades where Id_Ciudad='"+Datos[x][0]+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Ciudad) from t_Ciudades where Id_Ciudad='"+Datos[x][0]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1131,9 +1187,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                             BD.insert("t_Ciudades",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1141,17 +1197,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
         }
+        BD.close();
     }
 
     private void Actualiza_Huerta(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Huerta",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Huerta) from t_Huerta where Id_Huerta='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][22]+"'",null);
+                    Renglon=BD.rawQuery("select count(Id_Huerta) from t_Huerta where Id_Huerta='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][22]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1207,10 +1268,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             BD.insert("t_Huerta",null,registro);
                         }
 
-                        BD.close();
+
                     }else{
 
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1218,16 +1279,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
         }
+        BD.close();
     }
     private void Actualiza_Bloque(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Bloque",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_Bloque) from t_Bloque where Id_Bloque='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][7]+"'",null);
+                    Renglon =BD.rawQuery("select count(Id_Bloque) from t_Bloque where Id_Bloque='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][7]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1253,9 +1320,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             registro.put("TipoBloque",Datos[x][8]);
                             BD.insert("t_Bloque",null,registro);
                         }
-                        BD.close();
+
                     }else{
-                        BD.close();
+
                     }
                 }catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1263,17 +1330,21 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
         }
+        BD.close();
     }
     private void Actualiza_Puntocontrol(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Puntocontrol",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-                AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-                SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                 try{
-                    Cursor Renglon =BD.rawQuery("select count(Id_PuntoControl) from t_Puntocontrol where Id_PuntoControl='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][9]+"'",null);
+                    Renglon =BD.rawQuery("select count(Id_PuntoControl) from t_Puntocontrol where Id_PuntoControl='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][9]+"'",null);
 
                     if(Renglon.moveToFirst()){
 
@@ -1304,10 +1375,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             BD.insert("t_Puntocontrol",null,registro);
                         }
 
-                        BD.close();
+
                     }else{
 
-                        BD.close();
+
                     }
                 } catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1315,18 +1386,23 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
         }
+        BD.close();
     }
 
     private void Actualiza_Zona(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Zona",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
 
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_zona) from t_Zona where Id_zona='"+Datos[x][0].toString()+"'",null);
+                Renglon =BD.rawQuery("select count(Id_zona) from t_Zona where Id_zona='"+Datos[x][0].toString()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1350,10 +1426,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_Zona",null,registro);
                     }
 
-                    BD.close();
                 }else{
 
-                    BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1361,17 +1435,23 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Individuo(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Individuo",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Individuo) from t_Individuo where Id_Individuo='"+Datos[x][0].toString()+"'",null);
+                Renglon =BD.rawQuery("select count(Id_Individuo) from t_Individuo where Id_Individuo='"+Datos[x][0].toString()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1397,10 +1477,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_Individuo",null,registro);
                     }
 
-                    BD.close();
+
                 }else{
 
-                    BD.close();
+
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1408,18 +1488,21 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Valores(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Monitoreo",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
-
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_monitoreo) from t_Monitoreo where Id_monitoreo='"+Datos[x][0].toString()+"'",null);
+                Renglon=BD.rawQuery("select count(Id_monitoreo) from t_Monitoreo where Id_monitoreo='"+Datos[x][0].toString()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1452,11 +1535,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         registro.put("Id_Fenologico",Datos[x][11]);
                         BD.insert("t_Monitoreo",null,registro);
                     }
-
-                    BD.close();
                 }else{
-
-                    BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1464,43 +1543,54 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_UsuHuerta(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Usuario_Huerta",Datos.length);
         arrayArticulos.add(Tabla);
-        for(int x=0;x<Datos.length;x++){
 
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
-            try{
-                int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='"+Datos[x][0].toString()+"' and c_codigo_eps='"+Datos[x][2]+"' and Id_Huerta='"+Datos[x][1]+"'", null);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
 
-                ContentValues registro= new ContentValues();
-                registro.put("Id_Usuario",Datos[x][0]);
-                registro.put("Id_Huerta",Datos[x][1]);
-                registro.put("c_codigo_eps",Datos[x][2]);
-                BD.insert("t_Usuario_Huerta",null,registro);
+        int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='-1'", null);
 
-            } catch (SQLiteConstraintException sqle){
-                //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
-                //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+
+                try {
+
+                    ContentValues registro = new ContentValues();
+                    registro.put("Id_Usuario", Datos[x][0]);
+                    registro.put("Id_Huerta", Datos[x][1]);
+                    registro.put("c_codigo_eps", Datos[x][2]);
+                    BD.insert("t_Usuario_Huerta", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
             }
-            BD.close();
         }
+        BD.close();
     }
 
     private void Actualiza_Productos(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Productos",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][5]+"'",null);
+                Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][5]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1542,29 +1632,35 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_Productos",null,registro);
                     }
 
-                    BD.close();
+                    //BD.close();
                 }else{
 
-                    BD.close();
+                    //BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
-               Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+               //Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
-                Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Unidades(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Unidad",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
 
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_uni) from t_Unidad where c_codigo_uni='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][3]+"'",null);
+                Renglon=BD.rawQuery("select count(c_codigo_uni) from t_Unidad where c_codigo_uni='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][3]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1591,10 +1687,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_Unidad",null,registro);
                     }
 
-                    BD.close();
+
                 }else{
 
-                    BD.close();
+
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1602,18 +1698,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_TipoAplicaciones(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("Id_TipoAplicacion",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_TipoAplicacion) from t_TipoAplicacion where Id_TipoAplicacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][2]+"'",null);
+                Renglon=BD.rawQuery("select count(Id_TipoAplicacion) from t_TipoAplicacion where Id_TipoAplicacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][2]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1638,10 +1738,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_TipoAplicacion",null,registro);
                     }
 
-                    BD.close();
                 }else{
 
-                    BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1649,17 +1747,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Presentasiones(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Presentacion",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Presentacion) from t_Presentacion where Id_Presentacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][4]+"' ",null);
+                Renglon =BD.rawQuery("select count(Id_Presentacion) from t_Presentacion where Id_Presentacion='"+Datos[x][0]+"' and c_codigo_eps='"+Datos[x][4]+"' ",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1688,10 +1791,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_Presentacion",null,registro);
                     }
 
-                    BD.close();
                 }else{
 
-                    BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1699,18 +1800,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Almacenes(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("t_Almacen",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2]+"' and Id_Huerta='"+Datos[x][3]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
+                Renglon =BD.rawQuery("select count(Id_Almacen) from t_Almacen where Id_Almacen='"+Datos[x][2]+"' and Id_Huerta='"+Datos[x][3]+"' and c_codigo_eps='"+Datos[x][4]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1736,10 +1841,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("t_Almacen",null,registro);
                     }
 
-                    BD.close();
                 }else{
 
-                    BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1747,18 +1850,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Empresas(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("conempresa",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_eps) from conempresa where c_codigo_eps='"+Datos[x][0].toString()+"'",null);
+                Renglon=BD.rawQuery("select count(c_codigo_eps) from conempresa where c_codigo_eps='"+Datos[x][0].toString()+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1785,10 +1892,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         BD.insert("conempresa",null,registro);
                     }
 
-                    BD.close();
                 }else{
 
-                    BD.close();
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1797,18 +1902,22 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
             }
 
         }
+        BD.close();
     }
 
     private void Actualiza_Existencias(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("Existencias",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][1]+"'",null);
+                Renglon=BD.rawQuery("select count(c_codigo_pro) from t_Productos where c_codigo_pro='"+Datos[x][1]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1828,10 +1937,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                     }
 
-                    BD.close();
+
                 }else{
 
-                    BD.close();
+
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1839,57 +1948,72 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }
+        BD.close();
     }
 
     private void Actualiza_UsuEmp(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("Usuario_Empresa",Datos.length);
         arrayArticulos.add(Tabla);
-        for(int x=0;x<Datos.length;x++){
 
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
-            try{
-                int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario='"+Datos[x][0]+"'  and c_codigo_eps='"+Datos[x][1]+"'", null);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
 
-                ContentValues registro= new ContentValues();
-                registro.put("Id_Usuario",Datos[x][0]);
-                registro.put("c_codigo_eps",Datos[x][1]);
+        int cantidad = BD.delete("t_Usuario_Empresa", "Id_Usuario!='-1'", null);
 
-                BD.insert("t_Usuario_Empresa",null,registro);
+        if(cantidad>0){
 
-                BD.close();
-
-            } catch (SQLiteConstraintException sqle){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } catch (Exception e){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
+        }else{
 
         }
+        if(Datos.length>0) {
+
+            for (int x = 0; x < Datos.length; x++) {
+
+                try {
+
+                    ContentValues registro = new ContentValues();
+                    registro.put("Id_Usuario", Datos[x][0]);
+                    registro.put("c_codigo_eps", Datos[x][1]);
+
+                    BD.insert("t_Usuario_Empresa", null, registro);
+
+
+
+                } catch (SQLiteConstraintException sqle) {
+                    /*runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, sqle.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });*/
+
+                } catch (Exception e) {
+                   /* runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });*/
+
+                }
+            }
+        }
+        BD.close();
     }
 
     private void Actualiza_ExistenciasAlm(String [][] Datos ){
         Tabla=new Tablas_Sincronizadas("Existencias_Almacen",Datos.length);
         arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        Cursor Renglon;
+
         for(int x=0;x<Datos.length;x++){
 
-
-            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-            SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
             try{
-                Cursor Renglon =BD.rawQuery("select count(c_codigo_pro) as c_codigo_pro from t_existencias where c_codigo_eps='"+Datos[x][0]+"' and c_codigo_alm='"+Datos[x][2]+"' and c_codigo_pro='"+Datos[x][1]+"'",null);
+                Renglon=BD.rawQuery("select count(c_codigo_pro) as c_codigo_pro from t_existencias where c_codigo_eps='"+Datos[x][0]+"' and c_codigo_alm='"+Datos[x][2]+"' and c_codigo_pro='"+Datos[x][1]+"'",null);
 
                 if(Renglon.moveToFirst()){
 
@@ -1914,23 +2038,23 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                        BD.insert("t_existencias",null,registro2);
                     }
-                    BD.close();
+
                 }else{
-                    BD.close();
+
                 }
             } catch (SQLiteConstraintException sqle){
                 //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
             } catch (Exception e){
-                String Pro=e.getMessage();
+                /*String Pro=e.getMessage();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
-                });
-
+                });*/
             }
         }
+        BD.close();
     }
 
     private void Actualiza_Recetas(String [][] Datos ){
@@ -1944,12 +2068,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         if(cantidad>0){
 
         }else{
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this,"Error al actualizar Recetas",Toast.LENGTH_SHORT).show();
-                }
-            });
 
         }
         if(Datos.length>0){
@@ -1991,13 +2109,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         if(cantidad>0){
 
         }else{
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this,"Error al actualizar Recetas Detalle",Toast.LENGTH_SHORT).show();
-                }
-            });
-
         }
         if(Datos.length>0){
             for(int x=0;x<Datos.length;x++){
@@ -2037,13 +2148,12 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         if(cantidad>0){
 
         }else{
-            runOnUiThread(new Runnable() {
+            /*runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(MainActivity.this,"Error al actualizar el estado fenologico",Toast.LENGTH_SHORT).show();
                 }
-            });
-
+            });*/
         }
         if(Datos.length>0){
             for(int x=0;x<Datos.length;x++){
@@ -2053,6 +2163,42 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     registro.put("Nombre_Fenologico",Datos[x][1]);
                     registro.put("PoE",Datos[x][2]);
                     BD.insert("t_Est_Fenologico",null,registro);
+
+                } catch (SQLiteConstraintException sqle){
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_Actividad(String [][] Datos ){
+        Tabla=new Tablas_Sincronizadas("cosactividad",Datos.length);
+        arrayArticulos.add(Tabla);
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        int cantidad= BD.delete("cosactividad","c_codigo_act!='-1' ",null);
+
+        if(cantidad>0){
+
+        }else{
+            /*runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"Error al actualizar el estado fenologico",Toast.LENGTH_SHORT).show();
+                }
+            });*/
+        }
+        if(Datos.length>0){
+            for(int x=0;x<Datos.length;x++){
+                try{
+                    ContentValues registro= new ContentValues();
+                    registro.put("c_codigo_act",Datos[x][0]);
+                    registro.put("v_nombre_act",Datos[x][1]);
+                    BD.insert("cosactividad",null,registro);
 
                 } catch (SQLiteConstraintException sqle){
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
