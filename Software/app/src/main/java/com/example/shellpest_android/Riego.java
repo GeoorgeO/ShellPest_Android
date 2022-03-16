@@ -102,6 +102,7 @@ public class Riego extends AppCompatActivity {
 
                     if (sp_Hue.getCount()==2){
                         sp_Hue.setSelection(1);
+                        Cargagrid();
                     }else{
                         if (sp_Hue.getCount()<=1){
                             ItemSPHue = new ArrayList<>();
@@ -134,6 +135,9 @@ public class Riego extends AppCompatActivity {
                     }
                 }
 
+                if(i>0){
+                    Cargagrid();
+                }
 
                 /*cargaSpinnerHue();
                 CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
@@ -231,7 +235,6 @@ public class Riego extends AppCompatActivity {
             }
         });
 
-        Cargagrid();
 
     }
 

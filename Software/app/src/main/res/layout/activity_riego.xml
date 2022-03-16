@@ -185,7 +185,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:background="@color/teal_700"
-                android:text="Cau.Ini"
+                android:text="C.Ini"
                 android:textAlignment="center" />
 
             <TextView
@@ -193,7 +193,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:background="@color/teal_700"
-                android:text="Cau.Fin"
+                android:text="C.Fin"
                 android:textAlignment="center" />
 
             <TextView
