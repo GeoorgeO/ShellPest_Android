@@ -229,16 +229,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:background="@drawable/rounded_button"
                 android:onClick="InsertarPodas"
                 android:text="Agregar"
-                android:textColor="#FFFFFF"
-                android:background="@color/verde_azul"/>
+                android:textColor="#FFFFFF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="8dp">
+                android:paddingTop="3dp">
 
                 <TextView
                     android:id="@+id/textView34"

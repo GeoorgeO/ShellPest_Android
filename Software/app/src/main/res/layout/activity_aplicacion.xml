@@ -373,14 +373,15 @@
                 android:textAlignment="center"
 				android:textColor="@color/verde_azul"/>
 
-            <Button
-                android:id="@+id/btn_Agrega"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="Agregar"
-                android:text="Agregar" 
-				android:background="@color/verde_azul"
+			<Button
+				android:id="@+id/btn_Agrega"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:layout_margin="3dp"
+				android:background="@drawable/rounded_button"
+				android:onClick="Agregar"
+				android:text="Agregar"
 				android:textColor="#FFFFFF" />
 
             <LinearLayout
