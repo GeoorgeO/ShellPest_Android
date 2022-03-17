@@ -259,6 +259,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
 
             DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> etd_Fecha2.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
             dtpd.show();
+            sp_Blo2.setSelection(0);
         }
     }
 

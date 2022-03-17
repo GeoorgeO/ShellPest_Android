@@ -63,7 +63,7 @@
         android:layout_height="51dp"
         android:layout_marginStart="159dp"
         android:layout_marginEnd="160dp"
-        android:background="#009688"
+        android:background="@drawable/rounded_button"
         android:onClick="validarLogin"
         android:text="Entrar"
         android:textColor="#FFFFFF"

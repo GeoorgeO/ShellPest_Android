@@ -41,20 +41,21 @@
 
                 <TextView
                     android:id="@+id/textView35"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
                     android:gravity="center"
-                    android:layout_weight="1"
                     android:text="Fecha:"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
                     android:textSize="12sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/etd_Fecha2"
-                    android:layout_width="227dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.9"
                     android:ems="10"
                     android:hint="Fecha"
                     android:inputType="date"
@@ -64,12 +65,6 @@
                     android:textColorLink="@color/verde_azul"
                     android:textSize="14sp" />
 
-                <ImageButton
-                    android:id="@+id/imageButton6"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:background="@drawable/miniboton_redondo"
-                    app:srcCompat="@android:drawable/ic_input_get" />
             </LinearLayout>
 
             <LinearLayout
@@ -80,20 +75,21 @@
 
                 <TextView
                     android:id="@+id/textView57"
-                    android:layout_width="102dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
                     android:gravity="center"
                     android:text="Empresa:"
-                    android:textAlignment="center"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/sp_Empresa5"
-                    android:layout_width="280dp"
-                    android:layout_height="25dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
                     android:popupBackground="@drawable/spinner_style"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -106,20 +102,21 @@
 
                 <TextView
                     android:id="@+id/textView58"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
                     android:gravity="center"
                     android:text="Huerta:"
-                    android:textAlignment="center"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/sp_huerta5"
-                    android:layout_width="280dp"
-                    android:layout_height="25sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
                     android:popupBackground="@drawable/spinner_style"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -132,20 +129,21 @@
 
                 <TextView
                     android:id="@+id/textView60"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
                     android:gravity="center"
                     android:text="Bloque:"
-                    android:textAlignment="center"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/sp_Blo2"
-                    android:layout_width="280dp"
-                    android:layout_height="25sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
                     android:popupBackground="@drawable/spinner_style"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -161,10 +159,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:text="N° de Arboles:"
-                    android:textAlignment="center"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
                     android:textSize="12sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/etn_ApliCantidad"
@@ -191,8 +189,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:text="Observaciones:"
-                    android:textAlignment="center"
-                    android:textColor="@color/verde"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/cafe"
                     android:textStyle="bold" />
 
                 <EditText
@@ -244,6 +242,7 @@
                     android:id="@+id/textView34"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.3"
                     android:background="@color/verde"
                     android:text="Codigo"
@@ -255,6 +254,7 @@
                     android:id="@+id/textView33"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.7"
                     android:background="@color/verde"
                     android:text="Actividad de poda"

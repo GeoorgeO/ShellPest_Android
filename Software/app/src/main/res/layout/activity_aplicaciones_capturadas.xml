@@ -29,8 +29,9 @@
                 android:id="@+id/text_Id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
                 android:layout_weight="1"
-                
                 android:text="ID. Aplicación"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
@@ -39,8 +40,9 @@
                 android:id="@+id/text_Huerta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
                 android:layout_weight="1"
-              
                 android:text="Huerta"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
@@ -49,8 +51,9 @@
                 android:id="@+id/text_FechaApli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
                 android:layout_weight="1"
-           
                 android:text="Fecha"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
@@ -84,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
-        android:background="@color/verde_azul"
+        android:background="@drawable/rounded_button"
         android:onClick="Regresar"
         android:text="Cerrar"
         android:textColor="@color/white"

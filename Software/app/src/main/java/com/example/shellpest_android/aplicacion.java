@@ -1283,7 +1283,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                             registro2.put("Fecha",etd_Fecha.getText().toString());
                             registro2.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
                             registro2.put("Dosis",etn_ApliCantidad.getText().toString());
-                            registro2.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
                             registro2.put("Id_Usuario",Usuario);
                             registro2.put("F_Creacion",objSDF.format(date1));
                             registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
@@ -1355,7 +1354,12 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("F_Creacion",objSDF.format(date1));
                     registro.put("Enviado","0");
                     registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
-                    registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,7));
+                    if(ItemSPRec.size()==1){
+                        registro.put("Id_Receta","");
+                    }else{
+                        registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,7));
+                    }
+
                     registro.put("Unidades_aplicadas",etn_Pipadas.getText().toString());
                     BD.insert("t_Aplicaciones",null,registro);
                     Id=text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);

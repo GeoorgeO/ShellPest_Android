@@ -92,7 +92,7 @@ public class Aplicaciones extends AppCompatActivity {
 
         }
         if (Accion.equals("Enviar")){
-            //intento=new Intent(this,Enviar_Aplicaciones.class);
+            intento=new Intent(this,Enviar_Poda.class);
         }
         startActivity(intento);
     }

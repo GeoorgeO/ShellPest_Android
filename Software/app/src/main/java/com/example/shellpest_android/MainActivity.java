@@ -388,7 +388,13 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
 
                             }
-                            tv_Porcentaje.setVisibility(View.INVISIBLE);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tv_Porcentaje.setVisibility(View.INVISIBLE);
+                                }
+                            });
+
                             if(arrayArticulos.size()>0){
                                 Adapter=new Adaptador_Tabla(getApplicationContext(),arrayArticulos);
 
