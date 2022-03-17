@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondorecibir"
     tools:context=".MainActivity">
 
     <TextView
@@ -28,11 +29,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView67"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingTop="10dp"
+            android:text="DATOS A RECIBIR"
+            android:textAlignment="center"
+            android:textColor="@color/cafe"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <EditText
                 android:id="@+id/space_blak"
@@ -48,8 +60,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".333"
+                android:background="@color/verde_azul"
                 android:onClick="Existe_Sinc"
-                android:text="Sincronizar" />
+                android:text="Sincronizar"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/space_blak2"
@@ -65,8 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-
-            >
+            android:paddingTop="5dp">
 
             <EditText
                 android:id="@+id/Columna1"
@@ -74,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".65"
-                android:background="@color/teal_700"
+                android:background="@color/cafe"
                 android:enabled="false"
                 android:text="Tabla"
                 android:textAlignment="center"
@@ -85,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".35"
-                android:background="@color/teal_700"
+                android:background="@color/cafe"
                 android:enabled="false"
                 android:text="N Sinc."
                 android:textAlignment="center"
@@ -94,8 +108,8 @@
 
         <ListView
             android:id="@+id/lv_Cambios"
-            android:layout_width="411dp"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="416dp"
 
             android:layout_weight="6"
             tools:listitem="@layout/registro_grid">
@@ -112,7 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
 
             <EditText
                 android:id="@+id/space_blak5"
@@ -128,8 +143,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".3"
+                android:background="@color/verde_azul"
                 android:onClick="continuar"
                 android:text="Continuar"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/lv_Cambios" />
 
             <EditText

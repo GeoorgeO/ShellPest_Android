@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondosalidas"
     tools:context=".Salidas">
 
     <LinearLayout
@@ -15,6 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView68"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:paddingTop="5dp"
+            android:text="SALIDAS"
+            android:textAlignment="center"
+            android:textColor="@color/verde_azul"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,9 +35,12 @@
             <TextView
                 android:id="@+id/tv_Responsable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:text="Responsable: " />
+                android:paddingLeft="5dp"
+                android:text="Responsable: "
+                android:textColor="@color/verde_azul"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/abrirSalidas"
@@ -36,10 +51,30 @@
                 app:srcCompat="@android:drawable/ic_input_get" />
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/sp_Empresa"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView69"
+                android:layout_width="102dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Empresa:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_Empresa"
+                android:layout_width="311dp"
+                android:layout_height="match_parent"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,29 +83,77 @@
 
             <TextView
                 android:id="@+id/textView19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="89dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:text="Fecha" />
+                android:text="Fecha:"
+                android:gravity="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_Fecha"
-                android:layout_width="wrap_content"
+                android:layout_width="298dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="date" />
+                android:hint="Fecha"
+                android:inputType="date"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde_azul"
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/sp_Almacen"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="35dp"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/sp_Aplicacion"
+            <TextView
+                android:id="@+id/textView70"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Almacén:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_Almacen"
+                android:layout_width="311dp"
+                android:layout_height="match_parent"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView71"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Aplicación:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_Aplicacion"
+                android:layout_width="311dp"
+                android:layout_height="match_parent"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,7 +165,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".8"
-                android:text="Producto" />
+                android:text="Producto:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <AutoCompleteTextView
                 android:id="@+id/actv_Producto"
@@ -91,7 +178,12 @@
                 android:layout_weight=".2"
                 android:hint="Teclee nombre de producto"
                 android:shadowColor="#FFFFFF"
-                android:text="" />
+                android:text=""
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde_azul"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -104,7 +196,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".8"
-                android:text="Cantidad:" />
+                android:text="Cantidad:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/etn_Cantidad"
@@ -112,109 +208,125 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
 
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textColor="@color/verde_azul"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_Unidad"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_weight=".2"
-                android:text="Unidad:" />
+                android:paddingLeft="10dp"
+                android:text="Unidad:"
+                android:textAlignment="textStart"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/textView41"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="68"
-                android:text="Centro de costos:" />
+                android:text="Centro de costos:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_BloquesT"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="32"
-                android:background="@android:drawable/editbox_dropdown_light_frame"
+                android:paddingRight="10dp"
                 android:text="V"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/verde_azul" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_Agregar"
-            android:layout_width="wrap_content"
+            android:layout_width="103dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:background="@color/verde_azul"
             android:onClick="Agregar"
-            android:text="Agregar" />
+            android:text="Agregar"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/textView20"
-                android:layout_width="55dp"
+                android:layout_width="49dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/amarillo"
                 android:text="Fecha"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/cafe" />
 
             <TextView
                 android:id="@+id/textView21"
-                android:layout_width="wrap_content"
+                android:layout_width="127dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/teal_700"
+                android:background="@color/amarillo"
                 android:text="Producto"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/cafe" />
 
             <TextView
                 android:id="@+id/textView22"
-                android:layout_width="45dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/amarillo"
                 android:text="Cant."
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/cafe" />
 
             <TextView
                 android:id="@+id/textView23"
-                android:layout_width="45dp"
+                android:layout_width="67dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/amarillo"
                 android:text="Unidad"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/cafe" />
 
             <TextView
                 android:id="@+id/textView24"
-                android:layout_width="86dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/amarillo"
                 android:text="Centro Costo"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/cafe" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/lv_GridSalidas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="331dp"
             android:textAlignment="center"
             tools:listitem="@layout/item_grid_salida" />
 

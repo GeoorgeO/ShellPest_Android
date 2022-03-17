@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:background="@drawable/fondoformularios"
     tools:context=".activity_Monitoreo">
 
     <LinearLayout
@@ -12,10 +13,22 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
+		app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView66"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.02"
+            android:text="MONITOREO"
+            android:textAlignment="center"
+            android:textColor="@color/amarillo"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+		
+		<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.02"
@@ -29,8 +42,14 @@
 
                 android:layout_marginLeft="5dp"
                 android:enabled="false"
+				android:hint="Fecha"
                 android:inputType="date"
-                android:textAlignment="center" />
+                android:textAlignment="center" 
+				android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde_azul"
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_espacio"
@@ -59,24 +78,76 @@
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/sp_Empresa2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.02" />
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/sp_Hue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.0755" />
+			<TextView
+				android:id="@+id/textView60"
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="Empresa:"
+				android:textAlignment="center"
+				android:textColor="@color/cafe"
+				android:textSize="12sp" />
+
+			<Spinner
+				android:id="@+id/sp_Empresa2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.75"
+				android:popupBackground="@drawable/spinner_style" />
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/textView61"
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="Huerta:"
+				android:textAlignment="center"
+				android:textColor="@color/cafe"
+				android:textSize="12sp" />
+
+			<Spinner
+				android:id="@+id/sp_Hue"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.75"
+				android:popupBackground="@drawable/spinner_style"/>
 
 
-        <Spinner
-            android:id="@+id/sp_Pto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.0755" />
+		</LinearLayout>
+
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/textView62"
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="Punto de Control:"
+				android:textAlignment="center"
+				android:textColor="@color/cafe"
+				android:textSize="12sp" />
+
+			<Spinner
+				android:id="@+id/sp_Pto"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.75"
+				android:popupBackground="@drawable/spinner_style"/>
+
+		</LinearLayout>
 
 
         <RadioGroup
@@ -91,44 +162,113 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.333"
-                android:text="Plaga" />
+                android:text="Plaga"
+				android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/cafe"
+                android:textColorHint="@color/cafe"
+                android:textColorLink="@color/verde_azul"
+                android:textStyle="bold"/>
 
             <RadioButton
                 android:id="@+id/rb_Enfermedad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.333"
-                android:text="Enfermedad" />
+                android:text="Enfermedad"
+				android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/cafe"
+                android:textColorHint="@color/cafe"
+                android:textColorLink="@color/verde_azul"
+                android:textStyle="bold"/>
 
             <RadioButton
                 android:id="@+id/rb_SinPresencia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.333"
-                android:text="Sin Presencia" />
+                android:text="Sin Presencia" 
+				android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/cafe"
+                android:textColorHint="@color/cafe"
+                android:textColorLink="@color/verde_azul"
+                android:textStyle="bold"/>
 
         </RadioGroup>
 
 
-        <Spinner
-            android:id="@+id/sp_PE"
+		<LinearLayout
+			android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.02"
+            android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/textView63"
+				android:layout_width="100dp"
+				android:layout_height="match_parent"
+				android:text="Plaga / Enfermedad:"
+				android:textAlignment="center"
+				android:textColor="@color/cafe"
+				android:textSize="12sp" />
+			
+	        <Spinner
+	            android:id="@+id/sp_PE"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.0755" 
+				android:popupBackground="@drawable/spinner_style"/>
+			
+		</LinearLayout>
+
+		<LinearLayout
+            android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+            android:layout_weight="0.02"
+            android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/textView64"
+				android:layout_width="100dp"
+				android:layout_height="match_parent"
+				android:text="Organo Muestreado:"
+				android:textAlignment="center"
+				android:textColor="@color/cafe"
+				android:textSize="12sp" />
+			
+        	<Spinner
+            	android:id="@+id/sp_Org"
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:layout_weight="0.0755"
+            	android:text="Huerta" 
+				android:popupBackground="@drawable/spinner_style"/>
+
+		</LinearLayout>
+		
+		<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+			android:layout_weight="0.02"
+            android:orientation="horizontal">
 
-            android:layout_weight="0.0755" />
-
-        <Spinner
-            android:id="@+id/sp_Org"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.0755"
-            android:text="Huerta" />
-
-        <Spinner
-            android:id="@+id/sp_Ind"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.0755" />
+			<TextView
+				android:id="@+id/textView65"
+				android:layout_width="100dp"
+				android:layout_height="match_parent"
+				android:text="Individuo:"
+				android:textAlignment="center"
+				android:textAllCaps="false"
+				android:textColor="@color/cafe"
+				android:textSize="12sp" />
+			
+	        <Spinner
+	            android:id="@+id/sp_Ind"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.0755" 
+				android:popupBackground="@drawable/spinner_style" />
+			
+		</LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,12 +276,11 @@
             android:layout_weight="0.02"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView47"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.02"
-                android:text="N° Individuos:" />
+			<TextView
+				android:id="@+id/textView47"
+				android:layout_width="100dp"
+				android:layout_height="wrap_content"
+				android:text="N° Individuos:" />
 
             <EditText
                 android:id="@+id/et_individuos"
@@ -149,7 +288,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.02"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+				android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textSize="14sp"/>
+			
         </LinearLayout>
 
         <Button
@@ -158,7 +302,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.02"
             android:onClick="agregarAGrid"
-            android:text="Agregar" />
+            android:text="Agregar"
+			android:background="@color/verde_azul"
+			android:textColor="#FFFFFF"/>
 
 
         <LinearLayout
@@ -172,13 +318,12 @@
                 android:id="@+id/et_PuntoControl"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
-
+                android:background="@color/verde"
                 android:editable="false"
                 android:enabled="false"
                 android:text="P"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/cafe"
                 android:textSize="14sp" />
 
             <EditText
@@ -186,43 +331,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2.5"
-                android:background="@color/teal_700"
+                android:background="@color/verde"
                 android:editable="false"
                 android:enabled="false"
                 android:text="PE"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/cafe"
                 android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_Organo"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/verde"
                 android:editable="false"
                 android:enabled="false"
                 android:text="Organo"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/cafe"
                 android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_Individuo"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/verde"
                 android:editable="false"
                 android:enabled="false"
                 android:text="N Individuo"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/cafe"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/lv_GridMonitoreo"
             android:layout_width="match_parent"
-            android:layout_height="173dp"
+            android:layout_height="147dp"
             android:layout_weight="0.41"
             tools:listitem="@layout/item_grid_monitoreo">
 
@@ -234,7 +379,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.03"
             android:onClick="MtdCerrar"
-            android:text="Guardar" />
+            android:text="Guardar"
+			android:background="@color/verde_azul"
+			android:textColor="#FFFFFF" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

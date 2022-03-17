@@ -11,6 +11,7 @@ public class Fertilizaciones extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fertilizaciones);
+		getSupportActionBar().hide();
     }
 
     public void Agregar(View view){

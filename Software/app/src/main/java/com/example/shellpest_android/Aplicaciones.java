@@ -13,6 +13,7 @@ public class Aplicaciones extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aplicaciones);
+		getSupportActionBar().hide();
 
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
@@ -93,6 +94,22 @@ public class Aplicaciones extends AppCompatActivity {
         if (Accion.equals("Enviar")){
             //intento=new Intent(this,Enviar_Aplicaciones.class);
         }
+        startActivity(intento);
+    }
+	
+	 public void Gasolina(View view){
+        Intent intento=null;
+        intento=new Intent(this,Gasolina.class);
+        /*if (Accion.equals("Captura")){
+            intento=new Intent(this,Podas.class);
+            intento.putExtra("usuario3", Usuario);
+            intento.putExtra("perfil3", Perfil);
+            intento.putExtra("huerta2", Huerta);
+
+        }
+        if (Accion.equals("Enviar")){
+            //intento=new Intent(this,Enviar_Aplicaciones.class);
+        }*/
         startActivity(intento);
     }
 

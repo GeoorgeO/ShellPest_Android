@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
+		<activity
+            android:name=".Gasolina"
+            android:exported="true" />
         <activity android:name=".Podas"></activity>
         <activity android:name=".Fertilizaciones" />
         <activity android:name=".Salidas_Capturadas" />

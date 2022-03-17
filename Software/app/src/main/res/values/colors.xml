@@ -8,4 +8,8 @@
     <color name="teal_900">#004D40</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+	<color name="verde_azul">#009688</color>
+    <color name="cafe">#BC6209</color>
+    <color name="amarillo">#FFC107</color>
+    <color name="verde">#A8CF45</color>
 </resources>

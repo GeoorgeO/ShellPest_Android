@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoformularios"
+    tools:context=".Gasolina">
+
+    <TextView
+        android:id="@+id/textView79"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GASOLINA"
+        android:textColor="@color/amarillo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.006" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="431dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.163">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView82"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="5sp"
+                android:text="Responsable:"
+                android:textColor="@color/verde_azul"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView83"
+                android:layout_width="78dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Folio Vale:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextNumber"
+                android:layout_width="81dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="0000"
+                android:inputType="number"
+                android:textAlignment="viewStart"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView84"
+                android:layout_width="78dp"
+                android:layout_height="match_parent"
+                android:paddingRight="5dp"
+                android:text="Fecha Ingreso:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="dd / mm / aa"
+                android:inputType="date"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView85"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Fecha Salida"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextDate2"
+                android:layout_width="112dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="dd / mm / aa"
+                android:inputType="date"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde_azul"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView86"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:text="Cantidad Ingreso:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextNumberDecimal"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="0.0"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10sp"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView87"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10sp"
+                android:text="lt"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/textView88"
+                android:layout_width="78dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Cantidad Saldo:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextNumberDecimal2"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="0.0"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10sp"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde_azul"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView89"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="lt"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView90"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Activo:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_activoGas"
+                android:layout_width="220dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"
+                android:textColor="@color/verde_azul"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView91"
+                android:layout_width="94dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Huerta:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_huertaGas"
+                android:layout_width="220dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"
+                />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10sp">
+
+                <TextView
+                    android:id="@+id/textView92"
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Kilometraje Inicial:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextNumberDecimal3"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="0.0"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="10sp"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView93"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Km"
+                    android:textColor="@color/black" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10sp">
+
+                <TextView
+                    android:id="@+id/textView94"
+                    android:layout_width="129dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Kilometraje Final:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextNumberDecimal4"
+                    android:layout_width="178dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="0.0 "
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="10sp"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView95"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Km"
+                    android:textColor="@color/black" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10sp">
+
+                <TextView
+                    android:id="@+id/textView97"
+                    android:layout_width="109dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Horometro:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextNumberDecimal5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="00:00"
+                    android:inputType="time"
+                    android:paddingLeft="15sp"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView96"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hrs"
+                    android:textColor="@color/black" />
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView98"
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Tipo Combustible:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_tipoGas"
+                android:layout_width="140dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView99"
+                android:layout_width="103dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Actividad:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_actividadGas"
+                android:layout_width="226dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView100"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Observaciones:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextTextPersonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Observaciones"
+                android:inputType="textPersonName"
+                android:paddingLeft="10sp"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_agregarGas"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/textView101"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/verde"
+            android:text="Registros"
+            android:textColor="@color/cafe" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_agregarGas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/verde_azul"
+        android:text="AGREGAR"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ListView
+        android:layout_width="358dp"
+        android:layout_height="101dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,6 +41,7 @@ public class Login_Usuario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_usuario);
+		getSupportActionBar().hide();
 
         et_Usuario=(EditText)findViewById(R.id.et_Usuario);
         et_Password=(EditText)findViewById(R.id.et_Password);

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondoformularios"
     tools:context=".Podas">
 
     <LinearLayout
@@ -16,6 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView52"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PODAS"
+            android:gravity="center"
+            android:textColor="@color/amarillo"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/ll_ApliEncabezado"
@@ -33,17 +43,25 @@
                     android:id="@+id/textView35"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:layout_weight="1"
-                    android:text="Fecha:" />
+                    android:text="Fecha:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/etd_Fecha2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="227dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:hint="Fecha"
                     android:inputType="date"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
                     android:textSize="14sp" />
 
                 <ImageButton
@@ -54,20 +72,83 @@
                     app:srcCompat="@android:drawable/ic_input_get" />
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/sp_Empresa5"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/sp_huerta5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/textView57"
+                    android:layout_width="102dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Empresa:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/sp_Blo2"
+                <Spinner
+                    android:id="@+id/sp_Empresa5"
+                    android:layout_width="280dp"
+                    android:layout_height="25dp"
+                    android:popupBackground="@drawable/spinner_style"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView58"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Huerta:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_huerta5"
+                    android:layout_width="280dp"
+                    android:layout_height="25sp"
+                    android:popupBackground="@drawable/spinner_style"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Bloque:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_Blo2"
+                    android:layout_width="280dp"
+                    android:layout_height="25sp"
+                    android:popupBackground="@drawable/spinner_style"
+                    android:textAlignment="center" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +160,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:text="N° de Arboles:" />
+                    android:text="N° de Arboles:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/etn_ApliCantidad"
@@ -87,9 +172,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
                     android:inputType="numberDecimal"
-                    android:textSize="14sp" />
-
-
+                    android:hint="Arboles"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -102,7 +190,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:text="Observaciones:" />
+                    android:text="Observaciones:"
+                    android:textAlignment="center"
+                    android:textColor="@color/verde"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/pt_Observaciones"
@@ -111,24 +202,27 @@
                     android:layout_weight="0.7"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:textSize="14sp" />
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/teal_700"
+                android:background="@color/verde"
                 android:text="Act. de Poda:"
                 android:textAlignment="center"
-                android:textColor="@android:color/secondary_text_dark" />
-
-
+                android:textColor="@color/cafe" />
 
             <Spinner
                 android:id="@+id/sp_Actividad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"/>
 
             <Button
                 android:id="@+id/btn_Agrega"
@@ -136,22 +230,25 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:onClick="InsertarPodas"
-                android:text="Agregar" />
+                android:text="Agregar"
+                android:textColor="#FFFFFF"
+                android:background="@color/verde_azul"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
 
                 <TextView
                     android:id="@+id/textView34"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:background="@color/teal_700"
+                    android:background="@color/verde"
                     android:text="Codigo"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/cafe"
                     android:textSize="12sp" />
 
                 <TextView
@@ -159,10 +256,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:background="@color/teal_700"
+                    android:background="@color/verde"
                     android:text="Actividad de poda"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/cafe"
                     android:textSize="12sp" />
 
 
