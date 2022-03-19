@@ -411,7 +411,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "(Fecha text not null, " +
                 "Id_bloque text not null, " +
                 "c_codigo_eps text not null, " +
-                "actividad text not null, " +
+                "Actividad text not null, " +
                 "primary key(Fecha,Id_bloque,c_codigo_eps,actividad))");
     }
 

@@ -53,7 +53,7 @@ public class Aplicaciones extends AppCompatActivity {
     }
 
     public void Salida(View view){
-        Intent intento=null;
+      /*  Intent intento=null;
         if (Accion.equals("Captura")){
             intento=new Intent(this,Salidas.class);
             intento.putExtra("usuario2", Usuario);
@@ -64,7 +64,7 @@ public class Aplicaciones extends AppCompatActivity {
         if (Accion.equals("Enviar")){
             intento=new Intent(this,Enviar_Salidas.class);
         }
-        startActivity(intento);
+        startActivity(intento);*/
     }
 
     public void Aplicacion(View view){

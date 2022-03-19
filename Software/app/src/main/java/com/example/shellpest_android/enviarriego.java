@@ -35,7 +35,6 @@ public class enviarriego extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enviarriego);
 
-
         getSupportActionBar().hide();
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
@@ -44,11 +43,9 @@ public class enviarriego extends AppCompatActivity {
         }
 
         txt_NBloques=(TextView)findViewById(R.id.txt_NBloques);
-
         txt_RFechas=(TextView)findViewById(R.id.txt_RFechas);
 
         CargaDatos();
-
     }
 
     public void Enviar(View view) {
@@ -66,29 +63,19 @@ public class enviarriego extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
             }
-
-
-
             Cursor Renglon3 = BD.rawQuery("select  Fecha, Hora, Id_Bloque, Precipitacion_Sistema, Caudal_Inicio, Caudal_Fin, Horas_riego, Id_Usuario, c_codigo_eps, Temperatura, ET from t_RiegoEliminado ", null);
 
             if (Renglon3.moveToFirst()) {
-
                 do {
                     insertWebRiegoElim(Renglon3.getString(0),Renglon3.getString(1),Renglon3.getString(2),Renglon3.getFloat(3),Renglon3.getFloat(4),Renglon3.getFloat(5),Renglon3.getFloat(6),Renglon3.getString(7),Renglon3.getString(8),Renglon3.getString(9),Renglon3.getString(10));
                 } while (Renglon3.moveToNext());
-
-
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
-
             }
-
-
             BD.close();
         }else{
             Toast.makeText(this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
         }
-
         CargaDatos();
     }
 
@@ -104,17 +91,13 @@ public class enviarriego extends AppCompatActivity {
 
                 txt_RFechas.setText(Renglon.getString(1)+" - "+Renglon.getString(2));
             } while (Renglon.moveToNext());
-
-
         } else {
             Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
-
         }
     }
 
     public void Obtener_Ip (){
         WifiManager ip= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-
         String Cip= Formatter.formatIpAddress(ip.getConnectionInfo().getIpAddress());
         MyIp=Cip;
         //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
@@ -125,21 +108,15 @@ public class enviarriego extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
         if(Hora == null){
             Hora="";
         }
         if(Id_Bloque== null){
             Id_Bloque="";
         }
-
-
-
         if(Id_Usuario==null){
             Id_Usuario="";
         }
-
-
 
         String dia,mes,ano;
         ano=Fecha.substring(6);
@@ -254,14 +231,9 @@ public class enviarriego extends AppCompatActivity {
         if(Id_Bloque== null){
             Id_Bloque="";
         }
-
-
-
         if(Id_Usuario==null){
             Id_Usuario="";
         }
-
-        
 
         String dia,mes,ano;
         ano=Fecha.substring(6);
