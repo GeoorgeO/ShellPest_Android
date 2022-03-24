@@ -3,9 +3,12 @@ package com.example.shellpest_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,12 +109,34 @@ public class Gasolina extends AppCompatActivity {
         sp_actividadGas = (Spinner) findViewById(R.id.sp_actividadGas);
 
         cargarEmpresa();
-        //CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
-        //sp_empresaGas.setAdapter(CopiEmp);
+        CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
+        sp_empresaGas.setAdapter(CopiEmp);
 
-        //if(sp_empresaGas.getCount()==2){
-        //    sp_empresaGas.setSelection(1);
-        //}
+        if(sp_empresaGas.getCount()==2){
+            sp_empresaGas.setSelection(1);
+        }
+
+        sp_empresaGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(ItemSPHue==null){
+                    cargarHuerta();
+                    CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
+                    sp_huertaGas.setAdapter(CopiHue);
+
+                    if(sp_huertaGas.getCount()==2){
+                        sp_huertaGas.setSelection(1);
+                        ////////////////////
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         cargarHuerta();
         cargarActivo();
@@ -209,4 +234,19 @@ public class Gasolina extends AppCompatActivity {
     public void agregarDatos (View view){
         Toast.makeText(this, "sp_empresa", Toast.LENGTH_SHORT).show();
     }
+
+    private void cargaGrid(){
+        lv_GridGasolina.setAdapter(null);
+        arrayGas.clear();
+
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "HellPest", null, 1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        //Cursor Renglon = BD.rawQuery();
+    }
+
 }
