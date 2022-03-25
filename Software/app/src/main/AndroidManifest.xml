@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Enviar_Poda"></activity>
+        <activity android:name=".Cosecha"></activity>
+        <activity android:name=".Enviar_Poda" />
         <activity
             android:name=".Gasolina"
             android:exported="true" />
