@@ -1,32 +1,18 @@
 USE [ShellPest]
 GO
--- ================================================
--- Template generated from Template Explorer using:
--- Create Procedure (New Menu).SQL
---
--- Use the Specify Values for Template Parameters 
--- command (Ctrl-Shift-M) to fill in the parameter 
--- values below.
---
--- This block of comments will not be included in
--- the definition of the procedure.
--- ================================================
+/****** Object:  StoredProcedure [dbo].[SP_WS_empleados_huerta_Select]    Script Date: 25/3/2022 12:49:43 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
-GO
-IF  EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'SP_WS_empleados_huerta_Select')
-DROP PROCEDURE SP_WS_empleados_huerta_Select
 GO
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE SP_WS_empleados_huerta_Select
+ALTER PROCEDURE [dbo].[SP_WS_empleados_huerta_Select]
 	-- Add the parameters for the stored procedure here
-	@id_usuario varchar(10),
-	@Fecha varchar(8)
+	@id_usuario varchar(10)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -65,8 +51,7 @@ BEGIN
 		'0021',
 		'0022',
 		'0027')
-		and (N.d_creacion_emp >=@Fecha or N.d_modifi_emp>=@Fecha	)
 	order by Nombre_Completo
 		
 END
-GO
+
