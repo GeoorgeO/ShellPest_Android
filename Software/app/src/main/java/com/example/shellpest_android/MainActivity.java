@@ -1559,7 +1559,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
 
-        int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario='-1'", null);
+        int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
 
         if(Datos.length>0) {
             for (int x = 0; x < Datos.length; x++) {
