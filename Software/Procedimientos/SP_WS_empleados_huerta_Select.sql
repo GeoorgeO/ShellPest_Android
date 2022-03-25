@@ -25,7 +25,8 @@ GO
 -- =============================================
 CREATE PROCEDURE SP_WS_empleados_huerta_Select
 	-- Add the parameters for the stored procedure here
-	@id_usuario varchar(10)
+	@id_usuario varchar(10),
+	@Fecha varchar(8)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -64,6 +65,7 @@ BEGIN
 		'0021',
 		'0022',
 		'0027')
+		and (N.d_creacion_emp >=@Fecha or N.d_modifi_emp>=@Fecha	)
 	order by Nombre_Completo
 		
 END
