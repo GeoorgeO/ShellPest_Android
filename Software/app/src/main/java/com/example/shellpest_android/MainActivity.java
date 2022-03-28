@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda" );
                     //Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina" );//// ActivosGasolina
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta"+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
 
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RH" );
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesPoda" );
                         //Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActivosGasolina" ); ///ActivosGasolina
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta"+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda");
                         //Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina");//// ActivosGasolina
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta"+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                     }
                 }
 

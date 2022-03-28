@@ -428,6 +428,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Cajas_Desecho float," +
                 "Cajas_Pepena float," +
                 "Cajas_RDiaria float," +
+                "Id_Usuario text not null, " +
+                "F_Creacion text not null, " +
                 "primary key (Fecha,Id_Bloque,c_codigo_eps))");
 
     }

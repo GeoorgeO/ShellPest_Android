@@ -5,8 +5,8 @@ public class ItemCosecha {
     private int n_c_cosecha,n_c_desecho,n_c_pepena,n_c_diario;
 
     public ItemCosecha(String fecha, String id_Bloque,String Nombre_Blq, String c_codigo_eps, String BICO, int n_c_cosecha, int n_c_desecho, int n_c_pepena, int n_c_diario) {
-        Fecha = fecha;
-        Id_Bloque = id_Bloque;
+        this.Fecha = fecha;
+        this.Id_Bloque = id_Bloque;
         this.Nombre_Blq=Nombre_Blq;
         this.c_codigo_eps = c_codigo_eps;
         this.BICO = BICO;

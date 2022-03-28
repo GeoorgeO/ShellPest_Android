@@ -163,7 +163,7 @@
                 <EditText
                     android:id="@+id/et_Bico"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.7"
                     android:hint="Teclee la BICO"
                     android:inputType="text"
@@ -301,7 +301,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/rounded_button"
-                android:onClick="InsertarPodas"
+                android:onClick="InsertarCosecha"
                 android:text="Agregar"
                 android:textColor="#FFFFFF" />
 
@@ -383,8 +383,8 @@
         <ListView
             android:id="@+id/lv_GridCosecha"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".6"
+            android:layout_height="wrap_content"
+
             tools:listitem="@layout/item_grid_cosecha" />
 
     </LinearLayout>

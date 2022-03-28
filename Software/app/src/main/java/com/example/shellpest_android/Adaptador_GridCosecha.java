@@ -14,9 +14,9 @@ public class Adaptador_GridCosecha extends BaseAdapter {
     ArrayList<ItemCosecha> itemlist=new ArrayList<ItemCosecha>();
     Context mContext;
 
-    public Adaptador_GridCosecha(ArrayList<ItemCosecha> itemlist, Context mContext) {
-        this.itemlist = itemlist;
+    public Adaptador_GridCosecha(Context mContext,ArrayList<ItemCosecha> ArrayTablas) {
         this.mContext = mContext;
+        this.itemlist=ArrayTablas;
     }
 
     @Override
