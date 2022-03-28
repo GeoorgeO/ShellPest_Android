@@ -278,6 +278,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda" );
+                    //Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina" );//// ActivosGasolina
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta"+Usuario);
+
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -316,6 +319,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Fenologicos");
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RH" );
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesPoda" );
+                        //Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActivosGasolina" ); ///ActivosGasolina
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta"+Usuario);
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -353,6 +358,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda");
+                        //Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina");//// ActivosGasolina
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta"+Usuario);
                     }
                 }
 
@@ -607,6 +614,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         case "c_codigo_act":
                             Actualiza_Actividad(datos);
                             break;
+                        case "c_codigo_emp":
+                            Actualiza_EmpleadosHuerta(datos);
+                            break;
                     }
                 }
 
@@ -630,6 +640,38 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         }catch (WindowManager.BadTokenException E){
 
         }
+    }
+
+    private void Actualiza_EmpleadosHuerta(String[][] Datos) {
+        Tabla=new Tablas_Sincronizadas("t_Empleados_Huerta",Datos.length);
+        arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        //int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
+
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+
+                try {
+
+                    ContentValues registro = new ContentValues();
+                    registro.put("c_codigo_emp", Datos[x][0]);
+                    registro.put("Id_Huerta", Datos[x][1]);
+                    registro.put("Nombre_Completo", Datos[x][2]);
+                    BD.insert("t_Empleados_Huerta", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        BD.close();
     }
 
     private void ActualizaFechaSinc(){

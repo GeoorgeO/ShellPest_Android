@@ -879,7 +879,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 Eps=Renglon.getString(1);
                 Fecha=Renglon.getString(2);
 
-
                 try {
                     FechaD = objSDF.parse(Fecha);
 

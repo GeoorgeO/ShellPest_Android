@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -110,11 +111,13 @@ public class Gasolina extends AppCompatActivity {
 
         cargarEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
-        sp_empresaGas.setAdapter(CopiEmp);
+        //sp_empresaGas.setAdapter(CopiEmp);
 
         if(sp_empresaGas.getCount()==2){
             sp_empresaGas.setSelection(1);
         }
+
+
 
         sp_empresaGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -122,7 +125,7 @@ public class Gasolina extends AppCompatActivity {
                 if(ItemSPHue==null){
                     cargarHuerta();
                     CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
-                    sp_huertaGas.setAdapter(CopiHue);
+                    //sp_huertaGas.setAdapter(CopiHue);
 
                     if(sp_huertaGas.getCount()==2){
                         sp_huertaGas.setSelection(1);
@@ -138,7 +141,7 @@ public class Gasolina extends AppCompatActivity {
         });
 
 
-        cargarHuerta();
+        //cargarHuerta();
         cargarActivo();
         cargarActividad();
         cargarResponsable();
@@ -202,14 +205,63 @@ public class Gasolina extends AppCompatActivity {
     }
 
     private void cargarEmpresa(){
-        String[] empresa = {"Empresa", "AGV", "FTVL"};
-        sp_empresaGas.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, empresa));
+        CopiEmp = null;
+        ItemSPEmp = new ArrayList<>();
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon10;
+        String Consulta;
+
+        Consulta="select E.c_codigo_eps,E.v_abrevia_eps from conempresa as E inner join t_Usuario_Empresa as UE on UE.c_codigo_eps=E.c_codigo_eps where ltrim(rtrim(UE.Id_Usuario))='"+Usuario+"' ";
+        Renglon10=BD.rawQuery(Consulta,null);
+
+        if(Renglon10.moveToFirst()){
+
+            do {
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
+            } while(Renglon10.moveToNext());
+
+            BD.close();
+        }else{
+            BD.close();
+        }
+
+        //String[] empresa = {"Empresa", "AGV", "FTVL"};
+        //sp_empresaGas.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, empresa));
 
     }
 
     private void cargarHuerta(){
-        String[] huerta = {"Huerta","La Fontana","Tepehuaje","Los Arroyos"};
-        sp_huertaGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, huerta));
+       CopiHue = null;
+       ItemSPHue = new ArrayList<>();
+       AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+       SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+       Cursor Renglon;
+
+       if(Perfil.equals("001")){
+           Renglon = BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+       }else{
+           Renglon = BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+       }
+
+       if(Renglon.getCount()>1){
+           ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+       }
+
+       if(Renglon.moveToFirst()){
+           do{
+               ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2)));
+           }while(Renglon.moveToNext());
+       }else{
+           Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT).show();
+           BD.close();
+       }
+       BD.close();
+
+       //String[] huerta = {"Huerta","La Fontana","Tepehuaje","Los Arroyos"};
+       //sp_huertaGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, huerta));
 
     }
 
@@ -232,7 +284,87 @@ public class Gasolina extends AppCompatActivity {
     }
 
     public void agregarDatos (View view){
-        Toast.makeText(this, "sp_empresa", Toast.LENGTH_SHORT).show();
+        if(etxt_fechainiGas.getText().length()==0){
+            etxt_fechainiGas.setText("dd/mm/aa");
+        }
+        if(etxt_fechafinGas.getText().length()==0){
+            etxt_fechafinGas.setText("dd/mm/aa");
+        }
+        if(etxt_cantidadiniGas.getText().length()==0){
+            etxt_cantidadiniGas.setText("0.0");
+        }
+        if(etxt_cantidadsaldoGas.getText().length()==0){
+            etxt_cantidadsaldoGas.setText("0.0");
+        }
+        if(etxt_kminiGas.getText().length()==0){
+            etxt_kminiGas.setText("0.0");
+        }
+        if(etxt_kmfinGas.getText().length()==0){
+            etxt_kmfinGas.setText("0.0");
+        }
+        if (etxt_folioGas.getText().length()==0){
+            etxt_folioGas.setText("0000");
+        }
+        if(etxt_horometroGas.getText().length()==0){
+            etxt_horometroGas.setText("00:00");
+        }
+        if(etxt_observacionesGas.getText().length()==0){
+            etxt_observacionesGas.setText("Observaciones");
+        }
+        if(sp_actividadGas.getSelectedItemPosition()>0){
+            boolean FaltaAlgo = false;
+            if(Double.parseDouble(String.valueOf(etxt_folioGas.getText()))>=0){
+                if(Double.parseDouble(String.valueOf(etxt_fechainiGas.getText()))>=0){
+                    if(Double.parseDouble(String.valueOf(etxt_fechafinGas.getText()))>=0){
+                        if(Double.parseDouble(String.valueOf(etxt_cantidadiniGas.getText()))>=0){
+                            if (Double.parseDouble(String.valueOf(etxt_cantidadsaldoGas.getText()))>=0){
+                                if (Double.parseDouble(String.valueOf(etxt_kminiGas.getText()))>=0){
+                                    if(Double.parseDouble(String.valueOf(etxt_kmfinGas.getText()))>=0){
+                                        if(Double.parseDouble(String.valueOf(etxt_horometroGas.getText()))>=0){
+                                            if(Double.parseDouble(String.valueOf(etxt_observacionesGas.getText()))>=0){
+
+                                            }else{
+                                                FaltaAlgo = true;
+                                                Toast.makeText(this, "Falta agregar observaciones", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            FaltaAlgo = true;
+                                            Toast.makeText(this, "Falta agregar Horometros",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        FaltaAlgo = true;
+                                        Toast.makeText(this,"Falta agregar Km Final", Toast.LENGTH_SHORT).show();
+                                    }
+                                }else{
+                                    FaltaAlgo = true;
+                                    Toast.makeText(this, "Falta agregar Km Inicial", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                FaltaAlgo = true;
+                                Toast.makeText(this,"Falta agregar Cantidad Saldo", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            FaltaAlgo = true;
+                            Toast.makeText(this, "Falta agregar Cantidad Inicial", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        FaltaAlgo = true;
+                        Toast.makeText(this,"Falta seleccionar Fecha Final", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    FaltaAlgo = true;
+                    Toast.makeText(this, "Falta seleccionar Fecha Inicial", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                FaltaAlgo = true;
+                Toast.makeText(this, "Falta agregar Folio Vale", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
+
+        //Toast.makeText(this, "sp_empresa", Toast.LENGTH_SHORT).show();
     }
 
     private void cargaGrid(){
