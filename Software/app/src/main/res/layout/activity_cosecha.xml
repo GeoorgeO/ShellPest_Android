@@ -44,7 +44,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.1"
-                    android:gravity="center"
                     android:text="Fecha:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
@@ -78,7 +77,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:gravity="center"
                     android:text="Empresa:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
@@ -105,7 +103,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:gravity="center"
                     android:text="Huerta:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
@@ -132,7 +129,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:gravity="center"
                     android:text="Bloque:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
@@ -165,12 +161,12 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etn_ApliCantidad"
+                    android:id="@+id/et_Bico"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:hint="Arboles"
-                    android:inputType="numberDecimal"
+                    android:hint="Teclee la BICO"
+                    android:inputType="text"
                     android:textColor="@color/verde_azul"
                     android:textColorHighlight="@color/verde"
                     android:textColorHint="@color/verde"
@@ -187,19 +183,21 @@
                     android:id="@+id/textView29"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.5"
                     android:text="N° Cajas Cosecha:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/pt_Observaciones"
+                    android:id="@+id/etn_Cosecha"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.5"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:hint="0"
+                    android:inputType="number"
                     android:textColor="@color/verde_azul"
                     android:textColorHighlight="@color/verde"
                     android:textColorHint="@color/verde"
@@ -215,19 +213,21 @@
                     android:id="@+id/text_Desecho"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.5"
                     android:text="N° Cajas Desecho:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/text_DesechoCap"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.5"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:hint="0"
+                    android:inputType="number"
                     android:textColor="@color/verde_azul"
                     android:textColorHighlight="@color/verde"
                     android:textColorHint="@color/verde"
@@ -243,19 +243,21 @@
                     android:id="@+id/text_Pepena"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.5"
                     android:text="N° Cajas Pepena:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/text_PepenaCap"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.5"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:hint="0"
+                    android:inputType="number"
                     android:textColor="@color/verde_azul"
                     android:textColorHighlight="@color/verde"
                     android:textColorHint="@color/verde"
@@ -271,19 +273,21 @@
                     android:id="@+id/text_Diaria"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.5"
                     android:text="N° Cajas Reco. Dir.:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/cafe"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/text_DiariaCap"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.5"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:hint="0"
+                    android:inputType="number"
                     android:textColor="@color/verde_azul"
                     android:textColorHighlight="@color/verde"
                     android:textColorHint="@color/verde"
@@ -309,10 +313,20 @@
                 android:paddingTop="3dp">
 
                 <TextView
-                    android:id="@+id/textView34"
+                    android:id="@+id/textvBlq"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
+                    android:background="@color/verde"
+                    android:text="Blq"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/textvBICO"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
                     android:background="@color/verde"
                     android:text="BICO"
                     android:textAlignment="center"
@@ -323,9 +337,9 @@
                     android:id="@+id/textvCos"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
                     android:background="@color/verde"
-                    android:text="Cosecha"
+                    android:text="N°Cos."
                     android:textAlignment="center"
                     android:textColor="@color/cafe"
                     android:textSize="12sp" />
@@ -334,9 +348,9 @@
                     android:id="@+id/textvDes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
                     android:background="@color/verde"
-                    android:text="Cosecha"
+                    android:text="N°Des."
                     android:textAlignment="center"
                     android:textColor="@color/cafe"
                     android:textSize="12sp" />
@@ -345,9 +359,9 @@
                     android:id="@+id/textvPep"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
                     android:background="@color/verde"
-                    android:text="Cosecha"
+                    android:text="N°Pep."
                     android:textAlignment="center"
                     android:textColor="@color/cafe"
                     android:textSize="12sp" />
@@ -356,9 +370,9 @@
                     android:id="@+id/textvDir"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
                     android:background="@color/verde"
-                    android:text="Cosecha"
+                    android:text="N°Dir."
                     android:textAlignment="center"
                     android:textColor="@color/cafe"
                     android:textSize="12sp" />
@@ -367,11 +381,11 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/lv_GridPodas"
+            android:id="@+id/lv_GridCosecha"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".6"
-            tools:listitem="@layout/item_grid_poda" />
+            tools:listitem="@layout/item_grid_cosecha" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

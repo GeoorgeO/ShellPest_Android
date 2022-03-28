@@ -113,4 +113,19 @@ public class Aplicaciones extends AppCompatActivity {
         startActivity(intento);
     }
 
+    public void Cosecha(View view){
+        Intent intento=null;
+        if (Accion.equals("Captura")){
+            intento=new Intent(this,Cosecha.class);
+            intento.putExtra("usuario3", Usuario);
+            intento.putExtra("perfil3", Perfil);
+            intento.putExtra("huerta2", Huerta);
+
+        }
+        if (Accion.equals("Enviar")){
+            intento=new Intent(this,Enviar_Poda.class);
+        }
+        startActivity(intento);
+    }
+
 }
