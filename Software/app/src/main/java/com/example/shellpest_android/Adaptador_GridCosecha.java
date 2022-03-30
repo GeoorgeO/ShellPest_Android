@@ -21,12 +21,12 @@ public class Adaptador_GridCosecha extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return itemlist.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return itemlist.get(i);
     }
 
     @Override

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="1dp"
     android:background="@drawable/fondoformularios"
     tools:context=".Cosecha">
 
@@ -308,24 +309,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="1dp"
+                android:orientation="horizontal"
                 android:paddingTop="3dp">
 
                 <TextView
                     android:id="@+id/textvBlq"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="Blq"
                     android:textAlignment="center"
                     android:textColor="@color/cafe"
                     android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/textvBICO"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.25"
                     android:background="@color/verde"
                     android:text="BICO"
@@ -337,6 +341,7 @@
                     android:id="@+id/textvCos"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Cos."
@@ -348,6 +353,7 @@
                     android:id="@+id/textvDes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Des."
@@ -359,6 +365,7 @@
                     android:id="@+id/textvPep"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Pep."
@@ -370,6 +377,7 @@
                     android:id="@+id/textvDir"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
                     android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Dir."
@@ -383,8 +391,9 @@
         <ListView
             android:id="@+id/lv_GridCosecha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="visible"
             tools:listitem="@layout/item_grid_cosecha" />
 
     </LinearLayout>

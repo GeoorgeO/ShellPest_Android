@@ -82,6 +82,7 @@ public class Cosecha extends AppCompatActivity implements View.OnClickListener{
             sp_Empresa5.setSelection(1);
         }
 
+
         sp_Empresa5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -370,7 +371,7 @@ public class Cosecha extends AppCompatActivity implements View.OnClickListener{
         if (!FaltoAlgo){
             if (guardarEncabezado()){
 
-                Cargagrid(etd_Fecha2.getText().toString(),CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2));
+                Cargagrid(etd_Fecha2.getText().toString().trim(),CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2));
             }
 
         }else{
@@ -430,7 +431,7 @@ public class Cosecha extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-    private void Cargagrid(String Fecha,String c_codigp_eps){
+    private void Cargagrid(String Fecha,String c_codigo_eps){
         lv_GridCosecha.setAdapter(null);
         arrayArticulos.clear();
 
@@ -453,7 +454,7 @@ public class Cosecha extends AppCompatActivity implements View.OnClickListener{
                 "PD.Cajas_RDiaria " +
                 "from t_Cosecha as PD " +
                 "inner join t_Bloque as BLQ on BLQ.Id_Bloque=PD.Id_Bloque and BLQ.c_codigo_eps=PD.c_codigo_eps " +
-                "where PD.Fecha='"+Fecha+"' and PD.c_codigo_eps='"+c_codigp_eps+"'",null);
+                "where PD.Fecha='"+Fecha+"' and PD.c_codigo_eps='"+c_codigo_eps+"'",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
@@ -461,7 +462,7 @@ public class Cosecha extends AppCompatActivity implements View.OnClickListener{
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new ItemCosecha(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getInt(5),Renglon.getInt(6),Renglon.getInt(7),Renglon.getInt(8));
+                    Tabla=new ItemCosecha(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
