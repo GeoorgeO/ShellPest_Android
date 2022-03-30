@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -74,6 +75,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         Huerta = getIntent().getStringExtra("huerta2");
         Id = getIntent().getStringExtra("ID");
         cepsselapli=getIntent().getStringExtra("CEPS");
+
         getSupportActionBar().hide();
 
         LineEmpresa=0;

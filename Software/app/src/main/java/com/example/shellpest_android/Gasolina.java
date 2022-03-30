@@ -1,12 +1,17 @@
 package com.example.shellpest_android;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.BundleCompat;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Gasolina extends AppCompatActivity {
+public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
     public String Usuario, Perfil, Huerta;
 
@@ -46,19 +51,19 @@ public class Gasolina extends AppCompatActivity {
     Adaptador_GridGasolina Adapter;
     ArrayList<Itemgasolina> arrayGas;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gasolina);
         getSupportActionBar().hide();
 
-        solounaEmpresa = false;
-        solounaHuerta = false;
-
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
         Huerta = getIntent().getStringExtra("huerta2");
+        Log.e("Usuario", Usuario);
+
+        solounaEmpresa = false;
+        solounaHuerta = false;
 
         txtv_responsableGas = (TextView) findViewById(R.id.txtv_responsableGas);
         etxt_folioGas = (EditText) findViewById(R.id.etxt_folioGas);
@@ -98,10 +103,6 @@ public class Gasolina extends AppCompatActivity {
         etxt_fechafinGas.setInputType(InputType.TYPE_NULL);
         etxt_fechafinGas.requestFocus();
 
-        Usuario = getIntent().getStringExtra("usuario2");
-        Perfil = getIntent().getStringExtra("perfil2");
-        Huerta = getIntent().getStringExtra("huerta2");
-
         sp_responsableGas = (Spinner)findViewById(R.id.sp_responsableGas);
         sp_empresaGas = (Spinner)findViewById(R.id.sp_empresaGas);
         sp_activoGas = (Spinner) findViewById(R.id.sp_activoGas);
@@ -110,14 +111,13 @@ public class Gasolina extends AppCompatActivity {
         sp_actividadGas = (Spinner) findViewById(R.id.sp_actividadGas);
 
         cargarEmpresa();
+        Toast.makeText(this, "CARGA EMPRESA", Toast.LENGTH_SHORT).show();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
-        //sp_empresaGas.setAdapter(CopiEmp);
+        sp_empresaGas.setAdapter(CopiEmp);
 
         if(sp_empresaGas.getCount()==2){
             sp_empresaGas.setSelection(1);
         }
-
-
 
         sp_empresaGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -228,40 +228,38 @@ public class Gasolina extends AppCompatActivity {
             BD.close();
         }
 
-        //String[] empresa = {"Empresa", "AGV", "FTVL"};
-        //sp_empresaGas.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, empresa));
-
+        //cargarHuerta();
     }
 
     private void cargarHuerta(){
-       CopiHue = null;
-       ItemSPHue = new ArrayList<>();
-       AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-       SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-       Cursor Renglon;
+        CopiHue = null;
+        ItemSPHue = new ArrayList<>();
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
 
-       if(Perfil.equals("001")){
-           Renglon = BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-       }else{
-           Renglon = BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-       }
+        if(Perfil.equals("001")){
+            Renglon = BD.rawQuery("select Id_Huerta,Nombre_Huerta,Id_zona from t_Huerta where Activa_Huerta='True' and c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+        }else{
+            Renglon = BD.rawQuery("select Hue.Id_Huerta,Hue.Nombre_Huerta,Hue.Id_zona from t_Huerta as Hue inner join t_Usuario_Huerta as UH ON Hue.Id_Huerta=UH.Id_Huerta where UH.Id_Usuario='"+Usuario+"' and Hue.Activa_Huerta='True' and UH.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+        }
 
-       if(Renglon.getCount()>1){
-           ItemSPHue.add(new ItemDatoSpinner("Huerta"));
-       }
+        if(Renglon.getCount()>1){
+            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+        }
 
-       if(Renglon.moveToFirst()){
-           do{
-               ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2)));
-           }while(Renglon.moveToNext());
-       }else{
-           Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT).show();
-           BD.close();
-       }
-       BD.close();
+        if(Renglon.moveToFirst()){
+            do{
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2)));
+            }while(Renglon.moveToNext());
+        }else{
+            Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT).show();
+            BD.close();
+        }
+        BD.close();
 
-       //String[] huerta = {"Huerta","La Fontana","Tepehuaje","Los Arroyos"};
-       //sp_huertaGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, huerta));
+        //String[] huerta = {"Huerta","La Fontana","Tepehuaje","Los Arroyos"};
+        //sp_huertaGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, huerta));
 
     }
 
