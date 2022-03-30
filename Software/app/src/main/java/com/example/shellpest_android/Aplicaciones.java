@@ -99,17 +99,16 @@ public class Aplicaciones extends AppCompatActivity {
 	
 	 public void Gasolina(View view){
         Intent intento=null;
-        intento=new Intent(this,Gasolina.class);
-        /*if (Accion.equals("Captura")){
-            intento=new Intent(this,Podas.class);
-            intento.putExtra("usuario3", Usuario);
-            intento.putExtra("perfil3", Perfil);
+        if (Accion.equals("Captura")){
+            intento=new Intent(this,Gasolina.class);
+            intento.putExtra("usuario2", Usuario);
+            intento.putExtra("perfil2", Perfil);
             intento.putExtra("huerta2", Huerta);
 
         }
         if (Accion.equals("Enviar")){
-            //intento=new Intent(this,Enviar_Aplicaciones.class);
-        }*/
+            //intento=new Intent(this,.class);
+        }
         startActivity(intento);
     }
 
