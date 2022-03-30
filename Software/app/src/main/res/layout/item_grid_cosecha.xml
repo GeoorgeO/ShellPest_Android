@@ -10,48 +10,46 @@
 
         <TextView
             android:id="@+id/tv_Blq"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15"
+            android:layout_weight="0.25"
             android:text=""
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tv_ibico"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
             android:text="" />
 
         <TextView
             android:id="@+id/tv_icos"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15"
             android:text=""
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tv_ides"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15"
+
             android:text=""
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tv_ipep"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15"
+
             android:text=""
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tv_idir"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15"
             android:text=""
             android:textAlignment="center" />
     </LinearLayout>

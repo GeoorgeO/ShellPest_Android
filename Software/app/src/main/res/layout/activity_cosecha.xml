@@ -318,7 +318,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
-                    android:layout_weight="0.15"
+                    android:layout_weight="0.25"
                     android:background="@color/verde"
                     android:text="Blq"
                     android:textAlignment="center"
@@ -339,10 +339,9 @@
 
                 <TextView
                     android:id="@+id/textvCos"
-                    android:layout_width="0dp"
+                    android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
-                    android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Cos."
                     android:textAlignment="center"
@@ -351,10 +350,9 @@
 
                 <TextView
                     android:id="@+id/textvDes"
-                    android:layout_width="0dp"
+                    android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
-                    android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Des."
                     android:textAlignment="center"
@@ -363,10 +361,9 @@
 
                 <TextView
                     android:id="@+id/textvPep"
-                    android:layout_width="0dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
-                    android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Pep."
                     android:textAlignment="center"
@@ -375,10 +372,9 @@
 
                 <TextView
                     android:id="@+id/textvDir"
-                    android:layout_width="0dp"
+                    android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
-                    android:layout_weight="0.15"
                     android:background="@color/verde"
                     android:text="N°Dir."
                     android:textAlignment="center"

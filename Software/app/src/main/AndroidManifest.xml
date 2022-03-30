@@ -17,8 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Cosecha"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".Enviar_Cosecha"></activity>
+        <activity
+            android:name=".Cosecha"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Enviar_Poda" />
         <activity
             android:name=".Gasolina"

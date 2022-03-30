@@ -123,7 +123,7 @@ public class Aplicaciones extends AppCompatActivity {
 
         }
         if (Accion.equals("Enviar")){
-            intento=new Intent(this,Enviar_Poda.class);
+            intento=new Intent(this,Enviar_Cosecha.class);
         }
         startActivity(intento);
     }
