@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda" );
-                    //Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina" );//// ActivosGasolina
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//////
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
 
                 } else {
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Fenologicos");
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RH" );
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesPoda" );
-                        //Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActivosGasolina" ); ///ActivosGasolina
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);////// ///ActivosGasolina
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda");
-                        //Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina");//// ActivosGasolina
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//// ActivosGasolina
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                     }
                 }
@@ -617,6 +617,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         case "c_codigo_emp":
                             Actualiza_EmpleadosHuerta(datos);
                             break;
+                        case"Id_ActivosGas":
+                            Actualiza_ActivosHuerta(datos);
+                            break;
                     }
                 }
 
@@ -640,6 +643,42 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         }catch (WindowManager.BadTokenException E){
 
         }
+    }
+
+    private void Actualiza_ActivosHuerta(String[][] Datos) {
+        Tabla=new Tablas_Sincronizadas("t_Activos_Huerta",Datos.length);
+        arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        //int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
+
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+
+                try {
+
+                    ContentValues registro = new ContentValues();
+                    registro.put("Id_ActivosGas", Datos[x][0]);
+                    registro.put("v_descripcorta_act", Datos[x][1]);
+                    registro.put("v_serie_act", Datos[x][2]);
+                    registro.put("c_codigo_fam", Datos[x][3]);
+                    registro.put("c_codigo_are", Datos[x][4]);
+                    BD.insert("t_Activos_Huerta", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        BD.close();
+
+
     }
 
     private void Actualiza_EmpleadosHuerta(String[][] Datos) {

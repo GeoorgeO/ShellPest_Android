@@ -432,6 +432,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "F_Creacion text not null, " +
                 "primary key (Fecha,Id_Bloque,c_codigo_eps))");
 
+        BD.execSQL("create table t_Activos_Huerta"+
+                "( Id_ActivosGas text not null, " +
+                "v_descripcorta_act text not null, " +
+                "v_serie_act text,"+
+                "c_codigo_fam text not null,"+
+                "c_codigo_are text not null)");
+
     }
 
     @Override
@@ -484,6 +491,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_PodasDet");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Empleados_Huerta");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Cosecha");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Activos_Huerta");
 
         onCreate(sqLiteDatabase);
     }

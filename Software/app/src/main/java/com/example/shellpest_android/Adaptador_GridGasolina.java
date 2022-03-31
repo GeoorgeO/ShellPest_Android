@@ -13,7 +13,7 @@ public class Adaptador_GridGasolina extends BaseAdapter {
     ArrayList<Itemgasolina> itemlist = new ArrayList<Itemgasolina>();
     Context mContext;
 
-    public Adaptador_GridGasolina(Context c, ArrayList<Itemgasolina> ArrayTablas){
+    public Adaptador_GridGasolina(Context c, ArrayList<Itemgasolina> ArrayTablas) {
         mContext = c;
         itemlist = ArrayTablas;
     }

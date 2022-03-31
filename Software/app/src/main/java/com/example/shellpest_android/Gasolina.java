@@ -125,13 +125,46 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 if(ItemSPHue==null){
                     cargarHuerta();
                     CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
-                    //sp_huertaGas.setAdapter(CopiHue);
+                    sp_huertaGas.setAdapter(CopiHue);
 
                     if(sp_huertaGas.getCount()==2){
                         sp_huertaGas.setSelection(1);
-                        ////////////////////
+                        //cargaGrid();
+                    }else{
+                        if (sp_huertaGas.getCount()<=1){
+                            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                            CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
+                            sp_huertaGas.setAdapter(CopiHue);
+                        }
+                    }
+                }else{
+                    if ((ItemSPHue.size()<=1) || LineEmpresa!=i){
+                        cargarHuerta();
+                        CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
+                        sp_huertaGas.setAdapter(CopiHue);
+
+                        if (LineHuerta > 0){
+                            LineHuerta = 0;
+                        }else{
+                            if(sp_huertaGas.getCount() == 2){
+                                sp_huertaGas.setSelection(1);
+                            }else{
+                                if (sp_huertaGas.getCount() <= 1){
+                                    ItemSPHue = new ArrayList<>();
+                                    ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                                    CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
+                                    sp_huertaGas.setAdapter(CopiHue);
+                                }
+                            }
+                        }
                     }
                 }
+
+                if(i > 0){
+                    //cargaGrid();
+                }
+
+                LineEmpresa = i;
             }
 
             @Override
@@ -139,6 +172,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
             }
         });
+
 
 
         //cargarHuerta();
@@ -367,7 +401,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     private void cargaGrid(){
         lv_GridGasolina.setAdapter(null);
-        arrayGas.clear();
+        //arrayGas.clear(); //se usa para guardar loa datos y cargarlos en el grid
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "HellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -376,7 +410,50 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
 
-        //Cursor Renglon = BD.rawQuery();
+        Cursor Renglon =BD.rawQuery("select R.Nombre_Responsable, \n" +
+                "\tR.Folio_vale,\n" +
+                "\tB.Fecha_Inicio, \n" +
+                "\tR.Fecha_final, \n" +
+                "\tR.Cantidad_ingreso, \n" +
+                "\tR.Cantidad_saldo, \n" +
+                "\tR.Empresa, \n" +
+                "\tR.Huerta, \n" +
+                "\tR.Km_Inicial, \n" +
+                "\tR.Km_Final, \n" +
+                "\tR.Horometro, \n" +
+                "\tR.Tipo_Combustible, \n" +
+                "\tR.Actividad, \n" +
+                "\tR.Observaciones, \n" +
+
+                "\tR.Horas_Riego, R.c_codigo_eps, R.Temperatura, R.ET \n" +
+                "from t_Riego as R \n" +
+                "left join t_Bloque as B on B.Id_Bloque=R.Id_Bloque and B.c_codigo_eps=R.c_codigo_eps \n" +
+                "where R.Fecha='"+objSDF.format(date1)+"' and R.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+
+        if(Renglon.moveToFirst()) {
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+            if (Renglon.moveToFirst()) {
+
+                do {
+                    Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
+                    arrayGas.add(Tabla);
+                } while (Renglon.moveToNext());
+
+
+                BD.close();
+            } else {
+                Toast.makeText(this, "No hay datos en t_Monitoreo_PE guardados", Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+        }
+        if(arrayGas.size()>0){
+            Adapter=new Adaptador_GridGasolina(getApplicationContext(),arrayGas);
+            lv_GridGasolina.setAdapter(Adapter);
+        }else{
+            //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
