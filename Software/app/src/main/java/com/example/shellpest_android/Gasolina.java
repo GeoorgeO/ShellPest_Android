@@ -1,12 +1,8 @@
 package com.example.shellpest_android;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.BundleCompat;
 
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -22,7 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,10 +25,10 @@ import java.util.Date;
 
 public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
-    public String Usuario, Perfil, Huerta;
+    public String Usuario, Perfil, Huerta, Activo, Responsable;
 
     Spinner sp_responsableGas, sp_empresaGas, sp_activoGas, sp_huertaGas, sp_tipoGas, sp_actividadGas;
-    TextView txtv_responsableGas;
+
     EditText etxt_folioGas, etxt_fechainiGas, etxt_fechafinGas, etxt_cantidadiniGas,
             etxt_cantidadsaldoGas, etxt_kminiGas, etxt_kmfinGas, etxt_horometroGas, etxt_observacionesGas;
     Button btn_agregarGas;
@@ -41,8 +36,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     int LineHuerta, LineEmpresa, LineActivo, LineTipo, LineActividad;
 
-    private AdaptadorSpinner CopiHue, CopiActivo, CopiEmp;
-    private ArrayList<ItemDatoSpinner> ItemSPUsu, ItemSPEmp, ItemSPHue, ItemSPactivo, ItemSPtipo, ItemSPactividad;
+    private AdaptadorSpinner CopiHue, CopiActivo, CopiEmp, CopiResp;
+    private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPHue, ItemSPActivo, ItemSPResp, ItemSPTipo, ItemSPActividad;
 
     Boolean solounaEmpresa, solounaHuerta;
     private int dia,mes, anio;
@@ -65,7 +60,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         solounaEmpresa = false;
         solounaHuerta = false;
 
-        txtv_responsableGas = (TextView) findViewById(R.id.txtv_responsableGas);
         etxt_folioGas = (EditText) findViewById(R.id.etxt_folioGas);
         etxt_fechainiGas = (EditText) findViewById(R.id.etxt_fechainiGas);
         etxt_fechainiGas.setOnClickListener(this::onClick);
@@ -173,10 +167,46 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
+        sp_huertaGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Huerta = CopiHue.getItem(i).getTexto().substring(0,8);
+                Log.e("Huerta ",Huerta);
+                cargarActivo();
+                CopiActivo = new AdaptadorSpinner(getApplicationContext(), ItemSPActivo);
+                sp_activoGas.setAdapter(CopiActivo);
+
+                LineHuerta = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        sp_activoGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                Activo = CopiActivo.getItem(i).getTexto().substring(0,8);
+                Log.e("Activo", Activo);
+
+                cargarResponsable();
+                CopiResp = new AdaptadorSpinner(getApplicationContext(), ItemSPResp);
+                sp_responsableGas.setAdapter(CopiResp);
+
+                LineActivo = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         //cargarHuerta();
-        cargarActivo();
+        //cargarActivo();
         cargarActividad();
         cargarResponsable();
         cargarTipogas();
@@ -234,8 +264,30 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         return Valor;
     }
     private void cargarResponsable(){
-        String[] responsable = {"Responsable", "Jorge"};
-        sp_responsableGas.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, responsable));
+        CopiResp = null;
+        ItemSPResp = new ArrayList<>();
+        ItemSPResp.add(new ItemDatoSpinner("Responsable"));
+
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+        String Consulta;
+
+        Consulta="select EH.c_codigo_emp, EH.Id_Huerta, EH.Nombre_Completo from t_Empleados_Huerta as EH where ltrim(rtrim(EH.Id_Huerta))='"+Huerta+"' ";
+        Renglon=BD.rawQuery(Consulta,null);
+
+
+        if(Renglon.moveToFirst()){
+
+            do {
+                ItemSPResp.add(new ItemDatoSpinner(Renglon.getString(0)+"-"+Renglon.getString(1)+"- "+Renglon.getString(2)));
+            } while(Renglon.moveToNext());
+
+            BD.close();
+        }else{
+            BD.close();
+        }
+
     }
 
     private void cargarEmpresa(){
@@ -298,9 +350,32 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void cargarActivo(){
-        String[] activo = {"Activo","Camioneta","Tractor","Maquinaria"};
-        sp_activoGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, activo));
+        CopiActivo = null;
 
+        ItemSPActivo = new ArrayList<>();
+        ItemSPActivo.add(new ItemDatoSpinner("Activo"));
+        if(Huerta.length()>0 && !Huerta.equals("NULL")){
+
+            AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+            SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+            Cursor Renglon;
+
+            String Consulta;
+            Consulta="select A.Id_ActivosGas,A.v_descripcorta_act, A.v_serie_act  from t_Activos_Huerta as A ";
+            Renglon = BD.rawQuery(Consulta,null);
+
+            if(Renglon.moveToFirst()){
+                do {
+                    ItemSPActivo.add(new ItemDatoSpinner(Renglon.getString(0)+"-"+Renglon.getString(1)+"-"+Renglon.getString(2)));
+                } while(Renglon.moveToNext());
+            }else{
+                Toast.makeText(this,"No se encontraron datos en Activos",Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+            BD.close();
+        }else{
+
+        }
     }
 
     private void cargarTipogas(){

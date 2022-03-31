@@ -63,7 +63,7 @@
                 android:textColorHighlight="@color/verde"
                 android:textColorHint="@color/verde"
                 android:textColorLink="@color/verde"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -148,7 +148,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="47dp"
             android:orientation="horizontal">
 
             <TextView
@@ -173,7 +173,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="34dp"
+            android:layout_height="74dp"
             android:orientation="horizontal">
 
             <TextView
@@ -199,7 +199,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="34dp"
+            android:layout_height="58dp"
             android:orientation="horizontal">
 
             <TextView
@@ -207,9 +207,9 @@
                 android:layout_width="18dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:paddingLeft="5sp"
                 android:text="Responsable:"
-                android:gravity="center"
                 android:textColor="@color/cafe"
                 android:textStyle="bold" />
 
@@ -220,7 +220,7 @@
                 android:layout_weight="1"
                 android:popupBackground="@drawable/spinner_style"
                 android:textAlignment="center"
-                android:textColor="@color/verde_azul"  />
+                android:textColor="@color/verde_azul" />
 
         </LinearLayout>
 
