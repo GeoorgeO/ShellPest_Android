@@ -3,14 +3,17 @@ package com.example.shellpest_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.ClipData;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,7 +30,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     public String Usuario, Perfil, Huerta, Activo, Responsable;
 
-    Spinner sp_responsableGas, sp_empresaGas, sp_activoGas, sp_huertaGas, sp_tipoGas, sp_actividadGas;
+    Spinner sp_responsableGas, sp_empresaGas, sp_activoGas, sp_huertaGas, sp_tipoGas;
+
+    AutoCompleteTextView atxt_actividadGas;
 
     EditText etxt_folioGas, etxt_fechainiGas, etxt_fechafinGas, etxt_cantidadiniGas,
             etxt_cantidadsaldoGas, etxt_kminiGas, etxt_kmfinGas, etxt_horometroGas, etxt_observacionesGas;
@@ -36,7 +41,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     int LineHuerta, LineEmpresa, LineActivo, LineTipo, LineActividad;
 
-    private AdaptadorSpinner CopiHue, CopiActivo, CopiEmp, CopiResp;
+    private AdaptadorSpinner CopiHue, CopiActivo, CopiEmp, CopiResp, CopiTipo;
     private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPHue, ItemSPActivo, ItemSPResp, ItemSPTipo, ItemSPActividad;
 
     Boolean solounaEmpresa, solounaHuerta;
@@ -71,6 +76,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         etxt_kmfinGas = (EditText) findViewById(R.id.etxt_kmfinGas);
         etxt_horometroGas = (EditText) findViewById(R.id.etxt_horometroGas);
         etxt_observacionesGas = (EditText) findViewById(R.id.etxt_observacionesGas);
+        atxt_actividadGas = (AutoCompleteTextView) findViewById(R.id.atxt_actividadGas);
 
         lv_GridGasolina = (ListView) findViewById(R.id.lv_GridGasolina);
         btn_agregarGas = (Button) findViewById(R.id.btn_agregarGas);
@@ -102,7 +108,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         sp_activoGas = (Spinner) findViewById(R.id.sp_activoGas);
         sp_huertaGas= (Spinner) findViewById(R.id.sp_huertaGas);
         sp_tipoGas = (Spinner) findViewById(R.id.sp_tipoGas);
-        sp_actividadGas = (Spinner) findViewById(R.id.sp_actividadGas);
 
         cargarEmpresa();
         Toast.makeText(this, "CARGA EMPRESA", Toast.LENGTH_SHORT).show();
@@ -170,7 +175,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         sp_huertaGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Huerta = CopiHue.getItem(i).getTexto().substring(0,8);
+                Huerta = CopiHue.getItem(i).getTexto().substring(0,5);
                 Log.e("Huerta ",Huerta);
                 cargarActivo();
                 CopiActivo = new AdaptadorSpinner(getApplicationContext(), ItemSPActivo);
@@ -188,7 +193,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         sp_activoGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
-                Activo = CopiActivo.getItem(i).getTexto().substring(0,8);
+                Activo = CopiActivo.getItem(i).getTexto().substring(0,5);
                 Log.e("Activo", Activo);
 
                 cargarResponsable();
@@ -204,12 +209,32 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
+        sp_responsableGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
+                Responsable = CopiResp.getItem(i).getTexto().substring(0,5);
+                Log.e("Responsable", Responsable);
+
+                cargarTipogas();
+                CopiTipo = new AdaptadorSpinner(getApplicationContext(), ItemSPTipo);
+                sp_tipoGas.setAdapter(CopiTipo);
+
+                LineTipo = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         //cargarHuerta();
         //cargarActivo();
         cargarActividad();
-        cargarResponsable();
+        //cargarResponsable();
         cargarTipogas();
+
 
         //cada item representa cada fila del spinner al cual se le agregan items marcados por posicion
         //Empresa
@@ -218,8 +243,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         //Responsable
         //Actividad
         //tipo gasolina
-
-
 
     }
 
@@ -314,7 +337,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             BD.close();
         }
 
-        //cargarHuerta();
     }
 
     private void cargarHuerta(){
@@ -354,6 +376,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
         ItemSPActivo = new ArrayList<>();
         ItemSPActivo.add(new ItemDatoSpinner("Activo"));
+
         if(Huerta.length()>0 && !Huerta.equals("NULL")){
 
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -379,14 +402,20 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void cargarTipogas(){
-        String[] tipo = {"Tipo","Gasolina Magna","Gasolina Premium","Diesel"};
-        sp_tipoGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipo));
+        String Magna = "Magna - 87 - octanos", Premium = "Premium - 92 - octanos", Diesel= "Diesel";
+        CopiTipo = null;
+
+        ItemSPTipo = new ArrayList<>();
+        ItemSPTipo.add(new ItemDatoSpinner("Tipo"));
+        ItemSPTipo.add(new ItemDatoSpinner("   "+Magna));
+        ItemSPTipo.add(new ItemDatoSpinner("   "+Premium));
+        ItemSPTipo.add(new ItemDatoSpinner("   "+Diesel));
+
+        sp_tipoGas.setGravity(Gravity.CENTER);
 
     }
 
     private void cargarActividad(){
-        String[] actividad = {"Actividad", "Poda","Traslado", "Viaje"};
-        sp_actividadGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, actividad));
 
     }
 
@@ -418,7 +447,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         if(etxt_observacionesGas.getText().length()==0){
             etxt_observacionesGas.setText("Observaciones");
         }
-        if(sp_actividadGas.getSelectedItemPosition()>0){
+        ////if(sp_actividadGas.getSelectedItemPosition()>0){
             boolean FaltaAlgo = false;
             if(Double.parseDouble(String.valueOf(etxt_folioGas.getText()))>=0){
                 if(Double.parseDouble(String.valueOf(etxt_fechainiGas.getText()))>=0){
@@ -466,7 +495,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 FaltaAlgo = true;
                 Toast.makeText(this, "Falta agregar Folio Vale", Toast.LENGTH_SHORT).show();
             }
-        }
+        //}
 
 
 
