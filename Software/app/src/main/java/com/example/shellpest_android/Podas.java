@@ -329,7 +329,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
             Cursor Renglon;
 
             String Consulta;
-            Consulta="select B.Id_Bloque,B.Nombre_Bloque from t_Bloque as B  where B.TipoBloque='R' and B.Id_Huerta='"+Huerta+"' and B.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"'";
+            Consulta="select B.Id_Bloque,B.Nombre_Bloque from t_Bloque as B  where B.TipoBloque='B' and B.Id_Huerta='"+Huerta+"' and B.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"'";
             Renglon=BD.rawQuery(Consulta,null);
 
             if(Renglon.moveToFirst()){

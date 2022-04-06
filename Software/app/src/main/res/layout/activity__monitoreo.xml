@@ -35,27 +35,33 @@
             android:orientation="horizontal">
 
 
-            <EditText
-                android:id="@+id/et_fecha"
-                android:layout_width="165dp"
-                android:layout_height="wrap_content"
+			<TextView
+				android:id="@+id/textView6"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.4"
+				android:text="Fecha:" />
 
-                android:layout_marginLeft="5dp"
-                android:enabled="false"
+			<EditText
+				android:id="@+id/et_fecha"
+				android:layout_width="165dp"
+				android:layout_height="wrap_content"
+
+				android:layout_marginLeft="5dp"
 				android:hint="Fecha"
-                android:inputType="date"
-                android:textAlignment="center" 
+				android:inputType="date"
+				android:textAlignment="center"
 				android:textColor="@color/verde_azul"
-                android:textColorHighlight="@color/verde"
-                android:textColorHint="@color/verde"
-                android:textColorLink="@color/verde_azul"
-                android:textSize="14sp"/>
+				android:textColorHighlight="@color/verde"
+				android:textColorHint="@color/verde"
+				android:textColorLink="@color/verde_azul"
+				android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/et_espacio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:enabled="false"
                 android:inputType="date"
                 android:textAlignment="center"

@@ -371,6 +371,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Intervalo_Reingreso float," +
                 "Id_Huerta text," +
                 "c_codigo_eps text not null," +
+                "Para text," +
                 "primary key(Id_Receta,c_codigo_eps))");
 
         BD.execSQL("create table t_RecetaDet " +

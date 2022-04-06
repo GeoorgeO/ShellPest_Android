@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,12 +40,13 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 
-public class activity_Monitoreo extends AppCompatActivity {
+public class activity_Monitoreo extends AppCompatActivity implements View.OnClickListener{
     TextView et_fecha, et_PuntoControl, et_EP, et_Organo, et_Individuo;
     Spinner sp_PE, sp_Hue, sp_Pto, sp_Org, sp_Ind,sp_Empresa2;
     RadioButton rb_Plaga, rb_Enfermedad,rb_SinPresencia;
@@ -67,6 +69,8 @@ public class activity_Monitoreo extends AppCompatActivity {
 
     LocationManager mlocManager ;
     Localizacion Local ;
+
+    int dia,mes,anio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +117,11 @@ public class activity_Monitoreo extends AppCompatActivity {
         Date objDate = new Date();
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
         Date date1 = objDate;
-        et_fecha.setText("Fecha: " + objSDF.format(date1));
+        et_fecha.setText(objSDF.format(date1));
+        et_fecha.setInputType(InputType.TYPE_NULL);
+        et_fecha.requestFocus();
+
+        et_fecha.setOnClickListener(this);
 
         ItemSPPE = new ArrayList<>();
         ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad"));
@@ -377,6 +385,37 @@ public class activity_Monitoreo extends AppCompatActivity {
         }
 
        // Localizacion();
+    }
+
+    public void onClick(View view) {
+        if(view==et_fecha){
+            final Calendar c=Calendar.getInstance();
+            Date objDate = new Date();
+            dia=c.get(Calendar.DAY_OF_MONTH);
+            mes=c.get(Calendar.MONTH);
+            anio=c.get(Calendar.YEAR);
+
+            DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> et_fecha.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
+            dtpd.show();
+            sp_Pto.setSelection(0);
+        }
+    }
+
+    private String rellenarCeros (String Valor,int NCaracteres){
+        if (Valor.length()<NCaracteres){
+            int faltan=0;
+            faltan=NCaracteres - Valor.length();
+            if (faltan==3){
+                return "000"+Valor;
+            }
+            if (faltan==2){
+                return "00"+Valor;
+            }
+            if (faltan==1){
+                return "0"+Valor;
+            }
+        }
+        return Valor;
     }
 
     private void cargaSpinnerEmpresa(){
@@ -1064,7 +1103,7 @@ public class activity_Monitoreo extends AppCompatActivity {
                 "left join t_Enfermedad as E on M.Id_enfermedad=E.Id_enfermedad\n" +
                 "left join t_Individuo as I on I.Id_Individuo=M.Id_Individuo\n" +
                 "left join conempresa as EPS on EPS.c_codigo_eps=M.c_codigo_eps\n" +
-                "where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                "where M.Fecha='"+et_fecha.getText().toString()+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));

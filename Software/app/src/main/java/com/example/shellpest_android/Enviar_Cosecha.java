@@ -71,8 +71,6 @@ public class Enviar_Cosecha extends AppCompatActivity {
             Cursor Renglon = BD.rawQuery("select Fecha,Id_Bloque,c_codigo_eps,BICO,Cajas_Cosecha,Cajas_Desecho,Cajas_Pepena,Cajas_RDiaria,Id_Usuario,F_Creacion from t_Cosecha ", null);
 
             if (Renglon.moveToFirst()) {
-            /*et_Usuario.setText(Renglon.getString(0));
-            et_Password.setText(Renglon.getString(1));*/
                 do {
                     //Toast.makeText(this, Renglon.getString(6), Toast.LENGTH_SHORT).show();
                     insertWebCosecha(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9));
@@ -186,14 +184,8 @@ public class Enviar_Cosecha extends AppCompatActivity {
                 String NombreId = "";
                 for (int i = 0; i < jsonarr.length(); i++) {
                     jsonobject = jsonarr.getJSONObject(i);
-
                     int columnas = 0;
-
-
-
                     int RegistrosEnviados=0;
-
-
                     if (jsonobject.optString("resultado").equals("True")) {
 
                         if (EliminaCosecha( Fecha , Id_Bloque, c_Codigo_eps, BICO)){
@@ -202,7 +194,6 @@ public class Enviar_Cosecha extends AppCompatActivity {
                     }
                 }
             }
-
             conn.disconnect();
 
         } catch (MalformedURLException e) {
@@ -234,7 +225,6 @@ public class Enviar_Cosecha extends AppCompatActivity {
         cantidad=0;
 
         cantidad = BD.delete("t_Cosecha", "Fecha='"+Fecha+"' and Id_Bloque='"+Id_Bloque+"' and c_Codigo_eps='"+c_Codigo_eps+"' and BICO='"+BICO+"' ", null);
-
 
         BD.close();
 

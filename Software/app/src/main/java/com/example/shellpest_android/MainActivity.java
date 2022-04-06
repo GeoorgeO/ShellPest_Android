@@ -2173,6 +2173,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     registro.put("Intervalo_Reingreso",Datos[x][9]);
                     registro.put("c_codigo_eps",Datos[x][10]);
                     registro.put("Id_Huerta",Datos[x][11]);
+                    registro.put("Para",Datos[x][12]);
                     BD.insert("t_Receta",null,registro);
 
                 } catch (SQLiteConstraintException sqle){
@@ -2308,7 +2309,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         if(cantidad>0){
 
         }else{
-
 
         }
         if(Datos.length>0){

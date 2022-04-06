@@ -74,7 +74,7 @@ public class Aplicaciones extends AppCompatActivity {
             intento.putExtra("usuario2", Usuario);
             intento.putExtra("perfil2", Perfil);
             intento.putExtra("huerta2", Huerta);
-
+            intento.putExtra("FoF", "A");
         }
         if (Accion.equals("Enviar")){
             intento=new Intent(this,Enviar_Aplicaciones.class);
@@ -120,6 +120,21 @@ public class Aplicaciones extends AppCompatActivity {
             intento.putExtra("perfil3", Perfil);
             intento.putExtra("huerta2", Huerta);
 
+        }
+        if (Accion.equals("Enviar")){
+            intento=new Intent(this,Enviar_Cosecha.class);
+        }
+        startActivity(intento);
+    }
+
+    public void Fertiliza(View view){
+        Intent intento=null;
+        if (Accion.equals("Captura")){
+            intento=new Intent(this,aplicacion.class);
+            intento.putExtra("usuario2", Usuario);
+            intento.putExtra("perfil2", Perfil);
+            intento.putExtra("huerta2", Huerta);
+            intento.putExtra("FoF", "F");
         }
         if (Accion.equals("Enviar")){
             intento=new Intent(this,Enviar_Cosecha.class);

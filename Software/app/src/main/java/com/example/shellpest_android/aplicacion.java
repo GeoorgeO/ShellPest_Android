@@ -34,7 +34,7 @@ import java.util.Date;
 
 public class aplicacion extends AppCompatActivity implements View.OnClickListener {
 
-    public String Usuario,Huerta, Perfil ,Id,UnidadPro,cepsselapli;
+    public String Usuario,Huerta, Perfil ,Id,UnidadPro,cepsselapli,FumoFer;
     int LineEmpresa,LineHuerta,LineReceta,LineTipoA,LinePresentacion;
 
     boolean yasemovio,seldet;
@@ -42,7 +42,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
     Spinner sp_TipoAplicacion, sp_Presentacion,sp_huerta,sp_Empresa4,sp_Receta;
     AutoCompleteTextView actv_Productos;
-    TextView text_Codigo,text_Aplicados,text_CantidadTotal ,text_UnidadPro,text_CenCos;
+    TextView text_Codigo,text_Aplicados,text_CantidadTotal ,text_UnidadPro,text_CenCos,tv_Titulo;
     EditText etd_Fecha,pt_Observaciones,etn_ApliCantidad,etn_Pipadas;
     ListView lv_GridAplicacion;
 
@@ -75,6 +75,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         Huerta = getIntent().getStringExtra("huerta2");
         Id = getIntent().getStringExtra("ID");
         cepsselapli=getIntent().getStringExtra("CEPS");
+        FumoFer=getIntent().getStringExtra("FoF");
 
         getSupportActionBar().hide();
 
@@ -100,10 +101,18 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         text_CantidadTotal= (TextView) findViewById(R.id.text_CantidadTotal);
         text_UnidadPro= (TextView) findViewById(R.id.text_UnidadPro);
         text_CenCos= (TextView) findViewById(R.id.text_CenCos);
+        tv_Titulo=(TextView) findViewById(R.id.tv_Titulo);
 
         btn_Agrega=(Button) findViewById(R.id.btn_Agrega);
 
         yasemovio=false;
+
+        if(FumoFer.equals("A")){
+            tv_Titulo.setText("APLICACIONES");
+        }
+        else{
+            tv_Titulo.setText("FERTILIZACIONES");
+        }
 
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
@@ -405,11 +414,11 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                    // textView32.setText(CopiApli.getItem(i).getTexto().substring(CopiApli.getItem(i).getTexto().indexOf("-")+2)+"s");
 
-                    if(ItemSPPre==null){
+
                         cargaSpinnerPresentacion();
                         CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
                         sp_Presentacion.setAdapter(CopiPre);
-                    }
+
 
 
                     if (sp_Presentacion.getCount() == 2 && sp_Presentacion.getSelectedItemPosition()==0) {
@@ -1541,7 +1550,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from  t_Receta_Huerta  as RH  inner join t_Receta as R on RH.Id_Receta=R.Id_Receta and RH.c_codigo_eps=R.c_codigo_eps where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and RH.Id_Huerta='"+Huerta+"' ",null);
+        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from  t_Receta_Huerta  as RH  inner join t_Receta as R on RH.Id_Receta=R.Id_Receta and RH.c_codigo_eps=R.c_codigo_eps where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and RH.Id_Huerta='"+Huerta+"' and R.Para='"+FumoFer+"' ",null);
 
         if (Renglon.moveToFirst()) {
             do {

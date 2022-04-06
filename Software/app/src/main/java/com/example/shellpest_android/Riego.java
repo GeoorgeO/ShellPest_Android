@@ -3,11 +3,13 @@ package com.example.shellpest_android;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,9 +21,10 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
-public class Riego extends AppCompatActivity {
+public class Riego extends AppCompatActivity implements View.OnClickListener{
 
     public String Usuario, Perfil, Huerta;
 
@@ -34,6 +37,8 @@ public class Riego extends AppCompatActivity {
 
     private AdaptadorSpinner CopiHue,CopiBlq,CopiEmp;
     private ArrayList<ItemDatoSpinner> ItemSPHue,ItemSPBlq,ItemSPEmp;
+
+    int dia,mes,anio;
 
     ItemRiego Tabla;
     Adaptador_GridRiego Adapter;
@@ -68,7 +73,7 @@ public class Riego extends AppCompatActivity {
         Date objDate = new Date();
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
         Date date1 = objDate;
-        et_fecha.setText("Fecha: " + objSDF.format(date1));
+        et_fecha.setText(objSDF.format(date1));
 
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
@@ -88,7 +93,7 @@ public class Riego extends AppCompatActivity {
         CopiBlq = new AdaptadorSpinner(Riego.this, ItemSPBlq);
         sp_Blq.setAdapter(CopiBlq);
 
-
+        et_fecha.setOnClickListener(this);
 
         arrayArticulos = new ArrayList<>();
 
@@ -137,6 +142,9 @@ public class Riego extends AppCompatActivity {
 
                 if(i>0){
                     Cargagrid();
+                }else{
+                    lv_GridRiego.setAdapter(null);
+                    arrayArticulos.clear();
                 }
 
                 /*cargaSpinnerHue();
@@ -170,6 +178,9 @@ public class Riego extends AppCompatActivity {
 
             }
         });
+
+        et_fecha.setInputType(InputType.TYPE_NULL);
+        et_fecha.requestFocus();
 
         lv_GridRiego.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -506,7 +517,7 @@ public class Riego extends AppCompatActivity {
                 "\tR.Horas_Riego, R.c_codigo_eps, R.Temperatura, R.ET \n" +
                 "from t_Riego as R \n" +
                 "left join t_Bloque as B on B.Id_Bloque=R.Id_Bloque and B.c_codigo_eps=R.c_codigo_eps \n" +
-                "where R.Fecha='"+objSDF.format(date1)+"' and R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                "where R.Fecha='"+et_fecha.getText().toString().trim()+"' and R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
@@ -532,6 +543,40 @@ public class Riego extends AppCompatActivity {
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view==et_fecha){
+            final Calendar c=Calendar.getInstance();
+            Date objDate = new Date();
+            dia=c.get(Calendar.DAY_OF_MONTH);
+            mes=c.get(Calendar.MONTH);
+            anio=c.get(Calendar.YEAR);
+
+            DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> et_fecha.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
+            dtpd.show();
+            LineEmpresa=0;
+            sp_Empresa3.setSelection(0);
+
+        }
+    }
+
+    private String rellenarCeros (String Valor,int NCaracteres){
+        if (Valor.length()<NCaracteres){
+            int faltan=0;
+            faltan=NCaracteres - Valor.length();
+            if (faltan==3){
+                return "000"+Valor;
+            }
+            if (faltan==2){
+                return "00"+Valor;
+            }
+            if (faltan==1){
+                return "0"+Valor;
+            }
+        }
+        return Valor;
     }
 
 }
