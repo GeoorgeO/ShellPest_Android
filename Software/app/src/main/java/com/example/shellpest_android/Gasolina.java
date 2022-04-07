@@ -32,12 +32,14 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     Spinner sp_responsableGas, sp_empresaGas, sp_activoGas, sp_huertaGas, sp_tipoGas;
 
-    AutoCompleteTextView atxt_actividadGas;
+    AutoCompleteTextView actxt_actividadGas;
 
     EditText etxt_folioGas, etxt_fechainiGas, etxt_fechafinGas, etxt_cantidadiniGas,
             etxt_cantidadsaldoGas, etxt_kminiGas, etxt_kmfinGas, etxt_horometroGas, etxt_observacionesGas;
     Button btn_agregarGas;
     ListView lv_GridGasolina;
+
+    private ArrayList<String> ArrayActividades,ArrayActividadesLimpia;
 
     int LineHuerta, LineEmpresa, LineActivo, LineTipo, LineActividad;
 
@@ -76,7 +78,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         etxt_kmfinGas = (EditText) findViewById(R.id.etxt_kmfinGas);
         etxt_horometroGas = (EditText) findViewById(R.id.etxt_horometroGas);
         etxt_observacionesGas = (EditText) findViewById(R.id.etxt_observacionesGas);
-        atxt_actividadGas = (AutoCompleteTextView) findViewById(R.id.atxt_actividadGas);
+        actxt_actividadGas = (AutoCompleteTextView) findViewById(R.id.atxt_actividadGas);
 
         lv_GridGasolina = (ListView) findViewById(R.id.lv_GridGasolina);
         btn_agregarGas = (Button) findViewById(R.id.btn_agregarGas);
@@ -225,6 +227,32 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        actxt_actividadGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(Gasolina.this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+                Cursor Renglon;
+                Renglon = BD.rawQuery("select AH.c_codigo_act, AH.c_codigo_cam,AH.v_nombre_act" +
+                        "from t_Actividades_Huerta as AH " +
+                        "ltrim(rtrim(AH.id_Huerta))='"+Huerta+"' ",null);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        actxt_actividadGas.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                actxt_actividadGas.setText(" ");
             }
         });
 
@@ -416,7 +444,22 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void cargarActividad(){
+        ArrayActividades = ArrayActividadesLimpia;
+        ArrayActividades = new ArrayList<>();
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
 
+        Renglon=BD.rawQuery("select T.v_nombre_pro,T.c_codigo_pro from t_Productos as T where T.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+
+        if(Renglon.moveToFirst()){
+            do {
+                ArrayActividades.add(new String(Renglon.getString(0)+" | "+Renglon.getString(1)));
+            } while(Renglon.moveToNext());
+            BD.close();
+        }else{
+            BD.close();
+        }
     }
 
     public void agregarDatos (View view){
