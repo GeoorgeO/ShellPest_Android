@@ -39,6 +39,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     Button btn_agregarGas;
     ListView lv_GridGasolina;
 
+    private ArrayAdapter Adaptador_Arreglos;
     private ArrayList<String> ArrayActividades,ArrayActividadesLimpia;
 
     int LineHuerta, LineEmpresa, LineActivo, LineTipo, LineActividad;
@@ -217,6 +218,10 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 Responsable = CopiResp.getItem(i).getTexto().substring(0,5);
                 Log.e("Responsable", Responsable);
 
+                cargarActividad();
+                Adaptador_Arreglos = new ArrayAdapter(Gasolina.this, android.R.layout.simple_list_item_1,ArrayActividades);
+                actxt_actividadGas.setAdapter(Adaptador_Arreglos);
+
                 cargarTipogas();
                 CopiTipo = new AdaptadorSpinner(getApplicationContext(), ItemSPTipo);
                 sp_tipoGas.setAdapter(CopiTipo);
@@ -230,21 +235,26 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-        actxt_actividadGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actxt_actividadGas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(Gasolina.this,"ShellPest",null,1);
                 SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
                 Cursor Renglon;
                 Renglon = BD.rawQuery("select AH.c_codigo_act, AH.c_codigo_cam,AH.v_nombre_act" +
-                        "from t_Actividades_Huerta as AH " +
-                        "ltrim(rtrim(AH.id_Huerta))='"+Huerta+"' ",null);
+                        " from t_Actividades_Huerta as AH " +
+                        "where ltrim(rtrim(AH.id_Huerta))='"+Huerta+"' or AH.c_codigo_cam = '00'",null);
 
-            }
+                if(Renglon.moveToFirst()){
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                    do {
+                        Log.e("Renglon",Renglon.toString());
+                    } while(Renglon.moveToNext());
 
+                    BD.close();
+                }else{
+                    BD.close();
+                }
             }
         });
 
@@ -444,13 +454,15 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void cargarActividad(){
-        ArrayActividades = ArrayActividadesLimpia;
-        ArrayActividades = new ArrayList<>();
+        ArrayActividades=ArrayActividadesLimpia;
+        ArrayActividades=new ArrayList<>();
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select T.v_nombre_pro,T.c_codigo_pro from t_Productos as T where T.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+        Renglon = BD.rawQuery("select AH.v_nombre_act,AH.c_codigo_cam,AH.c_codigo_act" +
+                " from t_Actividades_Huerta as AH " +
+                "where ltrim(rtrim(AH.id_Huerta))='"+Huerta+"' or AH.c_codigo_cam = '00'",null);
 
         if(Renglon.moveToFirst()){
             do {

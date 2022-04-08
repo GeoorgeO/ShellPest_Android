@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda" );
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//////
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
 
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
@@ -321,6 +322,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesPoda" );
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);////// ///ActivosGasolina
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
                     }else{
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
@@ -360,6 +362,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda");
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//// ActivosGasolina
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
                     }
                 }
 
@@ -367,7 +370,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                 Grid_Cambios.setAdapter(null);
                 arrayArticulos.clear();
-
 
                     Thread hilo=new Thread(new Runnable() {
                         @Override
@@ -620,6 +622,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         case"Id_ActivosGas":
                             Actualiza_ActivosHuerta(datos);
                             break;
+                        case"v_nombre_act":
+                            Actualiza_ActividadesHuerta(datos);
+                            break;
                     }
                 }
 
@@ -643,6 +648,39 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         }catch (WindowManager.BadTokenException E){
 
         }
+    }
+
+    private void Actualiza_ActividadesHuerta(String[][] Datos) {
+
+        Tabla=new Tablas_Sincronizadas("t_Actividades_Huerta",Datos.length);
+        arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        //int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
+
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+                try {
+                    ContentValues registro = new ContentValues();
+                    registro.put("v_nombre_act", Datos[x][0]);
+                    registro.put("c_codigo_cam", Datos[x][1]);
+                    registro.put("c_codigo_act", Datos[x][2]);
+                    registro.put("Id_Huerta", Datos[x][3]);
+                    registro.put("Nombre_Huerta", Datos[x][4]);
+                    BD.insert("t_Actividades_Huerta", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        BD.close();
     }
 
     private void Actualiza_ActivosHuerta(String[][] Datos) {
@@ -677,8 +715,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
             }
         }
         BD.close();
-
-
     }
 
     private void Actualiza_EmpleadosHuerta(String[][] Datos) {
