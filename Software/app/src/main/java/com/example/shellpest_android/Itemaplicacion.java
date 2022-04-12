@@ -52,4 +52,8 @@ public class Itemaplicacion {
     public String getcEps(){
         return cEps;
     }
+
+    public void setCantidad(String Dosis){
+        this.Dosis=Dosis;
+    }
 }

@@ -163,8 +163,8 @@ String Usuario,Perfil,Huerta;
                 "left join t_Bloque as B on P.Id_Bloque=B.Id_Bloque and B.c_codigo_eps=P.c_codigo_eps \n" +
                 "left join t_Huerta as H on B.Id_Huerta=H.Id_Huerta and H.c_codigo_eps=B.c_codigo_eps \n" +
                 "left join conempresa as EPS on EPS.c_codigo_eps=ME.c_codigo_eps\n" +
-                "where ME.Fecha='"+objSDF.format(date1)+"' group by ME.c_codigo_eps,EPS.v_nombre_eps,ME.Fecha,H.Nombre_Huerta,ME.Id_PuntoControl,P.Nombre_PuntoControl ",null);
-
+                " group by ME.c_codigo_eps,EPS.v_nombre_eps,ME.Fecha,H.Nombre_Huerta,ME.Id_PuntoControl,P.Nombre_PuntoControl ",null);
+//where ME.Fecha='"+objSDF.format(date1)+"'
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/

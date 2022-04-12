@@ -107,7 +107,9 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Id_Huerta text," +
                 "Nombre_Bloque text," +
                 "c_codigo_eps text," +
-                "TipoBloque text)");
+                "TipoBloque text," +
+                "Superficie float," +
+                "Ha_Produccion float)");
 
         BD.execSQL("create table t_Puntocontrol" +
                 "(Id_PuntoControl text not null," +

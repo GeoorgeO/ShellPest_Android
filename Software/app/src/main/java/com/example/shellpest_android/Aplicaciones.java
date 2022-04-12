@@ -130,7 +130,7 @@ public class Aplicaciones extends AppCompatActivity {
     public void Fertiliza(View view){
         Intent intento=null;
         if (Accion.equals("Captura")){
-            intento=new Intent(this,aplicacion.class);
+            intento=new Intent(this,Fertilizacion.class);
             intento.putExtra("usuario2", Usuario);
             intento.putExtra("perfil2", Perfil);
             intento.putExtra("huerta2", Huerta);

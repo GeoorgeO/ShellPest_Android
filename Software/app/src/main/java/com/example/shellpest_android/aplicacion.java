@@ -371,7 +371,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         BD.close();
                     }
 
-                    text_Codigo.setText(MaxCod+"-"+objSDF.format(date1).substring(8, 10)+"-"+CopiHue.getItem(i).getTexto().substring(0, 5)+"-"+CopiHue.getItem(i).getTexto().substring(8));
+                    text_Codigo.setText(MaxCod+"-"+etd_Fecha.getText().toString().trim().substring(8, 10)+"-"+CopiHue.getItem(i).getTexto().substring(0, 5)+"-"+CopiHue.getItem(i).getTexto().substring(8));
                 }
                 Huerta=CopiHue.getItem(i).getTexto().substring(0, 5);
 
@@ -536,7 +536,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                         BD.close();
 
-                        cargaGridxReceta(CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7),text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(i).getTexto().substring(0, 5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
+                        cargaGridxReceta(CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0, 7),text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(i).getTexto().substring(0, 5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2));
                     } else {
                         BD.close();
                     }
@@ -798,11 +798,10 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 Cursor Renglon;
 
                 for(int i=0;i<arrayArticulos.size();i++){
-
                     if(arrayArticulos.get(i).getcProducto().trim().length()>0) {
                         Renglon = BD.rawQuery("select count(Id_Aplicacion) " +
                                 "from t_Aplicaciones_Det " +
-                                "where Id_Aplicacion='" + text_Codigo.getText().toString().substring(0, 3) + objSDF.format(date1).substring(8, 10) + CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0, 5) + "' and Fecha='" + etd_Fecha.getText() + "' " +
+                                "where Id_Aplicacion='" + text_Codigo.getText().toString().substring(0, 3) + etd_Fecha.getText().toString().trim().substring(8, 10) + CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0, 5) + "' and Fecha='" + etd_Fecha.getText() + "' " +
                                 "and c_codigo_pro='" + arrayArticulos.get(i).getcProducto().trim() + "' and c_codigo_eps='" + CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0, 2) + "' ", null);
 
                         if (Renglon.moveToFirst()) {
@@ -810,7 +809,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                                 Toast.makeText(this, "Ya se encuntra ese producto en la lista, favor de revisar.", Toast.LENGTH_SHORT).show();
                             } else {
                                 ContentValues registro2 = new ContentValues();
-                                registro2.put("Id_Aplicacion", text_Codigo.getText().toString().substring(0, 3) + objSDF.format(date1).substring(8, 10) + CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0, 5)); //objSDF.format(date1)
+                                registro2.put("Id_Aplicacion", text_Codigo.getText().toString().substring(0, 3) + etd_Fecha.getText().toString().trim().substring(8, 10) + CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0, 5)); //objSDF.format(date1)
                                 registro2.put("Fecha", etd_Fecha.getText().toString());
                                 registro2.put("c_codigo_pro", arrayArticulos.get(i).getcProducto().trim());
                                 registro2.put("Dosis", arrayArticulos.get(i).getCantidad());
@@ -1259,7 +1258,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                 Renglon =BD.rawQuery("select count(Id_Aplicacion) " +
                         "from t_Aplicaciones_Det " +
-                        "where Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
+                        "where Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
                         "and c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
 
                 if(Renglon.moveToFirst()){
@@ -1270,7 +1269,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         registro3.put("Dosis",etn_ApliCantidad.getText().toString());
                         registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
                         //registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
-                        int cantidad=BD.update("t_Aplicaciones_Det",registro3,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+
+                        int cantidad=BD.update("t_Aplicaciones_Det",registro3,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+
                                 "' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'"+
                                 " and c_codigo_pro='"+arrayArticulos.get(nseldet).getcProducto()+"' and Fecha='"+arrayArticulos.get(nseldet).getFecha()+"' ",null);
 
@@ -1289,7 +1288,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                         }else{
                             ContentValues registro2= new ContentValues();
-                            registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
+                            registro2.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
                             registro2.put("Fecha",etd_Fecha.getText().toString());
                             registro2.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
                             registro2.put("Dosis",etn_ApliCantidad.getText().toString());
@@ -1308,7 +1307,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                 BD.close();
 
                 LimpiarDetalle();
-                Cargagrid(text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
+                Cargagrid(text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5),CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
             }
 
 
@@ -1328,7 +1327,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         String currentTime = simpleDateFormat.format(new Date());
 
         Cursor Renglon;
-        Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Apli.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and Enviado='0' ",null);
+        Renglon=BD.rawQuery("select count(Apli.Id_Aplicacion) as Sihay from t_Aplicaciones as Apli where Apli.Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Apli.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"' and Enviado='0' ",null);
         if(Renglon.moveToFirst()){
             do {
 
@@ -1341,10 +1340,11 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
                     registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,6));
                     registro.put("Unidades_aplicadas",etn_Pipadas.getText().toString());
-                    int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                    int cantidad=BD.update("t_Aplicaciones",registro,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                     if(cantidad>0){
-                        Id=text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);
+                        //Cambie en el Id, ya no tome la fecha del sistema, si no la fecha que seleccionen en la ventana
+                        Id=text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);
                         cepsselapli=CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2);
                         //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
                     }else{
@@ -1355,7 +1355,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     ContentValues registro= new ContentValues();
 
                     String Parrafo=String.valueOf(pt_Observaciones.getText());
-                    registro.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5));
+                    //Cambie en el Id, ya no tome la fecha del sistema (objSDF.format(date1)), si no la fecha que seleccionen en la ventana
+                    registro.put("Id_Aplicacion",text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5));
                     registro.put("Id_Huerta",Huerta);
                     registro.put("Observaciones",pt_Observaciones.getText().toString());
                     registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
@@ -1372,7 +1373,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
                     registro.put("Unidades_aplicadas",etn_Pipadas.getText().toString());
                     BD.insert("t_Aplicaciones",null,registro);
-                    Id=text_Codigo.getText().toString().substring(0,3)+objSDF.format(date1).substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);
+                    //Cambie en el Id, ya no tome la fecha del sistema (objSDF.format(date1)), si no la fecha que seleccionen en la ventana
+                    Id=text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5);
                     cepsselapli=CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2);
                     return true;
                 }

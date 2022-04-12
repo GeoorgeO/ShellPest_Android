@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoformularios"
+    tools:context=".Fertilizacion">
+
+    <LinearLayout
+        android:id="@+id/ll_ApliGeneral"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/ll_ApliEncabezado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="FERTILIZACIÓN"
+                android:textAlignment="center"
+                android:textColor="@color/amarillo"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView35"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="Codigo:"
+                    android:textColor="@color/verde"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_Codigo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="9"
+                    android:textColor="@color/verde_azul" />
+
+                <ImageButton
+                    android:id="@+id/imageButton6"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/miniboton_redondo"
+                    android:onClick="ListarAplicaciones"
+                    app:srcCompat="@android:drawable/ic_input_get" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView57"
+                    android:layout_width="102dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Empresa:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_Empresa5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:popupBackground="@drawable/spinner_style" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView58"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Huerta:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_huerta5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:popupBackground="@drawable/spinner_style" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_EtiCenCos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:text="Bloque's: "
+                    android:textColor="@color/cafe"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_CenCos"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:background="@android:drawable/btn_default_small"
+                    android:text="V"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/cafe"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:text="Observaciones:"
+                    android:textColor="@color/verde"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/pt_Observaciones"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView56"
+                    android:layout_width="127dp"
+                    android:layout_height="25sp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Receta:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_Receta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:popupBackground="@drawable/spinner_style" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView51"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+
+                    android:text="Aplicación:"
+
+                    android:textAllCaps="false"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_TipoAplicacion"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.49"
+                    android:popupBackground="@drawable/spinner_style" />
+
+                <TextView
+                    android:id="@+id/text_HaApli"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+                    android:text="Hectareas:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etn_HaApli"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
+                    android:inputType="number"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView59"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35sp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Presentación:"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_Presentacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:popupBackground="@drawable/spinner_style" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+                    android:text="Fecha:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etd_Fecha"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.82"
+                    android:inputType="date"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+                    android:text="Producto:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/actv_Productos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.64"
+                    android:hint="Teclee Nombre de producto"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/text_UnidadPro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+                    android:text="Uni:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView27"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+                    android:text="Aplicado:"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etn_ApliCantidad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.82"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/verde_azul"
+                    android:textColorHighlight="@color/verde"
+                    android:textColorHint="@color/verde"
+                    android:textColorLink="@color/verde_azul"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_Agrega"
+                android:layout_width="98dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="3dp"
+                android:background="@drawable/rounded_button"
+                android:onClick="Agregar"
+                android:text="Agregar"
+                android:textColor="#FFFFFF" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/verde"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView34"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Producto"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="61dp"
+                    android:layout_height="wrap_content"
+                    android:text="Cantidad"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Unidad"
+                    android:textAlignment="center"
+                    android:textColor="@color/cafe"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <ListView
+            android:id="@+id/lv_GridFertiliza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_grid_aplicacion" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

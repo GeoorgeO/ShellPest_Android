@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 SimpleDateFormat objSDF = new SimpleDateFormat("yyyyMMdd"); // La cadena de formato de fecha se pasa como un argumento al objeto
 
                 Date date1=objDate;
+                Date dateLot=objDate;
                 try {
                     date1=new SimpleDateFormat("dd/MM/yyyy").parse(esaFecha);
                 } catch (ParseException e) {
@@ -254,7 +255,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
@@ -296,7 +297,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
@@ -336,7 +337,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
@@ -1427,6 +1428,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             registro.put("Id_Huerta",Datos[x][1]);
                             registro.put("Nombre_Bloque",Datos[x][2]);
                             registro.put("TipoBloque",Datos[x][8]);
+                            registro.put("Superficie",Datos[x][9]);
+                            registro.put("Ha_Produccion",Datos[x][10]);
                             int cantidad=BD.update("t_Bloque",registro,"Id_Bloque='"+Datos[x][0].toString()+"'",null);
 
                             if(cantidad>0){
@@ -1441,6 +1444,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             registro.put("Nombre_Bloque",Datos[x][2]);
                             registro.put("c_codigo_eps",Datos[x][7]);
                             registro.put("TipoBloque",Datos[x][8]);
+                            registro.put("Superficie",Datos[x][9]);
+                            registro.put("Ha_Produccion",Datos[x][10]);
                             BD.insert("t_Bloque",null,registro);
                         }
 

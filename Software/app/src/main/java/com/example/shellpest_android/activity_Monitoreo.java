@@ -333,9 +333,9 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         String SQLWhere;
                         if (arrayArticulos.get(i).getcPlaga().trim().length()>0){
-                            SQLWhere="Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"'  and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and Id_Plagas='"+arrayArticulos.get(i).getcPlaga()+"' and Id_Fenologico='"+arrayArticulos.get(i).getcInd()+"' ";
+                            SQLWhere="Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+et_fecha.getText().toString().trim()+"'  and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and Id_Plagas='"+arrayArticulos.get(i).getcPlaga()+"' and Id_Fenologico='"+arrayArticulos.get(i).getcInd()+"' ";
                         }else{
-                            SQLWhere="Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"'  and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and  Id_Enfermedad='"+arrayArticulos.get(i).getcEnferma()+"' and Id_Fenologico='"+arrayArticulos.get(i).getcInd()+"' ";
+                            SQLWhere="Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+et_fecha.getText().toString().trim()+"'  and Id_Deteccion='"+arrayArticulos.get(i).getcDet()+"' and  Id_Enfermedad='"+arrayArticulos.get(i).getcEnferma()+"' and Id_Fenologico='"+arrayArticulos.get(i).getcInd()+"' ";
                         }
 
                         int cantidad= BD.delete("t_Monitoreo_PEDetalle",SQLWhere,null);
@@ -492,7 +492,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 String currentTime = simpleDateFormat.format(new Date());
 
                 Cursor Renglon;
-                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+et_fecha.getText().toString().trim()+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and M.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                 if(Renglon.moveToFirst()){
 
                     do {
@@ -506,7 +506,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 registro.put("n_coordenadaX",Local.Long);
                                 registro.put("n_coordenadaY",Local.Lat);
 
-                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+et_fecha.getText().toString().trim()+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                                 if(cantidad>0){
                                     //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
@@ -518,7 +518,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
 
                         }else{
                             ContentValues registro= new ContentValues();
-                            registro.put("Fecha",objSDF.format(date1));
+                            registro.put("Fecha",et_fecha.getText().toString().trim());
                             registro.put("Id_Huerta",Huerta);
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro.put("Id_Usuario",Usuario);
@@ -543,7 +543,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             "from t_Monitoreo_PEDetalle " +
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                            "and  Fecha='"+objSDF.format(date1)+"' " +
+                            "and  Fecha='"+et_fecha.getText().toString().trim()+"' " +
                             "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                 }else{
@@ -552,14 +552,14 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and  Fecha='"+et_fecha.getText().toString().trim()+"' " +
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
                     }else{
                         Renglon =BD.rawQuery("select count(Id_PuntoControl) " +
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='' "+ //'"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and  Fecha='"+et_fecha.getText().toString().trim()+"' " +
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
                     }
                 }
@@ -570,7 +570,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                     }else{
                         if(rb_SinPresencia.isChecked()){
                             ContentValues registro2= new ContentValues();
-                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Fecha",et_fecha.getText().toString().trim());
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro2.put("Id_Humbral","0001");
                             registro2.put("Hora",currentTime);
@@ -578,7 +578,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }else{
                             ContentValues registro2= new ContentValues();
-                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Fecha",et_fecha.getText().toString().trim());
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             if(rb_Enfermedad.isChecked()){
                                 registro2.put("Id_Plagas","");
@@ -935,7 +935,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
 
 
 
-                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+objSDF.format(date1)+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
+                Renglon=BD.rawQuery("select count(M.Id_PuntoControl) as Sihay,Hora from t_Monitoreo_PEEncabezado as M where M.Fecha='"+et_fecha.getText().toString().trim()+"' and M.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' ",null);
                 if(Renglon.moveToFirst()){
 
                     do {
@@ -949,7 +949,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 registro.put("n_coordenadaX",Local.Long);
                                 registro.put("n_coordenadaY",Local.Lat);
 
-                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
+                                int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+et_fecha.getText().toString().trim()+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
                                 if(cantidad>0){
                                     //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
@@ -961,7 +961,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
 
                         }else{
                             ContentValues registro= new ContentValues();
-                            registro.put("Fecha",objSDF.format(date1));
+                            registro.put("Fecha",et_fecha.getText().toString().trim());
                             registro.put("Id_Huerta",Huerta);
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro.put("Id_Usuario",Usuario);
@@ -988,7 +988,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             "from t_Monitoreo_PEDetalle " +
                             "where Id_Plagas='' and Id_Enfermedad='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                            "and  Fecha='"+objSDF.format(date1)+"' " +
+                            "and  Fecha='"+et_fecha.getText().toString().trim()+"' " +
                             "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
                             "and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'" +
                             "and Id_Fenologico='"+CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
@@ -999,7 +999,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='"+CopiPE.getItem(sp_PE.getSelectedItemPosition()).getTexto().substring(0,4)+"' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and  Fecha='"+et_fecha.getText().toString().trim()+"' " +
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'" +
                                 "and Id_Fenologico='"+CopiInd.getItem(sp_Ind.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                     }else{
@@ -1007,7 +1007,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 "from t_Monitoreo_PEDetalle " +
                                 "where Id_Plagas='' and Id_Enfermedad='' " +
                                 "and Id_Deteccion='' "+ // '"+CopiOrg.getItem(sp_Org.getSelectedItemPosition()).getTexto().substring(0,4)+"' " +
-                                "and  Fecha='"+objSDF.format(date1)+"' " +
+                                "and  Fecha='"+et_fecha.getText().toString().trim()+"' " +
                                 "and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
                                 "and Id_Fenologico='' ",null);
                     }
@@ -1019,7 +1019,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                     }else{
                         if(rb_SinPresencia.isChecked()){
                             ContentValues registro2= new ContentValues();
-                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Fecha",et_fecha.getText().toString().trim());
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro2.put("Id_Humbral","0001");
                             registro2.put("Hora",currentTime);
@@ -1027,7 +1027,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             BD.insert("t_Monitoreo_PEDetalle",null,registro2);
                         }else{
                             ContentValues registro2= new ContentValues();
-                            registro2.put("Fecha",objSDF.format(date1));
+                            registro2.put("Fecha",et_fecha.getText().toString().trim());
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             if(rb_Enfermedad.isChecked()){
                                 registro2.put("Id_Plagas","");
