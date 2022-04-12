@@ -15,9 +15,17 @@
 
         <TextView
             android:id="@+id/txt_IPunto"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/txt_IFecha"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/txt_IHuerta"

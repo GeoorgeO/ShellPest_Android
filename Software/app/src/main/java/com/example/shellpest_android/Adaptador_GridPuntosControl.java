@@ -40,13 +40,14 @@ public class Adaptador_GridPuntosControl extends BaseAdapter {
         TextView txt_IPunto=(TextView)itemView.findViewById(R.id.txt_IPunto);
         TextView txt_IHuerta=(TextView)itemView.findViewById(R.id.txt_IHuerta);
         TextView txt_INoPE=(TextView)itemView.findViewById(R.id.txt_INoPE);
+        TextView txt_IFecha=(TextView)itemView.findViewById(R.id.txt_IFecha);
 
 
 
         txt_IPunto.setText(""+itemlist.get(i).getPuntoControl());
         txt_IHuerta.setText(""+itemlist.get(i).getHuerta());
         txt_INoPE.setText(""+itemlist.get(i).getNoPE());
-
+        txt_IFecha.setText(""+itemlist.get(i).getFecha());
 
 
         return itemView;

@@ -62,7 +62,7 @@ String Usuario,Perfil,Huerta;
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Puntos_Capturados.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
-                        Cursor Renglon =BD.rawQuery("select Fecha,Id_Huerta,Id_PuntoControl,Id_Usuario,n_coordenadaX,n_coordenadaY,Hora,c_codigo_eps from t_Monitoreo_PEEncabezado where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
+                        Cursor Renglon =BD.rawQuery("select Fecha,Id_Huerta,Id_PuntoControl,Id_Usuario,n_coordenadaX,n_coordenadaY,Hora,c_codigo_eps from t_Monitoreo_PEEncabezado where Fecha='"+arrayArticulos.get(i).getFecha()+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
 
                             if (Renglon.moveToFirst()) {
 
@@ -78,7 +78,7 @@ String Usuario,Perfil,Huerta;
                                     registro.put("c_codigo_eps",Renglon.getString(7));
                                     BD.insert("t_Monitoreo_Eliminados_PEEncabezado",null,registro);
 
-                                    int cantidad= BD.delete("t_Monitoreo_PEEncabezado","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'",null);
+                                    int cantidad= BD.delete("t_Monitoreo_PEEncabezado","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+arrayArticulos.get(i).getFecha()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'",null);
 
                                     if(cantidad>0){
 
@@ -90,7 +90,7 @@ String Usuario,Perfil,Huerta;
                                 //Toast.makeText(Puntos_Capturados.this, "No hay datos en t_Monitoreo_PE guardados", Toast.LENGTH_SHORT).show();
                             }
 
-                        Cursor Renglon2 =BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral,Hora,c_codigo_eps,Cant_Individuos,Id_Fenologico from t_Monitoreo_PEDetalle where Fecha='"+objSDF.format(date1)+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'",null);
+                        Cursor Renglon2 =BD.rawQuery("select Fecha,Id_Plagas,Id_Enfermedad,Id_PuntoControl,Id_Deteccion,Id_Individuo,Id_Humbral,Hora,c_codigo_eps,Cant_Individuos,Id_Fenologico from t_Monitoreo_PEDetalle where Fecha='"+arrayArticulos.get(i).getFecha()+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'",null);
 
                         if (Renglon2.moveToFirst()) {
 
@@ -111,7 +111,7 @@ String Usuario,Perfil,Huerta;
                                 registro2.put("Id_Fenologico",Renglon2.getString(10));
                                 BD.insert("t_Monitoreo_Eliminados_PEDetalle",null,registro2);
 
-                                int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+objSDF.format(date1)+"' ",null);
+                                int cantidad= BD.delete("t_Monitoreo_PEDetalle","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+arrayArticulos.get(i).getFecha()+"' ",null);
 
                                 if(cantidad>0){
 
@@ -156,7 +156,10 @@ String Usuario,Perfil,Huerta;
         Cursor Renglon =BD.rawQuery("select P.Nombre_PuntoControl, \n" +
                 "\tH.Nombre_Huerta,\n" +
                 "\t count(M.Id_Individuo), \n" +
-                "\t ME.Id_PuntoControl,Me.c_codigo_eps,EPS.v_nombre_eps \n" +
+                "\t ME.Id_PuntoControl, \n" +
+                "Me.c_codigo_eps, \n" +
+                "EPS.v_nombre_eps, \n" +
+                "ME.Fecha \n" +
                 "from t_Monitoreo_PEEncabezado as ME \n" +
                 "left join  t_Monitoreo_PEDetalle as M on ME.Id_PuntoControl=M.Id_PuntoControl and M.Fecha=ME.Fecha and M.c_codigo_eps=ME.c_codigo_eps \n "+
                 "left join t_Puntocontrol as P on ME.Id_PuntoControl=P.Id_PuntoControl and ME.c_codigo_eps=P.c_codigo_eps \n" +
@@ -171,7 +174,7 @@ String Usuario,Perfil,Huerta;
             if (Renglon.moveToFirst()) {
 
                 do {
-                    Tabla=new ItemPuntosControl(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5));
+                    Tabla=new ItemPuntosControl(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
