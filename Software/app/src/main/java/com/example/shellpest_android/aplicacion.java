@@ -107,12 +107,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
 
         yasemovio=false;
 
-        if(FumoFer.equals("A")){
-            tv_Titulo.setText("APLICACIONES");
-        }
-        else{
-            tv_Titulo.setText("FERTILIZACIONES");
-        }
+
+        tv_Titulo.setText("APLICACIONES");
 
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);

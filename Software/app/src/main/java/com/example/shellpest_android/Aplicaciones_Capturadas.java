@@ -140,7 +140,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         if (Perfil.equals("001")){
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
-                    "\t min(Ad.Fecha) + ' - ' + max(AD.Fecha) as Fecha , \n" +
+                    "\t min(Ad.Fecha) || ' - ' || max(AD.Fecha) as Fecha , \n" +
                     "\t A.Id_Huerta,A.c_codigo_eps \n" +
                     "from t_Aplicaciones as A \n" +
                     "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
@@ -149,7 +149,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         }else{
             Consulta="select A.Id_Aplicacion, \n" +
                     "\tH.Nombre_Huerta,\n" +
-                    "\t min(Ad.Fecha)+ ' - ' +max(AD.Fecha) as Fecha , \n" +
+                    "\t min(Ad.Fecha) || ' - ' || max(AD.Fecha) as Fecha , \n" +
                     "\t A.Id_Huerta,A.c_codigo_eps \n" +
                     "from t_Aplicaciones as A \n" +
                     "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
@@ -163,12 +163,10 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.moveToFirst()) {
-
                 do {
                     Tabla=new ItemAplicaciones(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
-
 
                 BD.close();
             } else {

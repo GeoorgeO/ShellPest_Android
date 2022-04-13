@@ -202,7 +202,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Riego.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
-                        Cursor Renglon =BD.rawQuery("select Fecha ,Hora,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,Id_Usuario,c_codigo_eps from t_Riego where Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' and c_codigo_eps='"+arrayArticulos.get(i).getCEPS()+"'  ",null);
+                        Cursor Renglon =BD.rawQuery("select Fecha ,Hora,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,Id_Usuario,c_codigo_eps from t_Riego where Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' and c_codigo_eps='"+arrayArticulos.get(i).getCEPS()+"'  ",null);
 
                         if (Renglon.moveToFirst()) {
 
@@ -219,7 +219,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                                 registro.put("c_codigo_eps",Renglon.getString(8));
                                 BD.insert("t_RiegoEliminado",null,registro);
 
-                                int cantidad= BD.delete("t_Riego","Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' ",null);
+                                int cantidad= BD.delete("t_Riego","Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' ",null);
 
                                 if(cantidad>0){
 
@@ -421,7 +421,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
                 Renglon =BD.rawQuery("select count(Id_Bloque) " +
                             "from t_Riego " +
-                            "where Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+                            "where Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
                 if(Renglon.moveToFirst()){
                     if(Renglon.getInt(0)>0){
@@ -445,7 +445,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                                 registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2));
                                 registro2.put("Temperatura",Double.parseDouble(String.valueOf(txt_Temperatura.getText())));
                                 registro2.put("ET",Double.parseDouble(String.valueOf(txt_ET.getText())));
-                                BD.update("t_Riego",registro2,"Fecha='"+objSDF.format(date1)+"' and Id_Bloque='"+CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
+                                BD.update("t_Riego",registro2,"Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2)+"' ",null);
                                 BD.close();
                                 Cargagrid();
                             }
@@ -462,7 +462,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                     }
                     else{
                         ContentValues registro2= new ContentValues();
-                        registro2.put("Fecha",objSDF.format(date1));
+                        registro2.put("Fecha",et_fecha.getText().toString().trim());
                         registro2.put("Hora",currentTime);
                         registro2.put("Id_Bloque",CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4));
 
