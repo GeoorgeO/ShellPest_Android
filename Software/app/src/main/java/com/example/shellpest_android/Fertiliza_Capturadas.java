@@ -17,11 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Aplicaciones_Capturadas extends AppCompatActivity {
+public class Fertiliza_Capturadas extends AppCompatActivity {
 
     String Usuario,Perfil,Huerta;
 
-    ListView lv_Aplicaciones;
+    ListView lv_Fertilizaciones;
     ItemAplicaciones Tabla;
     Adaptador_GridAplicaciones Adapter;
     ArrayList<ItemAplicaciones> arrayArticulos;
@@ -30,7 +30,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aplicaciones_capturadas);
+        setContentView(R.layout.activity_fertiliza_capturadas);
 
         getSupportActionBar().hide();
 
@@ -38,7 +38,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         Perfil = getIntent().getStringExtra("perfil");
         Huerta = getIntent().getStringExtra("huerta");
 
-        lv_Aplicaciones = (ListView) findViewById(R.id.lv_Aplicaciones);
+        lv_Fertilizaciones = (ListView) findViewById(R.id.lv_Fertilizaciones);
 
         arrayArticulos = new ArrayList<>();
 
@@ -48,17 +48,16 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         Renglon=0;
         nclic=0;
 
-        lv_Aplicaciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_Fertilizaciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 if(Renglon==l){
                     nclic++;
                 }else{
                     nclic=1;
                 }
                 if (nclic>1){
-                    Intent intento = new Intent(getApplicationContext(), aplicacion.class);
+                    Intent intento = new Intent(getApplicationContext(), Fertilizacion.class);
                     intento.putExtra("usuario2", Usuario);
                     intento.putExtra("perfil2", Perfil);
                     intento.putExtra("huerta2", Huerta);
@@ -70,13 +69,14 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
                     nclic=0;
                 }
             }
+
         });
 
-        lv_Aplicaciones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lv_Fertilizaciones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 nclic=0;
-                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Aplicaciones_Capturadas.this);
+                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Fertiliza_Capturadas.this);
                 dialogo1.setTitle("ELIMINAR REGISTRO SELECCIONADO");
                 dialogo1.setMessage("¿ Quieres eliminar el registro seleccionado ?");
                 dialogo1.setCancelable(false);
@@ -88,19 +88,19 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
                         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
                         Date date1=objDate;
 
-                        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Aplicaciones_Capturadas.this,"ShellPest",null,1);
+                        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Fertiliza_Capturadas.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
 
-                        int cantidad= BD.delete("t_Aplicaciones_Det","Id_Aplicacion='"+arrayArticulos.get(i).getId()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
+                        int cantidad= BD.delete("t_Fertiliza_Det","Id_Fertiliza='"+arrayArticulos.get(i).getId()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
 
                         if(cantidad>0){
-                            int cantidad2= BD.delete("t_Aplicaciones","Id_Aplicacion='"+arrayArticulos.get(i).getId()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'  ",null);
+                            int cantidad2= BD.delete("t_Fertiliza","Id_Fertiliza='"+arrayArticulos.get(i).getId()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'  ",null);
 
                             if(cantidad2>0){
 
                             }else{
-                                Toast.makeText(Aplicaciones_Capturadas.this,"Ocurrio un error al intentar eliminar la aplicacion seleccionada, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Fertiliza_Capturadas.this,"Ocurrio un error al intentar eliminar la Fertilización seleccionada, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             //Toast.makeText(Puntos_Capturados.this,"Ocurrio un error al intentar eliminar el usuario logeado, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
@@ -123,7 +123,7 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
     }
 
     private void Cargagrid(){
-        lv_Aplicaciones.setAdapter(null);
+        lv_Fertilizaciones.setAdapter(null);
         arrayArticulos.clear();
 
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -136,23 +136,23 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
         //Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
         String Consulta;
         if (Perfil.equals("001")){
-            Consulta="select A.Id_Aplicacion, \n" +
+            Consulta="select A.Id_Fertiliza, \n" +
                     "\tH.Nombre_Huerta,\n" +
                     "\t min(Ad.Fecha) || ' - ' || max(AD.Fecha) as Fecha , \n" +
                     "\t A.Id_Huerta,A.c_codigo_eps \n" +
-                    "from t_Aplicaciones as A \n" +
+                    "from t_Fertiliza as A \n" +
                     "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
-                    "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion and  AD.c_codigo_eps=A.c_codigo_eps \n" +
-                    " where A.Enviado='0' group by A.Id_Aplicacion,A.c_codigo_eps ";
+                    "left join t_Fertiliza_Det as AD on AD.Id_Fertiliza=A.Id_Fertiliza and  AD.c_codigo_eps=A.c_codigo_eps \n" +
+                    " where A.Enviado='0' group by A.Id_Fertiliza,A.c_codigo_eps ";
         }else{
-            Consulta="select A.Id_Aplicacion, \n" +
+            Consulta="select A.Id_Fertiliza, \n" +
                     "\tH.Nombre_Huerta,\n" +
                     "\t min(Ad.Fecha) || ' - ' || max(AD.Fecha) as Fecha , \n" +
                     "\t A.Id_Huerta,A.c_codigo_eps \n" +
-                    "from t_Aplicaciones as A \n" +
+                    "from t_Fertiliza as A \n" +
                     "left join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps \n "+
-                    "left join t_Aplicaciones_Det as AD on AD.Id_Aplicacion=A.Id_Aplicacion and  AD.c_codigo_eps=A.c_codigo_eps \n" +
-                    "where A.Enviado='0' and ltrim(rtrim(A.Id_Huerta))+ltrim(rtrim(A.c_codigo_eps)) in (select ltrim(rtrim(tem.Id_Huerta))+ltrim(rtrim(tem.c_codigo_eps)) from t_Usuario_Huerta as tem where tem.Id_Usuario='"+Usuario+"') group by A.Id_Aplicacion,A.c_codigo_eps ";
+                    "left join t_Fertiliza_Det as AD on AD.Id_Fertiliza=A.Id_Fertiliza and  AD.c_codigo_eps=A.c_codigo_eps \n" +
+                    "where A.Enviado='0' and ltrim(rtrim(A.Id_Huerta))+ltrim(rtrim(A.c_codigo_eps)) in (select ltrim(rtrim(tem.Id_Huerta))+ltrim(rtrim(tem.c_codigo_eps)) from t_Usuario_Huerta as tem where tem.Id_Usuario='"+Usuario+"') group by A.Id_Fertiliza,A.c_codigo_eps ";
         }
 
         Cursor Renglon =BD.rawQuery(Consulta,null);
@@ -168,13 +168,13 @@ public class Aplicaciones_Capturadas extends AppCompatActivity {
 
                 BD.close();
             } else {
-                Toast.makeText(this, "No hay datos en t_Aplicaciones_Det guardados", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay datos en t_Fertiliza_Det guardados", Toast.LENGTH_SHORT).show();
                 BD.close();
             }
         }
         if(arrayArticulos.size()>0){
             Adapter=new Adaptador_GridAplicaciones(getApplicationContext(),arrayArticulos);
-            lv_Aplicaciones.setAdapter(Adapter);
+            lv_Fertilizaciones.setAdapter(Adapter);
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }

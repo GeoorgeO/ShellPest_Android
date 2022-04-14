@@ -17,8 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Fertilizacion"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".Fertiliza_Capturadas"></activity>
+        <activity
+            android:name=".Fertilizacion"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Enviar_Cosecha" />
         <activity
             android:name=".Cosecha"

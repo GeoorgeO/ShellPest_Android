@@ -61,7 +61,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:background="@drawable/miniboton_redondo"
-                    android:onClick="ListarAplicaciones"
+                    android:onClick="ListarFertiliza"
                     app:srcCompat="@android:drawable/ic_input_get" />
             </LinearLayout>
 

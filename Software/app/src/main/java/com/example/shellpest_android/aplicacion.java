@@ -1022,7 +1022,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         text_CenCos.setText(Renglon.getString(14).trim());
                     }
 
-
                     int item;
 
                     if(sp_Empresa4.getSelectedItemPosition()<2){

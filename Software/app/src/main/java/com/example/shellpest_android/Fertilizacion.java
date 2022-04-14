@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -511,6 +512,12 @@ public class Fertilizacion extends AppCompatActivity {
                 }
             }
         });
+
+        if(Id!=null){
+            Cargagrid(Id,cepsselapli);
+            CargarFertilizacion();
+        }
+
     }
 
     private void cargaSpinnerEmpresa(){
@@ -801,11 +808,8 @@ public class Fertilizacion extends AppCompatActivity {
 
                 if(arrayArticulos.size()>0){
                     if(SGC!=arrayArticulos.size()){
-                        //GuardaDeReceta();
+                        GuardaDeReceta();
                     }
-
-                    //DescansoEnMilisegundos(8000,IdAplica,c_codigo_eps); inhabilite por que no se requiere validar si hay existencias en el producto
-
                 }
                 BD.close();
             } else {
@@ -837,6 +841,529 @@ public class Fertilizacion extends AppCompatActivity {
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void Agregar(View view){
+        boolean FaltoAlgo;
+        FaltoAlgo=false;
+        String Mensaje;
+        Mensaje = "";
+
+        if (sp_Empresa5.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una empresa,Verifica por favor";
+        }
+        if (sp_huerta5.getSelectedItemPosition() > 0 ) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar un almacen,Verifica por favor";
+        }
+        if (sp_TipoAplicacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una tipo de aplicacion,Verifica por favor";
+        }
+
+        if (sp_Presentacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una Presentacion,Verifica por favor";
+        }
+
+        if (actv_Productos.getText().toString().indexOf("|") >= 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta teclear un producto,Verifica por favor";
+        }
+        try {
+            if (Double.parseDouble(etn_ApliCantidad.getText().toString()) > 0) {
+
+            } else {
+                FaltoAlgo = true;
+                Mensaje = "Falta teclear la cantidad de dosis,Verifica por favor";
+            }
+        } catch (IllegalStateException e) {
+            etn_ApliCantidad.setText("0");
+        }
+        catch(NumberFormatException f)
+        {
+            etn_ApliCantidad.setText("0");
+        }
+        catch(Exception g)
+        {
+            etn_ApliCantidad.setText("0");
+        }
+
+        try {
+            if (Double.parseDouble(etn_HaApli.getText().toString()) > 0) {
+
+            } else {
+                FaltoAlgo = true;
+                Mensaje = "Falta teclear la cantidad de la aplicados,Verifica por favor";
+            }
+        } catch (IllegalStateException e) {
+            etn_HaApli.setText("0");
+        }
+        catch(NumberFormatException f)
+        {
+            etn_HaApli.setText("0");
+        }
+        catch(Exception g)
+        {
+            etn_HaApli.setText("0");
+        }
+
+        if (!FaltoAlgo){
+            if (guardarEncabezado()){
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                Date date1=objDate;
+
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+                Cursor Renglon;
+
+                Renglon =BD.rawQuery("select count(Id_Fertiliza) " +
+                        "from t_Fertiliza_Det " +
+                        "where Id_Fertiliza='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fecha='"+etd_Fecha.getText()+"' " +
+                        "and c_codigo_pro='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' " ,null);
+
+                if(Renglon.moveToFirst()){
+                    if(seldet){
+                        ContentValues registro3= new ContentValues();
+                        registro3.put("Fecha",etd_Fecha.getText().toString());
+                        registro3.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
+                        registro3.put("Cantidad_Aplicada",etn_ApliCantidad.getText().toString());
+                        registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
+                        //registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
+                        int cantidad=BD.update("t_Fertiliza_Det",registro3,"Id_Fertiliza='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5)+
+                                "' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"'"+
+                                " and c_codigo_pro='"+arrayArticulos.get(nseldet).getcProducto()+"' and Fecha='"+arrayArticulos.get(nseldet).getFecha()+"' ",null);
+
+                        if(cantidad>0){
+                            //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        if(Renglon.getInt(0)>0){
+                            if(seldet){
+
+                            }else{
+                                Toast.makeText(this,"Ya se encuntra ese producto en la lista, favor de revisar.",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else{
+                            ContentValues registro2= new ContentValues();
+                            registro2.put("Id_Fertiliza",text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5)); //objSDF.format(date1)
+                            registro2.put("Fecha",etd_Fecha.getText().toString());
+                            registro2.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
+                            registro2.put("Cantidad_Aplicada",etn_ApliCantidad.getText().toString());
+                            registro2.put("Id_Usuario",Usuario);
+                            registro2.put("F_Creacion",objSDF.format(date1));
+                            registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2));
+                            registro2.put("Centro_Costos",text_CenCos.getText().toString().trim());
+                            BD.insert("t_Fertiliza_Det",null,registro2);
+                        }
+                    }
+                    seldet=false;
+                    nseldet=-1;
+                }else{
+                    Toast.makeText(this,"No Regreso nada la consulta de Detalle",Toast.LENGTH_SHORT).show();
+                }
+                BD.close();
+
+                LimpiarDetalle();
+                Cargagrid(text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5),CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2));
+            }
+
+
+        }else{
+            Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean guardarEncabezado(){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = simpleDateFormat.format(new Date());
+
+        Cursor Renglon;
+        Renglon=BD.rawQuery("select count(Fer.Id_Fertiliza) as Sihay from t_Fertiliza as Fer where Fer.Id_Fertiliza='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5)+"' and Fer.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' and Enviado='0' ",null);
+        if(Renglon.moveToFirst()){
+            do {
+                if (Renglon.getInt(0)>0){
+                    ContentValues registro = new ContentValues();
+                    String Parrafo=String.valueOf(pt_Observaciones.getText());
+                    registro.put("Observaciones", String.valueOf(pt_Observaciones.getText()));
+                    registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
+                    registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
+                    registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,6));
+                    registro.put("Ha_aplicadas",etn_HaApli.getText().toString());
+                    int cantidad=BD.update("t_Fertiliza",registro,"Id_Fertiliza='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5)+"' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
+
+                    if(cantidad>0){
+                        //Cambie en el Id, ya no tome la fecha del sistema, si no la fecha que seleccionen en la ventana
+                        Id=text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5);
+                        cepsselapli=CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2);
+                        //////Toast.makeText(MainActivity.this,"Se actualizo t_Calidad correctamente.",Toast.LENGTH_SHORT).show();
+                    }else{
+                        //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }else{
+                    ContentValues registro= new ContentValues();
+
+                    String Parrafo=String.valueOf(pt_Observaciones.getText());
+                    //Cambie en el Id, ya no tome la fecha del sistema (objSDF.format(date1)), si no la fecha que seleccionen en la ventana
+                    registro.put("Id_Fertiliza",text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5));
+                    registro.put("Id_Huerta",Huerta);
+                    registro.put("Observaciones",pt_Observaciones.getText().toString());
+                    registro.put("Id_TipoAplicacion",CopiApli.getItem(sp_TipoAplicacion.getSelectedItemPosition()).getTexto().substring(0,3));
+                    registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
+                    registro.put("Id_Usuario",Usuario);
+                    registro.put("F_Creacion",objSDF.format(date1));
+                    registro.put("Enviado","0");
+                    registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2));
+                    if(ItemSPRec.size()==1){
+                        registro.put("Id_Receta","");
+                    }else{
+                        registro.put("Id_Receta",CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,7));
+                    }
+
+                    registro.put("Ha_aplicadas",etn_HaApli.getText().toString());
+                    BD.insert("t_Fertiliza",null,registro);
+                    //Cambie en el Id, ya no tome la fecha del sistema (objSDF.format(date1)), si no la fecha que seleccionen en la ventana
+                    Id=text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5);
+                    cepsselapli=CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2);
+                    return true;
+                }
+            } while(Renglon.moveToNext());
+        }else{
+            Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private void LimpiarDetalle(){
+        actv_Productos.setText("");
+        actv_Productos.showDropDown();
+        etn_ApliCantidad.setText("0");
+    }
+
+    private void Cargagrid(String Id,String c_codigo_eps){
+        lv_GridFertiliza.setAdapter(null);
+        arrayArticulos.clear();
+
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+        Date date1=objDate;
+
+        // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
+
+        Cursor Renglon =BD.rawQuery("select AD.Fecha, \n" +
+                "\tAD.c_codigo_pro,\n" +
+                "\tAD.Cantidad_Aplicada,\n" +
+                "\t '1' as uno, \n" +
+                "\tP.c_codigo_uni, \n" +
+                "\tP.v_nombre_pro, \n" +
+                "\tU.v_abrevia_uni, AD.c_codigo_eps, AD.Centro_Costos \n" +
+                "from t_Fertiliza_Det as AD \n" +
+                "left join t_Productos as P on rtrim(ltrim(AD.c_codigo_pro))=rtrim(ltrim(P.c_codigo_pro)) and P.c_codigo_eps=AD.c_codigo_eps \n" +
+                "left join t_Unidad as U on U.c_codigo_uni=P.c_codigo_uni and U.c_codigo_eps=P.c_codigo_eps \n" +
+                "where AD.Id_Fertiliza='"+Id+"' and AD.c_codigo_eps='"+c_codigo_eps+"'",null);
+
+        if(Renglon.moveToFirst()) {
+            /*et_Usuario.setText(Renglon.getString(0));
+            et_Password.setText(Renglon.getString(1));*/
+            if (Renglon.moveToFirst()) {
+
+                do {
+                    Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
+                    arrayArticulos.add(Tabla);
+                } while (Renglon.moveToNext());
+
+                BD.close();
+            } else {
+                Toast.makeText(this, "No hay datos en t_Aplicaciones guardados", Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+        }
+        if(arrayArticulos.size()>0){
+            Adapter=new Adaptador_GridAplicacion(getApplicationContext(),arrayArticulos);
+            lv_GridFertiliza.setAdapter(Adapter);
+        }else{
+            //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void GuardaDeReceta(){
+        boolean FaltoAlgo;
+        FaltoAlgo=false;
+        String Mensaje;
+        Mensaje = "";
+
+        if (sp_Empresa5.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una empresa,Verifica por favor";
+        }
+        if (sp_huerta5.getSelectedItemPosition() > 0 ) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar un almacen,Verifica por favor";
+        }
+        if (sp_TipoAplicacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una tipo de aplicacion,Verifica por favor";
+        }
+
+        if (sp_Presentacion.getSelectedItemPosition() > 0) {
+
+        } else {
+            FaltoAlgo = true;
+            Mensaje = "Falta seleccionar una Presentacion,Verifica por favor";
+        }
+
+        if (!FaltoAlgo){
+            if (guardarEncabezado()){
+
+
+                Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+                Date date1=objDate;
+
+                AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+                SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+                Cursor Renglon;
+
+                for(int i=0;i<arrayArticulos.size();i++){
+                    if(arrayArticulos.get(i).getcProducto().trim().length()>0) {
+                        Renglon = BD.rawQuery("select count(Id_Fertiliza) " +
+                                "from t_Fertiliza_Det " +
+                                "where Id_Fertiliza='" + text_Codigo.getText().toString().substring(0, 3) + etd_Fecha.getText().toString().trim().substring(8, 10) + CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0, 5) + "' and Fecha='" + etd_Fecha.getText() + "' " +
+                                "and c_codigo_pro='" + arrayArticulos.get(i).getcProducto().trim() + "' and c_codigo_eps='" + CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0, 2) + "' ", null);
+
+                        if (Renglon.moveToFirst()) {
+                            if (Renglon.getInt(0) > 0) {
+                                Toast.makeText(this, "Ya se encuntra ese producto en la lista, favor de revisar.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                ContentValues registro2 = new ContentValues();
+                                registro2.put("Id_Fertiliza", text_Codigo.getText().toString().substring(0, 3) + etd_Fecha.getText().toString().trim().substring(8, 10) + CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0, 5)); //objSDF.format(date1)
+                                registro2.put("Fecha", etd_Fecha.getText().toString());
+                                registro2.put("c_codigo_pro", arrayArticulos.get(i).getcProducto().trim());
+                                registro2.put("Cantidad_Aplicada", arrayArticulos.get(i).getCantidad());
+                                // registro2.put("Unidades_aplicadas", arrayArticulos.get(i).getUnidades_aplicadas());
+                                registro2.put("Id_Usuario", Usuario);
+                                registro2.put("F_Creacion", objSDF.format(date1));
+                                registro2.put("c_codigo_eps", CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0, 2));
+                                BD.insert("t_Fertiliza_Det", null, registro2);
+                            }
+                        } else {
+                            Toast.makeText(this, "No Regreso nada la consulta de Detalle", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                BD.close();
+
+                LimpiarDetalle();
+            }
+        }else{
+            Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void ListarFertiliza(View view){
+        Intent intento = new Intent(this, Fertiliza_Capturadas.class);
+        intento.putExtra("usuario", Usuario);
+        intento.putExtra("perfil", Perfil);
+        intento.putExtra("huerta", Huerta);
+
+        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+        startActivity(intento);
+        finish();
+    }
+
+    public void CargarFertilizacion(){
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        Cursor Renglon;
+        Renglon=BD.rawQuery(" select A.Id_Fertiliza,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_abrevia_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta,A.Ha_aplicadas, A.Centro_Costos  " +
+                "from t_Fertiliza as A " +
+                "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps " +
+                "inner join t_Presentacion as Pre on A.Id_Presentacion=Pre.Id_Presentacion and Pre.c_codigo_eps=H.c_codigo_eps " +
+                "inner join t_Unidad as U on U.c_codigo_uni=Pre.Id_Unidad and U.c_codigo_eps=Pre.c_codigo_eps "+
+                "inner join t_TipoAplicacion as ta on A.Id_TipoAplicacion=ta.Id_TipoAplicacion and Ta.c_codigo_eps=Pre.c_codigo_eps " +
+                "left join conempresa as eps on eps.c_codigo_eps=A.c_codigo_eps  " +
+                "left join t_Receta as rec on rec.c_codigo_eps=A.c_codigo_eps and rec.Id_Receta=A.Id_Receta " +
+                "where A.Id_Fertiliza='"+Id+"' and A.c_codigo_eps='"+cepsselapli+"'",null);
+        if(Renglon.moveToFirst()){
+            do {
+                if (Renglon.getInt(0)>0){
+
+                    text_Codigo.setText(Id.substring(0,3)+"-"+Id.substring(3,5)+"-"+Id.substring(5,10));
+
+                    if(Renglon.getString(14)==null){
+                        text_CenCos.setText("");
+                    }else{
+                        text_CenCos.setText(Renglon.getString(14).trim());
+                    }
+
+                    int item;
+
+                    if(sp_Empresa5.getSelectedItemPosition()<2){
+                        item=0;
+                        for (int x=0; x<ItemSPEmp.size();x++){
+                            if( ItemSPEmp.get(x).getTexto().trim().equals(Renglon.getString(8).trim()+" - "+Renglon.getString(9).trim())){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0){
+                            sp_Empresa5.setSelection(item);
+                            LineEmpresa=item;
+                        }
+                    }
+
+                    if(ItemSPHue==null){
+                        cargaSpinnerHuertas();
+                        CopiHue = new AdaptadorSpinner(Fertilizacion.this, ItemSPHue);
+                        sp_huerta5.setAdapter(CopiHue);
+                    }else{
+                        if (ItemSPHue.size()<=1){
+                            cargaSpinnerHuertas();
+                            CopiHue = new AdaptadorSpinner(Fertilizacion.this, ItemSPHue);
+                            sp_huerta5.setAdapter(CopiHue);
+                        }
+                    }
+                    String THuerta;
+                    THuerta=Renglon.getString(1)+" - "+Renglon.getString(5);
+                    item=0;
+                    if(ItemSPHue!=null){
+                        for (int x=0; x<ItemSPHue.size();x++){
+                            THuerta=ItemSPHue.get(x).getTexto();
+                            if( ItemSPHue.get(x).getTexto().equals(Renglon.getString(1)+" - "+Renglon.getString(5))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0) {
+                            sp_huerta5.setSelection(item);
+                            LineHuerta=item;
+                        }
+                        String PArrafo;
+                        PArrafo=Renglon.getString(2);
+                        pt_Observaciones.setText(Renglon.getString(2));
+                        String Presentacion=Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim()+ " "+ Renglon.getString(10);
+                        String TIpo=Renglon.getString(3).trim()+" - "+Renglon.getString(7);
+                        if(ItemSPApli==null){
+                            cargaSpinnerTipoAplicacion();
+                            CopiApli = new AdaptadorSpinner(Fertilizacion.this, ItemSPApli);
+                            sp_TipoAplicacion.setAdapter(CopiApli);
+                        }else{
+                            if (ItemSPApli.size()<=1){
+                                cargaSpinnerTipoAplicacion();
+                                CopiApli = new AdaptadorSpinner(Fertilizacion.this, ItemSPApli);
+                                sp_TipoAplicacion.setAdapter(CopiApli);
+                            }
+                        }
+
+                        item=0;
+                        for (int x=0; x<ItemSPApli.size();x++){
+                            TIpo= ItemSPApli.get(x).getTexto();
+                            if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(3).trim()+" - "+Renglon.getString(7).trim())){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0) {
+                            sp_TipoAplicacion.setSelection(item);
+                            LineTipoA=item;
+                        }
+
+                        if(ItemSPPre==null){
+                            cargaSpinnerPresentacion();
+                            CopiPre = new AdaptadorSpinner(Fertilizacion.this, ItemSPPre);
+                            sp_Presentacion.setAdapter(CopiPre);
+                        }else{
+                            if (ItemSPPre.size()<=1){
+                                cargaSpinnerPresentacion();
+                                CopiPre = new AdaptadorSpinner(Fertilizacion.this, ItemSPPre);
+                                sp_Presentacion.setAdapter(CopiPre);
+                            }
+                        }
+
+
+                        item=0;
+                        for (int x=0; x<ItemSPPre.size();x++){
+                            if( ItemSPPre.get(x).getTexto().equals(Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim()+ " "+ Renglon.getString(10))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0){
+                            sp_Presentacion.setSelection(item);
+                            LinePresentacion=item;
+                        }
+                        String nPipadas;
+                        nPipadas=Renglon.getString(13).trim();
+                        etn_HaApli.setText(Renglon.getString(13).trim());
+
+                        item=0;
+
+                        if(ItemSPRec==null){
+                            cargaSpinnerRecetas();
+                            CopiRec = new AdaptadorSpinner(Fertilizacion.this, ItemSPRec);
+                            sp_Receta.setAdapter(CopiRec);
+                        }else{
+                            if (ItemSPRec.size()<=1){
+                                cargaSpinnerRecetas();
+                                CopiRec = new AdaptadorSpinner(Fertilizacion.this, ItemSPRec);
+                                sp_Receta.setAdapter(CopiRec);
+                            }
+                        }
+                        for (int x=0; x<ItemSPRec.size();x++){
+                            TIpo= ItemSPRec.get(x).getTexto()+" = "+Renglon.getString(11) + " - " + Renglon.getString(12);
+                            if( ItemSPRec.get(x).getTexto().equals(Renglon.getString(11) + " - " + Renglon.getString(12))){
+                                item=x;
+                                break;
+                            }
+                        }
+                        if(item>0) {
+                            sp_Receta.setSelection(item);
+                            LineReceta=item;
+                        }
+
+                    }
+                }else{
+
+                }
+            } while(Renglon.moveToNext());
+        }else{
+            Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
+        }
+        BD.close();
     }
 
 }

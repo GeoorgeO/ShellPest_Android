@@ -449,6 +449,32 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Id_Huerta text ," +
                 "Nombre_Huerta text )");
 
+        BD.execSQL("create table t_Fertiliza"+
+                "(Id_Fertiliza text not null," +
+                "Id_Huerta text," +
+                "Observaciones text," +
+                "Id_TipoAplicacion text," +
+                "Id_Presentacion text ," +
+                "Id_Usuario text, " +
+                "F_Creacion text," +
+                "Enviado text," +
+                "Id_Receta text," +
+                "Ha_aplicadas text, " +
+                "Centro_Costos text ," +
+                "c_codigo_eps text not null, " +
+                "primary key(Id_Fertiliza,c_codigo_eps))");
+
+        BD.execSQL("create table t_Fertiliza_Det " +
+                "(Id_Fertiliza text not null," +
+                "Fecha text," +
+                "c_codigo_pro text," +
+                "Cantidad_Aplicada text," +
+                "Id_Usuario text, " +
+                "F_Creacion text," +
+                "Enviado text, " +
+                "Centro_Costos text," +
+                "c_codigo_eps text not null)");
+
     }
 
     @Override
@@ -503,6 +529,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Cosecha");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Activos_Huerta");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Actividades_Huerta");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Fertiliza");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Fertiliza_Det");
 
         onCreate(sqLiteDatabase);
     }
