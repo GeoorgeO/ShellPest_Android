@@ -683,16 +683,16 @@ public class Fertilizacion extends AppCompatActivity {
 
         ContentValues registro3= new ContentValues();
 
-       /* registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
+        registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
         //registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
-        int cantidad=BD.update("t_Aplicaciones",registro3,"Id_Aplicacion='"+Id+
-                "' and c_codigo_eps='"+EPS+"' ",null);  LO QUITE YA QUE ACTUALIZA PERO DE APLICACION
+        int cantidad=BD.update("t_Fertiliza",registro3,"Id_Fertiliza='"+Id+
+                "' and c_codigo_eps='"+EPS+"' ",null);
 
         if(cantidad>0){
             Toast.makeText(Fertilizacion.this,"Se actualizo el o los Bloques.",Toast.LENGTH_SHORT).show();
         }else{
             //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
-        }*/
+        }
     }
 
     private void cargaSpinnerPresentacion(){
@@ -1209,7 +1209,21 @@ public class Fertilizacion extends AppCompatActivity {
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
         Cursor Renglon;
-        Renglon=BD.rawQuery(" select A.Id_Fertiliza,A.Id_Huerta ,A.Observaciones ,A.Id_TipoAplicacion ,A.Id_Presentacion,H.Nombre_Huerta,Pre.Nombre_Presentacion,ta.Nombre_TipoAplicacion,A.c_codigo_eps,eps.v_abrevia_eps,U.v_abrevia_uni,A.Id_Receta,rec.Fecha_Receta,A.Ha_aplicadas, A.Centro_Costos  " +
+        Renglon=BD.rawQuery(" select A.Id_Fertiliza," +
+                "A.Id_Huerta ," +
+                "A.Observaciones ," +
+                "A.Id_TipoAplicacion ," +
+                "A.Id_Presentacion," +
+                "H.Nombre_Huerta," +
+                "Pre.Nombre_Presentacion," +
+                "ta.Nombre_TipoAplicacion," +
+                "A.c_codigo_eps," +
+                "eps.v_abrevia_eps," +
+                "U.v_abrevia_uni," +
+                "A.Id_Receta," +
+                "rec.Fecha_Receta," +
+                "A.Ha_aplicadas, " +
+                "A.Centro_Costos  " +
                 "from t_Fertiliza as A " +
                 "inner join t_Huerta as H on H.Id_Huerta=A.Id_Huerta and A.c_codigo_eps=H.c_codigo_eps " +
                 "inner join t_Presentacion as Pre on A.Id_Presentacion=Pre.Id_Presentacion and Pre.c_codigo_eps=H.c_codigo_eps " +
@@ -1259,6 +1273,7 @@ public class Fertilizacion extends AppCompatActivity {
                     }
                     String THuerta;
                     THuerta=Renglon.getString(1)+" - "+Renglon.getString(5);
+                    Huerta=Renglon.getString(1);
                     item=0;
                     if(ItemSPHue!=null){
                         for (int x=0; x<ItemSPHue.size();x++){
@@ -1344,8 +1359,9 @@ public class Fertilizacion extends AppCompatActivity {
                             }
                         }
                         for (int x=0; x<ItemSPRec.size();x++){
-                            TIpo= ItemSPRec.get(x).getTexto()+" = "+Renglon.getString(11) + " - " + Renglon.getString(12);
-                            if( ItemSPRec.get(x).getTexto().equals(Renglon.getString(11) + " - " + Renglon.getString(12))){
+                            TIpo=Huerta;
+                            TIpo= ItemSPRec.get(x).getTexto()+" = "+Renglon.getString(11); //+ " - " + Renglon.getString(12);
+                            if( ItemSPRec.get(x).getTexto().equals(Renglon.getString(11).trim() + " - " + Renglon.getString(12).trim())){
                                 item=x;
                                 break;
                             }
