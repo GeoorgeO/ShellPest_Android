@@ -189,12 +189,12 @@ public class Fertilizacion extends AppCompatActivity {
 
                     String MaxCod,Consulta;
                     MaxCod="";
-                    Consulta="select count(A.Id_Aplicacion) num" +
-                            "                            from t_Aplicaciones as A " +
+                    Consulta="select count(A.Id_Fertiliza) num" +
+                            "                            from t_Fertiliza as A " +
                             "                            left join (select substr(min(ADT.Fecha),-4,4) as Fecha," +
-                            "   ADT.Id_Aplicacion,ADT.c_codigo_eps " +
-                            "   from t_Aplicaciones_Det as ADT where ADT.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
-                            "group by ADT.Id_Aplicacion,ADT.c_codigo_eps ) as AD on A.Id_Aplicacion=AD.Id_Aplicacion and AD.c_codigo_eps=A.c_codigo_eps " +
+                            "   ADT.Id_Fertiliza,ADT.c_codigo_eps " +
+                            "   from t_Fertiliza_Det as ADT where ADT.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' " +
+                            "group by ADT.Id_Fertiliza,ADT.c_codigo_eps ) as AD on A.Id_Fertiliza=AD.Id_Fertiliza and AD.c_codigo_eps=A.c_codigo_eps " +
                             "                            where rtrim(ltrim(A.Id_Huerta))='"+CopiHue.getItem(i).getTexto().substring(0, 5)+"' and AD.Fecha ='"+etd_Fecha.getText().toString().substring(6, 10)+"' and A.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' ";
                     Renglon=BD.rawQuery(Consulta,null);
                     //strftime('%Y',)
@@ -1035,6 +1035,7 @@ public class Fertilizacion extends AppCompatActivity {
                     registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
                     registro.put("Id_Usuario",Usuario);
                     registro.put("F_Creacion",objSDF.format(date1));
+                    registro.put("Centro_Costos",text_CenCos.getText().toString().trim());
                     registro.put("Enviado","0");
                     registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2));
                     if(ItemSPRec.size()==1){
