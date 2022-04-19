@@ -137,7 +137,7 @@ public class Aplicaciones extends AppCompatActivity {
             intento.putExtra("FoF", "F");
         }
         if (Accion.equals("Enviar")){
-            intento=new Intent(this,Enviar_Cosecha.class);
+            intento=new Intent(this,Enviar_Fertiliza.class);
         }
         startActivity(intento);
     }
