@@ -34,8 +34,6 @@ public class Fertilizacion extends AppCompatActivity {
     ListView lv_GridFertiliza;
     Button btn_Agrega;
 
-    private int dia,mes, anio;
-
     public String Usuario,Huerta, Perfil ,Id,UnidadPro,cepsselapli;
 
     private ArrayList<ItemDatoSpinner> ItemSPApli, ItemSPPre, ItemSPHue,ItemSPEmp,ItemSPRec;
@@ -443,7 +441,6 @@ public class Fertilizacion extends AppCompatActivity {
                         "where alm.Id_Huerta='"+Huerta+"' and exi.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' "+
                         "group by exi.c_codigo_eps,exi.c_codigo_pro,alm.Id_Huerta ) as Texi on ltrim(rtrim(Texi.c_codigo_pro))=ltrim(rtrim(P.c_codigo_pro)) and Texi.c_codigo_eps=p.c_codigo_eps "+
                         "where ltrim(rtrim(P.c_codigo_pro))='"+actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim()+"' and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
-
                 if(Renglon.moveToFirst()){
 
                     do {
@@ -481,13 +478,9 @@ public class Fertilizacion extends AppCompatActivity {
                     //etd_Fecha.setText(arrayArticulos.get(i).getFecha());
                     text_UnidadPro.setText("Uni:");
                     UnidadPro="";
-
-
-
                 }else{
                     seldet=true;
                     nseldet=i;
-                    String tarrsay=arrayArticulos.get(i).getcProducto();
 
                     if(!arrayArticulos.get(i).getcProducto().equals("")){
                         if (arrayArticulos.get(i).getNombre_Producto()!=null){
@@ -495,7 +488,6 @@ public class Fertilizacion extends AppCompatActivity {
                         }else{
                             actv_Productos.setText(" | "+arrayArticulos.get(i).getcProducto().trim());
                         }
-
                     }
 
                     etn_ApliCantidad.setText(arrayArticulos.get(i).getCantidad());
@@ -522,7 +514,6 @@ public class Fertilizacion extends AppCompatActivity {
 
     private void cargaSpinnerEmpresa(){
         CopiEmp=null;
-
         ItemSPEmp=new ArrayList<>();
         ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
 
@@ -535,7 +526,6 @@ public class Fertilizacion extends AppCompatActivity {
         Renglon10=BD.rawQuery(Consulta,null);
 
         if(Renglon10.moveToFirst()){
-
             do {
                 ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
             } while(Renglon10.moveToNext());
@@ -547,9 +537,7 @@ public class Fertilizacion extends AppCompatActivity {
     }
 
     private void cargaSpinnerHuertas(){
-
         CopiHue = null;
-
         ItemSPHue = new ArrayList<>();
         ItemSPHue.add(new ItemDatoSpinner("Huerta"));
 
@@ -633,29 +621,22 @@ public class Fertilizacion extends AppCompatActivity {
             int tamanio;
             tamanio=0;
             Arreglodias=new String[Renglon.getCount()];
-
             do {
-
-
                 Arreglodias[tamanio] =Renglon.getString(0)+" - "+Renglon.getString(1);
 
                 tamanio++;
-
             } while(Renglon.moveToNext());
 
             BD.close();
 
             Diaseleccionado=new boolean[Arreglodias.length];
-
         }else{
             BD.close();
         }
     }
 
     private void cargaSpinnerRecetas(){
-
         CopiRec = null;
-
         ItemSPRec = new ArrayList<>();
         ItemSPRec.add(new ItemDatoSpinner("Receta"));
 
@@ -679,7 +660,6 @@ public class Fertilizacion extends AppCompatActivity {
     private void ActualizaCentroCostos(String Id,String EPS){
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
-        Cursor Renglon;
 
         ContentValues registro3= new ContentValues();
 
@@ -735,7 +715,6 @@ public class Fertilizacion extends AppCompatActivity {
         }.start();
     }
 
-
     private float TomarHectareas(String Bloques){
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -763,10 +742,6 @@ public class Fertilizacion extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
-        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-        Date date1=objDate;
-
         // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
         String TC;
         TC="select '"+etd_Fecha.getText().toString()+"' as Fecha , \n" +
@@ -789,20 +764,13 @@ public class Fertilizacion extends AppCompatActivity {
         Cursor Renglon =BD.rawQuery(TC,null);
 
         if(Renglon.moveToFirst()) {
-
             if (Renglon.moveToFirst()) {
-
                 do {
-                    String NProducto=Renglon.getString(1).trim();
-                    String cProducto=Renglon.getString(8);
-
                     if(etn_HaApli.getText().toString().trim().equals("0")){
                         Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1).trim(),Renglon.getString(2),Renglon.getString(4).trim(),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),"");
                     }else{
                         Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1).trim(),String.valueOf(Float.valueOf(etn_HaApli.getText().toString()) *Float.valueOf(Renglon.getString(2))),Renglon.getString(4).trim(),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),"");
                     }
-                    //}
-
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
 
@@ -1093,7 +1061,6 @@ public class Fertilizacion extends AppCompatActivity {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.moveToFirst()) {
-
                 do {
                     Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
                     arrayArticulos.add(Tabla);
@@ -1185,13 +1152,11 @@ public class Fertilizacion extends AppCompatActivity {
                     }
                 }
                 BD.close();
-
                 LimpiarDetalle();
             }
         }else{
             Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public void ListarFertiliza(View view){
@@ -1288,11 +1253,9 @@ public class Fertilizacion extends AppCompatActivity {
                             sp_huerta5.setSelection(item);
                             LineHuerta=item;
                         }
-                        String PArrafo;
-                        PArrafo=Renglon.getString(2);
+
                         pt_Observaciones.setText(Renglon.getString(2));
-                        String Presentacion=Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim()+ " "+ Renglon.getString(10);
-                        String TIpo=Renglon.getString(3).trim()+" - "+Renglon.getString(7);
+
                         if(ItemSPApli==null){
                             cargaSpinnerTipoAplicacion();
                             CopiApli = new AdaptadorSpinner(Fertilizacion.this, ItemSPApli);
@@ -1307,7 +1270,6 @@ public class Fertilizacion extends AppCompatActivity {
 
                         item=0;
                         for (int x=0; x<ItemSPApli.size();x++){
-                            TIpo= ItemSPApli.get(x).getTexto();
                             if( ItemSPApli.get(x).getTexto().equals(Renglon.getString(3).trim()+" - "+Renglon.getString(7).trim())){
                                 item=x;
                                 break;
@@ -1330,7 +1292,6 @@ public class Fertilizacion extends AppCompatActivity {
                             }
                         }
 
-
                         item=0;
                         for (int x=0; x<ItemSPPre.size();x++){
                             if( ItemSPPre.get(x).getTexto().equals(Renglon.getString(4).trim()+" - "+Renglon.getString(6).trim()+ " "+ Renglon.getString(10))){
@@ -1342,8 +1303,7 @@ public class Fertilizacion extends AppCompatActivity {
                             sp_Presentacion.setSelection(item);
                             LinePresentacion=item;
                         }
-                        String nPipadas;
-                        nPipadas=Renglon.getString(13).trim();
+
                         etn_HaApli.setText(Renglon.getString(13).trim());
 
                         item=0;
@@ -1360,8 +1320,6 @@ public class Fertilizacion extends AppCompatActivity {
                             }
                         }
                         for (int x=0; x<ItemSPRec.size();x++){
-                            TIpo=Huerta;
-                            TIpo= ItemSPRec.get(x).getTexto()+" = "+Renglon.getString(11); //+ " - " + Renglon.getString(12);
                             if( ItemSPRec.get(x).getTexto().equals(Renglon.getString(11).trim() + " - " + Renglon.getString(12).trim())){
                                 item=x;
                                 break;
@@ -1371,7 +1329,6 @@ public class Fertilizacion extends AppCompatActivity {
                             sp_Receta.setSelection(item);
                             LineReceta=item;
                         }
-
                     }
                 }else{
 
