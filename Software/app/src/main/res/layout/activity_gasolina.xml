@@ -53,7 +53,7 @@
 
             <EditText
                 android:id="@+id/etxt_folioGas"
-                android:layout_width="wrap_content"
+                android:layout_width="279dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="0000"
@@ -63,7 +63,16 @@
                 android:textColorHighlight="@color/verde"
                 android:textColorHint="@color/verde"
                 android:textColorLink="@color/verde"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/imageButton11"
+                android:layout_width="71dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="cargaGrid"
+                android:visibility="invisible"
+                app:srcCompat="@android:drawable/ic_input_get" />
         </LinearLayout>
 
         <LinearLayout
@@ -228,6 +237,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_actividadGas"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal">
@@ -258,6 +268,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_cantidadGas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -334,7 +345,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView98"
+                android:id="@+id/txtv_tipoComb"
                 android:layout_width="18dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
