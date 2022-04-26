@@ -479,11 +479,11 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "(c_folio_gas text," +
                 "d_fechainicio_gas text not null,"+
                 "d_fechafin_gas text not null," +
-                "v_nomempresa_gas text not null," +
-                "v_nomhuerta_gas text not null," +
-                "v_nomactivo_gas text not null," +
-                "v_nomresponsable_gas text not null," +
-                "v_actividad_gas text not null," +
+                "c_codigo_eps text not null," +
+                "Id_Huerta text not null," +
+                "Id_ActivosGas text not null," +
+                "c_codigo_emp text not null," +
+                "c_codigo_act text not null," +
                 "v_cantingreso_gas text not null," +
                 "v_cantsaldo_gas text not null," +
                 "v_tipo_gas text not null," +

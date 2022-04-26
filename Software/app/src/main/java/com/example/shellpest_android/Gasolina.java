@@ -34,12 +34,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
     public String Usuario, Perfil, Huerta, Activo, Responsable, Tipo;
     public String Magna = "Magna - 87 - octanos", Premium = "Premium - 92 - octanos", Diesel= "Diesel";
     public Boolean Verde = false, Amarillo = false, Naranja = false, Azul = false;
+
     Spinner sp_responsableGas, sp_empresaGas, sp_activoGas, sp_huertaGas, sp_tipoGas;
 
     AutoCompleteTextView actxt_actividadGas;
@@ -113,7 +115,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
         Date date1 = objDate;
 
-        etxt_fechainiGas.setText(objSDF.format(date1));
+        etxt_fechainiGas.setText("");
         etxt_fechainiGas.setInputType(InputType.TYPE_NULL);
         etxt_fechainiGas.requestFocus();
 
@@ -121,7 +123,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         SimpleDateFormat objSDF2 = new SimpleDateFormat("dd/MM/yyyy");
         Date date2 = objDate2;
 
-        etxt_fechafinGas.setText(objSDF2.format(date2));
+        etxt_fechafinGas.setText("");
         etxt_fechafinGas.setInputType(InputType.TYPE_NULL);
         etxt_fechafinGas.requestFocus();
 
@@ -486,6 +488,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }
         return Valor;
     }
+
     private void cargarResponsable(){
         CopiResp = null;
         ItemSPResp = new ArrayList<>();
@@ -542,6 +545,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     private void cargarHuerta(){
         CopiHue = null;
         ItemSPHue = new ArrayList<>();
+        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
@@ -558,7 +562,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
         if(Renglon.moveToFirst()){
             do{
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2)));
             }while(Renglon.moveToNext());
         }else{
             Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT).show();
@@ -621,7 +625,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon = BD.rawQuery("select AH.v_nombre_act,AH.c_codigo_act,AH.c_codigo_cam" +
+        Renglon = BD.rawQuery("select AH.c_codigo_act,AH.v_nombre_act,AH.c_codigo_cam" +
                 " from t_Actividades_Huerta as AH " +
                 "where ltrim(rtrim(AH.id_Huerta))='"+Huerta+"' or AH.c_codigo_cam = '00'",null);
 
@@ -636,7 +640,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     public void agregarDatos (View view){
-       boolean Falta = false;
+       boolean Falta = false, FaltaFolio = false;
        String Mensaje = "";
        if (Verde == true){
            Log.e("Verde",Verde.toString());
@@ -649,10 +653,10 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             etxt_horometroGas.setText("00:00");
             if (etxt_kmfinGas.getText().length() > 0){ }else{
                 Falta = true;
-                Mensaje = "Falta ingresar kilometros finales, Verifica por favor.";
+                Mensaje = "Falta ingresar KILOMETROS FINALES, Verifica por favor.";
             }if (etxt_kminiGas.getText().length() > 0){ }else{
                 Falta = true;
-                Mensaje = "Falta ingresar kilometros iniciales, Verifica por favor.";
+                Mensaje = "Falta ingresar KILOMETROS INICIALES, Verifica por favor.";
             }
         }//fin Amarillo
         if (Naranja == true){
@@ -661,7 +665,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             etxt_kmfinGas.setText("0.0");
             if (etxt_horometroGas.getText().length() > 0){ }else{
                 Falta = true;
-                Mensaje = "Falta ingresar horometros, Verifica por favor.";
+                Mensaje = "Falta ingresar HOROMETROS, Verifica por favor.";
             }
         }//fin Naranja
         if (etxt_observacionesGas.getText().length() > 0){ }else{
@@ -669,47 +673,41 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             Mensaje = "Falta ingresar observaciones, Verifica por favor.";
         }if (sp_tipoGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Tipo, Verifica por favor.";
+            Mensaje = "Falta seleccionar TIPO, Verifica por favor.";
         }if (etxt_cantidadsaldoGas.getText().length() > 0){ }else{
             Falta = true;
             Mensaje = "Falta ingresar cantidad saldo, Verifica por favor.";
         }if (etxt_cantidadiniGas.getText().length() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta ingresar cantidad inicial, Verifica por favor.";
+            Mensaje = "Falta ingresar CANTIDAD INICIAL, Verifica por favor.";
         }if (actxt_actividadGas.getText().length() > 0){ }else {
             Falta = true;
             Mensaje = "Falta ingresar Actividad, Verifica por favor.";
         }if (sp_responsableGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Responsable, Verifica por favor.";
+            Mensaje = "Falta seleccionar RESPONSABLE, Verifica por favor.";
         }if (sp_activoGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar Activo, Verifica por favor.";
         }if (sp_huertaGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Huerta, Verifica por favor.";
+            Mensaje = "Falta seleccionar HUERTA, Verifica por favor.";
         }if(sp_empresaGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Empresa, Verifica por favor.";
+            Mensaje = "Falta seleccionar EMPRESA, Verifica por favor.";
         }if (etxt_fechafinGas.getText().length() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Fecha salida, Verifica por favor.";
+            Mensaje = "Falta seleccionar FECHA SALIDA, Verifica por favor.";
         }if(etxt_fechainiGas.getText().length() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Fecha ingreso, Verifica por favor.";
+            Mensaje = "Falta seleccionar FECHA INGRESO, Verifica por favor.";
         }if (etxt_folioGas.getText().length() > 0){ }else{
-            Falta = true;
-            Mensaje = "Falta ingresar folio de vale, Verifica por favor.";
-            AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Gasolina.this);
-            dialogo1.setTitle("No se ha ingresado Folio");
-            dialogo1.setMessage("No ha ingresado folio, ¿Desea continuar?");
-            dialogo1.setCancelable(true);
-            dialogo1.show();
+            FaltaFolio = true;
         }
         if (Azul == true){
             Log.e("Azul",Azul.toString());
             Falta = true;
-            Mensaje = "El activo seleccionado no consume gasolina, Verifica por favor.";
+            Mensaje = "El activo seleccionado NO consume gasolina, Verifica por favor.";
             AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Gasolina.this);
             dialogo1.setTitle("No Consume Gasolina");
             dialogo1.setMessage("El activo seleccionado no consume gasolina, Verifica por favor.");
@@ -720,54 +718,89 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         if (!Falta){
             AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
-
-            Cursor Renglon;
-
             ContentValues registroGas = new ContentValues();
-            //CONDICIONAR FOLIO
-            registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
-            registroGas.put("d_fechainicio_gas", etxt_fechainiGas.getText().toString());
-            registroGas.put("d_fechafin_gas", etxt_fechafinGas.getText().toString());
-            registroGas.put("v_nomempresa_gas", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto());
-            registroGas.put("v_nomhuerta_gas", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto());
-            registroGas.put("v_nomactivo_gas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto());
-            registroGas.put("v_nomresponsable_gas",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto());
-            registroGas.put("v_actividad_gas", actxt_actividadGas.getText().toString());
-            registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
-            registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
-            registroGas.put("v_tipo_gas", CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto());
-            registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
-            registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
-            registroGas.put("v_kmfinal_gas", etxt_kmfinGas.getText().toString());
-            registroGas.put("v_observaciones_gas", etxt_observacionesGas.getText().toString());
-            Log.e("Registro", registroGas.toString());
-            BD.insert("t_Consumo_Gasolina",null,registroGas);
+            if (FaltaFolio){
+                AlertDialog.Builder dialogo = new AlertDialog.Builder(Gasolina.this);
+                dialogo.setTitle("NO SE HA INGRESADO FOLIO");
+                dialogo.setMessage("No ha ingresado folio, si selecciona Aceptar se agregará el registro sin folio. \n ¿Desea continuar?");
+                dialogo.setCancelable(true);
+                Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
+                dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String fechaini=etxt_fechainiGas.getText().toString().replace("/","");
+                        String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
 
+                        registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
+                        registroGas.put("d_fechainicio_gas", fechaini);
+                        registroGas.put("d_fechafin_gas", fechafin);
+                        registroGas.put("c_codigo_eps", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2));//c_codigo_eps
+                        registroGas.put("Id_Huerta", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto().substring(0,5));//Id_Huerta
+                        registroGas.put("Id_ActivosGas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto().substring(0,4));//Id_ActivosGas
+                        registroGas.put("c_codigo_emp",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto().substring(0,6));//c_codigo_emp
+                        registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
+                        registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
+                        registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
+                        registroGas.put("v_tipo_gas", CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto());
+                        registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
+                        registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
+                        registroGas.put("v_kmfinal_gas", etxt_kmfinGas.getText().toString());
+                        registroGas.put("v_observaciones_gas", etxt_observacionesGas.getText().toString());
+                        Log.e("Registro", registroGas.toString());
+                        BD.insert("t_Consumo_Gasolina",null,registroGas);
+                        View toastView = ToastMensaje.getView();
+                        toastView.setBackgroundResource(R.drawable.spinner_style);
+                        toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        ToastMensaje.show();
 
-            Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
-            toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            ToastMensaje.show();
+                        limpiar();
+                    }
+                });
+                Toast ToastMensaje2 = Toast.makeText(this,"Registra el Folio por favor",Toast.LENGTH_SHORT);
+                dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        View toastView = ToastMensaje2.getView();
+                        toastView.setBackgroundResource(R.drawable.spinner_style);
+                        toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        ToastMensaje2.show();
+                    }
+                });
+                dialogo.show();
+            }else{
+                String fechaini=etxt_fechainiGas.getText().toString().replace("/","");
+                String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
+
+                registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
+                registroGas.put("d_fechainicio_gas", fechaini);
+                registroGas.put("d_fechafin_gas", fechafin);
+                registroGas.put("c_codigo_eps", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2));//c_codigo_eps
+                registroGas.put("Id_Huerta", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto().substring(0,5));//Id_Huerta
+                registroGas.put("Id_ActivosGas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto().substring(0,4));//Id_ActivosGas
+                registroGas.put("c_codigo_emp",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto().substring(0,6));//c_codigo_emp
+                registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
+                registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
+                registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
+                registroGas.put("v_tipo_gas", CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto());
+                registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
+                registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
+                registroGas.put("v_kmfinal_gas", etxt_kmfinGas.getText().toString());
+                registroGas.put("v_observaciones_gas", etxt_observacionesGas.getText().toString());
+                Log.e("Registro", registroGas.toString());
+                BD.insert("t_Consumo_Gasolina",null,registroGas);
+
+                Toast ToastMensaje3 = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
+                View toastView = ToastMensaje3.getView();
+                toastView.setBackgroundResource(R.drawable.spinner_style);
+                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                ToastMensaje3.show();
+
+                limpiar();
+            }
+
         }else{
-            Log.e("Folio",etxt_folioGas.getText().toString());
-            Log.e("Fecha inicial",etxt_fechainiGas.getText().toString());
-            Log.e("Fecha final",etxt_fechafinGas.getText().toString());
-            Log.e("Empresa",CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto());
-            Log.e("Huerta",CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto());
-            Log.e("Activo",CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto());
-            Log.e("Responsable",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto());
-            Log.e("Actividad",actxt_actividadGas.getText().toString());
-            Log.e("Cantidad inicial",etxt_cantidadiniGas.getText().toString());
-            Log.e("Cantidad saldo",etxt_cantidadsaldoGas.getText().toString());
-            Log.e("Tipo",CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto());
-            Log.e("Horometro",etxt_horometroGas.getText().toString());
-            Log.e("Km Inicial",etxt_kminiGas.getText().toString());
-            Log.e("Km Final", etxt_kmfinGas.getText().toString());
-            Log.e("Observaciones",etxt_observacionesGas.getText().toString());
-
-
-
             Toast ToastMensaje = Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
             toastView.setBackgroundResource(R.drawable.spinner_style);
@@ -819,4 +852,21 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     }
 
+    private void limpiar(){
+        etxt_folioGas.setText("");
+        etxt_fechainiGas.setText("");
+        etxt_fechafinGas.setText("");
+        sp_empresaGas.setSelection(0);
+        sp_huertaGas.setSelection(0);
+        sp_activoGas.setSelection(0);
+        sp_responsableGas.setSelection(0);
+        actxt_actividadGas.setText("");
+        etxt_cantidadiniGas.setText("");
+        etxt_cantidadsaldoGas.setText("");
+        sp_tipoGas.setSelection(0);
+        etxt_observacionesGas.setText("");
+        etxt_horometroGas.setText("");
+        etxt_kminiGas.setText("");
+        etxt_kmfinGas.setText("");
+    }
 }
