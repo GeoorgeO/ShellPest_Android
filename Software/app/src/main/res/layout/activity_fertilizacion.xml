@@ -359,17 +359,34 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="30"/>
             <Button
                 android:id="@+id/btn_Agrega"
-                android:layout_width="98dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="3dp"
+                android:layout_weight="40"
+                android:layout_margin="1dp"
                 android:background="@drawable/rounded_button"
                 android:onClick="Agregar"
                 android:text="Agregar"
                 android:textColor="#FFFFFF" />
 
+                <CheckBox
+                    android:id="@+id/checkCalcula"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:text="AutoCalcula" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -33,6 +34,7 @@ public class Fertilizacion extends AppCompatActivity {
     EditText etd_Fecha,pt_Observaciones,etn_ApliCantidad,etn_HaApli;
     ListView lv_GridFertiliza;
     Button btn_Agrega;
+    CheckBox checkCalcula;
 
     public String Usuario,Huerta, Perfil ,Id,UnidadPro,cepsselapli;
 
@@ -55,6 +57,7 @@ public class Fertilizacion extends AppCompatActivity {
 
     boolean seldet;
     int nseldet;
+    float CantidadOriginal[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +87,13 @@ public class Fertilizacion extends AppCompatActivity {
         text_UnidadPro= (TextView) findViewById(R.id.text_UnidadPro);
         text_CenCos= (TextView) findViewById(R.id.text_CenCos);
         btn_Agrega=(Button) findViewById(R.id.btn_Agrega);
+        checkCalcula=(CheckBox) findViewById(R.id.checkCalcula);
 
         Date objDate = new Date();
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
         Date date1=objDate;
+
+        checkCalcula.setChecked(true);
 
         etd_Fecha.setText(objSDF.format(date1));
 
@@ -505,6 +511,18 @@ public class Fertilizacion extends AppCompatActivity {
             }
         });
 
+        etn_HaApli.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+
+                if(!etn_HaApli.getText().toString().trim().equals("0") && !etn_HaApli.getText().toString().trim().equals("0.0") && etn_HaApli.getText().toString().trim().length()>0 && checkCalcula.isChecked()){
+                    actualizaCantidad();
+                }
+            }
+        });
+
+
+
         if(Id!=null){
             Cargagrid(Id,cepsselapli);
             CargarFertilizacion();
@@ -766,7 +784,7 @@ public class Fertilizacion extends AppCompatActivity {
         if(Renglon.moveToFirst()) {
             if (Renglon.moveToFirst()) {
                 do {
-                    if(etn_HaApli.getText().toString().trim().equals("0")){
+                    if(etn_HaApli.getText().toString().trim().equals("0") || etn_HaApli.getText().toString().trim().equals("0.0") || !checkCalcula.isChecked()){
                         Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1).trim(),Renglon.getString(2),Renglon.getString(4).trim(),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),"");
                     }else{
                         Tabla=new Itemaplicacion(Renglon.getString(0),Renglon.getString(1).trim(),String.valueOf(Float.valueOf(etn_HaApli.getText().toString()) *Float.valueOf(Renglon.getString(2))),Renglon.getString(4).trim(),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),"");
@@ -776,6 +794,10 @@ public class Fertilizacion extends AppCompatActivity {
 
                 if(arrayArticulos.size()>0){
                     if(SGC!=arrayArticulos.size()){
+                        CantidadOriginal = new float[arrayArticulos.size()];
+                        for(int i=0;i<arrayArticulos.size();i++){
+                            CantidadOriginal[i]=Float.valueOf(arrayArticulos.get(i).getCantidad());
+                        }
                         GuardaDeReceta();
                     }
                 }
@@ -796,9 +818,15 @@ public class Fertilizacion extends AppCompatActivity {
     private void actualizaCantidad(){
         for (int i=0; i<arrayArticulos.size();i++){
             if(etn_HaApli.getText().toString().trim().equals("0.0")){
-                arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(arrayArticulos.get(i).getCantidad())/vHatemp));
+                RegresaCantidadDosis();
+                //arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(arrayArticulos.get(i).getCantidad())/vHatemp));
             }else{
-                arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(etn_HaApli.getText().toString()) *Float.valueOf(arrayArticulos.get(i).getCantidad())));
+                if(checkCalcula.isChecked()){
+                    arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(etn_HaApli.getText().toString()) *Float.valueOf(arrayArticulos.get(i).getCantidad())));
+                }else{
+                   // RegresaCantidadDosis();
+                }
+
             }
 
         }
@@ -1338,6 +1366,48 @@ public class Fertilizacion extends AppCompatActivity {
             Toast.makeText(this,"No Regreso nada la consulta de Encabezado",Toast.LENGTH_SHORT).show();
         }
         BD.close();
+    }
+
+    private void RegresaCantidadDosis(){
+        if (arrayArticulos.size()>0){
+            for(int i=0;i<arrayArticulos.size();i++){
+                cargaCantidadOriginal(text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5),arrayArticulos.get(i).getcProducto().trim() ,CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2),i);
+            }
+            Adapter=new Adaptador_GridAplicacion(getApplicationContext(),arrayArticulos);
+            lv_GridFertiliza.setAdapter(Adapter);
+        }
+    }
+
+    private void cargaCantidadOriginal(String Id,String c_codigo_pro,String c_codigo_eps,int renglon){
+        lv_GridFertiliza.setAdapter(null);
+
+
+        AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
+
+        // Toast.makeText(this,objSDF.format(date1),Toast.LENGTH_SHORT).show();
+        String TC;
+        TC="select R.Dosis \n" +
+                "from t_RecetaDet as R \n" +
+                "where R.Id_Receta='"+Id+"' and R.c_codigo_eps='"+c_codigo_eps+"' and R.c_codigo_pro='"+c_codigo_pro+"' ";
+
+        // TC="select c_codigo_pro from t_Productos";
+        boolean Sinproducto=false,SG=false;
+        int SGC=0;
+        Cursor Renglon =BD.rawQuery(TC,null);
+
+        if(Renglon.moveToFirst()) {
+            if (Renglon.moveToFirst()) {
+                do {
+                    arrayArticulos.get(renglon).setCantidad(Renglon.getString(0));
+                } while (Renglon.moveToNext());
+                BD.close();
+            } else {
+                Toast.makeText(this, "No hay datos en t_Aplicaciones guardados", Toast.LENGTH_SHORT).show();
+                BD.close();
+            }
+        }
+
     }
 
 }
