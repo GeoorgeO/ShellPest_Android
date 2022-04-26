@@ -816,19 +816,24 @@ public class Fertilizacion extends AppCompatActivity {
     }
 
     private void actualizaCantidad(){
-        for (int i=0; i<arrayArticulos.size();i++){
-            if(etn_HaApli.getText().toString().trim().equals("0.0")){
-                RegresaCantidadDosis();
-                //arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(arrayArticulos.get(i).getCantidad())/vHatemp));
-            }else{
-                if(checkCalcula.isChecked()){
-                    arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(etn_HaApli.getText().toString()) *Float.valueOf(arrayArticulos.get(i).getCantidad())));
+        if(checkCalcula.isChecked()){
+            RegresaCantidadDosis();
+            for (int i=0; i<arrayArticulos.size();i++){
+                if(etn_HaApli.getText().toString().trim().equals("0.0")){
+                    RegresaCantidadDosis();
+                    //arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(arrayArticulos.get(i).getCantidad())/vHatemp));
                 }else{
-                   // RegresaCantidadDosis();
+                    if(checkCalcula.isChecked()){
+                        float ha,cant;
+                        ha=Float.valueOf(etn_HaApli.getText().toString());
+                        cant=Float.valueOf(arrayArticulos.get(i).getCantidad());
+
+                        arrayArticulos.get(i).setCantidad(String.valueOf(Float.valueOf(etn_HaApli.getText().toString()) *Float.valueOf(arrayArticulos.get(i).getCantidad())));
+                    }else{
+                       // RegresaCantidadDosis();
+                    }
                 }
-
             }
-
         }
         lv_GridFertiliza.setAdapter(null);
         if(arrayArticulos.size()>0){
@@ -1370,8 +1375,9 @@ public class Fertilizacion extends AppCompatActivity {
 
     private void RegresaCantidadDosis(){
         if (arrayArticulos.size()>0){
+            lv_GridFertiliza.setAdapter(null);
             for(int i=0;i<arrayArticulos.size();i++){
-                cargaCantidadOriginal(text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta5.getSelectedItemPosition()).getTexto().substring(0,5),arrayArticulos.get(i).getcProducto().trim() ,CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2),i);
+                cargaCantidadOriginal(CopiRec.getItem(sp_Receta.getSelectedItemPosition()).getTexto().substring(0,7),arrayArticulos.get(i).getcProducto().trim() ,CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2),i);
             }
             Adapter=new Adaptador_GridAplicacion(getApplicationContext(),arrayArticulos);
             lv_GridFertiliza.setAdapter(Adapter);
@@ -1379,9 +1385,6 @@ public class Fertilizacion extends AppCompatActivity {
     }
 
     private void cargaCantidadOriginal(String Id,String c_codigo_pro,String c_codigo_eps,int renglon){
-        lv_GridFertiliza.setAdapter(null);
-
-
         AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
@@ -1389,16 +1392,16 @@ public class Fertilizacion extends AppCompatActivity {
         String TC;
         TC="select R.Dosis \n" +
                 "from t_RecetaDet as R \n" +
-                "where R.Id_Receta='"+Id+"' and R.c_codigo_eps='"+c_codigo_eps+"' and R.c_codigo_pro='"+c_codigo_pro+"' ";
+                "where R.Id_Receta='"+Id+"' and R.c_codigo_eps='"+c_codigo_eps+"' and rtrim(R.c_codigo_pro)='"+c_codigo_pro+"' ";
 
-        // TC="select c_codigo_pro from t_Productos";
-        boolean Sinproducto=false,SG=false;
-        int SGC=0;
+
         Cursor Renglon =BD.rawQuery(TC,null);
 
         if(Renglon.moveToFirst()) {
             if (Renglon.moveToFirst()) {
                 do {
+                    String catres;
+                    catres=Renglon.getString(0);
                     arrayArticulos.get(renglon).setCantidad(Renglon.getString(0));
                 } while (Renglon.moveToNext());
                 BD.close();

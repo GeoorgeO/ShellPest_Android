@@ -234,7 +234,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.15"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/verde_azul"
                     android:textColorHighlight="@color/verde"
                     android:textColorHint="@color/verde"
