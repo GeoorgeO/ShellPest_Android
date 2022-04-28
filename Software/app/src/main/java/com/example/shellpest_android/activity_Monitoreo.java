@@ -522,6 +522,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             registro.put("Id_Huerta",Huerta);
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro.put("Id_Usuario",Usuario);
+                            registro.put("F_UsuCrea",(objSDF.format(date1)));
                             registro.put("n_coordenadaX",Local.Long);
                             registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
@@ -965,6 +966,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             registro.put("Id_Huerta",Huerta);
                             registro.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
                             registro.put("Id_Usuario",Usuario);
+                            registro.put("F_UsuCrea",(objSDF.format(date1)));
                             registro.put("n_coordenadaX",Local.Long);
                             registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
@@ -1072,8 +1074,8 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         }else{
             Toast.makeText(activity_Monitoreo.this,"Falta seleccionar un punto de control",Toast.LENGTH_SHORT).show();
         }
-
     }
+
     private void Cargagrid(){
         lv_GridMonitoreo.setAdapter(null);
         arrayArticulos.clear();
@@ -1109,12 +1111,10 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.moveToFirst()) {
-
                 do {
                     Tabla=new Itemmonitoreo(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(11),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8));
                     arrayArticulos.add(Tabla);
                 } while (Renglon.moveToNext());
-
 
                 BD.close();
             } else {
@@ -1128,6 +1128,5 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         }else{
             //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
         }
-
     }
 }

@@ -202,7 +202,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Riego.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
-                        Cursor Renglon =BD.rawQuery("select Fecha ,Hora,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,Id_Usuario,c_codigo_eps from t_Riego where Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' and c_codigo_eps='"+arrayArticulos.get(i).getCEPS()+"'  ",null);
+                        Cursor Renglon =BD.rawQuery("select Fecha ,Hora,Id_Bloque,Precipitacion_Sistema,Caudal_Inicio,Caudal_Fin,Horas_Riego,Id_Usuario,F_UsuCrea,c_codigo_eps from t_Riego where Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' and c_codigo_eps='"+arrayArticulos.get(i).getCEPS()+"'  ",null);
 
                         if (Renglon.moveToFirst()) {
 
@@ -216,7 +216,8 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                                 registro.put("Caudal_Fin",Renglon.getString(5));
                                 registro.put("Horas_Riego",Renglon.getString(6));
                                 registro.put("Id_Usuario",Renglon.getString(7));
-                                registro.put("c_codigo_eps",Renglon.getString(8));
+                                registro.put("F_UsuCrea",Renglon.getString(8));
+                                registro.put("c_codigo_eps",Renglon.getString(9));
                                 BD.insert("t_RiegoEliminado",null,registro);
 
                                 int cantidad= BD.delete("t_Riego","Fecha='"+et_fecha.getText().toString().trim()+"' and Id_Bloque='"+arrayArticulos.get(i).getId_Bloque()+"' ",null);
@@ -442,6 +443,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                                 registro2.put("Caudal_Fin",Double.parseDouble(String.valueOf(txt_CaudalFin.getText())));
                                 registro2.put("Horas_Riego",Double.parseDouble(String.valueOf(txt_Riego.getText())));
                                 registro2.put("Id_Usuario",Usuario);
+                                registro2.put("F_UsuCrea",objSDF.format(date1));
                                 registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2));
                                 registro2.put("Temperatura",Double.parseDouble(String.valueOf(txt_Temperatura.getText())));
                                 registro2.put("ET",Double.parseDouble(String.valueOf(txt_ET.getText())));
@@ -471,6 +473,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                         registro2.put("Caudal_Fin",Double.parseDouble(String.valueOf(txt_CaudalFin.getText())));
                         registro2.put("Horas_Riego",Double.parseDouble(String.valueOf(txt_Riego.getText())));
                         registro2.put("Id_Usuario",Usuario);
+                        registro2.put("F_UsuCrea",objSDF.format(date1));
                         registro2.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa3.getSelectedItemPosition()).getTexto().substring(0,2));
                         registro2.put("Temperatura",Double.parseDouble(String.valueOf(txt_Temperatura.getText())));
                         registro2.put("ET",Double.parseDouble(String.valueOf(txt_ET.getText())));

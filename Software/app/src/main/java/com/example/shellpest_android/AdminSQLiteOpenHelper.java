@@ -129,6 +129,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Id_Huerta text," +
                 "Id_PuntoControl text not null," +
                 "Id_Usuario text," +
+                "F_UsuCrea text," +
                 "n_coordenadaX text," +
                 "n_coordenadaY text," +
                 "Hora text," +
@@ -168,6 +169,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Id_Huerta text," +
                 "Id_PuntoControl text not null," +
                 "Id_Usuario text," +
+                "F_UsuCrea text," +
                 "n_coordenadaX text," +
                 "n_coordenadaY text," +
                 "Hora text," +
@@ -226,6 +228,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Caudal_Fin float," +
                 "Horas_Riego float," +
                 "Id_Usuario text," +
+                "F_UsuCrea text," +
                 "c_codigo_eps text not null," +
                 "Temperatura float," +
                 "ET float)");
@@ -239,6 +242,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Caudal_Fin float," +
                 "Horas_Riego float," +
                 "Id_Usuario text," +
+                "F_UsuCrea text," +
                 "c_codigo_eps text not null," +
                 "Temperatura float," +
                 "ET float)");

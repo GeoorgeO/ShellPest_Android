@@ -409,13 +409,9 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     text_Aplicados.setText("N° "+CopiApli.getItem(i).getTexto().substring(CopiApli.getItem(i).getTexto().indexOf("-")+2)+"s:");
 
                    // textView32.setText(CopiApli.getItem(i).getTexto().substring(CopiApli.getItem(i).getTexto().indexOf("-")+2)+"s");
-
-
                         cargaSpinnerPresentacion();
                         CopiPre = new AdaptadorSpinner(getApplicationContext(), ItemSPPre);
                         sp_Presentacion.setAdapter(CopiPre);
-
-
 
                     if (sp_Presentacion.getCount() == 2 && sp_Presentacion.getSelectedItemPosition()==0) {
                         sp_Presentacion.setSelection(1);
@@ -652,12 +648,8 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
             Arreglodias=new String[Renglon.getCount()];
 
             do {
-
-
                 Arreglodias[tamanio] =Renglon.getString(0)+" - "+Renglon.getString(1);
-
                 tamanio++;
-
             } while(Renglon.moveToNext());
 
             BD.close();
