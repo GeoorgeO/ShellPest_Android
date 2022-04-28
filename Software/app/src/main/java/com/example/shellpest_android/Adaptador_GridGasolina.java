@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class Adaptador_GridGasolina extends BaseAdapter {
@@ -42,12 +44,14 @@ public class Adaptador_GridGasolina extends BaseAdapter {
         TextView txtv_GCantIni = (TextView) itemView.findViewById(R.id.txtv_GCantIni);
         TextView txtv_GCantSaldo = (TextView) itemView.findViewById(R.id.txtv_GCantSaldo);
         TextView txtv_GActivo = (TextView) itemView.findViewById(R.id.txtv_GActivo);
+        TextView txtv_GTipo = (TextView) itemView.findViewById(R.id.txtv_GTipo);
 
-        txtv_GFechaIni.setText(""+itemlist.get(i).getFecha_Inicio());
-        txtv_GFechaFin.setText(""+itemlist.get(i).getFecha_final());
-        txtv_GCantIni.setText(""+itemlist.get(i).getCantidad_ingreso());
-        txtv_GCantSaldo.setText(""+itemlist.get(i).getCantidad_saldo());
-        txtv_GActivo.setText(""+itemlist.get(i).getActivo());
+        txtv_GFechaIni.setText(""+itemlist.get(i).getD_fechainicio_gas());
+        txtv_GFechaFin.setText(""+itemlist.get(i).getD_fechafin_gas());
+        txtv_GCantIni.setText(""+itemlist.get(i).getV_cantingreso_gas());
+        txtv_GCantSaldo.setText(""+itemlist.get(i).getV_cantsaldo_gas());
+        txtv_GActivo.setText(""+itemlist.get(i).getId_ActivosGas());
+        txtv_GTipo.setText(""+itemlist.get(i).getV_tipo_gas());
 
         return itemView;
     }

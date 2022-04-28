@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,11 +31,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
@@ -133,6 +137,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         sp_huertaGas= (Spinner) findViewById(R.id.sp_huertaGas);
         sp_tipoGas = (Spinner) findViewById(R.id.sp_tipoGas);
 
+        arrayGas = new ArrayList<>();
+
         cargarEmpresa();
         Toast.makeText(this, "CARGA EMPRESA", Toast.LENGTH_SHORT).show();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
@@ -152,7 +158,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
                     if(sp_huertaGas.getCount()==2){
                         sp_huertaGas.setSelection(1);
-                        //cargaGrid();
+                        cargaGrid();
                     }else{
                         if (sp_huertaGas.getCount()<=1){
                             ItemSPHue.add(new ItemDatoSpinner("Huerta"));
@@ -165,7 +171,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         cargarHuerta();
                         CopiHue = new AdaptadorSpinner(Gasolina.this, ItemSPHue);
                         sp_huertaGas.setAdapter(CopiHue);
-
                         if (LineHuerta > 0){
                             LineHuerta = 0;
                         }else{
@@ -183,8 +188,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                     }
                 }
 
-                if(i > 0){
-                    //cargaGrid();
+                if(i>0){
+                    cargaGrid();
+                }else{
+                    lv_GridGasolina.setAdapter(null);
+                    arrayGas.clear();
                 }
 
                 LineEmpresa = i;
@@ -565,7 +573,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2)));
             }while(Renglon.moveToNext());
         }else{
-            Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT).show();
+            Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);
+            View toastView = ToastMensaje.getView();
+            toastView.setBackgroundResource(R.drawable.spinner_style);
+            toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            ToastMensaje.show();
             BD.close();
         }
         BD.close();
@@ -641,6 +653,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     public void agregarDatos (View view){
        boolean Falta = false, FaltaFolio = false;
+        String fechaini=etxt_fechainiGas.getText().toString().replace("/","");
+        String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
+        String tipogas=CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto().replace("-", "");
        String Mensaje = "";
        if (Verde == true){
            Log.e("Verde",Verde.toString());
@@ -670,25 +685,25 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }//fin Naranja
         if (etxt_observacionesGas.getText().length() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta ingresar observaciones, Verifica por favor.";
+            Mensaje = "Falta ingresar OBSERVACIONES, Verifica por favor.";
         }if (sp_tipoGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar TIPO, Verifica por favor.";
         }if (etxt_cantidadsaldoGas.getText().length() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta ingresar cantidad saldo, Verifica por favor.";
+            Mensaje = "Falta ingresar CANTIDAD SALDO, Verifica por favor.";
         }if (etxt_cantidadiniGas.getText().length() > 0){ }else{
             Falta = true;
             Mensaje = "Falta ingresar CANTIDAD INICIAL, Verifica por favor.";
         }if (actxt_actividadGas.getText().length() > 0){ }else {
             Falta = true;
-            Mensaje = "Falta ingresar Actividad, Verifica por favor.";
+            Mensaje = "Falta ingresar ACTIVIDAD, Verifica por favor.";
         }if (sp_responsableGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar RESPONSABLE, Verifica por favor.";
         }if (sp_activoGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
-            Mensaje = "Falta seleccionar Activo, Verifica por favor.";
+            Mensaje = "Falta seleccionar ACTIVO, Verifica por favor.";
         }if (sp_huertaGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar HUERTA, Verifica por favor.";
@@ -708,9 +723,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             Log.e("Azul",Azul.toString());
             Falta = true;
             Mensaje = "El activo seleccionado NO consume gasolina, Verifica por favor.";
-            AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Gasolina.this);
-            dialogo1.setTitle("No Consume Gasolina");
-            dialogo1.setMessage("El activo seleccionado no consume gasolina, Verifica por favor.");
+            AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Gasolina.this, R.style.Theme_AppCompat_Dialog_Alert);
+            dialogo1.setTitle("NO CONSUME GASOLINA");
+            dialogo1.setMessage("El activo seleccionado NO consume gasolina. \n Verifica por favor.");
             dialogo1.setCancelable(true);
             dialogo1.show();
         }//fin Azul
@@ -720,17 +735,14 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
             ContentValues registroGas = new ContentValues();
             if (FaltaFolio){
-                AlertDialog.Builder dialogo = new AlertDialog.Builder(Gasolina.this);
+                AlertDialog.Builder dialogo = new AlertDialog.Builder(Gasolina.this, R.style.Theme_AppCompat_Dialog_Alert);
                 dialogo.setTitle("NO SE HA INGRESADO FOLIO");
-                dialogo.setMessage("No ha ingresado folio, si selecciona Aceptar se agregará el registro sin folio. \n ¿Desea continuar?");
+                dialogo.setMessage("No ha ingresado folio, si selecciona ACEPTAR se agregará el registro sin folio. \n   ¿Desea continuar?");
                 dialogo.setCancelable(true);
                 Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
-                dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                dialogo.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String fechaini=etxt_fechainiGas.getText().toString().replace("/","");
-                        String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
-
                         registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
                         registroGas.put("d_fechainicio_gas", fechaini);
                         registroGas.put("d_fechafin_gas", fechafin);
@@ -741,7 +753,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
                         registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
                         registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
-                        registroGas.put("v_tipo_gas", CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto());
+                        registroGas.put("v_tipo_gas", tipogas);
                         registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
                         registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
                         registroGas.put("v_kmfinal_gas", etxt_kmfinGas.getText().toString());
@@ -757,11 +769,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                     }
                 });
                 Toast ToastMensaje2 = Toast.makeText(this,"Registra el Folio por favor",Toast.LENGTH_SHORT);
-                dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
+                dialogo.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         View toastView = ToastMensaje2.getView();
                         toastView.setBackgroundResource(R.drawable.spinner_style);
                         toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -769,10 +779,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                     }
                 });
                 dialogo.show();
-            }else{
-                String fechaini=etxt_fechainiGas.getText().toString().replace("/","");
-                String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
 
+            }else{
                 registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
                 registroGas.put("d_fechainicio_gas", fechaini);
                 registroGas.put("d_fechafin_gas", fechafin);
@@ -783,7 +791,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
                 registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
                 registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
-                registroGas.put("v_tipo_gas", CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto());
+                registroGas.put("v_tipo_gas", tipogas);
                 registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
                 registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
                 registroGas.put("v_kmfinal_gas", etxt_kmfinGas.getText().toString());
@@ -809,45 +817,50 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
-    public void cargaGrid(View view){
+    private void cargaGrid(){
         lv_GridGasolina.setAdapter(null);
-//        arrayGas.clear(); //se usa para guardar los datos y cargarlos en el grid
+        arrayGas.clear(); //se usa para guardar los datos y cargarlos en el grid
 
-        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "HellPest", null, 1);
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-        Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
-        SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
-        Date date1=objDate;
-
-        Cursor Renglon =BD.rawQuery("select R.d_fechainicio_gas, \n" +
-                "\tR.d_fechafinal_gas,\n" +
-                "\tR.v_cantingreso_gas,\n" +
-                "\tR.v_cantsaldo_gas,\n" +
-                "\tR.v_nomactivo_gas",null);
+        Cursor Renglon =BD.rawQuery("select G.c_folio_gas,\n" +
+                "\tG.d_fechainicio_gas,\n"+
+                "\tG.d_fechafin_gas,\n"+
+                "\tG.c_codigo_eps,\n"+
+                "\tG.Id_Huerta,\n"+
+                "\tG.Id_ActivosGas,\n"+
+                "\tG.c_codigo_emp,\n"+
+                "\tG.c_codigo_act,\n"+
+                "\tG.v_cantingreso_gas,\n"+
+                "\tG.v_cantsaldo_gas,\n"+
+                "\tG.v_tipo_gas,\n"+
+                "\tG.v_horometro_gas,\n"+
+                "\tG.v_kminicial_gas,\n"+
+                "\tG.v_kmfinal_gas,\n"+
+                "\tG.v_observaciones_gas \n"+
+                "from t_Consumo_Gasolina as G",null);
 
         if(Renglon.moveToFirst()) {
             /*et_Usuario.setText(Renglon.getString(0));
             et_Password.setText(Renglon.getString(1));*/
             if (Renglon.moveToFirst()) {
-
                 do {
                     Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
                     arrayGas.add(Tabla);
                 } while (Renglon.moveToNext());
-
-
                 BD.close();
             } else {
-                Toast.makeText(this, "No hay datos en t_Consumo_Gasolina", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay datos en t_Consumo_Gasolina guardados", Toast.LENGTH_SHORT).show();
                 BD.close();
             }
         }
+
         if(arrayGas.size()>0){
             Adapter=new Adaptador_GridGasolina(getApplicationContext(),arrayGas);
             lv_GridGasolina.setAdapter(Adapter);
         }else{
-            //Toast.makeText(activity_Monitoreo.this, "No exisyen datos guardados.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Gasolina.this, "No existen datos guardados.", Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -70,7 +70,6 @@
                 android:layout_width="71dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="cargaGrid"
                 android:visibility="invisible"
                 app:srcCompat="@android:drawable/ic_input_get" />
         </LinearLayout>
@@ -516,7 +515,8 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="24dp"
+        android:layout_height="wrap_content"
+        android:background="@color/verde"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -527,18 +527,70 @@
 
         <TextView
             android:id="@+id/textView101"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/verde"
-            android:text="Registros"
+            android:gravity="center"
+            android:text="Fecha Inicio"
+            android:textAlignment="center"
+            android:textColor="@color/cafe" />
+
+        <TextView
+            android:id="@+id/textView81"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Fecha Fin"
+            android:textAlignment="center"
+            android:textColor="@color/cafe" />
+
+        <TextView
+            android:id="@+id/textView82"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Cant Inicial"
+            android:textAlignment="center"
+            android:textColor="@color/cafe" />
+
+        <TextView
+            android:id="@+id/textView92"
+            android:layout_width="18dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Cant Saldo"
+            android:textAlignment="center"
+            android:textColor="@color/cafe" />
+
+        <TextView
+            android:id="@+id/textView94"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Activo"
+            android:textAlignment="center"
+            android:textColor="@color/cafe" />
+
+        <TextView
+            android:id="@+id/textView97"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Tipo Gas"
+            android:textAlignment="center"
             android:textColor="@color/cafe" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_agregarGas"
-        android:layout_width="139dp"
-        android:layout_height="54dp"
+        android:layout_width="136dp"
+        android:layout_height="36dp"
         android:background="@drawable/rounded_button"
         android:onClick="agregarDatos"
         android:text="AGREGAR"
@@ -553,12 +605,11 @@
     <ListView
         android:id="@+id/lv_GridGasolina"
         android:layout_width="413dp"
-        android:layout_height="57dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.698"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

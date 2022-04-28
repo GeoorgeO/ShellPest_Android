@@ -1,146 +1,145 @@
 package com.example.shellpest_android;
 
 public class Itemgasolina {
-    private String Nombre_Responsable, Folio_vale, Fecha_Inicio, Fecha_final, Cantidad_ingreso, Cantidad_saldo,
-        Empresa, Activo, Huerta, Km_Inicial, Km_Final, Horometro, Tipo_Combustible, Actividad, Observaciones;
+    private String c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, Id_ActivosGas,
+            c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas;
 
-    public Itemgasolina(String Nombre_Responsable, String Folio_vale, String Fecha_Inicio, String Fecha_final, String Cantidad_ingreso, String Cantidad_saldo,
-                        String Empresa, String Activo, String Huerta, String Km_Inicial, String Km_Final, String Horometro, String Tipo_Combustible, String Actividad, String Observaciones){
-        this.Nombre_Responsable = Nombre_Responsable;
-        this.Folio_vale=Folio_vale;
-        this.Fecha_Inicio = Fecha_Inicio;
-        this.Fecha_final = Fecha_final;
-        this.Cantidad_ingreso = Cantidad_ingreso;
-        this.Cantidad_saldo = Cantidad_saldo;
-        this.Empresa = Empresa;
-        this.Activo = Activo;
-        this.Huerta = Huerta;
-        this.Km_Inicial = Km_Inicial;
-        this.Km_Final = Km_Final;
-        this.Horometro = Horometro;
-        this.Tipo_Combustible = Tipo_Combustible;
-        this.Actividad = Actividad;
-        this.Observaciones = Observaciones;
-
+    public Itemgasolina(String c_folio_gas, String d_fechainicio_gas, String d_fechafin_gas, String c_codigo_eps, String Id_Huerta, String Id_ActivosGas,
+                        String c_codigo_emp, String c_codigo_act, String v_cantingreso_gas, String v_cantsaldo_gas, String v_tipo_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
+        this.c_folio_gas = c_folio_gas;
+        this.d_fechainicio_gas = d_fechainicio_gas;
+        this.d_fechafin_gas = d_fechafin_gas;
+        this.c_codigo_eps = c_codigo_eps;
+        this.Id_Huerta = Id_Huerta;
+        this.Id_ActivosGas = Id_ActivosGas;
+        this.c_codigo_emp = c_codigo_emp;
+        this.c_codigo_act = c_codigo_act;
+        this.v_cantingreso_gas = v_cantingreso_gas;
+        this.v_cantsaldo_gas = v_cantsaldo_gas;
+        this.v_tipo_gas = v_tipo_gas;
+        this.v_horometro_gas = v_horometro_gas;
+        this.v_kminicial_gas = v_kminicial_gas;
+        this.v_kmfinal_gas = v_kmfinal_gas;
+        this.v_observaciones_gas = v_observaciones_gas;
     }
 
-    public String getNombre_Responsable() {
-        return Nombre_Responsable;
+    public String getC_folio_gas() {
+        return c_folio_gas;
     }
 
-    public void setNombre_Responsable(String nombre_Responsable) {
-        Nombre_Responsable = nombre_Responsable;
+    public void setC_folio_gas(String c_folio_gas) {
+        this.c_folio_gas = c_folio_gas;
     }
 
-    public String getFolio_vale() {
-        return Folio_vale;
+    public String getD_fechainicio_gas() {
+        return d_fechainicio_gas;
     }
 
-    public void setFolio_vale(String folio_vale) {
-        Folio_vale = folio_vale;
+    public void setD_fechainicio_gas(String d_fechainicio_gas) {
+        this.d_fechainicio_gas = d_fechainicio_gas;
     }
 
-    public String getFecha_Inicio() {
-        return Fecha_Inicio;
+    public String getD_fechafin_gas() {
+        return d_fechafin_gas;
     }
 
-    public void setFecha_Inicio(String fecha_Inicio) {
-        Fecha_Inicio = fecha_Inicio;
+    public void setD_fechafin_gas(String d_fechafin_gas) {
+        this.d_fechafin_gas = d_fechafin_gas;
     }
 
-    public String getFecha_final() {
-        return Fecha_final;
+    public String getC_codigo_eps() {
+        return c_codigo_eps;
     }
 
-    public void setFecha_final(String fecha_final) {
-        Fecha_final = fecha_final;
+    public void setC_codigo_eps(String c_codigo_eps) {
+        this.c_codigo_eps = c_codigo_eps;
     }
 
-    public String getCantidad_ingreso() {
-        return Cantidad_ingreso;
+    public String getId_Huerta() {
+        return Id_Huerta;
     }
 
-    public void setCantidad_ingreso(String cantidad_ingreso) {
-        Cantidad_ingreso = cantidad_ingreso;
+    public void setId_Huerta(String id_Huerta) {
+        Id_Huerta = id_Huerta;
     }
 
-    public String getCantidad_saldo() {
-        return Cantidad_saldo;
+    public String getId_ActivosGas() {
+        return Id_ActivosGas;
     }
 
-    public void setCantidad_saldo(String cantidad_saldo) {
-        Cantidad_saldo = cantidad_saldo;
+    public void setId_ActivosGas(String id_ActivosGas) {
+        Id_ActivosGas = id_ActivosGas;
     }
 
-    public String getEmpresa() {
-        return Empresa;
+    public String getC_codigo_emp() {
+        return c_codigo_emp;
     }
 
-    public void setEmpresa(String empresa) {
-        Empresa = empresa;
+    public void setC_codigo_emp(String c_codigo_emp) {
+        this.c_codigo_emp = c_codigo_emp;
     }
 
-    public String getActivo() {
-        return Activo;
+    public String getC_codigo_act() {
+        return c_codigo_act;
     }
 
-    public void setActivo(String activo) {
-        Activo = activo;
+    public void setC_codigo_act(String c_codigo_act) {
+        this.c_codigo_act = c_codigo_act;
     }
 
-    public String getHuerta() {
-        return Huerta;
+    public String getV_cantingreso_gas() {
+        return v_cantingreso_gas;
     }
 
-    public void setHuerta(String huerta) {
-        Huerta = huerta;
+    public void setV_cantingreso_gas(String v_cantingreso_gas) {
+        this.v_cantingreso_gas = v_cantingreso_gas;
     }
 
-    public String getKm_Inicial() {
-        return Km_Inicial;
+    public String getV_cantsaldo_gas() {
+        return v_cantsaldo_gas;
     }
 
-    public void setKm_Inicial(String km_Inicial) {
-        Km_Inicial = km_Inicial;
+    public void setV_cantsaldo_gas(String v_cantsaldo_gas) {
+        this.v_cantsaldo_gas = v_cantsaldo_gas;
     }
 
-    public String getKm_Final() {
-        return Km_Final;
+    public String getV_tipo_gas() {
+        return v_tipo_gas;
     }
 
-    public void setKm_Final(String km_Final) {
-        Km_Final = km_Final;
+    public void setV_tipo_gas(String v_tipo_gas) {
+        this.v_tipo_gas = v_tipo_gas;
     }
 
-    public String getHorometro() {
-        return Horometro;
+    public String getV_horometro_gas() {
+        return v_horometro_gas;
     }
 
-    public void setHorometro(String horometro) {
-        Horometro = horometro;
+    public void setV_horometro_gas(String v_horometro_gas) {
+        this.v_horometro_gas = v_horometro_gas;
     }
 
-    public String getTipo_Combustible() {
-        return Tipo_Combustible;
+    public String getV_kminicial_gas() {
+        return v_kminicial_gas;
     }
 
-    public void setTipo_Combustible(String tipo_Combustible) {
-        Tipo_Combustible = tipo_Combustible;
+    public void setV_kminicial_gas(String v_kminicial_gas) {
+        this.v_kminicial_gas = v_kminicial_gas;
     }
 
-    public String getActividad() {
-        return Actividad;
+    public String getV_kmfinal_gas() {
+        return v_kmfinal_gas;
     }
 
-    public void setActividad(String actividad) {
-        Actividad = actividad;
+    public void setV_kmfinal_gas(String v_kmfinal_gas) {
+        this.v_kmfinal_gas = v_kmfinal_gas;
     }
 
-    public String getObservaciones() {
-        return Observaciones;
+    public String getV_observaciones_gas() {
+        return v_observaciones_gas;
     }
 
-    public void setObservaciones(String observaciones) {
-        Observaciones = observaciones;
+    public void setV_observaciones_gas(String v_observaciones_gas) {
+        this.v_observaciones_gas = v_observaciones_gas;
     }
 }

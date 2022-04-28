@@ -13,31 +13,37 @@
 
         <TextView
             android:id="@+id/txtv_GFechaIni"
-            android:layout_width="18dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/txtv_GFechaFin"
-            android:layout_width="18dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/txtv_GCantIni"
-            android:layout_width="18dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/txtv_GCantSaldo"
-            android:layout_width="18dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/txtv_GActivo"
-            android:layout_width="126dp"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/txtv_GTipo"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
