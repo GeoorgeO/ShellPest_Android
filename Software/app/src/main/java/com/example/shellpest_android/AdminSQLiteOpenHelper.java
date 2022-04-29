@@ -480,7 +480,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "c_codigo_eps text not null)");
 
         BD.execSQL("create table t_Consumo_Gasolina"+
-                "(c_folio_gas text," +
+                "(d_fechacrea_gas text not null,"+
+                "c_folio_gas text," +
                 "d_fechainicio_gas text not null,"+
                 "d_fechafin_gas text not null," +
                 "c_codigo_eps text not null," +

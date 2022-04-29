@@ -43,7 +43,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
     public String Usuario, Perfil, Huerta, Activo, Responsable, Tipo;
-    public String Magna = "Magna - 87 - octanos", Premium = "Premium - 92 - octanos", Diesel= "Diesel";
+    public String Magna = "Magna - 87 - octanos", Premium = "Premium - 92 - octanos", Diesel= "Diesel", FechaCrea="";
     public Boolean Verde = false, Amarillo = false, Naranja = false, Azul = false;
 
     Spinner sp_responsableGas, sp_empresaGas, sp_activoGas, sp_huertaGas, sp_tipoGas;
@@ -64,9 +64,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     int LineHuerta, LineEmpresa, LineActivo, LineTipo, LineActividad;
 
     private AdaptadorSpinner CopiHue, CopiActivo, CopiEmp, CopiResp, CopiTipo;
-    private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPHue, ItemSPActivo, ItemSPResp, ItemSPTipo, ItemSPActividad;
+    private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPHue, ItemSPActivo, ItemSPResp, ItemSPTipo;
 
-    Boolean solounaEmpresa, solounaHuerta, largo;
+    Boolean solounaEmpresa, solounaHuerta;
     private int dia,mes, anio;
 
     Itemgasolina Tabla;
@@ -734,6 +734,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             AdminSQLiteOpenHelper SQLAdmin =new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
             ContentValues registroGas = new ContentValues();
+
+            Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
+            SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
+            Date date=objDate;
+
             if (FaltaFolio){
                 AlertDialog.Builder dialogo = new AlertDialog.Builder(Gasolina.this, R.style.Theme_AppCompat_Dialog_Alert);
                 dialogo.setTitle("NO SE HA INGRESADO FOLIO");
@@ -743,6 +748,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 dialogo.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        registroGas.put("d_fechacrea_gas",objSDF.format(date).replace("/",""));
                         registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
                         registroGas.put("d_fechainicio_gas", fechaini);
                         registroGas.put("d_fechafin_gas", fechafin);
@@ -781,6 +787,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 dialogo.show();
 
             }else{
+                registroGas.put("d_fechacrea_gas",objSDF.format(date).replace("/",""));
                 registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
                 registroGas.put("d_fechainicio_gas", fechaini);
                 registroGas.put("d_fechafin_gas", fechafin);
@@ -842,8 +849,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 "from t_Consumo_Gasolina as G",null);
 
         if(Renglon.moveToFirst()) {
-            /*et_Usuario.setText(Renglon.getString(0));
-            et_Password.setText(Renglon.getString(1));*/
             if (Renglon.moveToFirst()) {
                 do {
                     Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));

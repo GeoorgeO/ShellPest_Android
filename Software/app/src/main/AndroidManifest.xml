@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShellPest_Android"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Enviar_Fertiliza"></activity>
+        <activity
+            android:name=".Enviar_Gasolina"
+            android:exported="true" />
+        <activity android:name=".Enviar_Fertiliza" />
         <activity android:name=".Fertiliza_Capturadas" />
         <activity
             android:name=".Fertilizacion"

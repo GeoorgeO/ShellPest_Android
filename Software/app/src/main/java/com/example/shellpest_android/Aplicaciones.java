@@ -106,7 +106,7 @@ public class Aplicaciones extends AppCompatActivity {
 
         }
         if (Accion.equals("Enviar")){
-            //intento=new Intent(this,.class);
+            intento=new Intent(this,Enviar_Gasolina.class);
         }
         startActivity(intento);
     }
