@@ -20,7 +20,7 @@
         <activity
             android:name=".Enviar_Gasolina"
             android:exported="true" />
-        <activity android:name=".Enviar_Fertiliza" />
+        <activity android:name=".Enviar_Fertiliza"></activity>
         <activity android:name=".Fertiliza_Capturadas" />
         <activity
             android:name=".Fertilizacion"
