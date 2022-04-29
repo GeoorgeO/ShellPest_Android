@@ -52,7 +52,7 @@
         app:layout_constraintVertical_bias="0.175" />
 
     <TextView
-        android:id="@+id/txtv_Fechas"
+        android:id="@+id/text_NAplicaciones2"
         android:layout_width="136dp"
         android:layout_height="22dp"
         android:textAlignment="viewStart"
@@ -69,7 +69,7 @@
         app:layout_constraintVertical_bias="0.276" />
 
     <TextView
-        android:id="@+id/txtv_Activos"
+        android:id="@+id/text_Fechas2"
         android:layout_width="136dp"
         android:layout_height="22dp"
         android:textAlignment="viewStart"

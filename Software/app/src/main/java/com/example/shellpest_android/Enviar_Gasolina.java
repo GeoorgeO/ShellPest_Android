@@ -9,14 +9,12 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.format.Formatter;
 import android.view.View;
-import android.webkit.SafeBrowsingResponse;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,8 +22,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.SplittableRandom;
 
 public class Enviar_Gasolina extends AppCompatActivity {
 
@@ -44,8 +40,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
         setContentView(R.layout.activity_enviar_gasolina);
         getSupportActionBar().hide();
 
-        txtv_Fechas = (TextView) findViewById(R.id.txtv_Fechas);
-        txtv_Activos = (TextView) findViewById(R.id.txtv_Activos);
+        txtv_Fechas = (TextView) findViewById(R.id.text_NAplicaciones2);
+        txtv_Activos = (TextView) findViewById(R.id.text_Fechas2);
 
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
