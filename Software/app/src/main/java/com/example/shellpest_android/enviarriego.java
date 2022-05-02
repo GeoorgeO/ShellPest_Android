@@ -53,21 +53,21 @@ public class enviarriego extends AppCompatActivity {
             AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
             SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-            Cursor Renglon = BD.rawQuery("select Fecha , Hora, Id_Bloque, Precipitacion_Sistema, Caudal_Inicio , Caudal_Fin , Horas_Riego , Id_Usuario, c_codigo_eps, Temperatura, ET from t_Riego ", null);
+            Cursor Renglon = BD.rawQuery("select Fecha , Hora, Id_Bloque, Precipitacion_Sistema, Caudal_Inicio , Caudal_Fin , Horas_Riego , Id_Usuario, c_codigo_eps, Temperatura, ET,F_UsuCrea from t_Riego ", null);
 
             if (Renglon.moveToFirst()) {
                 do {
                     //Toast.makeText(this, Renglon.getString(6), Toast.LENGTH_SHORT).show();
-                    insertWebRiego(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getFloat(3),Renglon.getFloat(4),Renglon.getFloat(5),Renglon.getFloat(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10));
+                    insertWebRiego(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getFloat(3),Renglon.getFloat(4),Renglon.getFloat(5),Renglon.getFloat(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11));
                 } while (Renglon.moveToNext());
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
             }
-            Cursor Renglon3 = BD.rawQuery("select  Fecha, Hora, Id_Bloque, Precipitacion_Sistema, Caudal_Inicio, Caudal_Fin, Horas_riego, Id_Usuario, c_codigo_eps, Temperatura, ET from t_RiegoEliminado ", null);
+            Cursor Renglon3 = BD.rawQuery("select  Fecha, Hora, Id_Bloque, Precipitacion_Sistema, Caudal_Inicio, Caudal_Fin, Horas_riego, Id_Usuario, c_codigo_eps, Temperatura, ET,F_UsuCrea from t_RiegoEliminado ", null);
 
             if (Renglon3.moveToFirst()) {
                 do {
-                    insertWebRiegoElim(Renglon3.getString(0),Renglon3.getString(1),Renglon3.getString(2),Renglon3.getFloat(3),Renglon3.getFloat(4),Renglon3.getFloat(5),Renglon3.getFloat(6),Renglon3.getString(7),Renglon3.getString(8),Renglon3.getString(9),Renglon3.getString(10));
+                    insertWebRiegoElim(Renglon3.getString(0),Renglon3.getString(1),Renglon3.getString(2),Renglon3.getFloat(3),Renglon3.getFloat(4),Renglon3.getFloat(5),Renglon3.getFloat(6),Renglon3.getString(7),Renglon3.getString(8),Renglon3.getString(9),Renglon3.getString(10),Renglon3.getString(11));
                 } while (Renglon3.moveToNext());
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
@@ -103,7 +103,7 @@ public class enviarriego extends AppCompatActivity {
         //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
     }
 
-    private void insertWebRiego(String Fecha ,String Hora,String Id_Bloque,float Precipitacion_Sistema,float Caudal_Inicio ,float Caudal_Fin ,float Horas_Riego ,String Id_Usuario, String Empresa, String Temperatura, String ET) {
+    private void insertWebRiego(String Fecha ,String Hora,String Id_Bloque,float Precipitacion_Sistema,float Caudal_Inicio ,float Caudal_Fin ,float Horas_Riego ,String Id_Usuario, String Empresa, String Temperatura, String ET,String F_UsuCrea) {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -118,20 +118,24 @@ public class enviarriego extends AppCompatActivity {
             Id_Usuario="";
         }
 
-        String dia,mes,ano;
+        String dia,mes,ano,dia2,mes2,ano2;
         ano=Fecha.substring(6);
         mes=Fecha.substring(3, 5);
         dia=Fecha.substring(0, 2);
 
+        ano2=F_UsuCrea.substring(6);
+        mes2=F_UsuCrea.substring(3, 5);
+        dia2=F_UsuCrea.substring(0, 2);
+
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET;
+            Liga = "http://177.241.250.117:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET;
+                Liga = "http://192.168.3.254:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET;
+                Liga = "http://177.241.250.117:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }
         }
 
@@ -187,8 +191,6 @@ public class enviarriego extends AppCompatActivity {
 
                     int columnas = 0;
 
-
-
                     int RegistrosEnviados=0;
 
 
@@ -220,7 +222,7 @@ public class enviarriego extends AppCompatActivity {
         }
     }
 
-    private void insertWebRiegoElim(String Fecha,String Hora,String Id_Bloque,float Precipitacion_Sistema,float Caudal_Inicio,float Caudal_Fin,float Horas_riego,String Id_Usuario,String Empresa, String Temperatura, String ET) {
+    private void insertWebRiegoElim(String Fecha,String Hora,String Id_Bloque,float Precipitacion_Sistema,float Caudal_Inicio,float Caudal_Fin,float Horas_riego,String Id_Usuario,String Empresa, String Temperatura, String ET, String F_UsuCrea) {
         //Toast.makeText(MainActivity.this, Liga, Toast.LENGTH_SHORT).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -235,20 +237,24 @@ public class enviarriego extends AppCompatActivity {
             Id_Usuario="";
         }
 
-        String dia,mes,ano;
+        String dia,mes,ano,dia2,mes2,ano2;
         ano=Fecha.substring(6);
         mes=Fecha.substring(3, 5);
         dia=Fecha.substring(0, 2);
 
+        ano2=F_UsuCrea.substring(6);
+        mes2=F_UsuCrea.substring(3, 5);
+        dia2=F_UsuCrea.substring(0, 2);
+
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET;
+            Liga = "http://177.241.250.117:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET;
+                Liga = "http://192.168.3.254:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET;
+                Liga = "http://177.241.250.117:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }
         }
         URL url = null;

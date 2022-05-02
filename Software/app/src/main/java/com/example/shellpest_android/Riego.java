@@ -272,12 +272,10 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         }else{
             BD.close();
         }
-
     }
 
     private void cargaSpinnerHue(){
         CopiHue=null;
-
         ItemSPHue=new ArrayList<>();
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -320,8 +318,8 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
         ItemSPBlq=new ArrayList<>();
         ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
-        if(Huerta.length()>0 && !Huerta.equals("NULL")){
 
+        if(Huerta.length()>0 && !Huerta.equals("NULL")){
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
             SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
             Cursor Renglon;

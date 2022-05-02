@@ -662,7 +662,7 @@ public class Fertilizacion extends AppCompatActivity {
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
 
-        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from  t_Receta_Huerta  as RH  inner join t_Receta as R on RH.Id_Receta=R.Id_Receta and RH.c_codigo_eps=R.c_codigo_eps where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' and RH.Id_Huerta='"+Huerta+"' and R.Para='A' ",null);
+        Renglon=BD.rawQuery("select R.Id_Receta,R.Fecha_Receta from  t_Receta_Huerta  as RH  inner join t_Receta as R on RH.Id_Receta=R.Id_Receta and RH.c_codigo_eps=R.c_codigo_eps where R.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa5.getSelectedItemPosition()).getTexto().substring(0,2)+"' and RH.Id_Huerta='"+Huerta+"' and R.Para='F' ",null);
 
         if (Renglon.moveToFirst()) {
             do {
