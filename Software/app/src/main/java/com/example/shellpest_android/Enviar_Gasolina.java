@@ -40,8 +40,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
         setContentView(R.layout.activity_enviar_gasolina);
         getSupportActionBar().hide();
 
-        txtv_Fechas = (TextView) findViewById(R.id.text_NAplicaciones2);
-        txtv_Activos = (TextView) findViewById(R.id.text_Fechas2);
+        txtv_Fechas = (TextView) findViewById(R.id.txtv_fechasIni);
+        txtv_Activos = (TextView) findViewById(R.id.txtv_Activos);
 
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
@@ -54,7 +54,7 @@ public class Enviar_Gasolina extends AppCompatActivity {
     private void CargarDatos() {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-        Cursor Renglon = BD.rawQuery("select count(G.Id_ActivosGas), count(G.d_fechainicio_gas) from t_Consumo_Gasolina as G", null);
+        Cursor Renglon = BD.rawQuery("select count(G.Id_ActivosGas), G.d_fechainicio_gas from t_Consumo_Gasolina as G", null);
 
         if (Renglon.moveToFirst()) {
 
