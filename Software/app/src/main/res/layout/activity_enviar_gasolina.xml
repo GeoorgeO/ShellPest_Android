@@ -8,6 +8,21 @@
     tools:context=".Enviar_Gasolina">
 
     <TextView
+        android:id="@+id/textView98"
+        android:layout_width="75dp"
+        android:layout_height="52dp"
+        android:text="Fechas Finales:"
+        android:textColor="@color/cafe"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.477" />
+
+    <TextView
         android:id="@+id/textView38"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,18 +38,18 @@
 
     <TextView
         android:id="@+id/textView39"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fechas:"
+        android:layout_width="78dp"
+        android:layout_height="49dp"
+        android:text="Fechas Iniciales:"
         android:textColor="@color/cafe"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.277" />
+        app:layout_constraintVertical_bias="0.287" />
 
     <TextView
         android:id="@+id/textView40"
@@ -51,10 +66,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.175" />
 
-    <TextView
-        android:id="@+id/txtv_fechasIni"
-        android:layout_width="132dp"
-        android:layout_height="247dp"
+    <ListView
+        android:id="@+id/lv_fechasIni"
+        android:layout_width="201dp"
+        android:layout_height="110dp"
         android:textAlignment="viewStart"
         android:textColor="@color/verde_azul"
         android:textColorHighlight="@color/verde"
@@ -63,10 +78,27 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintHorizontal_bias="0.695"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.357" />
+        app:layout_constraintVertical_bias="0.276"></ListView>
+
+    <ListView
+        android:id="@+id/lv_fechasFin"
+        android:layout_width="201dp"
+        android:layout_height="110dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/verde_azul"
+        android:textColorHighlight="@color/verde"
+        android:textColorHint="@color/verde"
+        android:textColorLink="@color/verde_azul"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.695"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"></ListView>
 
     <TextView
         android:id="@+id/txtv_Activos"
@@ -80,7 +112,7 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintHorizontal_bias="0.53"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.177" />

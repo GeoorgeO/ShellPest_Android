@@ -853,10 +853,15 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 do {
                     Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
                     arrayGas.add(Tabla);
+                    Log.e("array GAS", arrayGas.toString());
                 } while (Renglon.moveToNext());
                 BD.close();
             } else {
-                Toast.makeText(this, "No hay datos en t_Consumo_Gasolina guardados", Toast.LENGTH_SHORT).show();
+                Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
+                View toastView = ToastMensaje.getView();
+                toastView.setBackgroundResource(R.drawable.spinner_style);
+                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                ToastMensaje.show();
                 BD.close();
             }
         }
@@ -864,6 +869,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         if(arrayGas.size()>0){
             Adapter=new Adaptador_GridGasolina(getApplicationContext(),arrayGas);
             lv_GridGasolina.setAdapter(Adapter);
+            Log.e("Adaptador", lv_GridGasolina.toString());
         }else{
             //Toast.makeText(Gasolina.this, "No existen datos guardados.", Toast.LENGTH_SHORT).show();
         }

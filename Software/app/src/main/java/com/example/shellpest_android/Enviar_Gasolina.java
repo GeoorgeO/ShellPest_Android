@@ -8,7 +8,10 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,15 +22,22 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.SplittableRandom;
 
 public class Enviar_Gasolina extends AppCompatActivity {
 
+    private ArrayList<String> FechasIni, FechasFin;
+    ArrayAdapter<String> AdaptadorIni, AdaptadorFin;
     public String MyIp, CodAplicacion;
     ConexionInternet obj;
-    TextView txtv_Fechas, txtv_Activos;
+
+    TextView txtv_Activos;
+    ListView lv_FechasIni,  lv_FechasFin;
 
     /*
     Fecha de creacion
@@ -40,8 +50,11 @@ public class Enviar_Gasolina extends AppCompatActivity {
         setContentView(R.layout.activity_enviar_gasolina);
         getSupportActionBar().hide();
 
-        txtv_Fechas = (TextView) findViewById(R.id.txtv_fechasIni);
+        lv_FechasIni = (ListView) findViewById(R.id.lv_fechasIni);
         txtv_Activos = (TextView) findViewById(R.id.txtv_Activos);
+        lv_FechasFin = (ListView) findViewById(R.id.lv_fechasFin);
+        FechasIni = new ArrayList<String>();
+        FechasFin = new ArrayList<String>();
 
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
@@ -54,17 +67,43 @@ public class Enviar_Gasolina extends AppCompatActivity {
     private void CargarDatos() {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-        Cursor Renglon = BD.rawQuery("select count(G.Id_ActivosGas), G.d_fechainicio_gas from t_Consumo_Gasolina as G", null);
+        Cursor Renglon = BD.rawQuery("select count(G.Id_ActivosGas), G.d_fechainicio_gas, G.d_fechafin_gas from t_Consumo_Gasolina as G", null);
+        //Array Srenglon=Renglon.getString(0)+Renglon.getString(1)+Renglon.getString(2);
+        //Log.e("renglon string",Srenglon);
+            if (Renglon.moveToFirst()) {
+                Log.e("move", String.valueOf(Renglon.getPosition()));
+                do {
+                    txtv_Activos.setText(Renglon.getString(0));
+                    //txtv_FechasIni.setText(Renglon.getString(1)+" - "+Renglon.getString(2));
+                    //txtv_FechasFin.setText(Renglon.getString(3)+" - "+Renglon.getString(4));
+                    FechasIni.add(Renglon.getString(1));
+                    AdaptadorIni = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasIni);
+                    lv_FechasIni.setAdapter(AdaptadorIni);
 
-        if (Renglon.moveToFirst()) {
+                    FechasFin.add(Renglon.getString(2));
+                    AdaptadorFin = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasFin);
+                    lv_FechasFin.setAdapter(AdaptadorFin);
+                    //Renglon.moveToNext();
+                    Log.e("Renglon------", FechasFin.toString());
+                } while (Renglon.moveToNext());
+                Log.e("move while", String.valueOf(Renglon.getPosition()));
 
-            do {
-                txtv_Activos.setText(Renglon.getString(0));
+                Log.e("Renglon while------", FechasFin.toString());
+                //BD.close();
+            }else {
+                Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
+                View toastView = ToastMensaje.getView();
+                toastView.setBackgroundResource(R.drawable.spinner_style);
+                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                ToastMensaje.show();BD.close();
+            }
 
-                txtv_Fechas.setText(Renglon.getString(1));
-            } while (Renglon.moveToNext());
-        } else {
-            Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+
+
+        if (FechasIni.size()>0){
+            AdaptadorIni = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,FechasIni);
+            lv_FechasIni.setAdapter(AdaptadorIni);
+            Log.e("Renglon------",FechasFin.toString());
         }
     }
 
