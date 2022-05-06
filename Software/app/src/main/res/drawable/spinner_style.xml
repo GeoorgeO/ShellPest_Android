@@ -11,7 +11,7 @@
         android:bottom="1dp"
         />
 
-    <corners android:radius="80px"/>
+    <corners android:radius="50px"/>
 
 
 

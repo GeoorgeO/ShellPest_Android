@@ -1,7 +1,6 @@
 package com.example.shellpest_android;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,6 @@ public class AdaptadorSpinner extends ArrayAdapter<ItemDatoSpinner> {
                 //textViewName.setBackgroundColor(Color.WHITE);
             }
         }
-
 
         return convertView;
     }
