@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -22,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
     ProgressBar pb_Progreso;
     private int dia,mes, anio;
     public String Usuario,Perfil,Huerta;
-
+    ImageView img;
 
 
     public String MyIp;
@@ -71,8 +73,13 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getSupportActionBar().hide();
+
+        img = (ImageView) findViewById(R.id.loadingviewmain);
+        img.setBackgroundResource(R.drawable.loadinggif);
+
+
+
 
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
@@ -369,6 +376,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                 int regla3=0;
 
+                AnimationDrawable frameAnimation;
+                frameAnimation = (AnimationDrawable) img.getBackground();
+
                 Grid_Cambios.setAdapter(null);
                 arrayArticulos.clear();
 
@@ -380,6 +390,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                                 @Override
                                 public void run() {
                                     tv_Porcentaje.setVisibility(View.VISIBLE); // aqui truena
+                                    img.setVisibility(View.VISIBLE);
+                                    frameAnimation.start();
                                 }
                             });
 
@@ -402,6 +414,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                                 @Override
                                 public void run() {
                                     tv_Porcentaje.setVisibility(View.INVISIBLE);
+                                    img.setVisibility(View.INVISIBLE);
+                                    frameAnimation.stop();
                                 }
                             });
 

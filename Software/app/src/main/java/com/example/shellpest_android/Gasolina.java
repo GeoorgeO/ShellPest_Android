@@ -137,6 +137,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         sp_huertaGas= (Spinner) findViewById(R.id.sp_huertaGas);
         sp_tipoGas = (Spinner) findViewById(R.id.sp_tipoGas);
 
+
         arrayGas = new ArrayList<>();
 
         cargarEmpresa();

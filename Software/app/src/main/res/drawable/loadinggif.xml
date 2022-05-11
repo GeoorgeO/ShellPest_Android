@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item android:drawable="@drawable/aguacate1" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate2" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate3" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate4" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate5" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate6" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate7" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate8" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate9" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate10" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate11" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate12" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate13" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate14" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate15" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate16" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate17" android:duration = "100"/>
+    <item android:drawable="@drawable/aguacate18" android:duration = "100"/>
+
+
+</animation-list>

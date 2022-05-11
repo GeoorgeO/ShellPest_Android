@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.os.StrictMode;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -42,6 +44,13 @@ public class Login_Usuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_usuario);
 		getSupportActionBar().hide();
+
+        ImageView img = (ImageView) findViewById(R.id.loadingviewlogin);
+        img.setBackgroundResource(R.drawable.loadinggif);
+
+        AnimationDrawable frameAnimation;
+        frameAnimation = (AnimationDrawable) img.getBackground();
+        frameAnimation.start();
 
         et_Usuario=(EditText)findViewById(R.id.et_Usuario);
         et_Password=(EditText)findViewById(R.id.et_Password);

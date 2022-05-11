@@ -22,7 +22,7 @@
             android:layout_weight="8"
 
             android:text="TextView"
-            android:textColor="@color/design_default_color_primary_variant" />
+            android:textColor="@color/black" />
 
         <EditText
             android:id="@+id/et_NActualizados"
@@ -35,7 +35,7 @@
             android:enabled="false"
 
             android:textAlignment="center"
-            android:textColor="@color/design_default_color_primary_variant"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

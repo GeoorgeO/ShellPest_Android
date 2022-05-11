@@ -67,9 +67,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
     private void CargarDatos() {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-        Cursor Renglon = BD.rawQuery("select count(G.Id_ActivosGas), G.d_fechainicio_gas, G.d_fechafin_gas from t_Consumo_Gasolina as G", null);
-        //Array Srenglon=Renglon.getString(0)+Renglon.getString(1)+Renglon.getString(2);
-        //Log.e("renglon string",Srenglon);
+        Cursor Renglon = BD.rawQuery("select G.Id_ActivosGas, G.d_fechainicio_gas, G.d_fechafin_gas from t_Consumo_Gasolina as G", null);
+
             if (Renglon.moveToFirst()) {
                 Log.e("move", String.valueOf(Renglon.getPosition()));
                 do {
@@ -79,17 +78,12 @@ public class Enviar_Gasolina extends AppCompatActivity {
                     FechasIni.add(Renglon.getString(1));
                     AdaptadorIni = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasIni);
                     lv_FechasIni.setAdapter(AdaptadorIni);
-
+                    Log.e("Renglon------",FechasIni.toString());
                     FechasFin.add(Renglon.getString(2));
                     AdaptadorFin = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasFin);
                     lv_FechasFin.setAdapter(AdaptadorFin);
-                    //Renglon.moveToNext();
-                    Log.e("Renglon------", FechasFin.toString());
+                    Log.e("Renglon------",FechasFin.toString());
                 } while (Renglon.moveToNext());
-                Log.e("move while", String.valueOf(Renglon.getPosition()));
-
-                Log.e("Renglon while------", FechasFin.toString());
-                //BD.close();
             }else {
                 Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
                 View toastView = ToastMensaje.getView();
@@ -97,8 +91,6 @@ public class Enviar_Gasolina extends AppCompatActivity {
                 toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 ToastMensaje.show();BD.close();
             }
-
-
 
         if (FechasIni.size()>0){
             AdaptadorIni = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,FechasIni);

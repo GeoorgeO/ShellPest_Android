@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EnviaRecibe extends AppCompatActivity {
@@ -20,6 +22,13 @@ public class EnviaRecibe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_envia_recibe);
         getSupportActionBar().hide();
+
+        ImageView img = (ImageView) findViewById(R.id.loadingviewmenu);
+        img.setBackgroundResource(R.drawable.loadinggif);
+
+        AnimationDrawable frameAnimation;
+        frameAnimation = (AnimationDrawable) img.getBackground();
+        frameAnimation.start();
 
         btn_Enviar=(Button)findViewById(R.id.btn_Enviar);
         btn_Recibir=(Button)findViewById(R.id.btn_Recibir);
