@@ -114,8 +114,8 @@
 
     <ImageView
         android:id="@+id/loadingviewlogin"
-        android:layout_width="128dp"
-        android:layout_height="149dp"
+        android:layout_width="109dp"
+        android:layout_height="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.943"
