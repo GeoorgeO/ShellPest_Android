@@ -3,8 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/drawable/spinner_style.xml" value="0.2065" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity__monitoreo.xml" value="0.1" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_fertilizacion.xml" value="0.1950136612021858" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_login_usuario.xml" value="0.153515625" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_main.xml" value="0.183203125" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_riego.xml" value="0.19330601092896174" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/dato_spinner.xml" value="0.183203125" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/registro_grid.xml" value="0.183203125" />
       </map>
     </option>
   </component>

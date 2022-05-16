@@ -250,6 +250,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 }
 
                 if(MyIp.equals("0.0.0.0")){
+                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+
                     if(HaySalidas()){
                         //Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
                         Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
@@ -292,6 +293,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
+                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
@@ -317,7 +319,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+
                         if(HaySalidas()){
                             //Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
                             Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
@@ -332,6 +334,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                         Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
                     }else{
+                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
@@ -357,7 +360,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+
                         if(HaySalidas()){
                             //Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
                             Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
