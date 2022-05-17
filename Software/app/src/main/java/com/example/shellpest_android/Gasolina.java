@@ -4,10 +4,12 @@ import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
@@ -24,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -53,7 +56,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     EditText etxt_folioGas, etxt_fechainiGas, etxt_fechafinGas, etxt_cantidadiniGas,
             etxt_cantidadsaldoGas, etxt_kminiGas, etxt_kmfinGas, etxt_horometroGas, etxt_observacionesGas;
     Button btn_agregarGas;
-    ListView lv_GridGasolina;
+
     TableRow tr_kminiT, tr_kmfinT, tr_hrT;
     LinearLayout ly_cantidadGas, ly_actividadGas;
     TextView txtv_tipoComb;
@@ -69,10 +72,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     Boolean solounaEmpresa, solounaHuerta;
     private int dia,mes, anio;
 
-    Itemgasolina Tabla;
-    Adaptador_GridGasolina Adapter;
-    ArrayList<Itemgasolina> arrayGas;
-
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +100,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         etxt_observacionesGas = (EditText) findViewById(R.id.etxt_observacionesGas);
         actxt_actividadGas = (AutoCompleteTextView) findViewById(R.id.atxt_actividadGas);
 
-        lv_GridGasolina = (ListView) findViewById(R.id.lv_GridGasolina);
+
         btn_agregarGas = (Button) findViewById(R.id.btn_agregarGas);
         tr_kminiT = (TableRow) findViewById(R.id.tr_kminiT);
         tr_kmfinT = (TableRow) findViewById(R.id.tr_kmfinT);
@@ -138,8 +138,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         sp_tipoGas = (Spinner) findViewById(R.id.sp_tipoGas);
 
 
-        arrayGas = new ArrayList<>();
-
         cargarEmpresa();
         Toast.makeText(this, "CARGA EMPRESA", Toast.LENGTH_SHORT).show();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
@@ -159,7 +157,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
                     if(sp_huertaGas.getCount()==2){
                         sp_huertaGas.setSelection(1);
-                        cargaGrid();
+                        //cargaGrid();
                     }else{
                         if (sp_huertaGas.getCount()<=1){
                             ItemSPHue.add(new ItemDatoSpinner("Huerta"));
@@ -190,10 +188,10 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 }
 
                 if(i>0){
-                    cargaGrid();
+                    //cargaGrid();
                 }else{
-                    lv_GridGasolina.setAdapter(null);
-                    arrayGas.clear();
+                    //lv_GridGasolina.setAdapter(null);
+                    //arrayGas.clear();
                 }
 
                 LineEmpresa = i;
@@ -313,12 +311,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-        lv_GridGasolina.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               //SE VA A UTILIZAR SI SE SELECCIONA ALGO DEL LIST VIEW Y CON LLEVA ALGUNA ACCION
-            }
-        });
+
 
         //cargarHuerta();
         //cargarActivo();
@@ -368,7 +361,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
             Toast ToastMensaje = Toast.makeText(this, "Sin medidor", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.drawable.spinner_style);
             ToastMensaje.show();
         }
         //Kilometros AMARILLO
@@ -396,7 +389,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
             Toast ToastMensaje = Toast.makeText(this, "Por favor, registra los kilometros", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.drawable.spinner_style);
             ToastMensaje.show();
         }
         //Horometro NARANJA
@@ -421,7 +414,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
             Toast ToastMensaje = Toast.makeText(this, "Por favor, registra el horometro", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.drawable.spinner_style);
             ToastMensaje.show();
         }
         //sin gasolina AZUL
@@ -452,7 +445,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
             Toast ToastMensaje = Toast.makeText(this, "Sin consumo de gasolina", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.drawable.spinner_style);
             ToastMensaje.show();
         }
     }
@@ -576,8 +569,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }else{
             Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
-            toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//            toastView.setBackgroundResource(R.drawable.spinner_style);
+//            toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             ToastMensaje.show();
             BD.close();
         }
@@ -768,8 +761,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         Log.e("Registro", registroGas.toString());
                         BD.insert("t_Consumo_Gasolina",null,registroGas);
                         View toastView = ToastMensaje.getView();
-                        toastView.setBackgroundResource(R.drawable.spinner_style);
-                        toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        toastView.setBackgroundResource(R.color.amarillo);
                         ToastMensaje.show();
 
                         limpiar();
@@ -780,8 +772,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         View toastView = ToastMensaje2.getView();
-                        toastView.setBackgroundResource(R.drawable.spinner_style);
-                        toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        toastView.setBackgroundResource(R.color.amarillo);
                         ToastMensaje2.show();
                     }
                 });
@@ -809,8 +800,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
                 Toast ToastMensaje3 = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
                 View toastView = ToastMensaje3.getView();
-                toastView.setBackgroundResource(R.drawable.spinner_style);
-                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                toastView.setBackgroundResource(R.color.amarillo);
                 ToastMensaje3.show();
 
                 limpiar();
@@ -819,62 +809,20 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }else{
             Toast ToastMensaje = Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            toastView.setBackgroundResource(R.drawable.spinner_style);
-            toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            //toastView.setBackgroundResource(R.color.amarillo);
             ToastMensaje.show();
         }
     }
 
-    private void cargaGrid(){
-        lv_GridGasolina.setAdapter(null);
-        arrayGas.clear(); //se usa para guardar los datos y cargarlos en el grid
+    public void capturados (View view){
+        Intent intento = new Intent(this, Gasolina_Capturada.class);
+        intento.putExtra("usuario", Usuario);
+        intento.putExtra("perfil", Perfil);
+        intento.putExtra("huerta", Huerta);
 
-        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
-        SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-
-        Cursor Renglon =BD.rawQuery("select G.c_folio_gas,\n" +
-                "\tG.d_fechainicio_gas,\n"+
-                "\tG.d_fechafin_gas,\n"+
-                "\tG.c_codigo_eps,\n"+
-                "\tG.Id_Huerta,\n"+
-                "\tG.Id_ActivosGas,\n"+
-                "\tG.c_codigo_emp,\n"+
-                "\tG.c_codigo_act,\n"+
-                "\tG.v_cantingreso_gas,\n"+
-                "\tG.v_cantsaldo_gas,\n"+
-                "\tG.v_tipo_gas,\n"+
-                "\tG.v_horometro_gas,\n"+
-                "\tG.v_kminicial_gas,\n"+
-                "\tG.v_kmfinal_gas,\n"+
-                "\tG.v_observaciones_gas \n"+
-                "from t_Consumo_Gasolina as G",null);
-
-        if(Renglon.moveToFirst()) {
-            if (Renglon.moveToFirst()) {
-                do {
-                    Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
-                    arrayGas.add(Tabla);
-                    Log.e("array GAS", arrayGas.toString());
-                } while (Renglon.moveToNext());
-                BD.close();
-            } else {
-                Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
-                View toastView = ToastMensaje.getView();
-                toastView.setBackgroundResource(R.drawable.spinner_style);
-                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                ToastMensaje.show();
-                BD.close();
-            }
-        }
-
-        if(arrayGas.size()>0){
-            Adapter=new Adaptador_GridGasolina(getApplicationContext(),arrayGas);
-            lv_GridGasolina.setAdapter(Adapter);
-            Log.e("Adaptador", lv_GridGasolina.toString());
-        }else{
-            //Toast.makeText(Gasolina.this, "No existen datos guardados.", Toast.LENGTH_SHORT).show();
-        }
-
+        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
+        startActivity(intento);
+        finish();
     }
 
     private void limpiar(){

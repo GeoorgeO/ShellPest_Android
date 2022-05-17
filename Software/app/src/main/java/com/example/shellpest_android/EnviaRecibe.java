@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextClock;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EnviaRecibe extends AppCompatActivity {
@@ -54,7 +56,7 @@ public class EnviaRecibe extends AppCompatActivity {
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
-        intento.putExtra("Accion", "Captura");
+        intento.putExtra("Accion", "CAPTURA");
         //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
     }
@@ -63,7 +65,7 @@ public class EnviaRecibe extends AppCompatActivity {
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
-        intento.putExtra("Accion", "Enviar");
+        intento.putExtra("Accion", "ENVIAR");
         //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
     }
