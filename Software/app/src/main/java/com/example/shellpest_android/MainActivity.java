@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
-        intento.putExtra("Accion", "Captura");
+        intento.putExtra("Accion", "CAPTURA");
         //Toast.makeText(this, Usuario+","+Perfil+","+Huerta,Toast.LENGTH_SHORT).show();
         startActivity(intento);
 
