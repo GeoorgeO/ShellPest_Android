@@ -776,7 +776,6 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
         if (!FaltoAlgo){
             if (guardarEncabezado()){
 
-
                 Date objDate = new Date(); // Sistema actual La fecha y la hora se asignan a objDate
                 SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy"); // La cadena de formato de fecha se pasa como un argumento al objeto
                 Date date1=objDate;
@@ -1254,7 +1253,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                         registro3.put("Fecha",etd_Fecha.getText().toString());
                         registro3.put("c_codigo_pro",actv_Productos.getText().toString().substring(actv_Productos.getText().toString().indexOf("|")+2).trim());
                         registro3.put("Dosis",etn_ApliCantidad.getText().toString());
-                        registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
+                        //registro3.put("Centro_Costos",text_CenCos.getText().toString().trim());
                         //registro3.put("Unidades_aplicadas", etn_Pipadas.getText().toString());
                         int cantidad=BD.update("t_Aplicaciones_Det",registro3,"Id_Aplicacion='"+text_Codigo.getText().toString().substring(0,3)+etd_Fecha.getText().toString().trim().substring(8, 10)+CopiHue.getItem(sp_huerta.getSelectedItemPosition()).getTexto().substring(0,5)+
                                 "' and c_codigo_eps='"+CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2)+"'"+
@@ -1350,6 +1349,7 @@ public class aplicacion extends AppCompatActivity implements View.OnClickListene
                     registro.put("Id_Presentacion",CopiPre.getItem(sp_Presentacion.getSelectedItemPosition()).getTexto().substring(0,4));
                     registro.put("Id_Usuario",Usuario);
                     registro.put("F_Creacion",objSDF.format(date1));
+                    registro.put("Centro_Costos",text_CenCos.getText().toString().trim());
                     registro.put("Enviado","0");
                     registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa4.getSelectedItemPosition()).getTexto().substring(0,2));
                     if(ItemSPRec.size()==1){

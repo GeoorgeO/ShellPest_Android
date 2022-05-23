@@ -110,12 +110,7 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
 
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
-
             }
-
-
-
-
 
             BD.close();
         }else{
@@ -282,8 +277,6 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
-
         if(c_codigo_pro== null){
             c_codigo_pro="";
         }
@@ -297,7 +290,6 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         if(F_Creacion==null){
             F_Creacion="";
         }
-
 
         String dia,mes,ano,dia2,mes2,ano2;
         ano=Fecha.substring(6);
