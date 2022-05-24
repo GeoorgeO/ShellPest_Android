@@ -87,8 +87,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
             }else {
                 Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
                 View toastView = ToastMensaje.getView();
-                toastView.setBackgroundResource(R.drawable.spinner_style);
-                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                toastView.setBackgroundResource(R.drawable.spinner_style);
+ //               toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 ToastMensaje.show();BD.close();
             }
 
@@ -104,11 +104,12 @@ public class Enviar_Gasolina extends AppCompatActivity {
             AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
             SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-            Cursor Renglon = BD.rawQuery("select Fecha,Id_Bloque,c_codigo_eps,BICO,Cajas_Cosecha,Cajas_Desecho,Cajas_Pepena,Cajas_RDiaria,Id_Usuario,F_Creacion from t_Cosecha ", null);
+            Cursor Renglon = BD.rawQuery("select d_fechacrea_gas,c_folio_gas,d_fechainicio_gas,d_fechafin_gas,c_codigo_eps,Id_Huerta,v_Bloques_gas,Id_ActivosGas,c_codigo_emp,c_codigo_act,v_cantingreso_gas,v_cantsaldo_gas,v_tipo_gas,v_horometro_gas,v_kminicial_gas,v_kmfinal_gas,v_observaciones_gas from t_Consumo_Gasolina ", null);
 
             if (Renglon.moveToFirst()) {
                 do {
-                    //insertWebGasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10), Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
+                    Toast.makeText(this, "va pal INSERT", Toast.LENGTH_SHORT).show();
+                    insertWebGasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14),Renglon.getString(15),Renglon.getString(16));
                 } while (Renglon.moveToNext());
             } else {
                 Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
@@ -120,11 +121,13 @@ public class Enviar_Gasolina extends AppCompatActivity {
         CargarDatos();
     }
 
-    private void insertWebGasolina(String c_folio_gas, String d_fechainicio_gas, String d_fechafin_gas, String c_codigo_eps, String Id_Huerta, String Id_ActivosGas, String c_codigo_emp, String c_codigo_act, String v_cantingreso_gas, String v_cantsaldo_gas, String v_tipo_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
+    private void insertWebGasolina(String d_fechacrea_gas, String c_folio_gas, String d_fechainicio_gas, String d_fechafin_gas, String c_codigo_eps, String Id_Huerta, String v_Bloques_gas, String Id_ActivosGas, String c_codigo_emp, String c_codigo_act, String v_cantingreso_gas, String v_cantsaldo_gas, String v_tipo_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        if (c_folio_gas == null){
+        if (d_fechacrea_gas == null){
+            d_fechacrea_gas = "";
+        }if (c_folio_gas == null){
             c_folio_gas="";
         }if (d_fechainicio_gas == null){
             d_fechainicio_gas="";
@@ -134,6 +137,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
             c_codigo_eps="";
         }if (Id_Huerta == null){
             Id_Huerta="";
+        }if (v_Bloques_gas == null){
+            v_Bloques_gas ="";
         }if (Id_ActivosGas == null){
             Id_ActivosGas="";
         }if (c_codigo_emp == null){
@@ -156,7 +161,10 @@ public class Enviar_Gasolina extends AppCompatActivity {
             v_observaciones_gas="";
         }
 
-        String diaFI, mesFI,anoFI,diaFF,mesFF,anoFF;
+        String diaCrea,mesCrea,anoCrea,diaFI, mesFI,anoFI,diaFF,mesFF,anoFF;
+        anoCrea=d_fechacrea_gas.substring(6);
+        mesCrea=d_fechacrea_gas.substring(2,4);
+        diaCrea=d_fechacrea_gas.substring(0,2);
         anoFI=d_fechainicio_gas.substring(6);
         mesFI=d_fechainicio_gas.substring(2,4);
         diaFI=d_fechainicio_gas.substring(0,2);
@@ -167,12 +175,18 @@ public class Enviar_Gasolina extends AppCompatActivity {
         Obtener_Ip();
         String Liga = "";
         if(MyIp.equals("0.0.0.0")){
-            //Liga = "http://177.241.250.117:8090//      ;
+            Liga = "http://177.241.250.117:8090//Control/Gasolina?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechainicio_gas="+ anoFI + "" + mesFI + "" + diaFI + "&d_fechafin_gas=" + anoFF + "" + mesFF + "" + diaFF + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&v_Bloques_gas=" + v_Bloques_gas + "&Id_ActivosGas=" + Id_ActivosGas + "&c_codigo_emp=" + c_codigo_emp + "&c_codigo_act=" + c_codigo_act + "&v_cantingreso_gas=" + v_cantingreso_gas + "&v_cantsaldo_gas=" + v_cantsaldo_gas + "&v_tipo_gas=" + v_tipo_gas + "&v_horometro_gas=" + v_horometro_gas + "&v_kminicial_gas=" + v_kminicial_gas + "&v_kmfinal_gas=" + v_kmfinal_gas + "&v_observaciones_gas=" + v_observaciones_gas;
+            EliminaGasolina( d_fechacrea_gas, c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas, c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas);
+            CargarDatos();
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                //Liga = "http://192.168.3.254:8090//      ;
+                Liga = "http://192.168.3.254:8090//Gasolina?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechainicio_gas="+ anoFI + "" + mesFI + "" + diaFI + "&d_fechafin_gas=" + anoFF + "" + mesFF + "" + diaFF + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&v_Bloques_gas=" + v_Bloques_gas + "&Id_ActivosGas=" + Id_ActivosGas + "&c_codigo_emp=" + c_codigo_emp + "&c_codigo_act=" + c_codigo_act + "&v_cantingreso_gas=" + v_cantingreso_gas + "&v_cantsaldo_gas=" + v_cantsaldo_gas + "&v_tipo_gas=" + v_tipo_gas + "&v_horometro_gas=" + v_horometro_gas + "&v_kminicial_gas=" + v_kminicial_gas + "&v_kmfinal_gas=" + v_kmfinal_gas + "&v_observaciones_gas=" + v_observaciones_gas;
+                EliminaGasolina( d_fechacrea_gas, c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas, c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas);
+                CargarDatos();
             }else{
-                //Liga = "http://177.241.250.117:8090//         ;
+                Liga = "http://177.241.250.117:8090//Gasolina?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechainicio_gas="+ anoFI + "" + mesFI + "" + diaFI + "&d_fechafin_gas=" + anoFF + "" + mesFF + "" + diaFF + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&v_Bloques_gas=" + v_Bloques_gas + "&Id_ActivosGas=" + Id_ActivosGas + "&c_codigo_emp=" + c_codigo_emp + "&c_codigo_act=" + c_codigo_act + "&v_cantingreso_gas=" + v_cantingreso_gas + "&v_cantsaldo_gas=" + v_cantsaldo_gas + "&v_tipo_gas=" + v_tipo_gas + "&v_horometro_gas=" + v_horometro_gas + "&v_kminicial_gas=" + v_kminicial_gas + "&v_kmfinal_gas=" + v_kmfinal_gas + "&v_observaciones_gas=" + v_observaciones_gas;
+                EliminaGasolina( d_fechacrea_gas, c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas, c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas);
+                CargarDatos();
             }
         }
         URL url = null;
@@ -226,7 +240,10 @@ public class Enviar_Gasolina extends AppCompatActivity {
                     int columnas = 0;
                     int RegistrosEnviados=0;
                     if (jsonobject.optString("resultado").equals("True")) {
-
+                        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+                        if (EliminaGasolina( d_fechacrea_gas, c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas, c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas)){
+                            RegistrosEnviados++;
+                        }
                     }
                 }
             }
@@ -252,6 +269,23 @@ public class Enviar_Gasolina extends AppCompatActivity {
         String Cip= Formatter.formatIpAddress(ip.getConnectionInfo().getIpAddress());
         MyIp=Cip;
         //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean EliminaGasolina(String d_fechacrea_gas, String c_folio_gas, String d_fechainicio_gas, String d_fechafin_gas, String c_codigo_eps, String Id_Huerta, String v_Bloques_gas, String Id_ActivosGas, String c_codigo_emp, String c_codigo_act, String v_cantingreso_gas, String v_cantsaldo_gas, String v_tipo_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
+        AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
+        SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
+        int cantidad;
+        cantidad=0;
+        Log.e("aqui anda DELETE", d_fechacrea_gas);
+        cantidad = BD.delete("t_Consumo_Gasolina", "d_fechacrea_gas='"+d_fechacrea_gas+"' and c_folio_gas='"+c_folio_gas+"' and d_fechainicio_gas='"+d_fechainicio_gas+"' and d_fechafin_gas='"+d_fechafin_gas+"' and c_codigo_eps='"+c_codigo_eps+"' and Id_Huerta='"+Id_Huerta+"' and v_Bloques_gas='"+v_Bloques_gas+"' and Id_ActivosGas='"+Id_ActivosGas+"' and c_codigo_emp='"+c_codigo_emp+"' and c_codigo_act='"+c_codigo_act+"' and v_cantingreso_gas='"+v_cantingreso_gas+"' and v_cantsaldo_gas='"+v_cantsaldo_gas+"' and v_tipo_gas='"+v_tipo_gas+"' and v_horometro_gas='"+v_horometro_gas+"' and v_kminicial_gas='"+v_kminicial_gas+"' and v_kmfinal_gas='"+v_kmfinal_gas+"' and v_observaciones_gas='"+v_observaciones_gas+"' ", null);
+        CargarDatos();
+        BD.close();
+
+        if (cantidad > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

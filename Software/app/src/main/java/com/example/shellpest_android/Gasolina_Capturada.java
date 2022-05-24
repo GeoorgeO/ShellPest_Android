@@ -54,11 +54,13 @@ public class Gasolina_Capturada extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-        Cursor Renglon =BD.rawQuery("select G.c_folio_gas,\n" +
+        Cursor Renglon =BD.rawQuery("select G.d_fechacrea_gas,\n" +
+                "\tG.c_folio_gas,\n"+
                 "\tG.d_fechainicio_gas,\n"+
                 "\tG.d_fechafin_gas,\n"+
                 "\tG.c_codigo_eps,\n"+
                 "\tG.Id_Huerta,\n"+
+                "\tG.v_Bloques_gas,\n"+
                 "\tG.Id_ActivosGas,\n"+
                 "\tG.c_codigo_emp,\n"+
                 "\tG.c_codigo_act,\n"+
@@ -74,7 +76,7 @@ public class Gasolina_Capturada extends AppCompatActivity {
         if(Renglon.moveToFirst()) {
             if (Renglon.moveToFirst()) {
                 do {
-                    Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
+                    Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14),Renglon.getString(15),Renglon.getString(16));
                     arrayGas.add(Tabla);
                     Log.e("array GAS", arrayGas.toString());
                 } while (Renglon.moveToNext());
@@ -82,8 +84,8 @@ public class Gasolina_Capturada extends AppCompatActivity {
             } else {
                 Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
                 View toastView = ToastMensaje.getView();
-                toastView.setBackgroundResource(R.drawable.spinner_style);
-                toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                //toastView.setBackgroundResource(R.drawable.spinner_style);
+                //toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 ToastMensaje.show();
                 BD.close();
             }

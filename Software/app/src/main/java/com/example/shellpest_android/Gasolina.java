@@ -12,6 +12,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -39,9 +41,12 @@ import com.google.android.material.tabs.TabLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import kotlinx.coroutines.ObsoleteCoroutinesApi;
 
 public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,7 +64,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     TableRow tr_kminiT, tr_kmfinT, tr_hrT;
     LinearLayout ly_cantidadGas, ly_actividadGas;
-    TextView txtv_tipoComb;
+    TextView txtv_tipoComb, txtv_bloquesGas;
 
     private ArrayAdapter Adaptador_Arreglos;
     private ArrayList<String> ArrayActividades,ArrayActividadesLimpia;
@@ -71,6 +76,10 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     Boolean solounaEmpresa, solounaHuerta;
     private int dia,mes, anio;
+
+    boolean[] Bloqueseleccionado, Bloqueseleccionadoclean;
+    ArrayList<Integer> Listabloque, ListaBloqueClean = new ArrayList<>();
+    String[] Arreglobloque, ArreglobloqueClean;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -108,6 +117,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         ly_cantidadGas = (LinearLayout) findViewById(R.id.ly_cantidadGas);
         ly_actividadGas = (LinearLayout) findViewById(R.id.ly_actividadGas);
         txtv_tipoComb = (TextView) findViewById(R.id.txtv_tipoComb);
+        txtv_bloquesGas = (TextView) findViewById(R.id.txtv_bloquesGas);
 
         LineHuerta=0;
         LineEmpresa=0;
@@ -212,6 +222,14 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 CopiActivo = new AdaptadorSpinner(getApplicationContext(), ItemSPActivo);
                 sp_activoGas.setAdapter(CopiActivo);
 
+                Arreglobloque = ArreglobloqueClean;
+                Bloqueseleccionado = Bloqueseleccionadoclean;
+                Listabloque = ListaBloqueClean;
+                Listabloque.clear();
+
+                cargaBloques();
+
+
                 LineHuerta = i;
             }
 
@@ -232,7 +250,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 cargarResponsable();
                 CopiResp = new AdaptadorSpinner(getApplicationContext(), ItemSPResp);
                 sp_responsableGas.setAdapter(CopiResp);
-
 
                 LineActivo = i;
             }
@@ -311,22 +328,66 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-
-
-        //cargarHuerta();
-        //cargarActivo();
-        //cargarActividad();
-        //cargarResponsable();
-        //cargarTipogas();
-
-
-        //cada item representa cada fila del spinner al cual se le agregan items marcados por posicion
-        //Empresa
-        //Huerta - dependiendo de la huerta se muestran los activos del lugar
-        //Activo - dependiendo del tipo de activo se muestran las actividades
-        //Responsable
-        //Actividad
-        //tipo gasolina
+        txtv_bloquesGas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(
+                        Gasolina.this
+                );
+                builder.setTitle("Selecciona al menos un bloque");
+                builder.setCancelable(false);
+                builder.setMultiChoiceItems(Arreglobloque, Bloqueseleccionado, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if(b){
+                            Listabloque.add(i);
+                            Collections.sort(Listabloque);
+                        }else{
+                            if (Listabloque.size()==1){
+                                Listabloque.clear();
+                            }else{
+                                Listabloque.remove(i);
+                            }
+                        }
+                    }
+                });
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder=new StringBuilder();
+                        for(int j=0; j < Listabloque.size();j++){
+                            stringBuilder.append(Arreglobloque[Listabloque.get(j)].substring(0,4));
+                            if(j!=Listabloque.size()-1){
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        txtv_bloquesGas.setText(stringBuilder.toString());
+                        if(txtv_bloquesGas.getText().toString().trim().length()>0 ){
+                            //if(Id!=null){
+                              //  ActualizaCentroCostos(Id,cepsselapli);
+                            //}
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Limpiar todo", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for(int j=0; j < Bloqueseleccionado.length;j++){
+                            Bloqueseleccionado[j]=false;
+                            Listabloque.clear();
+                            txtv_bloquesGas.setText("");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
 
     }
 
@@ -359,9 +420,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.VISIBLE);
             txtv_tipoComb.setVisibility(View.VISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(this, "Sin medidor", Toast.LENGTH_SHORT);
+            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Sin medidor", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundColor(Color.YELLOW);
             ToastMensaje.show();
         }
         //Kilometros AMARILLO
@@ -387,9 +448,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.VISIBLE);
             txtv_tipoComb.setVisibility(View.VISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(this, "Por favor, registra los kilometros", Toast.LENGTH_SHORT);
+            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Por favor, registra los kilometros", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.color.amarillo);
             ToastMensaje.show();
         }
         //Horometro NARANJA
@@ -412,9 +473,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.VISIBLE);
             txtv_tipoComb.setVisibility(View.VISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(this, "Por favor, registra el horometro", Toast.LENGTH_SHORT);
+            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Por favor, registra el horometro", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.color.amarillo);
             ToastMensaje.show();
         }
         //sin gasolina AZUL
@@ -443,9 +504,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.INVISIBLE);
             txtv_tipoComb.setVisibility(View.INVISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(this, "Sin consumo de gasolina", Toast.LENGTH_SHORT);
+            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Sin consumo de gasolina", Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.drawable.spinner_style);
+            //toastView.setBackgroundResource(R.color.amarillo);
             ToastMensaje.show();
         }
     }
@@ -568,9 +629,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }while(Renglon.moveToNext());
         }else{
             Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-//            toastView.setBackgroundResource(R.drawable.spinner_style);
-//            toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             ToastMensaje.show();
             BD.close();
         }
@@ -698,7 +756,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }if (sp_activoGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar ACTIVO, Verifica por favor.";
-        }if (sp_huertaGas.getSelectedItemPosition() > 0){ }else{
+        }if (txtv_bloquesGas.getText().length() > 0){}else{
+            Falta = true;
+            Mensaje = "Falta seleccionar BLOQUE, Verifica por favor.";
+        }
+        if (sp_huertaGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar HUERTA, Verifica por favor.";
         }if(sp_empresaGas.getSelectedItemPosition() > 0){ }else{
@@ -736,7 +798,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             if (FaltaFolio){
                 AlertDialog.Builder dialogo = new AlertDialog.Builder(Gasolina.this, R.style.Theme_AppCompat_Dialog_Alert);
                 dialogo.setTitle("NO SE HA INGRESADO FOLIO");
-                dialogo.setMessage("No ha ingresado folio, si selecciona ACEPTAR se agregará el registro sin folio. \n   ¿Desea continuar?");
+                dialogo.setMessage("No ha ingresado folio, si selecciona ACEPTAR se agregará el registro SIN FOLIO. \n   ¿Desea continuar?");
                 dialogo.setCancelable(true);
                 Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
                 dialogo.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
@@ -748,6 +810,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         registroGas.put("d_fechafin_gas", fechafin);
                         registroGas.put("c_codigo_eps", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2));//c_codigo_eps
                         registroGas.put("Id_Huerta", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto().substring(0,5));//Id_Huerta
+                        registroGas.put("v_Bloques_gas", txtv_bloquesGas.getText().toString().trim());
                         registroGas.put("Id_ActivosGas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto().substring(0,4));//Id_ActivosGas
                         registroGas.put("c_codigo_emp",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto().substring(0,6));//c_codigo_emp
                         registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
@@ -761,7 +824,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         Log.e("Registro", registroGas.toString());
                         BD.insert("t_Consumo_Gasolina",null,registroGas);
                         View toastView = ToastMensaje.getView();
-                        toastView.setBackgroundResource(R.color.amarillo);
+//                        toastView.setBackgroundResource(R.color.amarillo);
                         ToastMensaje.show();
 
                         limpiar();
@@ -772,7 +835,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         View toastView = ToastMensaje2.getView();
-                        toastView.setBackgroundResource(R.color.amarillo);
+//                        toastView.setBackgroundResource(R.color.amarillo);
                         ToastMensaje2.show();
                     }
                 });
@@ -785,6 +848,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 registroGas.put("d_fechafin_gas", fechafin);
                 registroGas.put("c_codigo_eps", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2));//c_codigo_eps
                 registroGas.put("Id_Huerta", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto().substring(0,5));//Id_Huerta
+                registroGas.put("v_Bloques_gas", txtv_bloquesGas.getText().toString().trim());
                 registroGas.put("Id_ActivosGas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto().substring(0,4));//Id_ActivosGas
                 registroGas.put("c_codigo_emp",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto().substring(0,6));//c_codigo_emp
                 registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
@@ -800,7 +864,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
                 Toast ToastMensaje3 = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
                 View toastView = ToastMensaje3.getView();
-//                toastView.setBackgroundResource(R.color.amarillo);
+                //toastView.setBackgroundResource(R.color.amarillo);
                 ToastMensaje3.show();
 
                 limpiar();
@@ -809,7 +873,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }else{
             Toast ToastMensaje = Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT);
             View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.color.amarillo);
+//            toastView.setBackgroundResource(R.color.amarillo);
             ToastMensaje.show();
         }
     }
@@ -825,12 +889,43 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         finish();
     }
 
+    public void cargaBloques(){
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+
+        Renglon=BD.rawQuery("select B.Id_Bloque,B.Nombre_Bloque " +
+                "from  t_Huerta as H  " +
+                "inner join t_Bloque as B on B.Id_Huerta=H.Id_Huerta and B.c_codigo_eps=H.c_codigo_eps " +
+                "where H.Id_Huerta='"+Huerta+"' " +
+                "and H.c_codigo_eps='"+CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"' and B.TipoBloque='B'",null);
+
+        if(Renglon.moveToFirst()){
+            int tamanio;
+            tamanio=0;
+            Arreglobloque=new String[Renglon.getCount()];
+
+            do {
+                Arreglobloque[tamanio] =Renglon.getString(0)+" - "+Renglon.getString(1);
+                tamanio++;
+            } while(Renglon.moveToNext());
+
+            BD.close();
+
+            Bloqueseleccionado = new boolean[Arreglobloque.length];
+
+        }else{
+            BD.close();
+        }
+    }
+
     private void limpiar(){
         etxt_folioGas.setText("");
         etxt_fechainiGas.setText("");
         etxt_fechafinGas.setText("");
         sp_empresaGas.setSelection(0);
         sp_huertaGas.setSelection(0);
+        txtv_bloquesGas.setText("");
         sp_activoGas.setSelection(0);
         sp_responsableGas.setSelection(0);
         actxt_actividadGas.setText("");
