@@ -444,8 +444,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "v_descripcorta_act text not null, " +
                 "v_serie_act text,"+
                 "c_codigo_fam text not null,"+
-                "c_codigo_are text not null,"+
-                "primary key (Id_ActivosGas))");
+                "c_codigo_are text not null)");
 
         BD.execSQL("create table t_Actividades_Huerta"+
                 "( v_nombre_act text not null, " +
