@@ -55,16 +55,16 @@
         android:id="@+id/textView40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Activos:"
+        android:text="Total de Registros:"
         android:textColor="@color/cafe"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintVertical_bias="0.178" />
 
     <ListView
         android:id="@+id/lv_fechasIni"
@@ -103,7 +103,8 @@
     <TextView
         android:id="@+id/txtv_Activos"
         android:layout_width="136dp"
-        android:layout_height="22dp"
+        android:layout_height="wrap_content"
+        android:hint="-"
         android:textAlignment="viewStart"
         android:textColor="@color/verde_azul"
         android:textColorHighlight="@color/verde"
@@ -112,10 +113,10 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintHorizontal_bias="0.734"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.177" />
+        app:layout_constraintVertical_bias="0.182" />
 
     <Button
         android:id="@+id/Enviar2"

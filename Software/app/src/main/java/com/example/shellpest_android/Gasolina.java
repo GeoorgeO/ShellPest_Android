@@ -3,13 +3,16 @@ package com.example.shellpest_android;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -23,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -64,7 +68,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     TableRow tr_kminiT, tr_kmfinT, tr_hrT;
     LinearLayout ly_cantidadGas, ly_actividadGas;
-    TextView txtv_tipoComb, txtv_bloquesGas;
+    TextView txtv_tipoComb, txtv_bloquesGas, MensajeToast;
+    View layout;
 
     private ArrayAdapter Adaptador_Arreglos;
     private ArrayList<String> ArrayActividades,ArrayActividadesLimpia;
@@ -81,12 +86,15 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     ArrayList<Integer> Listabloque, ListaBloqueClean = new ArrayList<>();
     String[] Arreglobloque, ArreglobloqueClean;
 
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gasolina);
         getSupportActionBar().hide();
+
+        int backgroundAmarillo = ContextCompat.getColor(Gasolina.this, R.color.amarillo);
 
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
@@ -118,6 +126,10 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         ly_actividadGas = (LinearLayout) findViewById(R.id.ly_actividadGas);
         txtv_tipoComb = (TextView) findViewById(R.id.txtv_tipoComb);
         txtv_bloquesGas = (TextView) findViewById(R.id.txtv_bloquesGas);
+
+        LayoutInflater inflater = getLayoutInflater();
+        layout = inflater.inflate(R.layout.custome_toast, (ViewGroup) findViewById(R.id.toast_layout_root));
+        MensajeToast = (TextView) layout.findViewById(R.id.MensajeToast);
 
         LineHuerta=0;
         LineEmpresa=0;
@@ -392,6 +404,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     public void Habilitar(){
+        int backgroundAmarillo = ContextCompat.getColor(Gasolina.this, R.color.amarillo);
 
         //sin medidor VERDE
         if (Activo.equals("0958")||Activo.equals("0959")||Activo.equals("0967")||Activo.equals("0970")||Activo.equals("0976")||Activo.equals("0977")||Activo.equals("0979")||Activo.equals("0980")||Activo.equals("0981")||Activo.equals("0988")||Activo.equals("0990")||Activo.equals("0991")||Activo.equals("0992")||Activo.equals("0996")||Activo.equals("1000")||Activo.equals("1017")||Activo.equals("1031")||Activo.equals("1032")||Activo.equals("1033")||Activo.equals("1034")||Activo.equals("1037")||Activo.equals("1038")||Activo.equals("1056")||Activo.equals("1070")||Activo.equals("2001")||Activo.equals("2002")||Activo.equals("2003")
@@ -420,10 +433,13 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.VISIBLE);
             txtv_tipoComb.setVisibility(View.VISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Sin medidor", Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundColor(Color.YELLOW);
-            ToastMensaje.show();
+
+            MensajeToast.setText("Sin medidor");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+
         }
         //Kilometros AMARILLO
         if (Activo.equals("0001")||Activo.equals("0002")||Activo.equals("0003")||Activo.equals("0004")||Activo.equals("0005")||Activo.equals("0006")||Activo.equals("0007")||Activo.equals("0008")||Activo.equals("0009")||Activo.equals("0011")||Activo.equals("0013")||Activo.equals("0014")||Activo.equals("0015")||Activo.equals("0016")||Activo.equals("0024")||Activo.equals("0025")||Activo.equals("0026")||Activo.equals("0027")||Activo.equals("0028")||Activo.equals("0029")||Activo.equals("0032")||Activo.equals("0052")||Activo.equals("0601")||Activo.equals("0602")||Activo.equals("0603")||Activo.equals("0700")||Activo.equals("0702")
@@ -448,10 +464,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.VISIBLE);
             txtv_tipoComb.setVisibility(View.VISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Por favor, registra los kilometros", Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.color.amarillo);
-            ToastMensaje.show();
+            MensajeToast.setText("Por favor, registra los kilometros");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         }
         //Horometro NARANJA
         if (Activo.equals("0978")||Activo.equals("0987")||Activo.equals("0989")||Activo.equals("1001")||Activo.equals("1002")||Activo.equals("1003")||Activo.equals("1004")||Activo.equals("1005")||Activo.equals("1006")||Activo.equals("1007")||Activo.equals("1008")||Activo.equals("1009")||Activo.equals("1010")||Activo.equals("1011")||Activo.equals("1012")||Activo.equals("1028")||Activo.equals("1039")||Activo.equals("1040")||Activo.equals("1041")||Activo.equals("1042")||Activo.equals("1044")||Activo.equals("1049")||Activo.equals("1050")||Activo.equals("1052")||Activo.equals("1053")||Activo.equals("1057")||Activo.equals("1058")
@@ -473,10 +490,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.VISIBLE);
             txtv_tipoComb.setVisibility(View.VISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Por favor, registra el horometro", Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.color.amarillo);
-            ToastMensaje.show();
+            MensajeToast.setText("Por favor, registra el horometro");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         }
         //sin gasolina AZUL
         if (Activo.equals("0010")||Activo.equals("0012")||Activo.equals("0022")||Activo.equals("0701")||Activo.equals("0953")||Activo.equals("0960")||Activo.equals("0961")||Activo.equals("0962")||Activo.equals("0963")||Activo.equals("0964")||Activo.equals("0965")||Activo.equals("0968")||Activo.equals("0972")||Activo.equals("0973")||Activo.equals("0974")||Activo.equals("0975")||Activo.equals("0983")||Activo.equals("0984")||Activo.equals("0985")||Activo.equals("0986")||Activo.equals("6230")||Activo.equals("6231")||Activo.equals("0994")||Activo.equals("0995")||Activo.equals("0997")||Activo.equals("0998")||Activo.equals("0999")||Activo.equals("1013")||Activo.equals("1021")||Activo.equals("1022")||Activo.equals("1023")||Activo.equals("1026")||Activo.equals("1027")||Activo.equals("1029")||Activo.equals("1030")||Activo.equals("1061")||Activo.equals("1062")||Activo.equals("1063")||Activo.equals("1064")||Activo.equals("1065")||Activo.equals("1066")||Activo.equals("1067")||Activo.equals("1068")||Activo.equals("2027")||Activo.equals("2028")||Activo.equals("2029")||Activo.equals("2035")||Activo.equals("2036")||Activo.equals("2037")||Activo.equals("2038")||Activo.equals("2040")||Activo.equals("2042")||Activo.equals("2043")||Activo.equals("2045")||Activo.equals("2048")||Activo.equals("2049")||Activo.equals("2051")||Activo.equals("2053")||Activo.equals("2054")||Activo.equals("2055")||Activo.equals("2061")||Activo.equals("2062")
@@ -504,10 +522,11 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             ly_actividadGas.setVisibility(View.INVISIBLE);
             txtv_tipoComb.setVisibility(View.INVISIBLE);
 
-            Toast ToastMensaje = Toast.makeText(Gasolina.this, "Sin consumo de gasolina", Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-            //toastView.setBackgroundResource(R.color.amarillo);
-            ToastMensaje.show();
+            MensajeToast.setText("Sin consumo de gasolina");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         }
     }
 
@@ -633,10 +652,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             BD.close();
         }
         BD.close();
-
-        //String[] huerta = {"Huerta","La Fontana","Tepehuaje","Los Arroyos"};
-        //sp_huertaGas.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, huerta));
-
     }
 
     private void cargarActivo(){
@@ -800,7 +815,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 dialogo.setTitle("NO SE HA INGRESADO FOLIO");
                 dialogo.setMessage("No ha ingresado folio, si selecciona ACEPTAR se agregará el registro SIN FOLIO. \n   ¿Desea continuar?");
                 dialogo.setCancelable(true);
-                Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
+                //Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
                 dialogo.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -823,20 +838,25 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         registroGas.put("v_observaciones_gas", etxt_observacionesGas.getText().toString());
                         Log.e("Registro", registroGas.toString());
                         BD.insert("t_Consumo_Gasolina",null,registroGas);
-                        View toastView = ToastMensaje.getView();
-//                        toastView.setBackgroundResource(R.color.amarillo);
-                        ToastMensaje.show();
+
+                        MensajeToast.setText("Agregado a la Base de Datos");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout);
+                        toast.show();
 
                         limpiar();
                     }
                 });
-                Toast ToastMensaje2 = Toast.makeText(this,"Registra el Folio por favor",Toast.LENGTH_SHORT);
+                //Toast ToastMensaje2 = Toast.makeText(this,"Registra el Folio por favor",Toast.LENGTH_SHORT);
                 dialogo.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        View toastView = ToastMensaje2.getView();
-//                        toastView.setBackgroundResource(R.color.amarillo);
-                        ToastMensaje2.show();
+                        MensajeToast.setText("Registra el Folio por favor");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout);
+                        toast.show();
                     }
                 });
                 dialogo.show();
@@ -862,19 +882,21 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 Log.e("Registro", registroGas.toString());
                 BD.insert("t_Consumo_Gasolina",null,registroGas);
 
-                Toast ToastMensaje3 = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
-                View toastView = ToastMensaje3.getView();
-                //toastView.setBackgroundResource(R.color.amarillo);
-                ToastMensaje3.show();
+                MensajeToast.setText("Agregado a la Base de Datos");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
 
                 limpiar();
             }
 
         }else{
-            Toast ToastMensaje = Toast.makeText(this,Mensaje,Toast.LENGTH_SHORT);
-            View toastView = ToastMensaje.getView();
-//            toastView.setBackgroundResource(R.color.amarillo);
-            ToastMensaje.show();
+            MensajeToast.setText(Mensaje);
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         }
     }
 
@@ -884,7 +906,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         intento.putExtra("perfil", Perfil);
         intento.putExtra("huerta", Huerta);
 
-        //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
         startActivity(intento);
         finish();
     }

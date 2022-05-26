@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,11 +40,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
 
     TextView txtv_Activos;
     ListView lv_FechasIni,  lv_FechasFin;
-
-    /*
-    Fecha de creacion
-    Fecha de envio
-    */
+    TextView MensajeToast;
+    View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +55,17 @@ public class Enviar_Gasolina extends AppCompatActivity {
         FechasIni = new ArrayList<String>();
         FechasFin = new ArrayList<String>();
 
+        LayoutInflater inflater = getLayoutInflater();
+        layout = inflater.inflate(R.layout.custome_toast, (ViewGroup) findViewById(R.id.toast_layout_root));
+        MensajeToast = (TextView) layout.findViewById(R.id.MensajeToast);
+
         obj = new ConexionInternet(this);
         if (obj.isConnected()==false ) {
-            Toast.makeText(this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();
+            MensajeToast.setText("Es necesario una conexion a internet");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
             super.onBackPressed();
         }
         CargarDatos();
@@ -67,35 +74,45 @@ public class Enviar_Gasolina extends AppCompatActivity {
     private void CargarDatos() {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
-        Cursor Renglon = BD.rawQuery("select G.Id_ActivosGas, G.d_fechainicio_gas, G.d_fechafin_gas from t_Consumo_Gasolina as G", null);
+        Cursor Renglon = BD.rawQuery("select G.d_fechainicio_gas, G.d_fechafin_gas from t_Consumo_Gasolina as G", null);
+        Cursor Renglon2 = BD.rawQuery("select count() from t_Consumo_Gasolina", null);
+
+            if (Renglon2.moveToFirst()){
+                do{
+                    txtv_Activos.setText(Renglon2.getString(0));
+                }while (Renglon2.moveToNext());
+
+            }else{
+                MensajeToast.setText("No hay datos en t_Consumo_Gasolina guardados");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+            }
 
             if (Renglon.moveToFirst()) {
-                Log.e("move", String.valueOf(Renglon.getPosition()));
                 do {
-                    txtv_Activos.setText(Renglon.getString(0));
-                    //txtv_FechasIni.setText(Renglon.getString(1)+" - "+Renglon.getString(2));
-                    //txtv_FechasFin.setText(Renglon.getString(3)+" - "+Renglon.getString(4));
-                    FechasIni.add(Renglon.getString(1));
+                    FechasIni.add(Renglon.getString(0));
                     AdaptadorIni = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasIni);
                     lv_FechasIni.setAdapter(AdaptadorIni);
                     Log.e("Renglon------",FechasIni.toString());
-                    FechasFin.add(Renglon.getString(2));
+                    FechasFin.add(Renglon.getString(1));
                     AdaptadorFin = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasFin);
                     lv_FechasFin.setAdapter(AdaptadorFin);
                     Log.e("Renglon------",FechasFin.toString());
                 } while (Renglon.moveToNext());
             }else {
-                Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
-                View toastView = ToastMensaje.getView();
-//                toastView.setBackgroundResource(R.drawable.spinner_style);
- //               toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                ToastMensaje.show();BD.close();
+                MensajeToast.setText("No hay datos en t_Consumo_Gasolina guardados");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+                BD.close();
             }
 
         if (FechasIni.size()>0){
             AdaptadorIni = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,FechasIni);
             lv_FechasIni.setAdapter(AdaptadorIni);
-            Log.e("Renglon------",FechasFin.toString());
         }
     }
 
@@ -108,15 +125,22 @@ public class Enviar_Gasolina extends AppCompatActivity {
 
             if (Renglon.moveToFirst()) {
                 do {
-                    Toast.makeText(this, "va pal INSERT", Toast.LENGTH_SHORT).show();
                     insertWebGasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14),Renglon.getString(15),Renglon.getString(16));
                 } while (Renglon.moveToNext());
             } else {
-                Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
+                MensajeToast.setText("No hay datos guardados para enviar");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
             }
             BD.close();
         }else{
-            Toast.makeText(this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
+            MensajeToast.setText("Sin conexion a internet");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         }
         CargarDatos();
     }
@@ -240,7 +264,11 @@ public class Enviar_Gasolina extends AppCompatActivity {
                     int columnas = 0;
                     int RegistrosEnviados=0;
                     if (jsonobject.optString("resultado").equals("True")) {
-                        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+                        MensajeToast.setText("Registros Enviados con éxito!");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout);
+                        toast.show();
                         if (EliminaGasolina( d_fechacrea_gas, c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas, c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas)){
                             RegistrosEnviados++;
                         }
@@ -252,15 +280,27 @@ public class Enviar_Gasolina extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Gasolina.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            MensajeToast.setText("Fallo la conexion al servidor [OPENPEDINS]");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         } catch (IOException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Gasolina.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            MensajeToast.setText("Fallo la conexion al servidor [OPENPEDINS]");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         } catch (JSONException e) {
             e.printStackTrace();
             conn.disconnect();
-            Toast.makeText(Enviar_Gasolina.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            MensajeToast.setText("Fallo la conexion al servidor [OPENPEDINS]");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
         }
     }
 
@@ -268,7 +308,6 @@ public class Enviar_Gasolina extends AppCompatActivity {
         WifiManager ip= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String Cip= Formatter.formatIpAddress(ip.getConnectionInfo().getIpAddress());
         MyIp=Cip;
-        //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
     }
 
     private boolean EliminaGasolina(String d_fechacrea_gas, String c_folio_gas, String d_fechainicio_gas, String d_fechafin_gas, String c_codigo_eps, String Id_Huerta, String v_Bloques_gas, String Id_ActivosGas, String c_codigo_emp, String c_codigo_act, String v_cantingreso_gas, String v_cantsaldo_gas, String v_tipo_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
@@ -276,9 +315,9 @@ public class Enviar_Gasolina extends AppCompatActivity {
         SQLiteDatabase BD = SQLAdmin.getWritableDatabase();
         int cantidad;
         cantidad=0;
-        Log.e("aqui anda DELETE", d_fechacrea_gas);
         cantidad = BD.delete("t_Consumo_Gasolina", "d_fechacrea_gas='"+d_fechacrea_gas+"' and c_folio_gas='"+c_folio_gas+"' and d_fechainicio_gas='"+d_fechainicio_gas+"' and d_fechafin_gas='"+d_fechafin_gas+"' and c_codigo_eps='"+c_codigo_eps+"' and Id_Huerta='"+Id_Huerta+"' and v_Bloques_gas='"+v_Bloques_gas+"' and Id_ActivosGas='"+Id_ActivosGas+"' and c_codigo_emp='"+c_codigo_emp+"' and c_codigo_act='"+c_codigo_act+"' and v_cantingreso_gas='"+v_cantingreso_gas+"' and v_cantsaldo_gas='"+v_cantsaldo_gas+"' and v_tipo_gas='"+v_tipo_gas+"' and v_horometro_gas='"+v_horometro_gas+"' and v_kminicial_gas='"+v_kminicial_gas+"' and v_kmfinal_gas='"+v_kmfinal_gas+"' and v_observaciones_gas='"+v_observaciones_gas+"' ", null);
         CargarDatos();
+
         BD.close();
 
         if (cantidad > 0) {

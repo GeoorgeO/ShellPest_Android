@@ -6,10 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,6 +24,8 @@ public class Gasolina_Capturada extends AppCompatActivity {
     Itemgasolina Tabla;
     Adaptador_GridGasolina Adapter;
     ArrayList<Itemgasolina> arrayGas;
+    TextView MensajeToast;
+    View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,10 @@ public class Gasolina_Capturada extends AppCompatActivity {
         lv_GridGasolina = (ListView) findViewById(R.id.lv_GridGasolina);
 
         arrayGas = new ArrayList<>();
+
+        LayoutInflater inflater = getLayoutInflater();
+        layout = inflater.inflate(R.layout.custome_toast, (ViewGroup) findViewById(R.id.toast_layout_root));
+        MensajeToast = (TextView) layout.findViewById(R.id.MensajeToast);
 
         cargaGrid();
 
@@ -44,7 +53,7 @@ public class Gasolina_Capturada extends AppCompatActivity {
     }
 
     public void cerrar(View view){
-        this.onBackPressed();
+        super.onBackPressed();
     }
 
     private void cargaGrid(){
@@ -82,11 +91,11 @@ public class Gasolina_Capturada extends AppCompatActivity {
                 } while (Renglon.moveToNext());
                 BD.close();
             } else {
-                Toast ToastMensaje = Toast.makeText(this,"No hay datos en t_Consumo_Gasolina guardados",Toast.LENGTH_SHORT);
-                View toastView = ToastMensaje.getView();
-                //toastView.setBackgroundResource(R.drawable.spinner_style);
-                //toastView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                ToastMensaje.show();
+                MensajeToast.setText("No hay datos en t_Consumo_Gasolina guardados");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
                 BD.close();
             }
         }
