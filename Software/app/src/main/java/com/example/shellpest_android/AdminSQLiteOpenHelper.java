@@ -498,6 +498,25 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "v_kmfinal_gas text not null," +
                 "v_observaciones_gas text)");
 
+        BD.execSQL("create table t_Eliminados_Gasolina"+
+                "(d_fechacrea_gas text not null,"+
+                "c_folio_gas text," +
+                "d_fechainicio_gas text not null,"+
+                "d_fechafin_gas text not null," +
+                "c_codigo_eps text not null," +
+                "Id_Huerta text not null," +
+                "v_Bloques_gas text not null," +
+                "Id_ActivosGas text not null," +
+                "c_codigo_emp text not null," +
+                "c_codigo_act text not null," +
+                "v_cantingreso_gas text not null," +
+                "v_cantsaldo_gas text not null," +
+                "v_tipo_gas text not null," +
+                "v_horometro_gas text not null," +
+                "v_kminicial_gas text not null," +
+                "v_kmfinal_gas text not null," +
+                "v_observaciones_gas text)");
+
     }
 
     @Override
@@ -555,6 +574,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Fertiliza");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Fertiliza_Det");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Consumo_Gasolina");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Eliminados_Gasolina");
 
         onCreate(sqLiteDatabase);
     }

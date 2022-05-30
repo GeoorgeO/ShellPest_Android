@@ -281,9 +281,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 cargarActividad();
                 Adaptador_Arreglos = new ArrayAdapter(Gasolina.this, android.R.layout.simple_list_item_1,ArrayActividades);
                 actxt_actividadGas.setAdapter(Adaptador_Arreglos);
-
             }
-
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -724,13 +722,13 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
         String tipogas=CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto().replace("-", "");
        String Mensaje = "";
-       if (Verde == true){
+       if (Verde == true){//sin medidor
            Log.e("Verde",Verde.toString());
            etxt_horometroGas.setText("00:00");
            etxt_kminiGas.setText("0.0");
            etxt_kmfinGas.setText("0.0");
        }//fin VERDE
-        if (Amarillo == true){
+        if (Amarillo == true){//kilometraje
             Log.e("Amarillo",Amarillo.toString());
             etxt_horometroGas.setText("00:00");
             if (etxt_kmfinGas.getText().length() > 0){ }else{
@@ -741,7 +739,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 Mensaje = "Falta ingresar KILOMETROS INICIALES, Verifica por favor.";
             }
         }//fin Amarillo
-        if (Naranja == true){
+        if (Naranja == true){//horometro
             Log.e("Naranja",Naranja.toString());
             etxt_kminiGas.setText("0.0");
             etxt_kmfinGas.setText("0.0");
@@ -784,7 +782,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }if (etxt_fechafinGas.getText().length() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar FECHA SALIDA, Verifica por favor.";
-        }if(etxt_fechainiGas.getText().length() > 0){ }else{
+        }
+        if(etxt_fechainiGas.getText().length() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar FECHA INGRESO, Verifica por favor.";
         }if (etxt_folioGas.getText().length() > 0){ }else{
@@ -815,8 +814,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 dialogo.setTitle("NO SE HA INGRESADO FOLIO");
                 dialogo.setMessage("No ha ingresado folio, si selecciona ACEPTAR se agregará el registro SIN FOLIO. \n   ¿Desea continuar?");
                 dialogo.setCancelable(true);
-                //Toast ToastMensaje = Toast.makeText(this,"Agregado a la Base de Datos",Toast.LENGTH_SHORT);
-                dialogo.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+               dialogo.setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         registroGas.put("d_fechacrea_gas",objSDF.format(date).replace("/",""));
@@ -848,7 +846,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         limpiar();
                     }
                 });
-                //Toast ToastMensaje2 = Toast.makeText(this,"Registra el Folio por favor",Toast.LENGTH_SHORT);
                 dialogo.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

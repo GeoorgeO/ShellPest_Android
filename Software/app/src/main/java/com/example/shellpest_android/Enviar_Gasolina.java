@@ -90,13 +90,18 @@ public class Enviar_Gasolina extends AppCompatActivity {
                 toast.show();
             }
 
+            String diaini,mesini,anoini, diafin,mesfin,anofin;
             if (Renglon.moveToFirst()) {
                 do {
-                    FechasIni.add(Renglon.getString(0));
+                    String fechaIni=Renglon.getString(0), fechaFin=Renglon.getString(1);
+                    anoini=fechaIni.substring(6);mesini=fechaIni.substring(2,4);diaini=fechaIni.substring(0,2);
+                    anofin=fechaFin.substring(6);mesfin=fechaFin.substring(2,4);diafin =fechaFin.substring(0,2);
+                    FechasIni.add(diaini+"/"+mesini+"/"+anoini);
                     AdaptadorIni = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasIni);
                     lv_FechasIni.setAdapter(AdaptadorIni);
                     Log.e("Renglon------",FechasIni.toString());
-                    FechasFin.add(Renglon.getString(1));
+
+                    FechasFin.add(diafin+"/"+mesfin+"/"+anofin);
                     AdaptadorFin = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, FechasFin);
                     lv_FechasFin.setAdapter(AdaptadorFin);
                     Log.e("Renglon------",FechasFin.toString());
@@ -186,15 +191,7 @@ public class Enviar_Gasolina extends AppCompatActivity {
         }
 
         String diaCrea,mesCrea,anoCrea,diaFI, mesFI,anoFI,diaFF,mesFF,anoFF;
-        anoCrea=d_fechacrea_gas.substring(6);
-        mesCrea=d_fechacrea_gas.substring(2,4);
-        diaCrea=d_fechacrea_gas.substring(0,2);
-        anoFI=d_fechainicio_gas.substring(6);
-        mesFI=d_fechainicio_gas.substring(2,4);
-        diaFI=d_fechainicio_gas.substring(0,2);
-        anoFF=d_fechafin_gas.substring(6);
-        mesFF=d_fechafin_gas.substring(2,4);
-        diaFF=d_fechafin_gas.substring(0,2);
+        anoCrea=d_fechacrea_gas.substring(6);mesCrea=d_fechacrea_gas.substring(2,4);diaCrea=d_fechacrea_gas.substring(0,2);anoFI=d_fechainicio_gas.substring(6);mesFI=d_fechainicio_gas.substring(2,4);diaFI=d_fechainicio_gas.substring(0,2);anoFF=d_fechafin_gas.substring(6);mesFF=d_fechafin_gas.substring(2,4);diaFF=d_fechafin_gas.substring(0,2);
 
         Obtener_Ip();
         String Liga = "";
