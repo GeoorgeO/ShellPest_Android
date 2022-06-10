@@ -1,27 +1,18 @@
 package com.example.shellpest_android;
 
-import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.ClipData;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,25 +23,17 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import kotlinx.coroutines.ObsoleteCoroutinesApi;
 
 public class Gasolina extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,8 +45,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     AutoCompleteTextView actxt_actividadGas;
 
-    EditText etxt_folioGas, etxt_fechainiGas, etxt_fechafinGas, etxt_cantidadiniGas,
-            etxt_cantidadsaldoGas, etxt_kminiGas, etxt_kmfinGas, etxt_horometroGas, etxt_observacionesGas;
+    EditText etxt_folioGas, etxt_fechaingresoGas, etxt_cantidadutiliGas,
+             etxt_kminiGas, etxt_kmfinGas, etxt_horometroGas, etxt_observacionesGas;
     Button btn_agregarGas;
 
     TableRow tr_kminiT, tr_kmfinT, tr_hrT;
@@ -94,8 +77,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_gasolina);
         getSupportActionBar().hide();
 
-        int backgroundAmarillo = ContextCompat.getColor(Gasolina.this, R.color.amarillo);
-
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
         Huerta = getIntent().getStringExtra("huerta2");
@@ -105,12 +86,9 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         solounaHuerta = false;
 
         etxt_folioGas = (EditText) findViewById(R.id.etxt_folioGas);
-        etxt_fechainiGas = (EditText) findViewById(R.id.etxt_fechainiGas);
-        etxt_fechainiGas.setOnClickListener(this::onClick);
-        etxt_fechafinGas = (EditText) findViewById(R.id.etxt_fechafinGas);
-        etxt_fechafinGas.setOnClickListener(this::onClick);
-        etxt_cantidadiniGas = (EditText) findViewById(R.id.etxt_cantidadiniGas);
-        etxt_cantidadsaldoGas = (EditText) findViewById(R.id.etxt_cantidadsaldoGas);
+        etxt_fechaingresoGas = (EditText) findViewById(R.id.etxt_fechaingresoGas);
+        etxt_fechaingresoGas.setOnClickListener(this::onClick);
+        etxt_cantidadutiliGas = (EditText) findViewById(R.id.etxt_cantidadutiliGas);
         etxt_kminiGas = (EditText) findViewById(R.id.etxt_kminiGas);
         etxt_kmfinGas = (EditText) findViewById(R.id.etxt_kmfinGas);
         etxt_horometroGas = (EditText) findViewById(R.id.etxt_horometroGas);
@@ -141,17 +119,13 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
         Date date1 = objDate;
 
-        etxt_fechainiGas.setText("");
-        etxt_fechainiGas.setInputType(InputType.TYPE_NULL);
-        etxt_fechainiGas.requestFocus();
+        etxt_fechaingresoGas.setText("");
+        etxt_fechaingresoGas.setInputType(InputType.TYPE_NULL);
+        etxt_fechaingresoGas.requestFocus();
 
         Date objDate2 = new Date();
         SimpleDateFormat objSDF2 = new SimpleDateFormat("dd/MM/yyyy");
         Date date2 = objDate2;
-
-        etxt_fechafinGas.setText("");
-        etxt_fechafinGas.setInputType(InputType.TYPE_NULL);
-        etxt_fechafinGas.requestFocus();
 
         sp_responsableGas = (Spinner)findViewById(R.id.sp_responsableGas);
         sp_empresaGas = (Spinner)findViewById(R.id.sp_empresaGas);
@@ -161,7 +135,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
 
         cargarEmpresa();
-        Toast.makeText(this, "CARGA EMPRESA", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "CARGA EMPRESA", Toast.LENGTH_SHORT).show();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
         sp_empresaGas.setAdapter(CopiEmp);
 
@@ -208,14 +182,6 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                         }
                     }
                 }
-
-                if(i>0){
-                    //cargaGrid();
-                }else{
-                    //lv_GridGasolina.setAdapter(null);
-                    //arrayGas.clear();
-                }
-
                 LineEmpresa = i;
             }
 
@@ -424,8 +390,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             tr_kmfinT.setVisibility(View.INVISIBLE);
             tr_hrT.setVisibility(View.INVISIBLE);
             actxt_actividadGas.setVisibility(View.VISIBLE);
-            etxt_cantidadiniGas.setVisibility(View.VISIBLE);
-            etxt_cantidadsaldoGas.setVisibility(View.VISIBLE);
+            etxt_cantidadutiliGas.setVisibility(View.VISIBLE);
             sp_tipoGas.setVisibility(View.VISIBLE);
             ly_cantidadGas.setVisibility(View.VISIBLE);
             ly_actividadGas.setVisibility(View.VISIBLE);
@@ -455,8 +420,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             tr_kmfinT.setVisibility(View.VISIBLE);
             tr_hrT.setVisibility(View.INVISIBLE);
             actxt_actividadGas.setVisibility(View.VISIBLE);
-            etxt_cantidadiniGas.setVisibility(View.VISIBLE);
-            etxt_cantidadsaldoGas.setVisibility(View.VISIBLE);
+            etxt_cantidadutiliGas.setVisibility(View.VISIBLE);
             sp_tipoGas.setVisibility(View.VISIBLE);
             ly_cantidadGas.setVisibility(View.VISIBLE);
             ly_actividadGas.setVisibility(View.VISIBLE);
@@ -481,8 +445,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             tr_kmfinT.setVisibility(View.INVISIBLE);
             tr_hrT.setVisibility(View.VISIBLE);
             actxt_actividadGas.setVisibility(View.VISIBLE);
-            etxt_cantidadiniGas.setVisibility(View.VISIBLE);
-            etxt_cantidadsaldoGas.setVisibility(View.VISIBLE);
+            etxt_cantidadutiliGas.setVisibility(View.VISIBLE);
             sp_tipoGas.setVisibility(View.VISIBLE);
             ly_cantidadGas.setVisibility(View.VISIBLE);
             ly_actividadGas.setVisibility(View.VISIBLE);
@@ -513,8 +476,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             tr_kmfinT.setVisibility(View.INVISIBLE);
             tr_hrT.setVisibility(View.INVISIBLE);
             actxt_actividadGas.setVisibility(View.INVISIBLE);
-            etxt_cantidadiniGas.setVisibility(View.INVISIBLE);
-            etxt_cantidadsaldoGas.setVisibility(View.INVISIBLE);
+            etxt_cantidadutiliGas.setVisibility(View.INVISIBLE);
             sp_tipoGas.setVisibility(View.INVISIBLE);
             ly_cantidadGas.setVisibility(View.INVISIBLE);
             ly_actividadGas.setVisibility(View.INVISIBLE);
@@ -529,25 +491,14 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
     }
 
     public void onClick(View view) {
-        if(view==etxt_fechainiGas){
+        if(view==etxt_fechaingresoGas){
             final Calendar c=Calendar.getInstance();
             Date objDate = new Date();
             dia=c.get(Calendar.DAY_OF_MONTH);
             mes=c.get(Calendar.MONTH);
             anio=c.get(Calendar.YEAR);
 
-            DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> etxt_fechainiGas.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
-            dtpd.show();
-        }
-
-        if(view==etxt_fechafinGas){
-            final Calendar c=Calendar.getInstance();
-            Date objDate = new Date();
-            dia=c.get(Calendar.DAY_OF_MONTH);
-            mes=c.get(Calendar.MONTH);
-            anio=c.get(Calendar.YEAR);
-
-            DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> etxt_fechafinGas.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
+            DatePickerDialog dtpd=new DatePickerDialog(this, (datePicker, i, i1, i2) -> etxt_fechaingresoGas.setText(rellenarCeros(String.valueOf(i2),2)+"/"+rellenarCeros(String.valueOf((i1+1)),2)+"/"+i),anio,mes,dia);
             dtpd.show();
         }
     }
@@ -645,8 +596,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                 ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2)));
             }while(Renglon.moveToNext());
         }else{
-            Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);
-            ToastMensaje.show();
+            /*Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);
+            ToastMensaje.show();*/
             BD.close();
         }
         BD.close();
@@ -718,8 +669,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     public void agregarDatos (View view){
        boolean Falta = false, FaltaFolio = false;
-        String fechaini=etxt_fechainiGas.getText().toString().replace("/","");
-        String fechafin=etxt_fechafinGas.getText().toString().replace("/","");
+        String fechaini=etxt_fechaingresoGas.getText().toString().replace("/","");
         String tipogas=CopiTipo.getItem(sp_tipoGas.getSelectedItemPosition()).getTexto().replace("-", "");
        String Mensaje = "";
        if (Verde == true){//sin medidor
@@ -754,10 +704,7 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }if (sp_tipoGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar TIPO, Verifica por favor.";
-        }if (etxt_cantidadsaldoGas.getText().length() > 0){ }else{
-            Falta = true;
-            Mensaje = "Falta ingresar CANTIDAD SALDO, Verifica por favor.";
-        }if (etxt_cantidadiniGas.getText().length() > 0){ }else{
+        }if (etxt_cantidadutiliGas.getText().length() > 0){ }else{
             Falta = true;
             Mensaje = "Falta ingresar CANTIDAD INICIAL, Verifica por favor.";
         }if (actxt_actividadGas.getText().length() > 0){ }else {
@@ -779,11 +726,8 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
         }if(sp_empresaGas.getSelectedItemPosition() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar EMPRESA, Verifica por favor.";
-        }if (etxt_fechafinGas.getText().length() > 0){ }else{
-            Falta = true;
-            Mensaje = "Falta seleccionar FECHA SALIDA, Verifica por favor.";
         }
-        if(etxt_fechainiGas.getText().length() > 0){ }else{
+        if(etxt_fechaingresoGas.getText().length() > 0){ }else{
             Falta = true;
             Mensaje = "Falta seleccionar FECHA INGRESO, Verifica por favor.";
         }if (etxt_folioGas.getText().length() > 0){ }else{
@@ -819,16 +763,14 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
                     public void onClick(DialogInterface dialog, int which) {
                         registroGas.put("d_fechacrea_gas",objSDF.format(date).replace("/",""));
                         registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
-                        registroGas.put("d_fechainicio_gas", fechaini);
-                        registroGas.put("d_fechafin_gas", fechafin);
+                        registroGas.put("d_fechaconsumo_gas", fechaini);
                         registroGas.put("c_codigo_eps", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2));//c_codigo_eps
                         registroGas.put("Id_Huerta", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto().substring(0,5));//Id_Huerta
                         registroGas.put("v_Bloques_gas", txtv_bloquesGas.getText().toString().trim());
                         registroGas.put("Id_ActivosGas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto().substring(0,4));//Id_ActivosGas
                         registroGas.put("c_codigo_emp",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto().substring(0,6));//c_codigo_emp
                         registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
-                        registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
-                        registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
+                        registroGas.put("v_cantutilizada_gas", etxt_cantidadutiliGas.getText().toString());
                         registroGas.put("v_tipo_gas", tipogas);
                         registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
                         registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
@@ -861,16 +803,14 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
             }else{
                 registroGas.put("d_fechacrea_gas",objSDF.format(date).replace("/",""));
                 registroGas.put("c_folio_gas", etxt_folioGas.getText().toString());
-                registroGas.put("d_fechainicio_gas", fechaini);
-                registroGas.put("d_fechafin_gas", fechafin);
+                registroGas.put("d_fechaconsumo_gas", fechaini);
                 registroGas.put("c_codigo_eps", CopiEmp.getItem(sp_empresaGas.getSelectedItemPosition()).getTexto().substring(0,2));//c_codigo_eps
                 registroGas.put("Id_Huerta", CopiHue.getItem(sp_huertaGas.getSelectedItemPosition()).getTexto().substring(0,5));//Id_Huerta
                 registroGas.put("v_Bloques_gas", txtv_bloquesGas.getText().toString().trim());
                 registroGas.put("Id_ActivosGas", CopiActivo.getItem(sp_activoGas.getSelectedItemPosition()).getTexto().substring(0,4));//Id_ActivosGas
                 registroGas.put("c_codigo_emp",CopiResp.getItem(sp_responsableGas.getSelectedItemPosition()).getTexto().substring(0,6));//c_codigo_emp
                 registroGas.put("c_codigo_act", actxt_actividadGas.getText().toString().substring(0,4));//c_codigo_act
-                registroGas.put("v_cantingreso_gas", etxt_cantidadiniGas.getText().toString());
-                registroGas.put("v_cantsaldo_gas", etxt_cantidadsaldoGas.getText().toString());
+                registroGas.put("v_cantutilizada_gas", etxt_cantidadutiliGas.getText().toString());
                 registroGas.put("v_tipo_gas", tipogas);
                 registroGas.put("v_horometro_gas", etxt_horometroGas.getText().toString());
                 registroGas.put("v_kminicial_gas", etxt_kminiGas.getText().toString());
@@ -939,20 +879,21 @@ public class Gasolina extends AppCompatActivity implements View.OnClickListener 
 
     private void limpiar(){
         etxt_folioGas.setText("");
-        etxt_fechainiGas.setText("");
-        etxt_fechafinGas.setText("");
+        etxt_fechaingresoGas.setText("");
         sp_empresaGas.setSelection(0);
         sp_huertaGas.setSelection(0);
         txtv_bloquesGas.setText("");
         sp_activoGas.setSelection(0);
         sp_responsableGas.setSelection(0);
         actxt_actividadGas.setText("");
-        etxt_cantidadiniGas.setText("");
-        etxt_cantidadsaldoGas.setText("");
+        etxt_cantidadutiliGas.setText("");
         sp_tipoGas.setSelection(0);
         etxt_observacionesGas.setText("");
         etxt_horometroGas.setText("");
         etxt_kminiGas.setText("");
         etxt_kmfinGas.setText("");
     }
+
+
+
 }

@@ -1,24 +1,22 @@
 package com.example.shellpest_android;
 
 public class Itemgasolina {
-    private String d_fechacrea_gas, c_folio_gas, d_fechainicio_gas, d_fechafin_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas,
-            c_codigo_emp, c_codigo_act, v_cantingreso_gas, v_cantsaldo_gas, v_tipo_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas;
+    private String d_fechacrea_gas, c_folio_gas, d_fechaconsumo_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas,
+         c_codigo_emp, c_codigo_act, v_tipo_gas, v_cantutilizada_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas;
 
-    public Itemgasolina(String d_fechacrea_gas, String c_folio_gas, String d_fechainicio_gas, String d_fechafin_gas, String c_codigo_eps, String Id_Huerta, String v_Bloques_gas, String Id_ActivosGas,
-                        String c_codigo_emp, String c_codigo_act, String v_cantingreso_gas, String v_cantsaldo_gas, String v_tipo_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
+    public Itemgasolina(String d_fechacrea_gas, String c_folio_gas, String d_fechaconsumo_gas, String c_codigo_eps, String Id_Huerta, String v_Bloques_gas, String Id_ActivosGas,
+                        String c_codigo_emp, String c_codigo_act, String v_tipo_gas, String v_cantutilizada_gas, String v_horometro_gas, String v_kminicial_gas, String v_kmfinal_gas, String v_observaciones_gas){
 
         this.d_fechacrea_gas = d_fechacrea_gas;
         this.c_folio_gas = c_folio_gas;
-        this.d_fechainicio_gas = d_fechainicio_gas;
-        this.d_fechafin_gas = d_fechafin_gas;
+        this.d_fechaconsumo_gas = d_fechaconsumo_gas;
         this.c_codigo_eps = c_codigo_eps;
         this.Id_Huerta = Id_Huerta;
         this.v_Bloques_gas = v_Bloques_gas;
         this.Id_ActivosGas = Id_ActivosGas;
         this.c_codigo_emp = c_codigo_emp;
         this.c_codigo_act = c_codigo_act;
-        this.v_cantingreso_gas = v_cantingreso_gas;
-        this.v_cantsaldo_gas = v_cantsaldo_gas;
+        this.v_cantutilizada_gas = v_cantutilizada_gas;
         this.v_tipo_gas = v_tipo_gas;
         this.v_horometro_gas = v_horometro_gas;
         this.v_kminicial_gas = v_kminicial_gas;
@@ -42,20 +40,12 @@ public class Itemgasolina {
         this.c_folio_gas = c_folio_gas;
     }
 
-    public String getD_fechainicio_gas() {
-        return d_fechainicio_gas;
+    public String getD_fechaconsumo_gas() {
+        return d_fechaconsumo_gas;
     }
 
-    public void setD_fechainicio_gas(String d_fechainicio_gas) {
-        this.d_fechainicio_gas = d_fechainicio_gas;
-    }
-
-    public String getD_fechafin_gas() {
-        return d_fechafin_gas;
-    }
-
-    public void setD_fechafin_gas(String d_fechafin_gas) {
-        this.d_fechafin_gas = d_fechafin_gas;
+    public void setD_fechaconsumo_gas(String d_fechaconsumo_gas) {
+        this.d_fechaconsumo_gas = d_fechaconsumo_gas;
     }
 
     public String getC_codigo_eps() {
@@ -106,20 +96,12 @@ public class Itemgasolina {
         this.c_codigo_act = c_codigo_act;
     }
 
-    public String getV_cantingreso_gas() {
-        return v_cantingreso_gas;
+    public String getV_cantutilizada_gas() {
+        return v_cantutilizada_gas;
     }
 
-    public void setV_cantingreso_gas(String v_cantingreso_gas) {
-        this.v_cantingreso_gas = v_cantingreso_gas;
-    }
-
-    public String getV_cantsaldo_gas() {
-        return v_cantsaldo_gas;
-    }
-
-    public void setV_cantsaldo_gas(String v_cantsaldo_gas) {
-        this.v_cantsaldo_gas = v_cantsaldo_gas;
+    public void setV_cantutilizada_gas(String v_cantutilizada_gas) {
+        this.v_cantutilizada_gas = v_cantutilizada_gas;
     }
 
     public String getV_tipo_gas() {

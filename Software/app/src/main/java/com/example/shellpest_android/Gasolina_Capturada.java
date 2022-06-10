@@ -24,6 +24,7 @@ import java.util.Date;
 
 public class Gasolina_Capturada extends AppCompatActivity {
 
+    String Usuario,Perfil,Huerta;
     ListView lv_GridGasolina;
 
     Itemgasolina Tabla;
@@ -41,6 +42,10 @@ public class Gasolina_Capturada extends AppCompatActivity {
         lv_GridGasolina = (ListView) findViewById(R.id.lv_GridGasolina);
 
         arrayGas = new ArrayList<>();
+
+        Usuario = getIntent().getStringExtra("usuario");
+        Perfil = getIntent().getStringExtra("perfil");
+        Huerta = getIntent().getStringExtra("huerta");
 
         LayoutInflater inflater = getLayoutInflater();
         layout = inflater.inflate(R.layout.custome_toast, (ViewGroup) findViewById(R.id.toast_layout_root));
@@ -66,28 +71,19 @@ public class Gasolina_Capturada extends AppCompatActivity {
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Gasolina_Capturada.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
 
-                        Cursor RenglonElimGas =BD.rawQuery("select G.d_fechacrea_gas,\n" +
-                                "\tG.c_folio_gas,\n"+
-                                "\tG.d_fechainicio_gas,\n"+
-                                "\tG.d_fechafin_gas,\n"+
-                                "\tG.c_codigo_eps,\n"+
-                                "\tG.Id_Huerta,\n"+
-                                "\tG.v_Bloques_gas,\n"+
-                                "\tG.Id_ActivosGas,\n"+
-                                "\tG.c_codigo_emp,\n"+
-                                "\tG.c_codigo_act,\n"+
-                                "\tG.v_cantingreso_gas,\n"+
-                                "\tG.v_cantsaldo_gas,\n"+
-                                "\tG.v_tipo_gas,\n"+
-                                "\tG.v_horometro_gas,\n"+
-                                "\tG.v_kminicial_gas,\n"+
-                                "\tG.v_kmfinal_gas,\n"+
-                                "\tG.v_observaciones_gas \n"+
-                                "from t_Consumo_Gasolina as G",null);
+                        Log.e("ANTES DEL RENGLON ","ELIMGAS");
 
+                        Cursor RenglonElimGas = BD.rawQuery("select d_fechacrea_gas, c_folio_gas, d_fechaconsumo_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas,\n" +
+                                " c_codigo_emp, c_codigo_act, v_tipo_gas, v_cantutilizada_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas "+
+                                " from t_Consumo_Gasolina " +
+                                " where d_fechaconsumo_gas='"+arrayGas.get(i).getD_fechaconsumo_gas()+"' and Id_ActivosGas='"+arrayGas.get(i).getId_ActivosGas()+"'",null);
+
+                        Log.e("antes renglonmov", RenglonElimGas.toString());
 
                         if (RenglonElimGas.moveToFirst()){
+                            Log.e("Renglon movfirst", RenglonElimGas.toString());
                             ContentValues registrosEGas = new ContentValues();
+                            Log.e("registrosEgas", registrosEGas.toString());
                             do{
                                 registrosEGas.put("d_fechacrea_gas",RenglonElimGas.getString(0));
                                 registrosEGas.put("c_folio_gas", RenglonElimGas.getString(1));
@@ -109,9 +105,8 @@ public class Gasolina_Capturada extends AppCompatActivity {
                                 BD.insert("t_Eliminados_Gasolina",null,registrosEGas);
                                 Log.e("Renglon eliminar", registrosEGas.toString());
 
-                                int cantidad= BD.delete("t_Consumo_Gasolina","d_fechainicio_gas='"+arrayGas.get(i).getD_fechainicio_gas()+
-                                        "' and d_fechafin_gas='"+arrayGas.get(i).getD_fechafin_gas()+
-                                        "' and  Id_ActivosGas='"+arrayGas.get(i).getId_ActivosGas()+"'",null);
+                                int cantidad= BD.delete("t_Consumo_Gasolina"," d_fechaconsumo_gas='"+arrayGas.get(i).getD_fechaconsumo_gas()+"' and Id_ActivosGas='"+arrayGas.get(i).getId_ActivosGas()+"'",null);
+                                Log.e("delete", String.valueOf(cantidad));
 
                                 if(cantidad>0){
 
@@ -120,8 +115,7 @@ public class Gasolina_Capturada extends AppCompatActivity {
                                 }
                             }while(RenglonElimGas.moveToNext());
                         }else{
-
-                        }
+                            }
                         BD.close();
                         cargaGrid();
                     }
@@ -151,27 +145,35 @@ public class Gasolina_Capturada extends AppCompatActivity {
 
         Cursor Renglon =BD.rawQuery("select G.d_fechacrea_gas,\n" +
                 "\tG.c_folio_gas,\n"+
-                "\tG.d_fechainicio_gas,\n"+
-                "\tG.d_fechafin_gas,\n"+
+                "\tG.d_fechaconsumo_gas,\n"+
                 "\tG.c_codigo_eps,\n"+
                 "\tG.Id_Huerta,\n"+
                 "\tG.v_Bloques_gas,\n"+
                 "\tG.Id_ActivosGas,\n"+
                 "\tG.c_codigo_emp,\n"+
                 "\tG.c_codigo_act,\n"+
-                "\tG.v_cantingreso_gas,\n"+
-                "\tG.v_cantsaldo_gas,\n"+
                 "\tG.v_tipo_gas,\n"+
+                "\tG.v_cantutilizada_gas,\n"+
                 "\tG.v_horometro_gas,\n"+
                 "\tG.v_kminicial_gas,\n"+
                 "\tG.v_kmfinal_gas,\n"+
-                "\tG.v_observaciones_gas \n"+
-                "from t_Consumo_Gasolina as G",null);
+                "\tG.v_observaciones_gas \n" +
+                " from t_Consumo_Gasolina as G",null);
+
+
+        int i = 0;
+        String diaini,mesini,anoini;
 
         if(Renglon.moveToFirst()) {
             if (Renglon.moveToFirst()) {
                 do {
-                    Tabla=new Itemgasolina(Renglon.getString(0),Renglon.getString(1),Renglon.getString(2),Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14),Renglon.getString(15),Renglon.getString(16));
+                    i++;
+                    Log.e("CONTADOR: ",String.valueOf(i));
+                    String fechaIni = Renglon.getString(2);
+                    anoini=fechaIni.substring(6);
+                    mesini=fechaIni.substring(2,4);
+                    diaini=fechaIni.substring(0,2);
+                    Tabla = new Itemgasolina(Renglon.getString(0),Renglon.getString(1),diaini+"/"+mesini+"/"+anoini,Renglon.getString(3),Renglon.getString(4),Renglon.getString(5),Renglon.getString(6),Renglon.getString(7),Renglon.getString(8),Renglon.getString(9),Renglon.getString(10),Renglon.getString(11),Renglon.getString(12),Renglon.getString(13),Renglon.getString(14));
                     arrayGas.add(Tabla);
                     Log.e("array GAS", arrayGas.toString());
                 } while (Renglon.moveToNext());

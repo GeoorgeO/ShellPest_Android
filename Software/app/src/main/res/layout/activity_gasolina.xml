@@ -89,7 +89,7 @@
 
             <TextView
                 android:id="@+id/textView84"
-                android:layout_width="wrap_content"
+                android:layout_width="112dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingRight="5dp"
@@ -99,8 +99,8 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/etxt_fechainiGas"
-                android:layout_width="105dp"
+                android:id="@+id/etxt_fechaingresoGas"
+                android:layout_width="179dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="dd / mm / aa"
@@ -112,30 +112,6 @@
                 android:textColorLink="@color/verde"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/textView85"
-                android:layout_width="91dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Fecha Salida"
-                android:textColor="@color/cafe"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/etxt_fechafinGas"
-                android:layout_width="112dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="dd / mm / aa"
-                android:inputType="date"
-                android:textColor="@color/verde_azul"
-                android:textColorHighlight="@color/verde"
-                android:textColorHint="@color/verde"
-                android:textColorLink="@color/verde_azul"
-                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -213,6 +189,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:hint="Selecciona Bloques"
+                android:paddingLeft="5dp"
                 android:textColor="@color/verde_azul"
                 android:textColorHighlight="@color/verde"
                 android:textColorHint="@color/verde"
@@ -314,7 +291,7 @@
 
             <TextView
                 android:id="@+id/txtv_tipoComb"
-                android:layout_width="18dp"
+                android:layout_width="77dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -342,17 +319,18 @@
 
             <TextView
                 android:id="@+id/textView86"
-                android:layout_width="70dp"
+                android:layout_width="128dp"
                 android:layout_height="match_parent"
-                android:text="Cantidad Ingreso:"
+                android:gravity="center"
+                android:text="Cantidad Utilizada:"
                 android:textAlignment="center"
                 android:textColor="@color/cafe"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/etxt_cantidadiniGas"
-                android:layout_width="79dp"
+                android:id="@+id/etxt_cantidadutiliGas"
+                android:layout_width="134dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="0.0"
@@ -372,40 +350,6 @@
                 android:text="lt"
                 android:textColor="#000000" />
 
-            <TextView
-                android:id="@+id/textView88"
-                android:layout_width="52dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Cantidad Saldo:"
-                android:textAlignment="center"
-                android:textColor="@color/cafe"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/etxt_cantidadsaldoGas"
-                android:layout_width="79dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="0.0"
-                android:inputType="numberDecimal"
-                android:paddingLeft="10sp"
-                android:textColor="@color/verde_azul"
-                android:textColorHighlight="@color/verde"
-                android:textColorHint="@color/verde"
-                android:textColorLink="@color/verde_azul"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textView89"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="lt"
-                android:textColor="@color/black" />
         </LinearLayout>
 
 

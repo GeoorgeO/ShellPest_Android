@@ -100,7 +100,7 @@ public class Aplicaciones extends AppCompatActivity {
 	 public void Gasolina(View view){
         Intent intento=null;
         if (Accion.equals("CAPTURA")){
-            intento=new Intent(this,Gasolina.class);
+            intento=new Intent(this,Entradas_Gasolina.class);
             intento.putExtra("usuario2", Usuario);
             intento.putExtra("perfil2", Perfil);
             intento.putExtra("huerta2", Huerta);

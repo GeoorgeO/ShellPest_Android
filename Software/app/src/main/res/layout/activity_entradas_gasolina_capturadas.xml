@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondosalidas"
-    tools:context=".Gasolina_Capturada">
+    tools:context=".EntradasGasolina_Capturadas">
 
     <TextView
-        android:id="@+id/textView72"
+        android:id="@+id/textView88"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CONSUMO DE GASOLINA CAPTURADA"
+        android:text="GASOLINA EN HUERTA CAPTURADA"
         android:textColor="@color/verde_azul"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.001" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayoutGas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/verde"
@@ -35,52 +35,52 @@
         app:layout_constraintVertical_bias="0.13999999">
 
         <TextView
-            android:id="@+id/textView101"
+            android:id="@+id/textView112"
             android:layout_width="25dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/verde"
             android:gravity="center"
-            android:text="Fecha Consumo"
+            android:text="Folio Vale"
             android:textAlignment="center"
             android:textColor="@color/cafe"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/textView81"
+            android:id="@+id/textView113"
             android:layout_width="7dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Activo"
+            android:text="Fecha Ingreso"
             android:textAlignment="center"
             android:textColor="@color/cafe"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/textView82"
+            android:id="@+id/textView114"
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Responsable"
-            android:textAlignment="center"
-            android:textColor="@color/cafe"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/textView92"
-            android:layout_width="18dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Actividad"
+            android:text="Huerta"
             android:textAlignment="center"
             android:textColor="@color/cafe"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/textView94"
+            android:id="@+id/textView115"
+            android:layout_width="18dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Tipo"
+            android:textAlignment="center"
+            android:textColor="@color/cafe"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textView116"
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -90,31 +90,21 @@
             android:textColor="@color/cafe"
             android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/textView97"
-            android:layout_width="36dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Tipo Gas"
-            android:textAlignment="center"
-            android:textColor="@color/cafe"
-            android:textSize="12sp" />
     </LinearLayout>
 
     <ListView
-        android:id="@+id/lv_GridGasolina"
+        android:id="@+id/lv_GridGashuerta"
         android:layout_width="0dp"
         android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutGas"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/btn_cerrarGas"
+        android:id="@+id/button7"
         android:layout_width="136dp"
         android:layout_height="36dp"
         android:background="@drawable/rounded_button"
@@ -128,6 +118,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.927" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoformularios"
+    tools:context=".Entradas_Gasolina">
+
+    <TextView
+        android:id="@+id/textView102"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INGRESO DE GASOLINA HUERTA"
+        android:textColor="@color/amarillo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.001" />
+
+    <Button
+        android:id="@+id/btn_capturados"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:background="@drawable/rounded_edittext"
+        android:foregroundGravity="center"
+        android:onClick="gasolinaHuerta"
+        android:text="  CONSULTA CANTIDAD EN HUERTA  "
+        android:textColor="@color/cafe"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.884"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.08" />
+
+    <LinearLayout
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_linearlayout"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btn_registrarGas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_capturados">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView103"
+                android:layout_width="102dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Folio Vale:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etxt_folioregGas"
+                android:layout_width="209dp"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="0000"
+                android:inputType="number"
+                android:textAlignment="viewStart"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView104"
+                android:layout_width="102dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingRight="5dp"
+                android:text="Fecha Ingreso:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etxt_fechaingresoregGas"
+                android:layout_width="191dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="dd / mm / aa"
+                android:inputType="date"
+                android:onClick="onClick"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView105"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Empresa:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/sp_empresaregistroGas"
+                android:layout_width="294dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"
+                android:textColor="@color/verde_azul" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView106"
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Huerta:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+
+                android:id="@+id/sp_huertaregistroGas"
+                android:layout_width="286dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView107"
+                android:layout_width="124dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="5sp"
+                android:text="Responsable:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+
+                android:id="@+id/sp_responsableregistroGas"
+                android:layout_width="286dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center"
+                android:textColor="@color/verde_azul" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView108"
+                android:layout_width="111dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Tipo Combustible:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+
+                android:id="@+id/sp_tiporegistroGas"
+                android:layout_width="220dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:popupBackground="@drawable/spinner_style"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView109"
+                android:layout_width="117dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Cantidad Ingreso:"
+                android:textAlignment="center"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etxt_cantidadingresoGas"
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="0.0"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10sp"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView110"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10sp"
+                android:text="lt"
+                android:textColor="#000000" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView111"
+                android:layout_width="158dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Observaciones:"
+                android:textColor="@color/cafe"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <EditText
+
+                android:id="@+id/etxt_observacionesregistroGas"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Observaciones"
+                android:inputType="textPersonName"
+                android:textColor="@color/verde_azul"
+                android:textColorHighlight="@color/verde"
+                android:textColorHint="@color/verde"
+                android:textColorLink="@color/verde"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Button
+
+            android:layout_width="136dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_button"
+            android:gravity="center"
+            android:onClick="agregarDatos"
+            android:text="AGREGAR"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_registrarGas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:onClick="registrarGas"
+        android:padding="8dp"
+        android:text="REGISTRAR CONSUMO GASOLINA"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.833"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.954" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

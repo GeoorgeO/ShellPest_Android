@@ -81,7 +81,6 @@ public class Enviar_Gasolina extends AppCompatActivity {
                 do{
                     txtv_Activos.setText(Renglon2.getString(0));
                 }while (Renglon2.moveToNext());
-
             }else{
                 MensajeToast.setText("No hay datos en t_Consumo_Gasolina guardados");
                 Toast toast = new Toast(getApplicationContext());

@@ -18,6 +18,15 @@
         android:theme="@style/Theme.Claro"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".EntradasGasolina_Capturadas"
+            android:exported="false" />
+        <activity
+            android:name=".EntradasGasolina_Consulta"
+            android:exported="false" />
+        <activity
+            android:name=".Entradas_Gasolina"
+            android:exported="false" />
+        <activity
             android:name=".Gasolina_Capturada"
             android:exported="false" />
         <activity
