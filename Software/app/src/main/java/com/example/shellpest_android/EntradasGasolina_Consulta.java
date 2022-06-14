@@ -29,7 +29,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
     public String Magna = "Magna - 87 - octanos", Premium = "Premium - 92 - octanos", Diesel= "Diesel", FechaCrea="";
     public String Usuario, Perfil, Huerta, Tipo;
     int LineHuerta, LineEmpresa,  LineTipo;
-    Boolean ban = false;
+    Boolean ban = false, banSuma = false;
 
     TextView MensajeToast;
     View layout;
@@ -77,7 +77,6 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
 
                     if(sp_huertaEntradaGas.getCount()==2){
                         sp_huertaEntradaGas.setSelection(1);
-                        //cargaGrid();
                     }else{
                         if (sp_huertaEntradaGas.getCount()<=1){
                             ItemSPHue.add(new ItemDatoSpinner("Huerta"));
@@ -169,7 +168,10 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
     }
 
     public void CargaDatos(View view){
-        String tipogas=CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", "");
+        String tipogas = CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", "");
+        String SumaIngreso, SumaConsumo;
+        Double Ingreso = 0.0, Consumo = 0.0;
+
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
@@ -180,6 +182,9 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         Cursor Renglon2 = BD.rawQuery("select Sum(v_cantingreso_gas) as SumaCantidad, v_tipo_gas from t_Entradas_Gasolina " +
                 "where Id_Huerta= '"+Huerta+"' and v_tipo_gas='"+ tipogas +"'", null);
 
+        Cursor Renglon3 = BD.rawQuery("select Sum(v_cantutilizada_gas) as SumaUtilizada  from t_Consumo_Gasolina" +
+                " where Id_Huerta= '"+Huerta+"' and v_tipo_gas='"+ tipogas +"'", null);
+
         if (Renglon2.moveToFirst()){
             do{
                 if(Renglon2.getString(0) == null){
@@ -189,9 +194,11 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
                     toast.setView(layout);
                     toast.show();
                 }else{
-                    txtv_entradaCantidad.setText("Cantidad total en huerta: \n"+Renglon2.getString(0) + " lt");
                     txtv_entradaTipo.setText(Renglon2.getString(1));
+                    SumaIngreso = Renglon2.getString(0);
+                    Ingreso = Double.parseDouble(SumaIngreso);
                     ban = true;
+                    banSuma = true;
                 }
             }while (Renglon2.moveToNext());
         }else{
@@ -217,6 +224,31 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
             }
         }
 
+        if (Renglon3.moveToFirst()){
+            do{
+                if (Renglon3.getString(0) == null){
+
+                }else{
+                    SumaConsumo = Renglon3.getString(0);
+                    Consumo = Double.parseDouble(SumaConsumo);
+                    banSuma = true;
+
+                }
+            }while (Renglon3.moveToNext());
+        }else{
+            MensajeToast.setText("No se encuentra la información correspondiente");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+        }
+
+        if (banSuma == true){
+            Double Cantidad = Ingreso - Consumo;
+            Log.e("Ingreso", Ingreso.toString());
+            Log.e("Consumo", Consumo.toString());
+            txtv_entradaCantidad.setText("Cantidad total en huerta: \n"+ Cantidad + " lt");
+        }
 
 
     }
@@ -292,6 +324,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
 
     private void limpiar(){
         ban = false;
+        banSuma = false;
         txtv_entradaEmpresa.setText("-");
         txtv_entradaHuerta.setText("-");
         txtv_entradaTipo.setText("-");
