@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class Entradas_Gasolina extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
     Spinner sp_empresaregistroGas,sp_huertaregistroGas, sp_responsableregistroGas,sp_tiporegistroGas;
     TextView MensajeToast;
     View layout;
+    Button btn_consultaGas;
 
     private AdaptadorSpinner CopiHue, CopiActivo, CopiEmp, CopiResp, CopiTipo;
     private ArrayList<ItemDatoSpinner> ItemSPEmp, ItemSPHue, ItemSPResp, ItemSPTipo;
@@ -54,6 +57,8 @@ public class Entradas_Gasolina extends AppCompatActivity {
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
         Huerta = getIntent().getStringExtra("huerta2");
+        Log.e("Usuario", Usuario);
+
 
         solounaEmpresa = false;
         solounaHuerta = false;
@@ -70,6 +75,11 @@ public class Entradas_Gasolina extends AppCompatActivity {
         sp_huertaregistroGas = (Spinner) findViewById(R.id.sp_huertaregistroGas);
         sp_responsableregistroGas = (Spinner) findViewById(R.id.sp_responsableregistroGas);
         sp_tiporegistroGas = (Spinner) findViewById(R.id.sp_tiporegistroGas);
+        btn_consultaGas = (Button) findViewById(R.id.btn_consultaGas);
+
+        if(Objects.equals(Usuario, "ADMIN")){
+            btn_consultaGas.setVisibility(View.VISIBLE);
+        }
 
         LineHuerta=0;
         LineEmpresa=0;
@@ -451,6 +461,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
+        btn_consultaGas.setVisibility(View.INVISIBLE);
 
         startActivity(intento);
         finish();
@@ -461,7 +472,18 @@ public class Entradas_Gasolina extends AppCompatActivity {
         intento.putExtra("usuario2", Usuario);
         intento.putExtra("perfil2", Perfil);
         intento.putExtra("huerta2", Huerta);
+        btn_consultaGas.setVisibility(View.INVISIBLE);
 
+        startActivity(intento);
+        finish();
+    }
+
+    public void registrosHuerta(View view){
+        Intent intento = new Intent(Entradas_Gasolina.this, EntradasGasolina_Capturadas.class);
+        intento.putExtra("usuario2", Usuario);
+        intento.putExtra("perfil2", Perfil);
+        intento.putExtra("huerta2", Huerta);
+        btn_consultaGas.setVisibility(View.INVISIBLE);
         startActivity(intento);
         finish();
     }

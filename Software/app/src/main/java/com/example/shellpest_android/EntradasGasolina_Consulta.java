@@ -175,9 +175,9 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
 
-        Cursor Renglon = BD.rawQuery("select E.v_abrevia_eps, H.Nombre_Huerta from t_Entradas_Gasolina as EG, conempresa as E, t_Huerta as H " +
+        Cursor Renglon = BD.rawQuery("select E.v_abrevia_eps, H.Nombre_Huerta,  EG.v_tipo_gas from t_Entradas_Gasolina as EG, conempresa as E, t_Huerta as H " +
                 " where E.c_codigo_eps='"+ CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2) +"' " +
-                " and H.Id_Huerta= '"+Huerta+"'", null);
+                " and H.Id_Huerta= '"+Huerta+"' and EG.v_tipo_gas= '"+tipogas+"'", null);
 
         Cursor Renglon2 = BD.rawQuery("select Sum(v_cantingreso_gas) as SumaCantidad, v_tipo_gas from t_Entradas_Gasolina " +
                 "where Id_Huerta= '"+Huerta+"' and v_tipo_gas='"+ tipogas +"'", null);
@@ -209,21 +209,6 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
             toast.show();
         }
 
-        if (ban == true){
-            if (Renglon.moveToFirst()){
-                do{
-                        txtv_entradaEmpresa.setText(Renglon.getString(0));
-                        txtv_entradaHuerta.setText(Renglon.getString(1));
-                }while (Renglon.moveToNext());
-            }else{
-                MensajeToast.setText("No se encuentra la información correspondiente");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setView(layout);
-                toast.show();
-            }
-        }
-
         if (Renglon3.moveToFirst()){
             do{
                 if (Renglon3.getString(0) == null){
@@ -241,6 +226,22 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout);
             toast.show();
+        }
+
+        if (ban == true || banSuma == true){
+            if (Renglon.moveToFirst()){
+                do{
+                    txtv_entradaEmpresa.setText(Renglon.getString(0));
+                    txtv_entradaHuerta.setText(Renglon.getString(1));
+                    txtv_entradaTipo.setText(Renglon.getString(2));
+                }while (Renglon.moveToNext());
+            }else{
+                MensajeToast.setText("No se encuentra la información correspondiente");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+            }
         }
 
         if (banSuma == true){

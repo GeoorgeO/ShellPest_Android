@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.001" />
 
     <Button
-        android:id="@+id/btn_capturados"
+        android:id="@+id/btn_consultaGas"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:background="@drawable/rounded_edittext"
@@ -32,13 +32,13 @@
         android:textColor="@color/cafe"
         android:textSize="12sp"
         android:textStyle="bold"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.884"
+        app:layout_constraintHorizontal_bias="0.102"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.08" />
+        app:layout_constraintVertical_bias="0.067" />
 
     <LinearLayout
         android:layout_width="336dp"
@@ -47,8 +47,9 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btn_registrarGas"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_capturados">
+        app:layout_constraintTop_toBottomOf="@+id/btn_consultaGas">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,7 +170,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="58dp"
+            android:layout_height="67dp"
             android:orientation="horizontal">
 
             <TextView
@@ -199,7 +200,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="52dp"
             android:orientation="horizontal">
 
             <TextView
@@ -328,10 +329,26 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.833"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.954" />
+        app:layout_constraintVertical_bias="0.972" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/miniboton_redondo"
+        android:foreground="@android:drawable/ic_input_get"
+        android:foregroundGravity="center"
+        android:onClick="registrosHuerta"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.904"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.067" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
