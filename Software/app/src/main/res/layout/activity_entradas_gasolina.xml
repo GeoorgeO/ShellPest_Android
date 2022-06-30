@@ -339,7 +339,7 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:background="@drawable/miniboton_redondo"
-        android:foreground="@android:drawable/ic_input_get"
+        android:foreground="?android:attr/actionModeFindDrawable"
         android:foregroundGravity="center"
         android:onClick="registrosHuerta"
         android:visibility="visible"

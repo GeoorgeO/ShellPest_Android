@@ -26,6 +26,12 @@ public class Aplicaciones extends AppCompatActivity {
 
     }
 
+    public void Home (View view){
+        finish();
+        Intent intento=new Intent(this,EnviaRecibe.class);
+        startActivity(intento);
+    }
+
     public void Monitoreo (View view){
         Intent intento=null;
         if (Accion.equals("CAPTURA")){

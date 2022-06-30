@@ -58,13 +58,12 @@
                     android:layout_weight="9"
 					android:textColor="@color/verde_azul"/>
 
-                <ImageButton
-                    android:id="@+id/imageButton6"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:background="@drawable/miniboton_redondo"
-                    android:onClick="ListarAplicaciones"
-                    app:srcCompat="@android:drawable/ic_input_get" />
+				<ImageButton
+					android:id="@+id/imageButton6"
+					android:layout_width="45dp"
+					android:layout_height="45dp"
+					android:foreground="?android:attr/actionModeFindDrawable"
+					android:onClick="ListarAplicaciones" />
             </LinearLayout>
 
 			<LinearLayout

@@ -5,18 +5,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class EntradasGasolina_Consulta extends AppCompatActivity {
 
@@ -33,6 +49,10 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
 
     TextView MensajeToast;
     View layout;
+
+    ConexionInternet obj;
+
+    public String MyIp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +84,12 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
 
         if(sp_empresaEntradaGas.getCount()==2){
             sp_empresaEntradaGas.setSelection(1);
+        }
+
+        obj = new ConexionInternet(this);
+        if (obj.isConnected()==false ) {
+            Toast.makeText(EntradasGasolina_Consulta.this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
         }
 
         sp_empresaEntradaGas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -153,6 +179,14 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
 
     }
 
+    public void Obtener_Ip (){
+        WifiManager ip= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+
+        String Cip= Formatter.formatIpAddress(ip.getConnectionInfo().getIpAddress());
+        MyIp=Cip;
+
+    }
+
     public void cerrar(View view){
         super.onBackPressed();
     }
@@ -167,10 +201,139 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         finish();
     }
 
+    private float ConsultaCombustibleServer(){
+        try{
+            if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
+                Obtener_Ip();
+                List<String> Ligas_Web =new ArrayList<>();
+                if(MyIp.equals("0.0.0.0")){
+                    Ligas_Web.add("http://177.241.250.117:8090//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
+                } else {
+                    if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
+                        Ligas_Web.add("http://192.168.3.254:8090//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
+                    }else{
+                        Ligas_Web.add("http://177.241.250.117:8090//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
+                    }
+
+                }
+
+                for (int i=0;i<Ligas_Web.size();i++){
+                    return LlamarWebService(Ligas_Web.get(i),i,Ligas_Web.size());
+                }
+            }else{
+                Toast.makeText(EntradasGasolina_Consulta.this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
+            }
+            }catch (WindowManager.BadTokenException E){
+            return 0;
+        }
+        return 0;
+    }
+
+    public float LlamarWebService(String Liga,int ix,int total){
+        try{
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            URL url= null;
+            try {
+                url = new URL(Liga);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection conn= null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                conn.setRequestMethod("GET");
+                conn.connect();
+
+                BufferedReader in =new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String inputLine;
+
+                StringBuffer response =new StringBuffer();
+
+                String json="";
+
+                while ((inputLine=in.readLine())!=null){
+                    response.append(inputLine);
+                }
+
+                json=response.toString();
+
+                JSONArray jsonarr=null;
+
+                try {
+                    jsonarr=new JSONArray(json);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (jsonarr.length()>0){
+                    String [][] datos;
+                    JSONObject jsonobject=jsonarr.getJSONObject(0);
+                    datos = new String[jsonarr.length()][jsonobject.length()];
+
+                    String NombreId="";
+                    for (int i=0;i<jsonarr.length();i++){
+                        jsonobject=jsonarr.getJSONObject(i);
+
+                        int columnas=0;
+
+                        Iterator llaves = jsonobject.keys();
+
+                        while(llaves.hasNext()) {
+                            String currentDynamicKey = (String)llaves.next();
+                            //Toast.makeText(MainActivity.this, currentDynamicKey, Toast.LENGTH_SHORT).show();
+                            datos[i][columnas]=jsonobject.optString(currentDynamicKey);
+                            if (columnas==0){
+                                NombreId=currentDynamicKey;
+                            }
+                            columnas++;
+                        }
+                    }
+
+                    // declaración de switch
+                    if(NombreId.equals("Cant_Conbustible"))
+                    {
+                        return Float.valueOf(datos[0][0]);
+                    }
+                }
+
+                conn.disconnect();
+
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(EntradasGasolina_Consulta.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(EntradasGasolina_Consulta.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(EntradasGasolina_Consulta.this, "Fallo la conexion al servidor [OPENPEDINS]", Toast.LENGTH_SHORT).show();
+            }
+        }catch (WindowManager.BadTokenException E){
+            return 0;
+        }
+        return 0;
+    }
+
     public void CargaDatos(View view){
         String tipogas = CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", "");
         String SumaIngreso, SumaConsumo;
         Double Ingreso = 0.0, Consumo = 0.0;
+
+
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -246,6 +409,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
 
         if (banSuma == true){
             Double Cantidad = Ingreso - Consumo;
+            Cantidad=Cantidad + ConsultaCombustibleServer();
             Log.e("Ingreso", Ingreso.toString());
             Log.e("Consumo", Consumo.toString());
             txtv_entradaCantidad.setText("Cantidad total en huerta: \n"+ Cantidad + " lt");

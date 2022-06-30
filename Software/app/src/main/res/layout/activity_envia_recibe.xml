@@ -9,19 +9,19 @@
 
     <Button
         android:id="@+id/btn_CerrarSesion"
-        android:layout_width="45dp"
+        android:layout_width="53dp"
         android:layout_height="45dp"
-        android:background="@drawable/miniboton_redondo"
+        android:background="@drawable/rounded_button"
         android:foreground="@android:drawable/ic_secure"
         android:foregroundGravity="center"
         android:onClick="CerrarSesion"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.956"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.149" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <Button
         android:id="@+id/btn_Recibir"
@@ -102,14 +102,14 @@
         android:layout_marginEnd="125dp"
         android:text="MENÚ PRINCIPAL"
         android:textColor="@color/cafe"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.079" />
+        app:layout_constraintVertical_bias="0.087" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -117,22 +117,22 @@
         android:layout_height="132dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.968"
+        app:layout_constraintVertical_bias="0.973"
         app:srcCompat="@drawable/iconobiagro" />
 
     <ImageView
         android:id="@+id/loadingviewmenu"
-        android:layout_width="129dp"
-        android:layout_height="151dp"
+        android:layout_width="67dp"
+        android:layout_height="96dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.949"
+        app:layout_constraintVertical_bias="0.058"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
