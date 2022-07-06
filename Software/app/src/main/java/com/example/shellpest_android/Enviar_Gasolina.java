@@ -77,8 +77,8 @@ public class Enviar_Gasolina extends AppCompatActivity {
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon = BD.rawQuery("select G.d_fechaconsumo_gas, G.Id_ActivosGas from t_Consumo_Gasolina as G", null);
-        Cursor Renglon2 = BD.rawQuery("select count() from t_Consumo_Gasolina", null);
-        Cursor Renglon3 = BD.rawQuery("select count() from t_Entradas_Gasolina", null);
+        Cursor Renglon2 = BD.rawQuery("select count(d_fechacrea_gas) from t_Consumo_Gasolina", null);
+        Cursor Renglon3 = BD.rawQuery("select count(d_fechacrea_gas) from t_Entradas_Gasolina", null);
         Cursor Renglon4 = BD.rawQuery("select d_fechaingreso_gas from t_Entradas_Gasolina", null);
 
             if (Renglon2.moveToFirst()){
@@ -106,19 +106,22 @@ public class Enviar_Gasolina extends AppCompatActivity {
                     AdaptadorActivos = new ArrayAdapter<String>(Enviar_Gasolina.this, android.R.layout.simple_list_item_1, Activos);
                     lv_Activos.setAdapter(AdaptadorActivos);
                 } while (Renglon.moveToNext());
+
+                if (FechasConsumo.size()>0){
+                    AdaptadorConsumo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, FechasConsumo);
+                    lv_FechasConsumo.setAdapter(AdaptadorConsumo);
+                }
+
             }else {
                 MensajeToast.setText("No hay datos en t_Consumo_Gasolina guardados");
                 Toast toast = new Toast(getApplicationContext());
                 toast.setDuration(Toast.LENGTH_SHORT);
                 toast.setView(layout);
                 toast.show();
-                BD.close();
+
             }
 
-        if (FechasConsumo.size()>0){
-            AdaptadorConsumo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, FechasConsumo);
-            lv_FechasConsumo.setAdapter(AdaptadorConsumo);
-        }
+
 
         if (Renglon3.moveToFirst()){
             do{
@@ -149,13 +152,14 @@ public class Enviar_Gasolina extends AppCompatActivity {
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout);
             toast.show();
-            BD.close();
+
         }
 
         if (FechasIngreso.size()>0){
             AdaptadorIngreso = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, FechasIngreso);
             lv_FechasIngreso.setAdapter(AdaptadorIngreso);
         }
+        BD.close();
     }
 
     public void EnviarGas(View view){

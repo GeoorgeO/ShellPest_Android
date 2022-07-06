@@ -10,6 +10,7 @@
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_aplicaciones_capturadas.xml" value="0.14344262295081966" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_cosecha.xml" value="0.14344262295081966" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_entradas_gasolina.xml" value="0.14344262295081966" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_entradas_gasolina_capturadas.xml" value="0.15129781420765026" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_entradas_gasolina_consulta.xml" value="0.14344262295081966" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_envia_recibe.xml" value="0.153515625" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_enviar_fertiliza.xml" value="0.12090007627765065" />
@@ -22,6 +23,8 @@
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/custome_toast.xml" value="0.14344262295081966" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/dato_spinner.xml" value="0.183203125" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/item_grid_aplicaciones.xml" value="0.14344262295081966" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/item_grid_entradasgasolina.xml" value="0.15129781420765026" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/item_grid_gasolina.xml" value="0.15129781420765026" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/item_grid_poda.xml" value="0.14344262295081966" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/registro_grid.xml" value="0.183203125" />
       </map>

@@ -29,6 +29,9 @@ public class Aplicaciones extends AppCompatActivity {
     public void Home (View view){
         finish();
         Intent intento=new Intent(this,EnviaRecibe.class);
+        intento.putExtra("usuario", Usuario);
+        intento.putExtra("perfil", Perfil);
+        intento.putExtra("huerta", Huerta);
         startActivity(intento);
     }
 

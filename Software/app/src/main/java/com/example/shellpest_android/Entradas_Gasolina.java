@@ -77,7 +77,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
         sp_tiporegistroGas = (Spinner) findViewById(R.id.sp_tiporegistroGas);
         btn_consultaGas = (Button) findViewById(R.id.btn_consultaGas);
 
-        if(Objects.equals(Usuario, "ADMIN")){
+        if(Perfil.equals("001")){
             btn_consultaGas.setVisibility(View.VISIBLE);
         }
 
@@ -468,14 +468,23 @@ public class Entradas_Gasolina extends AppCompatActivity {
     }
 
     public void gasolinaHuerta(View view){
-        Intent intento = new Intent(this, EntradasGasolina_Consulta.class);
-        intento.putExtra("usuario2", Usuario);
-        intento.putExtra("perfil2", Perfil);
-        intento.putExtra("huerta2", Huerta);
-        btn_consultaGas.setVisibility(View.INVISIBLE);
+        if(Perfil.equals("001")){
+            ConexionInternet obj;
+            obj = new ConexionInternet(this);
+            if (obj.isConnected()==false ) {
+                Toast.makeText(this, "Es necesario una conexion a internet", Toast.LENGTH_SHORT).show();
+                super.onBackPressed();
+            }
+            Intent intento = new Intent(this, EntradasGasolina_Consulta.class);
+            intento.putExtra("usuario2", Usuario);
+            intento.putExtra("perfil2", Perfil);
+            intento.putExtra("huerta2", Huerta);
+            btn_consultaGas.setVisibility(View.INVISIBLE);
 
-        startActivity(intento);
-        finish();
+            startActivity(intento);
+            finish();
+        }
+
     }
 
     public void registrosHuerta(View view){
