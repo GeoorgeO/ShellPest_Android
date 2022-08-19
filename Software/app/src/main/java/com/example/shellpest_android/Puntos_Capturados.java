@@ -156,7 +156,7 @@ String Usuario,Perfil,Huerta;
 
         Cursor Renglon =BD.rawQuery("select P.Nombre_PuntoControl, \n" +
                 "\tH.Nombre_Huerta,\n" +
-                "\t count(M.Id_Individuo), \n" +
+                "\t count(M.Id_PuntoControl), \n" +
                 "\t ME.Id_PuntoControl, \n" +
                 "Me.c_codigo_eps, \n" +
                 "EPS.v_nombre_eps, \n" +

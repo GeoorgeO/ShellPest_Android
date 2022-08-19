@@ -48,94 +48,93 @@
 
             <Button
                 android:id="@+id/imageButton"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@android:drawable/ic_menu_mapmode"
                 android:onClick="Monitoreo"
                 android:text="Monitoreo"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
 
             <Button
                 android:id="@+id/imageButton4"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@android:drawable/ic_menu_myplaces"
                 android:onClick="Aplicacion"
                 android:text="Aplicacion"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton7"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@drawable/podas"
                 android:onClick="Poda"
                 android:text="Poda"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton3"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@android:drawable/stat_sys_upload_done"
                 android:onClick="Salida"
                 android:text="Salida"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton2"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="?android:attr/textSelectHandle"
                 android:onClick="Riego"
                 android:text="Riego"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton5"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="?attr/actionModePasteDrawable"
                 android:text="Requisicion"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton8"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@drawable/cosecha"
                 android:onClick="Cosecha"
                 android:text="Cosechas"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton9"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@drawable/fertilizacion"
                 android:onClick="Fertiliza"
                 android:text="Fertiliza"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/imageButton10"
-                android:layout_width="wrap_content"
-                android:layout_height="100sp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
                 android:drawableTop="@drawable/gasolinaicono"
                 android:onClick="Gasolina"
                 android:text="Gasolina"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </GridLayout>
     </LinearLayout>

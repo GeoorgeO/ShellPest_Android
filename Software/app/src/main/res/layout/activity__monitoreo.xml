@@ -57,7 +57,16 @@
 				android:textColorLink="@color/verde_azul"
 				android:textSize="14sp" />
 
-            <EditText
+			<Button
+				android:id="@+id/button_UpFecha"
+				android:layout_width="45dp"
+				android:layout_height="45dp"
+				android:foreground="@android:drawable/ic_popup_sync"
+				android:onClick="Actualiza_Fecha"
+				android:text=""
+				android:visibility="invisible" />
+
+			<EditText
                 android:id="@+id/et_espacio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
