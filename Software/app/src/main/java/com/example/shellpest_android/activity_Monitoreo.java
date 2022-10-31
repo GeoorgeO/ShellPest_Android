@@ -49,13 +49,13 @@ import java.util.Locale;
 public class activity_Monitoreo extends AppCompatActivity implements View.OnClickListener{
     TextView et_fecha, et_PuntoControl, et_EP, et_Organo, et_Individuo;
     Spinner sp_PE, sp_Hue, sp_Pto, sp_Org, sp_Ind,sp_Empresa2;
-    RadioButton rb_Plaga, rb_Enfermedad,rb_SinPresencia;
+    RadioButton rb_Plaga, rb_Enfermedad,rb_SinPresencia,rb_Fumi;
     RadioGroup rg_PE;
     ListView lv_GridMonitoreo;
     Boolean SoloUnaHuerta;
     Button button_UpFecha;
 
-    EditText et_individuos;
+    EditText et_individuos,et_Observa;
 
     //private LocationManager Ubicacion;
 
@@ -97,6 +97,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         rb_Plaga = (RadioButton) findViewById(R.id.rb_Plaga);
         rb_Enfermedad = (RadioButton) findViewById(R.id.rb_Enfermedad);
         rb_SinPresencia= (RadioButton) findViewById(R.id.rb_SinPresencia);
+        rb_Fumi= (RadioButton) findViewById(R.id.rb_Fumi);
 
         rg_PE = (RadioGroup) findViewById(R.id.rg_PE);
 
@@ -105,10 +106,12 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         et_individuos=(EditText) findViewById(R.id.et_individuos) ;
 
         button_UpFecha=(Button) findViewById(R.id.button_UpFecha);
+        et_Observa=(EditText) findViewById(R.id.et_Observa) ;
 
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
         Huerta = getIntent().getStringExtra("huerta2");
+
 
         cargaSpinnerEmpresa();
         CopiEmp = new AdaptadorSpinner(this, ItemSPEmp);
@@ -296,7 +299,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         rg_PE.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(rb_SinPresencia.isChecked()){
+                if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
                     CopiPE=null;
                     ItemSPPE=new ArrayList<>();
                     ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad"));
@@ -384,8 +387,14 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 if (i > 0) {
                     // Notify the selected item text
                     Cargagrid();
-                    if (lv_GridMonitoreo.getCount()==0 && revisaSinPResencia() ){
-                        rb_SinPresencia.setChecked(true);
+                    CargaObserva();
+                    if (lv_GridMonitoreo.getCount()==0 && revisaSinPResencia()!=2 ){
+                        if (revisaSinPResencia()==0){
+                            rb_SinPresencia.setChecked(true);
+                        }
+                        if (revisaSinPResencia()==1){
+                            rb_Fumi.setChecked(true);
+                        }
                     }else{
                         rb_Plaga.setChecked(true);
                     }
@@ -422,6 +431,27 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         }
     }
 
+    private void CargaObserva(){
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+        String SQLS="select ifnull(Observaciones,'') from t_Monitoreo_PEEncabezado as E  where E.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and E.Fecha='"+et_fecha.getText().toString().trim()+"'";
+        Renglon=BD.rawQuery(SQLS,null);
+
+        if(Renglon.moveToFirst()){
+            do {
+
+                    BD.close();
+                    et_Observa.setText(Renglon.getString(0).trim());
+            } while(Renglon.moveToNext());
+
+
+        }else{
+            BD.close();
+            et_Observa.setText("");
+        }
+    }
+
     private String rellenarCeros (String Valor,int NCaracteres){
         if (Valor.length()<NCaracteres){
             int faltan=0;
@@ -439,28 +469,33 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         return Valor;
     }
 
-    private boolean revisaSinPResencia(){
+    private int revisaSinPResencia(){
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
         Cursor Renglon;
-        String SQLS="select count(E.Id_PuntoControl) from t_Monitoreo_PEEncabezado as E where E.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and E.Fecha='"+et_fecha.getText().toString().trim()+"'";
+        String SQLS="select count(D.Id_PuntoControl),ifnull(Fumigado,0) from t_Monitoreo_PEEncabezado as E left join t_Monitoreo_PEDetalle as D on D.Fecha=E.Fecha and D.Id_PuntoControl=E.Id_PuntoControl where E.Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"' and E.Fecha='"+et_fecha.getText().toString().trim()+"'";
         Renglon=BD.rawQuery(SQLS,null);
 
         if(Renglon.moveToFirst()){
             do {
                if( Renglon.getInt(0)>0){
                    BD.close();
-                   return true;
+                  return 2;//el 2 es cuando hay plagas o enfermedad, antes return true;
                }else{
-                   BD.close();
-                   return false;
+                   if( Renglon.getString(1).equals("1")) {
+                       BD.close();
+                       return 1; //el 1 es para fumigados;
+                   }else{
+                       BD.close();
+                       return 0; //el 0 es para sin presencia;
+                   }
                }
             } while(Renglon.moveToNext());
 
 
         }else{
             BD.close();
-            return false;
+            return 0;
         }
 
     }
@@ -514,11 +549,11 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 }
 
             }else{
-                if(rb_SinPresencia.isChecked()){
+                if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
                     FaltoAlgo=false;
                 }else{
                     FaltoAlgo=true;
-                    Toast.makeText(this,"Es necesario marcar 'Sin presencia' en caso de que no se detecte ninguna plaga o enfermedad.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"Es necesario marcar 'Sin presencia' o 'Fumigado' en caso de que no se detecte ninguna plaga o enfermedad.",Toast.LENGTH_SHORT).show();
                 }
             }
             if (!FaltoAlgo){
@@ -545,9 +580,9 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                     do {
                         if (Renglon.getInt(0)>0){
                             currentTime=Renglon.getString(1);
-                            if(rb_SinPresencia.isChecked()){
+                            /*if(rb_SinPresencia.isChecked()){
 
-                            }else{
+                            }else{*/
                                 ContentValues registro = new ContentValues();
 
                                 registro.put("n_coordenadaX",Local.Long);
@@ -560,7 +595,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 }else{
                                     //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                                 }
-                            }
+                            //}
 
 
                         }else{
@@ -574,6 +609,13 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
                             registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
+                            registro.put("Observaciones",et_Observa.getText().toString().trim());
+                            if(rb_Fumi.isChecked()){
+                                registro.put("Fumigado","1");
+                            }else{
+                                registro.put("Fumigado","0");
+                            }
+
                             BD.insert("t_Monitoreo_PEEncabezado",null,registro);
                         }
 
@@ -616,7 +658,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                     if(Renglon.getInt(0)>0){
                         Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
                     }else{
-                        if(rb_SinPresencia.isChecked()){
+                        if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
                           /*  ContentValues registro2= new ContentValues();
                             registro2.put("Fecha",et_fecha.getText().toString().trim());
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));
@@ -946,7 +988,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 }
 
             }else{
-                if(rb_SinPresencia.isChecked()){
+                if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
                     FaltoAlgo=false;
                 }else{
                     FaltoAlgo=true;
@@ -954,7 +996,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 }
             }
             if (!FaltoAlgo) {
-                if(rb_SinPresencia.isChecked()){
+                if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
 
                 }
                 else{
@@ -985,13 +1027,14 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                     do {
                         if (Renglon.getInt(0)>0){
                             currentTime=Renglon.getString(1);
-                            if(rb_SinPresencia.isChecked()){
+                           /* if(rb_SinPresencia.isChecked()){
 
-                            }else{
+                            }else{*/
                                 ContentValues registro = new ContentValues();
 
                                 registro.put("n_coordenadaX",Local.Long);
                                 registro.put("n_coordenadaY",Local.Lat);
+                                registro.put("Observaciones",et_Observa.getText().toString().trim());
 
                                 int cantidad=BD.update("t_Monitoreo_PEEncabezado",registro,"Fecha='"+et_fecha.getText().toString().trim()+"' and Id_PuntoControl='"+CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4)+"'",null);
 
@@ -1000,7 +1043,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                                 }else{
                                     //////Toast.makeText(MainActivity.this,"Ocurrio un error al intentar actualizar t_Calidad, favor de notificar al administrador del sistema.",Toast.LENGTH_SHORT).show();
                                 }
-                            }
+                            //}
                         }else{
                             ContentValues registro= new ContentValues();
                             registro.put("Fecha",et_fecha.getText().toString().trim());
@@ -1012,6 +1055,12 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                             registro.put("n_coordenadaY",Local.Lat);
                             registro.put("Hora",currentTime);
                             registro.put("c_codigo_eps",CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2));
+                            registro.put("Observaciones",et_Observa.getText().toString().trim());
+                            if(rb_Fumi.isChecked()){
+                                registro.put("Fumigado","1");
+                            }else{
+                                registro.put("Fumigado","0");
+                            }
                             BD.insert("t_Monitoreo_PEEncabezado",null,registro);
                         }
                     } while(Renglon.moveToNext());
@@ -1054,7 +1103,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                     if(Renglon.getInt(0)>0){
                         Toast.makeText(this,"Ya existe un dato en esta fecha con misma PE y Punto de control en esta fecha",Toast.LENGTH_SHORT).show();
                     }else{
-                        if(rb_SinPresencia.isChecked()){
+                        if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
                            /* ContentValues registro2= new ContentValues();
                             registro2.put("Fecha",et_fecha.getText().toString().trim());
                             registro2.put("Id_PuntoControl",CopiPto.getItem(sp_Pto.getSelectedItemPosition()).getTexto().substring(0,4));

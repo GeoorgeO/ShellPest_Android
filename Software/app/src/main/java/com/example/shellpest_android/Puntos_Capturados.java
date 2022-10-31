@@ -62,7 +62,7 @@ String Usuario,Perfil,Huerta;
                         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(Puntos_Capturados.this,"ShellPest",null,1);
                         SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
                         //BD.beginTransaction();
-                        Cursor Renglon =BD.rawQuery("select Fecha,Id_Huerta,Id_PuntoControl,Id_Usuario,F_UsuCrea,n_coordenadaX,n_coordenadaY,Hora,c_codigo_eps from t_Monitoreo_PEEncabezado where Fecha='"+arrayArticulos.get(i).getFecha()+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
+                        Cursor Renglon =BD.rawQuery("select Fecha,Id_Huerta,Id_PuntoControl,Id_Usuario,F_UsuCrea,n_coordenadaX,n_coordenadaY,Hora,c_codigo_eps,Observaciones,Fumigado from t_Monitoreo_PEEncabezado where Fecha='"+arrayArticulos.get(i).getFecha()+"' and Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"' ",null);
 
                             if (Renglon.moveToFirst()) {
 
@@ -77,6 +77,10 @@ String Usuario,Perfil,Huerta;
                                     registro.put("n_coordenadaY",Renglon.getString(6));
                                     registro.put("Hora",Renglon.getString(7));
                                     registro.put("c_codigo_eps",Renglon.getString(8));
+
+                                    registro.put("Observaciones",Renglon.getString(9).toString().trim());
+                                    registro.put("Fumigado",Renglon.getString(10));
+
                                     BD.insert("t_Monitoreo_Eliminados_PEEncabezado",null,registro);
 
                                     int cantidad= BD.delete("t_Monitoreo_PEEncabezado","Id_PuntoControl='"+arrayArticulos.get(i).getcPto()+"' and Fecha='"+arrayArticulos.get(i).getFecha()+"' and c_codigo_eps='"+arrayArticulos.get(i).getcEPS()+"'",null);

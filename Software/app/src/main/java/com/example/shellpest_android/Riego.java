@@ -35,6 +35,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
     int LineHuerta,LineEmpresa;
 
+    Boolean SoloUnaHuerta;
     private AdaptadorSpinner CopiHue,CopiBlq,CopiEmp;
     private ArrayList<ItemDatoSpinner> ItemSPHue,ItemSPBlq,ItemSPEmp;
 
@@ -48,6 +49,8 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_riego);
         getSupportActionBar().hide();
+
+        SoloUnaHuerta=false;
 
         Usuario = getIntent().getStringExtra("usuario2");
         Perfil = getIntent().getStringExtra("perfil2");
@@ -100,13 +103,18 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         sp_Empresa3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(ItemSPHue==null){
+                //if(ItemSPHue==null){
                     cargaSpinnerHue();
                     CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
                     sp_Hue.setAdapter(CopiHue);
 
-                    if (sp_Hue.getCount()==2){
-                        sp_Hue.setSelection(1);
+                    if (sp_Hue.getCount()==2 || SoloUnaHuerta==true){
+                        if(SoloUnaHuerta==true){
+
+                        }else{
+                            sp_Hue.setSelection(1);
+                        }
+
                         Cargagrid();
                     }else{
                         if (sp_Hue.getCount()<=1){
@@ -116,7 +124,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                             sp_Hue.setAdapter(CopiHue);
                         }
                     }
-                }else{
+                /*}else{
                     if((ItemSPHue.size()<=1  ) || LineEmpresa!=i){
                         cargaSpinnerHue();
                         CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
@@ -138,7 +146,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                             }
                         }
                     }
-                }
+                }*/
 
                 if(i>0){
                     Cargagrid();
@@ -291,7 +299,11 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
         if(Renglon.getCount()>1){
             ItemSPHue.add(new ItemDatoSpinner("Huerta"));
-
+            SoloUnaHuerta=false;
+        }else{
+            if(Renglon.getCount()==1){
+                SoloUnaHuerta=true;
+            }
         }
 
         /*if(Perfil.equals("001")){

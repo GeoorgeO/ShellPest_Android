@@ -133,7 +133,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "n_coordenadaX text," +
                 "n_coordenadaY text," +
                 "Hora text," +
-                "c_codigo_eps text not null," +
+                "c_codigo_eps text not null,Observaciones text,Fumigado text," +
                 "Primary key(Fecha,Id_PuntoControl,c_codigo_eps))");
 
         BD.execSQL("create table t_Monitoreo_PEDetalle" +
@@ -173,7 +173,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "n_coordenadaX text," +
                 "n_coordenadaY text," +
                 "Hora text," +
-                "c_codigo_eps text not null," +
+                "c_codigo_eps text not null,Observaciones text,Fumigado text," +
                 "primary key(Fecha,Id_PuntoControl,c_codigo_eps))");
 
         BD.execSQL("create table t_Monitoreo_Eliminados_PEDetalle" +

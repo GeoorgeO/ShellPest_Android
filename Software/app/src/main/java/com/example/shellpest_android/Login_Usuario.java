@@ -1,8 +1,10 @@
 package com.example.shellpest_android;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,16 +30,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Date;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Login_Usuario extends AppCompatActivity {
 
     private EditText et_Usuario,et_Password;
     public String MyIp;
     ConexionInternet obj;
+
+    String Version="V.22.10.03.02";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,98 @@ public class Login_Usuario extends AppCompatActivity {
         et_Usuario=(EditText)findViewById(R.id.et_Usuario);
         et_Password=(EditText)findViewById(R.id.et_Password);
         obj = new ConexionInternet(this);
-        Existe_Usuario();
+
+        Existe_Usuario(revisa_Version());
+    }
+
+    private boolean revisa_Version(){
+        //obj = new ConexionInternet(this);
+        if (obj.isConnected()==false ) {
+            return true;
+        }else{
+            Obtener_Ip();
+            String sql;
+            if(MyIp.equals("0.0.0.0")){
+                sql="http://177.241.250.117:8090//Control/Version";
+            }else{
+                if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0){
+                    sql = "http://192.168.3.254:8090//Control/Version";
+                }else{
+                    sql="http://177.241.250.117:8090//Control/Version";
+                }
+            }
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            URL url = null;
+            try {
+                url = new URL(sql);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection conn = null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                conn.setRequestMethod("GET");
+                conn.connect();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String inputLine;
+
+                StringBuffer response = new StringBuffer();
+
+                String json = "";
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                json = response.toString();
+
+                JSONArray jsonarr = null;
+
+                jsonarr = new JSONArray(json);
+
+                for (int i = 0; i < jsonarr.length(); i++) {
+                    JSONObject jsonobject = jsonarr.getJSONObject(i);
+
+                    if (jsonobject.optString("Version").length() > 0) {
+                        if(!jsonobject.optString("Version").equals(Version)){
+                            return false;
+
+                        }else{
+                            return true;
+                        }
+                    } else {
+                        Toast.makeText(this, "Si entro al service web, pero no retorno datos", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+                conn.disconnect();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 1", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 2", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                conn.disconnect();
+                Toast.makeText(this, "Fallo la conexion al servidor [OPENPEDINS] 3", Toast.LENGTH_SHORT).show();
+            }
+            return false;
+        }
+
+
     }
 
     public void Agrega_Usuario(String perfil,String huerta,String Nombre){
@@ -76,7 +171,7 @@ public class Login_Usuario extends AppCompatActivity {
         BD.close();
     }
 
-    public void Existe_Usuario(){
+    public void Existe_Usuario(boolean vertion){
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
 
@@ -93,6 +188,7 @@ public class Login_Usuario extends AppCompatActivity {
                 ParsePosition pp1 = new ParsePosition(0);
                 java.util.Date convertidaFecha=formato.parse( RevisaFechaSync(), pp1);
 
+                Intent intento;
                 if (RevisaFechaSync().trim().length()>0){
 
                     Calendar cal = Calendar.getInstance();
@@ -102,38 +198,56 @@ public class Login_Usuario extends AppCompatActivity {
                     cal.set(Calendar.MILLISECOND, 0);
                     java.util.Date fechaactual = cal.getTime(); //Para tomas solo fecha sin horas ni min.
 
+
                     if( fechaactual.getTime() - convertidaFecha.getTime() >172800000){ //la resta arroja los datos en milisegundos, la cantidad permitida son 2 dias
 
-                        Intent intento = new Intent(this, MainActivity.class);
+                        intento= new Intent(this, MainActivity.class);
                         intento.putExtra("usuario", Renglon.getString(0));
                         intento.putExtra("perfil", Renglon.getString(1));
                         intento.putExtra("huerta", Renglon.getString(2));
 
 
                         //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
-                        startActivity(intento);
+                        //startActivity(intento);
                     }
                     else{
-                        Intent intento = new Intent(this, EnviaRecibe.class);
+                        intento = new Intent(this, EnviaRecibe.class);
                         intento.putExtra("usuario", Renglon.getString(0));
                         intento.putExtra("perfil", Renglon.getString(1));
                         intento.putExtra("huerta", Renglon.getString(2));
 
                         //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
 
-                        startActivity(intento);
+                        //startActivity(intento);
                     }
                 }else{
-                    Intent intento = new Intent(this, MainActivity.class);
+                    intento = new Intent(this, MainActivity.class);
                     intento.putExtra("usuario", Renglon.getString(0));
                     intento.putExtra("perfil", Renglon.getString(1));
                     intento.putExtra("huerta", Renglon.getString(2));
 
                     //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
 
-                    startActivity(intento);
+                    //startActivity(intento);
                 }
-                finish();
+                if(!vertion){
+                    AlertDialog.Builder dialogo1 = new AlertDialog.Builder(Login_Usuario.this);
+                    dialogo1.setTitle("VERSION DESACTUALIZADA");
+                    dialogo1.setMessage("Pregunta a la encargada de agricultura de precision sobre la nueva version.");
+                    dialogo1.setCancelable(false);
+                    dialogo1.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            startActivity(intento);
+                            finish();
+                        }
+                    });
+
+                    dialogo1.show();
+                }else{
+                    startActivity(intento);
+                    finish();
+                }
+
             }
             BD.close();
         }else{
