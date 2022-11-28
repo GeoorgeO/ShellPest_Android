@@ -18,6 +18,12 @@
         android:theme="@style/Theme.Claro"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Enviar_Revision"
+            android:exported="false" />
+        <activity
+            android:name=".Revision"
+            android:exported="false" />
+        <activity
             android:name=".EntradasGasolina_Capturadas"
             android:exported="false" />
         <activity

@@ -523,6 +523,23 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "v_tipo_gas text not null," +
                 "v_cantingreso_gas text not null," +
                 "v_observaciones_gas text)");
+
+        BD.execSQL("create table t_Variedad " +
+                "(Id_Variedad int not null," +
+                "Nombre_Variedad text, " +
+                "Id_Cultivo text," +
+                "primary key(Id_Variedad))");
+
+        BD.execSQL("create table t_Revision " +
+                "(Fecha text not null," +
+                "Id_Bloque text not null, " +
+                "Fruta bit, " +
+                "Floracion bit, " +
+                "N_Arboles float, " +
+                "Observaciones text, " +
+                "Nivel_Humedad float, " +
+                "Primary key(Fecha,Id_Bloque))");
+
     }
 
     @Override
@@ -582,6 +599,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Consumo_Gasolina");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Eliminados_Gasolina");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Entradas_Gasolina");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Variedad");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Revision");
 
         onCreate(sqLiteDatabase);
     }

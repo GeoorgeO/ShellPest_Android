@@ -149,4 +149,18 @@ public class Aplicaciones extends AppCompatActivity {
         startActivity(intento);
     }
 
+    public void Revision(View view){
+        Intent intento=null;
+        if (Accion.equals("CAPTURA")){
+            intento=new Intent(this,Revision.class);
+            intento.putExtra("usuario3", Usuario);
+            intento.putExtra("perfil3", Perfil);
+            intento.putExtra("huerta2", Huerta);
+        }
+        if (Accion.equals("ENVIAR")){
+            intento=new Intent(this,Enviar_Revision.class);
+        }
+        startActivity(intento);
+    }
+
 }

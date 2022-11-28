@@ -33,18 +33,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:orientation="vertical"
+        android:scrollbarStyle="insideInset"
         app:layout_constraintTop_toBottomOf="@+id/txtv_modulos">
 
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:columnCount="3">
+            android:columnCount="3"
+            android:scrollbars="vertical">
 
             <Button
                 android:id="@+id/imageButton"
@@ -97,14 +100,17 @@
                 android:text="Riego"
                 android:textSize="10sp" />
 
+
             <Button
-                android:id="@+id/imageButton5"
+                android:id="@+id/imageButton11"
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
-                android:drawableTop="?attr/actionModePasteDrawable"
-                android:text="Requisicion"
+                android:drawableTop="@android:drawable/ic_menu_agenda"
+                android:onClick="Revision"
+                android:text="Revision"
                 android:textSize="10sp" />
+
 
             <Button
                 android:id="@+id/imageButton8"
@@ -136,8 +142,20 @@
                 android:text="Gasolina"
                 android:textSize="10sp" />
 
+            <Button
+                android:id="@+id/imageButton5"
+                android:layout_height="100dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:drawableTop="?attr/actionModePasteDrawable"
+                android:text="Requisicion"
+                android:textSize="10sp" />
+
         </GridLayout>
+
+
     </LinearLayout>
+
 
     <ImageView
         android:id="@+id/imageView"

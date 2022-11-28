@@ -41,7 +41,7 @@ public class Login_Usuario extends AppCompatActivity {
     public String MyIp;
     ConexionInternet obj;
 
-    String Version="V.22.10.03.02";
+    String Version="V.22.11.25.03";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
