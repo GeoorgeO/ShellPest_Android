@@ -117,6 +117,8 @@ public class Enviar_Revision extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
+
         if(Fecha == null){
             Fecha="";
         }
@@ -127,8 +129,6 @@ public class Enviar_Revision extends AppCompatActivity {
         if(Observaciones==null){
             Observaciones="";
         }
-
-
 
         if(Nivel_Humedad==null){
             Nivel_Humedad="";
@@ -146,12 +146,12 @@ public class Enviar_Revision extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&Fruta="+Fruta +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Floracion=" + Floracion + "&Nivel_Humedad=" +  Nivel_Humedad + "" ;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&Fruta="+Fruta +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Floracion=" + Floracion + "&Nivel_Humedad=" +  Nivel_Humedad + "" ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion+"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion+"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion +"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion +"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
             }
         }
 
@@ -207,13 +207,9 @@ public class Enviar_Revision extends AppCompatActivity {
 
                     int columnas = 0;
 
-
-
                     int RegistrosEnviados=0;
 
-
                     if (jsonobject.optString("resultado").trim().equals("1")) {
-
                         if (EliminaRevision( Fecha , Id_Bloque, Observaciones  )){
                             RegistrosEnviados++;
                         }
@@ -246,7 +242,6 @@ public class Enviar_Revision extends AppCompatActivity {
         cantidad=0;
 
         cantidad = BD.delete("t_Revision", "Fecha='"+Fecha+"' and Id_Bloque='"+Id_Bloque+"' ", null);
-
 
         BD.close();
 

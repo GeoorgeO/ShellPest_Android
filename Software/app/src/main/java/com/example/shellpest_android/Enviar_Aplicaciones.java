@@ -125,6 +125,7 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
 
         if(Observaciones == null){
             Observaciones="";
@@ -160,12 +161,12 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2 +"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Unidades_aplicadas="+Unidades_aplicadas ;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2 +"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Unidades_aplicadas="+Unidades_aplicadas ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Unidades_aplicadas="+Unidades_aplicadas ;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Unidades_aplicadas="+Unidades_aplicadas ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Unidades_aplicadas="+Unidades_aplicadas ;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Aplicaciones?Id_Aplicacion="  + Id_Aplicacion + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Unidades_aplicadas="+Unidades_aplicadas ;
             }
         }
         URL url = null;
@@ -218,8 +219,6 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
                     jsonobject = jsonarr.getJSONObject(i);
 
                     int columnas = 0;
-
-
 
                     int RegistrosEnviados=0;
 
@@ -277,6 +276,8 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
+
         if(c_codigo_pro== null){
             c_codigo_pro="";
         }
@@ -303,12 +304,12 @@ public class Enviar_Aplicaciones extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Aplicaciones_Det?Id_Aplicacion=" +Id_Aplicacion+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Dosis=" + Dosis +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
             }
         }
         URL url = null;

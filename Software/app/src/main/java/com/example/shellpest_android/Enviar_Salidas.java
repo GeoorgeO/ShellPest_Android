@@ -123,6 +123,7 @@ public class Enviar_Salidas extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
 
         if(c_codigo_eps == null){
             c_codigo_eps="";
@@ -158,12 +159,12 @@ public class Enviar_Salidas extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia ;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable +  "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable +  "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
             }
         }
         URL url = null;
@@ -216,8 +217,6 @@ public class Enviar_Salidas extends AppCompatActivity {
                     jsonobject = jsonarr.getJSONObject(i);
 
                     int columnas = 0;
-
-
 
                     int RegistrosEnviados=0;
 
@@ -273,7 +272,7 @@ public class Enviar_Salidas extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
+        Network Clase= new Network();
 
         if(c_codigo_pro== null){
             c_codigo_pro="";
@@ -288,12 +287,12 @@ public class Enviar_Salidas extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  +" &c_codigo_eps="+ c_codigo_eps ;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  +" &c_codigo_eps="+ c_codigo_eps ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
             }
         }
         URL url = null;
@@ -348,12 +347,10 @@ public class Enviar_Salidas extends AppCompatActivity {
                     int columnas = 0;
                     int RegistrosEnviados=0;
 
-
                     if (jsonobject.optString("Mensaje").equals("1")) {
                         if (EliminadeSalidaDetalle(Id_Salida,c_codigo_pro)){
                             RegistrosEnviados++;
                         }
-
                     }
                 }
             }
@@ -405,7 +402,8 @@ public class Enviar_Salidas extends AppCompatActivity {
 
     private void ActualizaExistenciaAlmacen(){
         String LinkServerWeb;
-        LinkServerWeb="http://177.241.250.117:8090//Control/ExistenciaProAlm";
+        Network Clase= new Network();
+        LinkServerWeb=Clase.IpoDNS+Clase.Puerto+"//Control/ExistenciaProAlm";
         try{
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -543,20 +541,16 @@ public class Enviar_Salidas extends AppCompatActivity {
         Cursor Renglon = BD.rawQuery("select count(S.Id_Salida) as Movimientos from t_Salidas_Det as S " , null);
 
         if (Renglon.moveToFirst()) {
-
             do {
                 if(Renglon.getInt(0)>1){
                     return false;
                 }else{
                     return true;
                 }
-
             } while (Renglon.moveToNext());
-
 
         } else {
             return true;
-
         }
     }
 

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
-        android:onClick="Enviar"
+        android:onClick="enviarNew"
         android:text="Enviar"
         android:textColor="@color/white"
         android:textStyle="bold"

@@ -90,6 +90,8 @@ public class Enviar_Cosecha extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
+
         if(Fecha == null){
             Fecha="";
         }
@@ -126,12 +128,12 @@ public class Enviar_Cosecha extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Cosecha?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&BICO=" + BICO + "&Cajas_Cosecha=" + Cajas_Cosecha + "&Cajas_Desecho=" + Cajas_Desecho + "&Cajas_Pepena=" + Cajas_Pepena + "&Cajas_RDiaria=" + Cajas_RDiaria+ "&Id_Usuario=" + Id_Usuario_Crea + "&F_Fecha_Crea=" +  ano2 + "" + mes2 + "" + dia2;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Cosecha?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&BICO=" + BICO + "&Cajas_Cosecha=" + Cajas_Cosecha + "&Cajas_Desecho=" + Cajas_Desecho + "&Cajas_Pepena=" + Cajas_Pepena + "&Cajas_RDiaria=" + Cajas_RDiaria+ "&Id_Usuario=" + Id_Usuario_Crea + "&F_Fecha_Crea=" +  ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Cosecha?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&BICO=" + BICO + "&Cajas_Cosecha=" + Cajas_Cosecha + "&Cajas_Desecho=" + Cajas_Desecho + "&Cajas_Pepena=" + Cajas_Pepena + "&Cajas_RDiaria=" + Cajas_RDiaria+ "&Id_Usuario=" + Id_Usuario_Crea + "&F_Fecha_Crea=" + ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Cosecha?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&BICO=" + BICO + "&Cajas_Cosecha=" + Cajas_Cosecha + "&Cajas_Desecho=" + Cajas_Desecho + "&Cajas_Pepena=" + Cajas_Pepena + "&Cajas_RDiaria=" + Cajas_RDiaria+ "&Id_Usuario=" + Id_Usuario_Crea + "&F_Fecha_Crea=" + ano2 + "" + mes2 + "" + dia2;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Cosecha?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&BICO=" + BICO + "&Cajas_Cosecha=" + Cajas_Cosecha + "&Cajas_Desecho=" + Cajas_Desecho + "&Cajas_Pepena=" + Cajas_Pepena + "&Cajas_RDiaria=" + Cajas_RDiaria+ "&Id_Usuario=" + Id_Usuario_Crea + "&F_Fecha_Crea=" + ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Cosecha?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&BICO=" + BICO + "&Cajas_Cosecha=" + Cajas_Cosecha + "&Cajas_Desecho=" + Cajas_Desecho + "&Cajas_Pepena=" + Cajas_Pepena + "&Cajas_RDiaria=" + Cajas_RDiaria+ "&Id_Usuario=" + Id_Usuario_Crea + "&F_Fecha_Crea=" + ano2 + "" + mes2 + "" + dia2;
             }
         }
 

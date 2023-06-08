@@ -233,6 +233,37 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Temperatura float," +
                 "ET float)");
 
+        BD.execSQL("create table t_RiegoV2 " +
+                "(Fecha text not null," +
+                "Hora text not null," +
+                "Id_Bloque text not null," +
+                "Precipitacion_Sistema float," +
+                "Caudal_Inicio float," +
+                "Caudal_Fin float," +
+                "Horas_Riego float," +
+                "Id_Usuario text," +
+                "F_UsuCrea text," +
+                "c_codigo_eps text not null," +
+                "Temperatura float," +
+                "ET float," +
+                "Hora_Fin text)");
+
+        BD.execSQL("create table t_Riego_Valvulas " +
+                "(Fecha text not null," +
+                "Hora text not null," +
+                "Id_Bloque text not null," +
+                "Id_Valvula int)");
+
+        BD.execSQL("create table t_Valvulas " +
+                "(Id_Bloque text not null," +
+                "Id_Valvula int not null," +
+                "N_Valvula int not null)");
+
+        BD.execSQL("create table t_Cambio_Riego_Det " +
+                "(Id_Bloque text not null," +
+                "Id_Valvula int not null," +
+                "Id_Cambio int not null)");
+
         BD.execSQL("create table t_RiegoEliminado " +
                 "(Fecha text not null," +
                 "Hora text," +
@@ -601,6 +632,11 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Entradas_Gasolina");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Variedad");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Revision");
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RiegoV2");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Riego_Valvulas");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Valvulas");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Cambio_Riego_Det");
 
         onCreate(sqLiteDatabase);
     }

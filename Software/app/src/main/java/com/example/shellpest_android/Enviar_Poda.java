@@ -96,11 +96,6 @@ public class Enviar_Poda extends AppCompatActivity {
             } else {
                 //Toast.makeText(this, "No hay datos guardados para enviar", Toast.LENGTH_SHORT).show();
             }
-
-
-
-
-
             BD.close();
         }else{
             Toast.makeText(this, "Sin conexion a internet", Toast.LENGTH_SHORT).show();
@@ -113,6 +108,8 @@ public class Enviar_Poda extends AppCompatActivity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        Network Clase= new Network();
 
         if(Fecha == null){
             Fecha="";
@@ -138,12 +135,12 @@ public class Enviar_Poda extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" +  ano2 + "" + mes2 + "" + dia2;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" +  ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
             }
         }
 
@@ -199,10 +196,7 @@ public class Enviar_Poda extends AppCompatActivity {
 
                     int columnas = 0;
 
-
-
                     int RegistrosEnviados=0;
-
 
                     if (jsonobject.optString("resultado").equals("True")) {
 
@@ -236,6 +230,8 @@ public class Enviar_Poda extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
+
         if(Fecha == null){
             Fecha="";
         }
@@ -258,15 +254,14 @@ public class Enviar_Poda extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
             }
         }
-
         //Toast.makeText(enviarriego.this, Liga, Toast.LENGTH_SHORT).show();
         URL url = null;
         try {
@@ -319,22 +314,15 @@ public class Enviar_Poda extends AppCompatActivity {
 
                     int columnas = 0;
 
-
-
                     int RegistrosEnviados=0;
-
 
                     if (jsonobject.optString("resultado").equals("True")) {
 
                         if (EliminaPodaDet( Fecha , Id_Bloque, c_Codigo_eps, Actividad)){
                             RegistrosEnviados++;
                         }
-
-
                     }
                 }
-
-
             }
 
             conn.disconnect();
@@ -361,7 +349,6 @@ public class Enviar_Poda extends AppCompatActivity {
         cantidad=0;
 
             cantidad = BD.delete("t_Podas", "Fecha='"+Fecha+"' and Id_Bloque='"+Id_Bloque+"' and c_Codigo_eps='"+c_Codigo_eps+"' and N_arboles='"+N_arboles+"' and  Observaciones='" + Observaciones + "' ", null);
-
 
         BD.close();
 

@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
     ImageView img;
 
 
+
     public String MyIp;
 
     ConexionInternet obj;
@@ -230,6 +231,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
     public void Sincroniza_Datos (String esaFecha,View view){
         try{
+            Network Clase= new Network();
+
             if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
                 Obtener_Ip();
                 List <String> Ligas_Web =new ArrayList<>();
@@ -247,130 +250,130 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 }
 
                 if(MyIp.equals("0.0.0.0")){
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                     if(HaySalidas()){
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                     }
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Almacenes?Id_Usuario="+Usuario);
 
                     if(HaySalidas()){
                         //Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
-                        Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                     }
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH" );
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda" );
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//////
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
-                    Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/UsuarioEmpresa");
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Recetas?Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Fenologicos");
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/RH" );
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActividadesPoda" );
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//////
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
 
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
-                            Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                            Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Almacenes?Id_Usuario="+Usuario);
 
                         if(HaySalidas()){
                             //Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
-                            Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
+                            Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/UsuarioEmpresa");
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/Fenologicos");
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/RH" );
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesPoda" );
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);////// ///ActivosGasolina
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://192.168.3.254:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/UsuarioEmpresa");
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Recetas?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Fenologicos");
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/RH" );
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/ActividadesPoda" );
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);////// ///ActivosGasolina
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
                     }else{
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Pais?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Estado?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Zona?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
-                            Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                            Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Almacenes?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Almacenes?Id_Usuario="+Usuario);
 
                         if(HaySalidas()){
                             //Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaPro");
-                            Ligas_Web.add("http://177.241.250.117:8090//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
+                            Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/UsuarioEmpresa");
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Recetas?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/Fenologicos");
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/RH");
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesPoda");
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//// ActivosGasolina
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
-                        Ligas_Web.add("http://177.241.250.117:8090//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/UsuarioEmpresa");
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Recetas?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Fenologicos");
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/RH");
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActividadesPoda");
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//// ActivosGasolina
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
                     }
                 }
 

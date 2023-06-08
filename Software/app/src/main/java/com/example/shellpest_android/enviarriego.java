@@ -108,6 +108,8 @@ public class enviarriego extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
+
         if(Hora == null){
             Hora="";
         }
@@ -130,12 +132,12 @@ public class enviarriego extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Riego?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_Riego+"&Id_Usuario="+Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }
         }
 
@@ -201,8 +203,6 @@ public class enviarriego extends AppCompatActivity {
 
                     }
                 }
-
-
             }
 
             conn.disconnect();
@@ -227,6 +227,8 @@ public class enviarriego extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Network Clase= new Network();
+
         if(Hora == null){
             Hora="";
         }
@@ -249,12 +251,12 @@ public class enviarriego extends AppCompatActivity {
         Obtener_Ip();
         String Liga="";
         if(MyIp.equals("0.0.0.0")){
-            Liga = "http://177.241.250.117:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
+            Liga = Clase.IpoDNS+Clase.Puerto+"//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque + "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = "http://192.168.3.254:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpLocal+Clase.Puerto+"//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }else{
-                Liga = "http://177.241.250.117:8090//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpoDNS+Clase.Puerto+"//Control/RiegoEliminado?Fecha=" + ano + "" + mes + "" + dia + "&Hora=" + Hora + "&Id_Bloque=" + Id_Bloque +  "&Precipitacion_Sistema=" + Precipitacion_Sistema + "&Caudal_Inicio=" + Caudal_Inicio + "&Caudal_Fin=" + Caudal_Fin + "&Horas_riego=" + Horas_riego+ "&Id_Usuario=" + Id_Usuario+"&c_codigo_eps="+Empresa+"&Temperatura="+Temperatura+"&ET="+ET+"&F_UsuCrea="+ano2 + "" + mes2 + "" + dia2;
             }
         }
         URL url = null;
