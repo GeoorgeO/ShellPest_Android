@@ -533,7 +533,7 @@ public class Fertilizacion extends AppCompatActivity {
     private void cargaSpinnerEmpresa(){
         CopiEmp=null;
         ItemSPEmp=new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -545,7 +545,7 @@ public class Fertilizacion extends AppCompatActivity {
 
         if(Renglon10.moveToFirst()){
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1),Renglon10.getString(0)));
             } while(Renglon10.moveToNext());
 
             BD.close();
@@ -557,7 +557,7 @@ public class Fertilizacion extends AppCompatActivity {
     private void cargaSpinnerHuertas(){
         CopiHue = null;
         ItemSPHue = new ArrayList<>();
-        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+        ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -571,7 +571,7 @@ public class Fertilizacion extends AppCompatActivity {
 
         if (Renglon.moveToFirst()) {
             do {
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1),Renglon.getString(0)));
             } while (Renglon.moveToNext());
 
             BD.close();
@@ -584,7 +584,7 @@ public class Fertilizacion extends AppCompatActivity {
         CopiApli=null;
 
         ItemSPApli=new ArrayList<>();
-        ItemSPApli.add(new ItemDatoSpinner("Tipo de Aplicacion"));
+        ItemSPApli.add(new ItemDatoSpinner("Tipo de Aplicacion",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -595,7 +595,7 @@ public class Fertilizacion extends AppCompatActivity {
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPApli.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPApli.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
             BD.close();
@@ -656,7 +656,7 @@ public class Fertilizacion extends AppCompatActivity {
     private void cargaSpinnerRecetas(){
         CopiRec = null;
         ItemSPRec = new ArrayList<>();
-        ItemSPRec.add(new ItemDatoSpinner("Receta"));
+        ItemSPRec.add(new ItemDatoSpinner("Receta",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -666,7 +666,7 @@ public class Fertilizacion extends AppCompatActivity {
 
         if (Renglon.moveToFirst()) {
             do {
-                ItemSPRec.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1)));
+                ItemSPRec.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1),Renglon.getString(0)));
             } while (Renglon.moveToNext());
 
             BD.close();
@@ -698,7 +698,7 @@ public class Fertilizacion extends AppCompatActivity {
         CopiPre = null;
 
         ItemSPPre = new ArrayList<>();
-        ItemSPPre.add(new ItemDatoSpinner("Presentacion"));
+        ItemSPPre.add(new ItemDatoSpinner("Presentacion",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -708,7 +708,7 @@ public class Fertilizacion extends AppCompatActivity {
 
         if (Renglon.moveToFirst()) {
             do {
-                ItemSPPre.add(new ItemDatoSpinner(Renglon.getString(0).trim() + " - " + Renglon.getString(1).trim()+ " "+ Renglon.getString(2).trim()));
+                ItemSPPre.add(new ItemDatoSpinner(Renglon.getString(0).trim() + " - " + Renglon.getString(1).trim()+ " "+ Renglon.getString(2).trim(),Renglon.getString(0).trim()));
             } while (Renglon.moveToNext());
 
             BD.close();

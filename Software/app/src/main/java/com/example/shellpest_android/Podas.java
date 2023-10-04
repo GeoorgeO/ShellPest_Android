@@ -267,7 +267,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
         CopiEmp=null;
 
         ItemSPEmp=new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -280,7 +280,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
         if(Renglon10.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1),Renglon10.getString(0)));
             } while(Renglon10.moveToNext());
 
             BD.close();
@@ -294,7 +294,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
         CopiHue = null;
 
         ItemSPHue = new ArrayList<>();
-        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+        ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this, "ShellPest", null, 1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -308,7 +308,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
 
         if (Renglon.moveToFirst()) {
             do {
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0) + " - " + Renglon.getString(1),Renglon.getString(0)));
             } while (Renglon.moveToNext());
 
             BD.close();
@@ -321,7 +321,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
         CopiBlq=null;
 
         ItemSPBlq=new ArrayList<>();
-        ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
+        ItemSPBlq.add(new ItemDatoSpinner("Bloque",""));
         if(Huerta.length()>0 && !Huerta.equals("NULL")){
 
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -334,7 +334,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
 
             if(Renglon.moveToFirst()){
                 do {
-                    ItemSPBlq.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1)));
+                    ItemSPBlq.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1),Renglon.getString(0)));
                 } while(Renglon.moveToNext());
             }else{
                 Toast.makeText(this,"No se encontraron datos en Bloques",Toast.LENGTH_SHORT).show();
@@ -350,7 +350,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
         CopiAct=null;
 
         ItemSPAct=new ArrayList<>();
-        ItemSPAct.add(new ItemDatoSpinner("Actividad de poda"));
+        ItemSPAct.add(new ItemDatoSpinner("Actividad de poda",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -360,7 +360,7 @@ public class Podas extends AppCompatActivity implements View.OnClickListener{
 
         if(Renglon.moveToFirst()){
             do {
-                ItemSPAct.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1)));
+                ItemSPAct.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
         }else{
             Toast.makeText(this,"No se encontraron datos en Bloques",Toast.LENGTH_SHORT).show();

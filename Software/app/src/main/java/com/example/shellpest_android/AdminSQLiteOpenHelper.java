@@ -259,9 +259,17 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
                 "Id_Valvula int not null," +
                 "N_Valvula int not null)");
 
+        BD.execSQL("create table t_ValvulasDet " +
+                "(Id_Bloque text not null," +
+                "Id_Valvula int not null," +
+                "N_Micros int," +
+                "N_Caudales float," +
+                "M3 float)");
+
         BD.execSQL("create table t_Cambio_Riego_Det " +
                 "(Id_Bloque text not null," +
                 "Id_Valvula int not null," +
+                "N_Cambio int not null," +
                 "Id_Cambio int not null)");
 
         BD.execSQL("create table t_RiegoEliminado " +
@@ -636,6 +644,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_RiegoV2");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Riego_Valvulas");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Valvulas");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_ValvulasDet");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS t_Cambio_Riego_Det");
 
         onCreate(sqLiteDatabase);

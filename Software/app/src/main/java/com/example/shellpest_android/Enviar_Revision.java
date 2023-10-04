@@ -149,7 +149,7 @@ public class Enviar_Revision extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&Fruta="+Fruta +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Floracion=" + Floracion + "&Nivel_Humedad=" +  Nivel_Humedad + "" ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion+"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion+"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Revision?Fecha=" + ano + "" + mes + "" + dia  + "&Id_bloque=" + Id_Bloque +"&Fruta="+Fruta + "&Floracion=" + Floracion +"&N_Arboles=" + N_arboles + "&Observaciones=" + Observaciones  + "&Nivel_Humedad=" + Nivel_Humedad + "" ;
             }

@@ -291,48 +291,57 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                     Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
 
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ValvulasRiego");
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ValvulasDetRiego");
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/CambiosRiego");
+
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Pais?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Estado?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Zona?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Cultivo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Duenio?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Deteccion?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Enfermedad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Humbral?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Plagas?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Productor?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Pais?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Estado?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Ciudad?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Huerta?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Bloques?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario+"&FechaLot="+objSDF.format(dateLot));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/PuntoControl?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Zona?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Individuo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Monitoreo?Fecha=" + objSDF.format(date1));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Huerta_Usuarios?Id_Usuario="+Usuario);
                         if(HaySalidas()){
-                            Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                            Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Productos?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Almacenes?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Unidades?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Presentasiones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/TipoAplicaciones?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Almacenes?Id_Usuario="+Usuario);
 
                         if(HaySalidas()){
                             //Ligas_Web.add("http://192.168.3.254:8090//Control/ExistenciaPro");
-                            Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
+                            Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Control/ExistenciaProAlm?Id_Usuario="+Usuario);
                         }
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/UsuarioEmpresa");
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Recetas?Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/Fenologicos");
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/RH" );
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/ActividadesPoda" );
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);////// ///ActivosGasolina
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
-                        Ligas_Web.add(Clase.IpLocal+Clase.Puerto+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/UsuarioEmpresa");
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Recetas?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/RecetasDetalle?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/Fenologicos");
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/RH" );
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/ActividadesPoda" );
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);////// ///ActivosGasolina
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
+
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/ValvulasRiego" );
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/ValvulasDetRiego" );
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Catalogos/CambiosRiego" );
+
                     }else{
                         Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Empresas?Fecha=" + objSDF.format(date1));
                         Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/Calidad?Fecha=" + objSDF.format(date1));
@@ -374,6 +383,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActivosGasolina?Fecha=" + objSDF.format(date1)+"&Id_Usuario="+Usuario);//// ActivosGasolina
                         Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/EmpleadosHuerta?Id_Usuario="+Usuario);
                         Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ActividadesHuerta?Id_Usuario="+Usuario);
+
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ValvulasRiego");
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/ValvulasDetRiego");
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Catalogos/CambiosRiego");
                     }
                 }
 
@@ -643,6 +656,15 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         case"v_nombre_act":
                             Actualiza_ActividadesHuerta(datos);
                             break;
+                        case"Id_BloqueV":
+                            Actualiza_Valvulas(datos);
+                            break;
+                        case"Id_BloqueVD":
+                            Actualiza_ValvulasDet(datos);
+                            break;
+                        case"Id_BloqueCD":
+                            Actualiza_CambiosDet(datos);
+                            break;
                     }
                 }
 
@@ -689,6 +711,103 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     registro.put("Id_Huerta", Datos[x][3]);
                     registro.put("Nombre_Huerta", Datos[x][4]);
                     BD.insert("t_Actividades_Huerta", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_Valvulas(String[][] Datos) {
+
+        Tabla=new Tablas_Sincronizadas("t_Valvulas",Datos.length);
+        arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        //int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
+
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+                try {
+                    ContentValues registro = new ContentValues();
+                    registro.put("Id_Bloque", Datos[x][0]);
+                    registro.put("Id_Valvula", Datos[x][1]);
+                    registro.put("N_Valvula", Datos[x][2]);
+
+                    BD.insert("t_Valvulas", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_ValvulasDet(String[][] Datos) {
+
+        Tabla=new Tablas_Sincronizadas("t_ValvulasDet",Datos.length);
+        arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        //int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
+
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+                try {
+                    ContentValues registro = new ContentValues();
+                    registro.put("Id_Bloque", Datos[x][0]);
+                    registro.put("Id_Valvula", Datos[x][1]);
+                    registro.put("N_Micros", Datos[x][2]);
+                    registro.put("N_Caudales", Datos[x][3]);
+                    registro.put("M3", Datos[x][4]);
+                    BD.insert("t_ValvulasDet", null, registro);
+
+                } catch (SQLiteConstraintException sqle) {
+                    //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    //////Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        BD.close();
+    }
+
+    private void Actualiza_CambiosDet(String[][] Datos) {
+
+        Tabla=new Tablas_Sincronizadas("t_Cambio_Riego_Det",Datos.length);
+        arrayArticulos.add(Tabla);
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getWritableDatabase();
+
+        //int cantidad = BD.delete("t_Usuario_Huerta", "Id_Usuario<>'-1'", null);
+
+        if(Datos.length>0) {
+            for (int x = 0; x < Datos.length; x++) {
+
+                try {
+                    ContentValues registro = new ContentValues();
+                    registro.put("Id_Bloque", Datos[x][0]);
+                    registro.put("Id_Cambio", Datos[x][1]);
+                    registro.put("Id_Valvula", Datos[x][2]);
+                    registro.put("N_Cambio", Datos[x][3]);
+                    BD.insert("t_Cambio_Riego_Det", null, registro);
 
                 } catch (SQLiteConstraintException sqle) {
                     //////Toast.makeText(MainActivity.this,sqle.getMessage(),Toast.LENGTH_SHORT).show();
@@ -1621,8 +1740,6 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         registro.put("No_Final",Datos[x][7]);
                         BD.insert("t_Individuo",null,registro);
                     }
-
-
                 }else{
 
 

@@ -261,7 +261,7 @@ public class Enviar_Gasolina extends AppCompatActivity {
             CargarDatos();
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Gasolina?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechaconsumo_gas="+ anoCon + "" + mesCon + "" + diaCon + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&v_Bloques_gas=" + v_Bloques_gas + "&Id_ActivosGas=" + Id_ActivosGas + "&c_codigo_emp=" + c_codigo_emp + "&c_codigo_act=" + c_codigo_act + "&v_tipo_gas=" + v_tipo_gas + "&v_cantutilizada_gas=" + v_cantutilizada_gas + "&v_horometro_gas=" + v_horometro_gas + "&v_kminicial_gas=" + v_kminicial_gas + "&v_kmfinal_gas=" + v_kmfinal_gas + "&v_observaciones_gas=" + v_observaciones_gas;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Gasolina?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechaconsumo_gas="+ anoCon + "" + mesCon + "" + diaCon + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&v_Bloques_gas=" + v_Bloques_gas + "&Id_ActivosGas=" + Id_ActivosGas + "&c_codigo_emp=" + c_codigo_emp + "&c_codigo_act=" + c_codigo_act + "&v_tipo_gas=" + v_tipo_gas + "&v_cantutilizada_gas=" + v_cantutilizada_gas + "&v_horometro_gas=" + v_horometro_gas + "&v_kminicial_gas=" + v_kminicial_gas + "&v_kmfinal_gas=" + v_kmfinal_gas + "&v_observaciones_gas=" + v_observaciones_gas;
                 EliminaGasolina(d_fechacrea_gas, c_folio_gas, d_fechaconsumo_gas, c_codigo_eps, Id_Huerta, v_Bloques_gas, Id_ActivosGas,c_codigo_emp, c_codigo_act, v_tipo_gas, v_cantutilizada_gas, v_horometro_gas, v_kminicial_gas, v_kmfinal_gas, v_observaciones_gas);
                 CargarDatos();
             }else{
@@ -404,7 +404,7 @@ public class Enviar_Gasolina extends AppCompatActivity {
             CargarDatos();
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/GasolinaIngreso?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechaingreso_gas="+ anoIng + "" + mesIng + "" + diaIng + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&c_codigo_emp=" + c_codigo_emp + "&v_tipo_gas="+ v_tipo_gas + "&v_cantingreso_gas=" + v_cantingreso_gas + "&v_observaciones_gas=" + v_observaciones_gas;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/GasolinaIngreso?d_fecha_crea=" + anoCrea + "" + mesCrea + "" + diaCrea + "&c_folio_gas="+ c_folio_gas + "&d_fechaingreso_gas="+ anoIng + "" + mesIng + "" + diaIng + "&c_codigo_eps=" + c_codigo_eps + "&Id_Huerta=" + Id_Huerta + "&c_codigo_emp=" + c_codigo_emp + "&v_tipo_gas="+ v_tipo_gas + "&v_cantingreso_gas=" + v_cantingreso_gas + "&v_observaciones_gas=" + v_observaciones_gas;
                 EliminaGasolinaIngreso(d_fechacrea_gas,c_folio_gas,d_fechaingreso_gas,c_codigo_eps,Id_Huerta,c_codigo_emp,v_tipo_gas,v_cantingreso_gas,v_observaciones_gas);
                 CargarDatos();
             }else{

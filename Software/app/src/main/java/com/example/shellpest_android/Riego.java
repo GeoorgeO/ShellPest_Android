@@ -22,24 +22,28 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 public class Riego extends AppCompatActivity implements View.OnClickListener{
 
     public String Usuario, Perfil, Huerta;
 
-    TextView et_fecha;
-    Spinner sp_Blq, sp_Hue,sp_Empresa3;
+    TextView et_fecha,tv_Valvula;
+    Spinner sp_Blq, sp_Hue,sp_Empresa3,sp_Cam;
     EditText txt_Precipitacion,txt_CaudalIni,txt_CaudalFin,txt_Riego,txt_Temperatura,txt_ET;
     ListView lv_GridRiego;
 
     int LineHuerta,LineEmpresa;
 
     Boolean SoloUnaHuerta;
-    private AdaptadorSpinner CopiHue,CopiBlq,CopiEmp;
-    private ArrayList<ItemDatoSpinner> ItemSPHue,ItemSPBlq,ItemSPEmp;
+    private AdaptadorSpinner CopiHue,CopiBlq,CopiEmp,CopiCamb;
+    private ArrayList<ItemDatoSpinner> ItemSPHue,ItemSPBlq,ItemSPEmp,ItemSPCamb;
 
     int dia,mes,anio;
+
+    String[] ADatosVal,AdatosClean,AValorVal;
+    boolean[] AsinoVal,AsinoClean;
 
     ItemRiego Tabla;
     Adaptador_GridRiego Adapter;
@@ -60,6 +64,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         sp_Hue = (Spinner) findViewById(R.id.sp_Hue);
         sp_Blq = (Spinner) findViewById(R.id.sp_Blo);
         sp_Empresa3 = (Spinner) findViewById(R.id.sp_Empresa3);
+        sp_Cam = (Spinner) findViewById(R.id.sp_Cam);
 
         txt_Precipitacion=(EditText) findViewById(R.id.txt_Precipitacion);
         txt_CaudalIni=(EditText) findViewById(R.id.txt_CaudalIni);
@@ -69,6 +74,8 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         txt_ET=(EditText) findViewById(R.id.txt_ET);
 
         lv_GridRiego=(ListView) findViewById(R.id.lv_GridRiego);
+
+        tv_Valvula = (TextView) findViewById(R.id.tv_Valvula);
 
         LineHuerta=0;
         LineEmpresa=0;
@@ -92,7 +99,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         sp_Hue.setAdapter(CopiHue);*/
 
         ItemSPBlq = new ArrayList<>();
-        ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
+        ItemSPBlq.add(new ItemDatoSpinner("Bloque",""));
         CopiBlq = new AdaptadorSpinner(Riego.this, ItemSPBlq);
         sp_Blq.setAdapter(CopiBlq);
 
@@ -119,7 +126,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
                     }else{
                         if (sp_Hue.getCount()<=1){
                             ItemSPHue = new ArrayList<>();
-                            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
                             CopiHue = new AdaptadorSpinner(Riego.this, ItemSPHue);
                             sp_Hue.setAdapter(CopiHue);
                         }
@@ -183,6 +190,33 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        sp_Blq.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cargaSpinnerCambio(CopiBlq.getItem(sp_Blq.getSelectedItemPosition()).getTexto().substring(0,4));
+                CopiCamb = new AdaptadorSpinner(Riego.this, ItemSPCamb);
+                sp_Cam.setAdapter(CopiCamb);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        sp_Cam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cargarAValvulas(CopiCamb.getItem(sp_Cam.getSelectedItemPosition()).getValor());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -255,14 +289,89 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
+        tv_Valvula.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(
+                        Riego.this
+                );
+                builder.setTitle("Valvulas");
+                builder.setCancelable(false);
+                builder. setMultiChoiceItems(ADatosVal, AsinoVal, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+                            AsinoVal[i]=b;
+
+                    }
+                });
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Limpiar todo", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for(int j=0;j<AsinoVal.length;j++){
+                            AsinoVal[j]=false;
+                        }
+                    }
+                });
+                builder.show();
+
+            }
+        });
+
+
+    }
+
+    private void cargarAValvulas(String Id_Cambio){
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+
+        Renglon=BD.rawQuery("select CRD.Id_Valvula,V.N_Valvula " +
+                "from  t_Cambio_Riego_Det as CRD  " +
+                "inner join t_Valvulas as V on CRD.Id_Valvula=V.Id_Valvula and CRD.Id_Bloque=V.Id_Bloque " +
+                "where CRD.Id_Cambio='"+Id_Cambio+"' ",null);
+
+        if(Renglon.moveToFirst()){
+            int tamanio;
+            tamanio=0;
+            ADatosVal=new String[Renglon.getCount()];
+            AValorVal=new String[Renglon.getCount()];
+            AsinoVal=new boolean[Renglon.getCount()];
+            do {
+                ADatosVal[tamanio] =Renglon.getString(1);
+                AValorVal[tamanio] =Renglon.getString(0);
+                AsinoVal[tamanio]=true;
+                tamanio++;
+            } while(Renglon.moveToNext());
+
+            BD.close();
+
+
+
+        }else{
+            BD.close();
+        }
     }
 
     private void cargaSpinnerEmpresa(){
         CopiEmp=null;
 
         ItemSPEmp=new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -273,7 +382,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
             BD.close();
@@ -298,7 +407,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         }
 
         if(Renglon.getCount()>1){
-            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
             SoloUnaHuerta=false;
         }else{
             if(Renglon.getCount()==1){
@@ -316,7 +425,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
         if(Renglon.moveToFirst()){
             do {
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2),Renglon.getString(0)));
             } while(Renglon.moveToNext());
         }else{
             Toast.makeText(this,"No se encontraron datos en huertas",Toast.LENGTH_SHORT).show();
@@ -329,7 +438,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
         CopiBlq=null;
 
         ItemSPBlq=new ArrayList<>();
-        ItemSPBlq.add(new ItemDatoSpinner("Bloque"));
+        ItemSPBlq.add(new ItemDatoSpinner("Bloque",""));
 
         if(Huerta.length()>0 && !Huerta.equals("NULL")){
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -342,7 +451,7 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
 
             if(Renglon.moveToFirst()){
                 do {
-                    ItemSPBlq.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1)));
+                    ItemSPBlq.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1),Renglon.getString(0)));
                 } while(Renglon.moveToNext());
             }else{
                 Toast.makeText(this,"No se encontraron datos en Bloques",Toast.LENGTH_SHORT).show();
@@ -351,6 +460,30 @@ public class Riego extends AppCompatActivity implements View.OnClickListener{
             BD.close();
         }else{
 
+        }
+    }
+
+    private void cargaSpinnerCambio(String Id_Bloque ){
+        CopiCamb=null;
+
+        ItemSPCamb=new ArrayList<>();
+        ItemSPCamb.add(new ItemDatoSpinner("Cambio",""));
+
+        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
+        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
+        Cursor Renglon;
+
+        Renglon=BD.rawQuery("select CRD.Id_Cambio,CRD.N_Cambio from t_Cambio_Riego_Det as CRD  where CRD.Id_Bloque='"+Id_Bloque+"' group by CRD.Id_Cambio ",null);
+
+        if(Renglon.moveToFirst()){
+
+            do {
+                ItemSPCamb.add(new ItemDatoSpinner(Renglon.getString(1),Renglon.getString(0)));
+            } while(Renglon.moveToNext());
+
+            BD.close();
+        }else{
+            BD.close();
         }
     }
 

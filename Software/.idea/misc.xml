@@ -17,6 +17,7 @@
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_enviar_fertiliza.xml" value="0.12090007627765065" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_enviar_poda.xml" value="0.24009562841530055" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_enviar_revision.xml" value="0.24009562841530055" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_enviarriego.xml" value="0.12090007627765065" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_fertilizacion.xml" value="0.1950136612021858" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_gasolina.xml" value="0.14344262295081966" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/activity_gasolina_capturada.xml" value="0.14344262295081966" />
@@ -35,6 +36,7 @@
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/item_grid_puntos.xml" value="0.15129781420765026" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/item_grid_revision.xml" value="0.24009562841530055" />
         <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/layout/registro_grid.xml" value="0.183203125" />
+        <entry key="..\:/JORGE/Documents/GitHub/ShellPest_Android/Software/app/src/main/res/xml/file_path.xml" value="0.10390625" />
       </map>
     </option>
   </component>

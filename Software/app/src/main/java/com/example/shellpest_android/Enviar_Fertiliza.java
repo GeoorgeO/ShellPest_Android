@@ -147,7 +147,7 @@ public class Enviar_Fertiliza extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Fertiliza?Id_Fertiliza="  + Id_Fertiliza + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2 +"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Ha_aplicadas="+Ha_aplicadas ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Fertiliza?Id_Fertiliza="  + Id_Fertiliza + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Ha_aplicadas="+Ha_aplicadas ;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Fertiliza?Id_Fertiliza="  + Id_Fertiliza + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Ha_aplicadas="+Ha_aplicadas ;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Fertiliza?Id_Fertiliza="  + Id_Fertiliza + "&Id_Huerta=" + Id_Huerta + "&Observaciones=" + Observaciones + "&Id_TipoAplicacion=" + Id_TipoAplicacion + "&Id_Presentacion=" + Id_Presentacion + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia + "&Anio="+ano2+"&c_codigo_eps="+c_codigo_eps+"&CC="+CC +"&Ha_aplicadas="+Ha_aplicadas ;
             }
@@ -295,7 +295,7 @@ public class Enviar_Fertiliza extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Fertiliza_Det?Id_Fertiliza=" +Id_Fertiliza+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Cantidad_Aplicada=" + Cantidad_Aplicada +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Fertiliza_Det?Id_Fertiliza=" +Id_Fertiliza+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Cantidad_Aplicada=" + Cantidad_Aplicada +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Fertiliza_Det?Id_Fertiliza=" +Id_Fertiliza+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Cantidad_Aplicada=" + Cantidad_Aplicada +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Fertiliza_Det?Id_Fertiliza=" +Id_Fertiliza+ "&Fecha="  + ano + "" + mes + "" + dia +  "&c_codigo_pro=" + c_codigo_pro + "&Cantidad_Aplicada=" + Cantidad_Aplicada +  "&Id_Usuario=" + Id_Usuario + "&F_Creacion="  + ano2 + "" + mes2 + "" + dia2 +"&c_codigo_eps="+c_codigo_eps ;
             }

@@ -41,7 +41,7 @@ public class Login_Usuario extends AppCompatActivity {
     public String MyIp;
     ConexionInternet obj;
 
-    String Version="V.22.11.25.03";
+    String Version="V.23.07.31.05";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +49,12 @@ public class Login_Usuario extends AppCompatActivity {
         setContentView(R.layout.activity_login_usuario);
 		getSupportActionBar().hide();
 
-        ImageView img = (ImageView) findViewById(R.id.loadingviewlogin);
+        /*ImageView img = (ImageView) findViewById(R.id.loadingviewlogin); este es para el monito que baila
         img.setBackgroundResource(R.drawable.loadinggif);
 
         AnimationDrawable frameAnimation;
         frameAnimation = (AnimationDrawable) img.getBackground();
-        frameAnimation.start();
+        frameAnimation.start();*/
 
         et_Usuario=(EditText)findViewById(R.id.et_Usuario);
         et_Password=(EditText)findViewById(R.id.et_Password);
@@ -68,15 +68,17 @@ public class Login_Usuario extends AppCompatActivity {
         if (obj.isConnected()==false ) {
             return true;
         }else{
+            Network Clase= new Network();
+
             Obtener_Ip();
             String sql;
             if(MyIp.equals("0.0.0.0")){
-                sql="http://177.241.250.117:8090//Control/Version";
+                sql=Clase.IpoDNS+Clase.Puerto+"//Control/Version";
             }else{
                 if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0){
-                    sql = "http://192.168.3.254:8090//Control/Version";
+                    sql = Clase.IpLocal+Clase.PortLocal+"//Control/Version";
                 }else{
-                    sql="http://177.241.250.117:8090//Control/Version";
+                    sql=Clase.IpoDNS+Clase.Puerto+"//Control/Version";
                 }
             }
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -200,12 +202,10 @@ public class Login_Usuario extends AppCompatActivity {
 
 
                     if( fechaactual.getTime() - convertidaFecha.getTime() >172800000){ //la resta arroja los datos en milisegundos, la cantidad permitida son 2 dias
-
                         intento= new Intent(this, MainActivity.class);
                         intento.putExtra("usuario", Renglon.getString(0));
                         intento.putExtra("perfil", Renglon.getString(1));
                         intento.putExtra("huerta", Renglon.getString(2));
-
 
                         //Toast.makeText(this, jsonobject.optString("Id_Usuario")+","+jsonobject.optString("Id_Perfil")+","+jsonobject.optString("Id_Huerta"),Toast.LENGTH_SHORT).show();
                         //startActivity(intento);
@@ -314,17 +314,19 @@ public class Login_Usuario extends AppCompatActivity {
     public void validarLogin(View view){
         if (et_Usuario.getText().length()>0 && et_Password.getText().length()>0){
 
+            Network Clase= new Network();
+
             Obtener_Ip();
             if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
                 //Toast.makeText(this, MyIp, Toast.LENGTH_SHORT).show();
                 String sql;
                 if(MyIp.equals("0.0.0.0")){
-                    sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
+                    sql=Clase.IpoDNS+Clase.Puerto+"//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
                 }else{
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0){
-                        sql = "http://192.168.3.254:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
+                        sql = Clase.IpLocal+Clase.PortLocal+"//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
                     }else{
-                        sql="http://177.241.250.117:8090//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
+                        sql=Clase.IpoDNS+Clase.Puerto+"//Usuarios/LoginUsuario?User=" + et_Usuario.getText().toString().toUpperCase() + "&Pass=" + et_Password.getText().toString();
                     }
                 }
 

@@ -138,7 +138,7 @@ public class Enviar_Poda extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" +  ano2 + "" + mes2 + "" + dia2;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Podas?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&N_arboles=" + N_arboles + "&Observaciones=" + Observaciones + "&Id_Usuario_Crea=" + Id_Usuario_Crea + "&F_Usuario_Crea=" + ano2 + "" + mes2 + "" + dia2;
             }
@@ -257,7 +257,7 @@ public class Enviar_Poda extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/PodasDet?Fecha=" + ano + "" + mes + "" + dia  + "&Id_Bloque=" + Id_Bloque +"&c_codigo_eps="+c_Codigo_eps +"&Actividad=" + Actividad ;
             }

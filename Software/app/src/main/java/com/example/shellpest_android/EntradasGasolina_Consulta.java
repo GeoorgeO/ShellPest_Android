@@ -105,7 +105,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
                         sp_huertaEntradaGas.setSelection(1);
                     }else{
                         if (sp_huertaEntradaGas.getCount()<=1){
-                            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
                             CopiHue = new AdaptadorSpinner(EntradasGasolina_Consulta.this, ItemSPHue);
                             sp_huertaEntradaGas.setAdapter(CopiHue);
                         }
@@ -123,7 +123,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
                             }else{
                                 if (sp_huertaEntradaGas.getCount() <= 1){
                                     ItemSPHue = new ArrayList<>();
-                                    ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                                    ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
                                     CopiHue = new AdaptadorSpinner(EntradasGasolina_Consulta.this, ItemSPHue);
                                     sp_huertaEntradaGas.setAdapter(CopiHue);
                                 }
@@ -205,14 +205,17 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         try{
             if (obj.isConnected() /*&& !MyIp.equals("0.0.0.0")*/) {
                 Obtener_Ip();
+
+                Network Clase= new Network();
+
                 List<String> Ligas_Web =new ArrayList<>();
                 if(MyIp.equals("0.0.0.0")){
-                    Ligas_Web.add("http://177.241.250.117:8090//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
+                    Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
                 } else {
                     if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0  ||  MyIp.indexOf("10.0.2")>=0){
-                        Ligas_Web.add("http://192.168.3.254:8090//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
+                        Ligas_Web.add(Clase.IpLocal+Clase.PortLocal+"//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
                     }else{
-                        Ligas_Web.add("http://177.241.250.117:8090//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
+                        Ligas_Web.add(Clase.IpoDNS+Clase.Puerto+"//Control/Cant_Combustible?c_codigo_eps="+CopiEmp.getItem(sp_empresaEntradaGas.getSelectedItemPosition()).getTexto().substring(0,2)+"&Id_Huerta="+Huerta+"&v_tipo_gas="+CopiTipo.getItem(sp_tipoEntradaGas.getSelectedItemPosition()).getTexto().replace("-", ""));
                     }
 
                 }
@@ -422,10 +425,10 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         CopiTipo = null;
 
         ItemSPTipo = new ArrayList<>();
-        ItemSPTipo.add(new ItemDatoSpinner("Tipo"));
-        ItemSPTipo.add(new ItemDatoSpinner("   " + Magna));
-        ItemSPTipo.add(new ItemDatoSpinner("   " + Premium));
-        ItemSPTipo.add(new ItemDatoSpinner("   " + Diesel));
+        ItemSPTipo.add(new ItemDatoSpinner("Tipo",""));
+        ItemSPTipo.add(new ItemDatoSpinner("   " + Magna,Magna));
+        ItemSPTipo.add(new ItemDatoSpinner("   " + Premium,Premium));
+        ItemSPTipo.add(new ItemDatoSpinner("   " + Diesel,Diesel));
 
         sp_tipoEntradaGas.setGravity(Gravity.CENTER);
 
@@ -434,7 +437,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
     private void cargarEmpresa(){
         CopiEmp = null;
         ItemSPEmp = new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -447,7 +450,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         if(Renglon10.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1),Renglon10.getString(0)));
             } while(Renglon10.moveToNext());
 
             BD.close();
@@ -460,7 +463,7 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
     private void cargarHuerta(){
         CopiHue = null;
         ItemSPHue = new ArrayList<>();
-        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+        ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
@@ -472,12 +475,12 @@ public class EntradasGasolina_Consulta extends AppCompatActivity {
         }
 
         if(Renglon.getCount()>1){
-            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
         }
 
         if(Renglon.moveToFirst()){
             do{
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2),Renglon.getString(0)));
             }while(Renglon.moveToNext());
         }else{
             /*Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);

@@ -115,7 +115,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
                         //cargaGrid();
                     }else{
                         if (sp_huertaregistroGas.getCount()<=1){
-                            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
                             CopiHue = new AdaptadorSpinner(Entradas_Gasolina.this, ItemSPHue);
                             sp_huertaregistroGas.setAdapter(CopiHue);
                         }
@@ -133,7 +133,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
                             }else{
                                 if (sp_huertaregistroGas.getCount() <= 1){
                                     ItemSPHue = new ArrayList<>();
-                                    ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                                    ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
                                     CopiHue = new AdaptadorSpinner(Entradas_Gasolina.this, ItemSPHue);
                                     sp_huertaregistroGas.setAdapter(CopiHue);
                                 }
@@ -243,7 +243,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
     private void cargarEmpresa(){
         CopiEmp = null;
         ItemSPEmp = new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -256,7 +256,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
         if(Renglon10.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon10.getString(0)+" - "+Renglon10.getString(1),Renglon10.getString(0)));
             } while(Renglon10.moveToNext());
 
             BD.close();
@@ -269,7 +269,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
     private void cargarHuerta(){
         CopiHue = null;
         ItemSPHue = new ArrayList<>();
-        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+        ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
         Cursor Renglon;
@@ -281,12 +281,12 @@ public class Entradas_Gasolina extends AppCompatActivity {
         }
 
         if(Renglon.getCount()>1){
-            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
         }
 
         if(Renglon.moveToFirst()){
             do{
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" - "+Renglon.getString(2),Renglon.getString(0)));
             }while(Renglon.moveToNext());
         }else{
             /*Toast ToastMensaje = Toast.makeText(this, "No se encontraron datos en huertas", Toast.LENGTH_SHORT);
@@ -299,7 +299,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
     private void cargarResponsable(){
         CopiResp = null;
         ItemSPResp = new ArrayList<>();
-        ItemSPResp.add(new ItemDatoSpinner("Responsable"));
+        ItemSPResp.add(new ItemDatoSpinner("Responsable",""));
 
         AdminSQLiteOpenHelper SQLAdmin = new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD = SQLAdmin.getReadableDatabase();
@@ -313,7 +313,7 @@ public class Entradas_Gasolina extends AppCompatActivity {
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPResp.add(new ItemDatoSpinner(Renglon.getString(0)+"-"+Renglon.getString(1)+"- "+Renglon.getString(2)));
+                ItemSPResp.add(new ItemDatoSpinner(Renglon.getString(0)+"-"+Renglon.getString(1)+"- "+Renglon.getString(2),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
             BD.close();
@@ -327,10 +327,10 @@ public class Entradas_Gasolina extends AppCompatActivity {
         CopiTipo = null;
 
         ItemSPTipo = new ArrayList<>();
-        ItemSPTipo.add(new ItemDatoSpinner("Tipo"));
-        ItemSPTipo.add(new ItemDatoSpinner("   " + Magna));
-        ItemSPTipo.add(new ItemDatoSpinner("   " + Premium));
-        ItemSPTipo.add(new ItemDatoSpinner("   " + Diesel));
+        ItemSPTipo.add(new ItemDatoSpinner("Tipo",""));
+        ItemSPTipo.add(new ItemDatoSpinner("   " + Magna,Magna));
+        ItemSPTipo.add(new ItemDatoSpinner("   " + Premium,Premium));
+        ItemSPTipo.add(new ItemDatoSpinner("   " + Diesel,Diesel));
 
         sp_tiporegistroGas.setGravity(Gravity.CENTER);
 

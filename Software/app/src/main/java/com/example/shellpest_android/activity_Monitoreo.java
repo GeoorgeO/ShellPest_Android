@@ -131,7 +131,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         et_fecha.setOnClickListener(this);
 
         ItemSPPE = new ArrayList<>();
-        ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad"));
+        ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad",""));
         CopiPE = new AdaptadorSpinner(this, ItemSPPE);
         sp_PE.setAdapter(CopiPE);
 
@@ -145,7 +145,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         }*/
 
         ItemSPPto = new ArrayList<>();
-        ItemSPPto.add(new ItemDatoSpinner("Punto de control"));
+        ItemSPPto.add(new ItemDatoSpinner("Punto de control",""));
         CopiPto = new AdaptadorSpinner(this, ItemSPPto);
         sp_Pto.setAdapter(CopiPto);
 
@@ -159,12 +159,12 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         sp_Org.setAdapter(CopiOrg);*/
 
         ItemSPInd = new ArrayList<>();
-        ItemSPInd.add(new ItemDatoSpinner("Est.Fenologico"));
+        ItemSPInd.add(new ItemDatoSpinner("Est.Fenologico",""));
         CopiInd = new AdaptadorSpinner(this, ItemSPInd);
         sp_Ind.setAdapter(CopiInd);
 
         ItemSPOrg=new ArrayList<>();
-        ItemSPOrg.add(new ItemDatoSpinner("Organo muestreado"));
+        ItemSPOrg.add(new ItemDatoSpinner("Organo muestreado",""));
         CopiOrg = new AdaptadorSpinner(this, ItemSPOrg);
         sp_Org.setAdapter(CopiOrg);
 
@@ -173,10 +173,12 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         sp_Empresa2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
                 cargaSpinnerHue();
                 CopiHue = new AdaptadorSpinner(activity_Monitoreo.this, ItemSPHue);
                 // CopiHue=AdaptadorSpiner;
                 sp_Hue.setAdapter(CopiHue);
+                System.out.println(CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getValor()+sp_Empresa2.getSelectedItemPosition());
 
                 if (sp_Hue.getCount()==2 || SoloUnaHuerta==true){
                     if(SoloUnaHuerta==true){
@@ -188,7 +190,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 }else{
                     if (sp_Hue.getCount()<=1){
                         ItemSPHue = new ArrayList<>();
-                        ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+                        ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
                         CopiHue = new AdaptadorSpinner(activity_Monitoreo.this, ItemSPHue);
                         sp_Hue.setAdapter(CopiHue);
                     }
@@ -302,7 +304,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
                 if(rb_SinPresencia.isChecked() || rb_Fumi.isChecked()){
                     CopiPE=null;
                     ItemSPPE=new ArrayList<>();
-                    ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad"));
+                    ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad",""));
                     CopiPE = new AdaptadorSpinner(getApplicationContext(), ItemSPPE);
                     //CopiInd=AdaptadorSpiner;
                     sp_PE.setAdapter(CopiPE);
@@ -504,7 +506,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         CopiEmp=null;
 
         ItemSPEmp=new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -515,7 +517,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
             BD.close();
@@ -774,7 +776,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
        CopiPE=null;
 
        ItemSPPE=new ArrayList<>();
-       ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad"));
+       ItemSPPE.add(new ItemDatoSpinner("Plaga/Enfermedad",""));
 
        AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
        SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -788,7 +790,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
        if(Renglon.moveToFirst()){
 
            do {
-               ItemSPPE.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+               ItemSPPE.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
            } while(Renglon.moveToNext());
 
 
@@ -819,7 +821,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         }
 
         if(Renglon.getCount()>1){
-            ItemSPHue.add(new ItemDatoSpinner("Huerta"));
+            ItemSPHue.add(new ItemDatoSpinner("Huerta",""));
             SoloUnaHuerta=false;
         }else{
             if(Renglon.getCount()==1){
@@ -829,7 +831,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
 
         if(Renglon.moveToFirst()){
             do {
-                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2)));
+                ItemSPHue.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" "+Renglon.getString(2),Renglon.getString(0)));
             } while(Renglon.moveToNext());
         }else{
             Toast.makeText(this,"No se encontraron datos en huertas",Toast.LENGTH_SHORT).show();
@@ -849,13 +851,13 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
             SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
             Cursor Renglon;
 
-            ItemSPPto.add(new ItemDatoSpinner("Punto de control"));
+            ItemSPPto.add(new ItemDatoSpinner("Punto de control",""));
 
             Renglon=BD.rawQuery("select P.Id_PuntoControl,P.Nombre_PuntoControl,P.Id_Bloque,P.n_coordenadaX,P.n_coordenadaY from t_Puntocontrol as P, t_Bloque as B  where  P.Id_Bloque=B.Id_Bloque and B.Id_Huerta='"+Huerta+"' and P.c_codigo_eps=B.c_codigo_eps and P.c_codigo_eps='"+CopiEmp.getItem(sp_Empresa2.getSelectedItemPosition()).getTexto().substring(0,2)+"'",null);
 
             if(Renglon.moveToFirst()){
                 do {
-                    ItemSPPto.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1)+"     ("+Renglon.getString(2)+","+Renglon.getString(3)+")"));
+                    ItemSPPto.add(new ItemDatoSpinner(Renglon.getString(0)+" -    "+Renglon.getString(1)+"     ("+Renglon.getString(2)+","+Renglon.getString(3)+")",Renglon.getString(0)));
                 } while(Renglon.moveToNext());
             }else{
                 Toast.makeText(this,"No se encontraron datos en huertas",Toast.LENGTH_SHORT).show();
@@ -871,7 +873,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         CopiOrg=null;
 
         ItemSPOrg=new ArrayList<>();
-        ItemSPOrg.add(new ItemDatoSpinner("Organo muestreado"));
+        ItemSPOrg.add(new ItemDatoSpinner("Organo muestreado",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -887,7 +889,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPOrg.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPOrg.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
 
@@ -904,7 +906,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         CopiInd=null;
 
         ItemSPInd=new ArrayList<>();
-        ItemSPInd.add(new ItemDatoSpinner("Est.Fenologico"));
+        ItemSPInd.add(new ItemDatoSpinner("Est.Fenologico",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -922,7 +924,7 @@ public class activity_Monitoreo extends AppCompatActivity implements View.OnClic
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPInd.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
             BD.close();

@@ -123,7 +123,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         sp_Almacen.setAdapter(CopiAlm);*/
 
         ItemSPApli = new ArrayList<>();
-        ItemSPApli.add(new ItemDatoSpinner("Aplicación"));
+        ItemSPApli.add(new ItemDatoSpinner("Aplicación",""));
 
         cargarResponsable();
 
@@ -725,7 +725,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         //CopiEmp=null;
 
         ItemSPEmp=new ArrayList<>();
-        ItemSPEmp.add(new ItemDatoSpinner("Empresa"));
+        ItemSPEmp.add(new ItemDatoSpinner("Empresa",""));
 
         AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
         SQLiteDatabase BD=SQLAdmin.getReadableDatabase();
@@ -736,7 +736,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         if(Renglon.moveToFirst()){
 
             do {
-                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPEmp.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
 
             BD.close();
@@ -800,7 +800,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         //CopiApli.clear();
 
         ItemSPApli=new ArrayList<>();
-        ItemSPApli.add(new ItemDatoSpinner("Aplicacion"));
+        ItemSPApli.add(new ItemDatoSpinner("Aplicacion",""));
 
 
             AdminSQLiteOpenHelper SQLAdmin= new AdminSQLiteOpenHelper(this,"ShellPest",null,1);
@@ -819,7 +819,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
             if(Renglon.moveToFirst()){
                 do {
-                    ItemSPApli.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" al "+Renglon.getString(2)));
+                    ItemSPApli.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)+" al "+Renglon.getString(2),Renglon.getString(0)));
                 } while(Renglon.moveToNext());
 
                 BD.close();
@@ -908,7 +908,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
         }
 
         if(Renglon.getCount()>1){
-            ItemSPAlm.add(new ItemDatoSpinner("Almacen"));
+            ItemSPAlm.add(new ItemDatoSpinner("Almacen",""));
         }else{
             if(Renglon.getCount()==1){
                 SoloUnaHuerta=true;
@@ -917,7 +917,7 @@ public class Salidas extends AppCompatActivity  implements View.OnClickListener{
 
         if(Renglon.moveToFirst()){
             do {
-                ItemSPAlm.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1)));
+                ItemSPAlm.add(new ItemDatoSpinner(Renglon.getString(0)+" - "+Renglon.getString(1),Renglon.getString(0)));
             } while(Renglon.moveToNext());
         }else{
             Toast.makeText(this,"No se encontraron datos en Almacen",Toast.LENGTH_SHORT).show();

@@ -162,7 +162,7 @@ public class Enviar_Salidas extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia ;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable + "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia ;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas?c_codigo_sal="  + Id_Salida + "&c_codigo_ent= &c_codigo_tmv=04 &c_codigo_tra= &d_documento_sal=" + ano2 + "" + mes2 + "" + dia2  + "&c_codigo_alm=" + Id_Almacen + " &c_codigo_eps=" + c_codigo_eps + "&Id_Responsable=" + Id_Responsable +  "&Id_Aplicacion=" + Id_Aplicacion  + "&Id_Usuario=" + Id_Usuario + "&F_Creacion=" + ano + "" + mes + "" + dia  ;
             }
@@ -290,7 +290,7 @@ public class Enviar_Salidas extends AppCompatActivity {
             Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque  +" &c_codigo_eps="+ c_codigo_eps ;
         } else {
             if (MyIp.indexOf("192.168.3")>=0 || MyIp.indexOf("192.168.68")>=0 ||  MyIp.indexOf("10.0.2")>=0 ){
-                Liga = Clase.IpLocal+Clase.Puerto+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
+                Liga = Clase.IpLocal+Clase.PortLocal+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
             }else{
                 Liga = Clase.IpoDNS+Clase.Puerto+"//Control/Salidas_Det?c_tipodoc_mov=S &c_coddoc_mov=" +Id_Salida+ "&c_codigo_pro="  + c_codigo_pro +  "&n_movipro_mov=0 &n_exiant_mov="+n_exiant_mov+" &n_cantidad_mov=-" + Cantidad + "&Id_Bloque=" + Id_Bloque +" &c_codigo_eps="+ c_codigo_eps ;
             }
